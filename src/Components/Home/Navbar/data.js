@@ -7,7 +7,7 @@ export const dataList = [
     title: "Connect Friends",
     iconBefore: "./images/rootsBefore.png",
     afterIcon: "./images/rootsSelected.png",
-    url: "/root",
+    url: "root",
   },
 
   {
@@ -15,7 +15,7 @@ export const dataList = [
     title: "Short Videos",
     iconBefore: "./images/kicksUnselected.png",
     afterIcon: "./images/kicksSelected.png",
-    url: "/kicks",
+    url: "kicks",
   },
   {
     name: "U-Meet",
@@ -23,14 +23,14 @@ export const dataList = [
     iconBefore: "./images/umeetUnselected.png",
     afterIcon: "./images/umeetSelected.png",
 
-    url: "/umeet",
+    url: "umeet",
   },
   {
     name: "Reals",
     title: "Create Map",
     iconBefore: "./images/realsBefore.png",
     afterIcon: "./images/realsSelected.png",
-    url: "/reals",
+    url: "reals",
   },
 ];
 export const data = [

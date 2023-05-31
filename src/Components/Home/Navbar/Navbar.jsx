@@ -153,7 +153,7 @@ const Navbar = () => {
                 >
                   <img
                     src={
-                      selectedTab === elem?.name
+                      location.pathname?.includes(elem?.url)
                         ? elem?.afterIcon
                         : elem?.iconBefore
                     }

@@ -59,7 +59,7 @@ const Kicks = () => {
   const [selectVideo, setSelectVideo] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
-
+  const [openCat, setOpenCat] = useState(false);
   const videoData = useMemo(() => {
     return kicksType === "Following"
       ? followingsContent
