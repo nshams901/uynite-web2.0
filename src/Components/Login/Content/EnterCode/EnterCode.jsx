@@ -20,8 +20,8 @@ const EnterCode = ({ title }) => {
   {
     /* send code timing implemented dynamically */
   }
-  const [timer, setTimer] = useState(false);
-    const [loading, setIsLoading] = useState(false);
+  const [timer, setTimer] = useState(true);
+  const [loading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const { otp, emailExist } = useSelector((state) => state.authReducer);
   const timerFunction = async () => {
@@ -30,12 +30,12 @@ const EnterCode = ({ title }) => {
       uemail: emailExist?.data?.uemail,
       // password: formik.values.password,
     };
-     dispatch(settingOtp(""));
-      setIsLoading(true);
+    dispatch(settingOtp(""));
+    setIsLoading(true);
     await dispatch(sendingMailForOtp(dataObj))
       .then((res) => {
         console.log(res);
-         setIsLoading(false);
+        setIsLoading(false);
         dispatch(settingOtp(""));
         toast.success(res.message);
       })
@@ -52,50 +52,61 @@ const EnterCode = ({ title }) => {
   };
 
   const onConfirmOtp = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const result = await dispatch(matchingOtp(emailExist.data.uemail, otp));
     if (!result.status) {
-       dispatch(settingOtp(""));
-       setIsLoading(false)
+      dispatch(settingOtp(""));
+      setIsLoading(false);
       return toasterFunction(result.message);
     }
-    setIsLoading(false)
+    setIsLoading(false);
     navigate("/auth/forgetpassword");
     toasterFunction(result.message);
   };
 
   function Timer() {
-    const [seconds, setSeconds] = useState(5 * 60);
+    const [seconds, setSeconds] = useState(10);
+    const [minute, setMinute] = useState(0);
 
+    let intervalId;
     useEffect(() => {
-      const intervalId = setInterval(() => {
-        setSeconds((prevSeconds) => prevSeconds - 1);
+      intervalId = setInterval(() => {
+            console.log("minute", minute);
+            console.log("Timerrrrrrrrrrrr222222222", seconds);
+        if (minute <= 0 && seconds <= 0) {
+          console.log("Timerrrrrrrrrrrr");
+          clearInterval(intervalId);
+          return;
+        }
+        if (seconds === 0) {
+          setSeconds(59);
+          setMinute(minute - 1);
+        } 
       }, 1000);
-
+      
       return () => clearInterval(intervalId);
-    }, [timer]);
+    }, []);
 
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
 
-    // const otpTimerFunction = ()=>{
-    //   setTimeout(() => {
 
-    //   }, timeout);
-    // }
+    // const minutes = Math.floor(seconds / 60);
+    // const remainingSeconds = seconds % 60;
+
     return (
       <div
         disabled="disabled"
         className="bg-gray-600 text-white w-[70%] rounded-3xl py-2 text-center font-bold text-xs"
       >
-        {minutes}:{remainingSeconds < 10 ? "0" : ""}
-        {remainingSeconds}
+        {minute}:{seconds < 10 ? "0" : ""}
+        {seconds}
       </div>
     );
   }
   const onChangeHandler = (event) => {
     if (event.target.value.length > 4) {
-       dispatch(settingOtp(event.target.value.slice(0,event.target.value.length-1)));
+      dispatch(
+        settingOtp(event.target.value.slice(0, event.target.value.length - 1))
+      );
     } else {
       dispatch(settingOtp(event.target.value));
     }
