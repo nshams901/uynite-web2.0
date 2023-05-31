@@ -4,7 +4,7 @@ import Umeetmaybe from "../../../../Assets/Images/Umeet/Umeet-Main/Umeet-maybe.p
 import { BsThreeDots } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import editImg from "../../../../Assets/Images/Edit profile.png";
-import deleteImg from "../../../../Assets/Images/Delete.png";
+import deleteImg from "../../../../Assets/Images/delete.png";
 import shareImg from "../../../../Assets/Images/External share.png";
 import { useDispatch, useSelector } from "react-redux";
 import {
