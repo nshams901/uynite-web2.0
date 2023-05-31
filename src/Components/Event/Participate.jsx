@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import ImageIcon from "@mui/icons-material/Image";
-import deleteIcon from "../../Assets/Images/Delete.png";
 import { imageUploadApi } from "../../redux/actionCreators/rootsActionCreator";
 import { addEventPost } from "../../redux/actionCreators/eventActionCreator";
 import { toasterFunction } from "../Utility/utility";
