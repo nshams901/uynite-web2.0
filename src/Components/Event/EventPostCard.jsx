@@ -6,7 +6,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShareIcon from "@mui/icons-material/Share";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import kicksAfterLike from "../../Assets/Images/KicksLike.png";
+import kicksAfterLike from "../../Assets/Images/kicksLike.png";
 import kicksBeforeLike from "../../Assets/Images/KicksBeforeLike.png";
 import kicksShare from "../../Assets/Images/Kicks Share.png";
 import SendIcon from "@mui/icons-material/Send";
