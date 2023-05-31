@@ -1,5 +1,5 @@
 import React from "react";
-import LikeIcon from "../../Assets/Images/KicksLike.png";
+import LikeIcon from "../../Assets/Images/kicksLike.png";
 const EventResultCard = () => {
   return (
     <div className="flex w-full flex-col bg-white rounded-[20px] px-4 py-2 gap-2 mt-2">
