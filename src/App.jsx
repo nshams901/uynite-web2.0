@@ -79,7 +79,7 @@ const App = () => {
   useEffect(() => {
     dispatch(getProfileById(userData?.id))
     isUserLoggedIn();
-  }, [dispatch, userData]);
+  }, [ userData]);
 
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker

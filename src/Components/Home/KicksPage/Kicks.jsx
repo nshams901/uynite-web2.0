@@ -26,7 +26,7 @@ import mute from "../../../Assets/Images/Mute.png";
 import Messages from "../../../Assets/Images/Messages.png";
 import like from "../../../Assets/Images/KicksBeforeLike.png";
 import share from "../../../Assets/Images/share.png";
-import collection from "../../../Assets/Images/collection.png";
+import Collections from "../../../Assets/Images/collection.png";
 import "./kicks.css";
 import { Link, useParams } from "react-router-dom";
 import KicksComment from "./KicksComment";

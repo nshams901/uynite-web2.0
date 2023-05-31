@@ -66,39 +66,40 @@ const EnterCode = ({ title }) => {
 
   function Timer() {
     const [seconds, setSeconds] = useState(10);
-    const [minute, setMinute] = useState(0);
 
-    let intervalId;
     useEffect(() => {
-      intervalId = setInterval(() => {
-            console.log("minute", minute);
-            console.log("Timerrrrrrrrrrrr222222222", seconds);
-        if (minute <= 0 && seconds <= 0) {
-          console.log("Timerrrrrrrrrrrr");
-          clearInterval(intervalId);
-          return;
-        }
-        if (seconds === 0) {
-          setSeconds(59);
-          setMinute(minute - 1);
-        } 
+      console.log("++++++++++++++++======");
+      const intervalId = setInterval(() => {
+        setSeconds((prevSeconds) => {
+          if (prevSeconds <= 1) {
+            clearInterval(intervalId);
+            setTimer(false)
+            return 0;
+          }
+          return prevSeconds - 1;
+        });
+
+        // setSeconds((prevSeconds) => prevSeconds - 1);
       }, 1000);
-      
+
       return () => clearInterval(intervalId);
     }, []);
-
-
 
     // const minutes = Math.floor(seconds / 60);
     // const remainingSeconds = seconds % 60;
 
+    // const otpTimerFunction = ()=>{
+    //   setTimeout(() => {
+
+    //   }, timeout);
+    // }
     return (
       <div
         disabled="disabled"
         className="bg-gray-600 text-white w-[70%] rounded-3xl py-2 text-center font-bold text-xs"
       >
-        {minute}:{seconds < 10 ? "0" : ""}
-        {seconds}
+        { Math.floor(seconds / 60)}:{seconds % 60 < 10 ? "0" : ""}
+        {seconds % 60}
       </div>
     );
   }
