@@ -10,13 +10,10 @@ import { getMyUnion } from "../../../../redux/actionCreators/unionActionCreator"
 import Loader from "../../../common/Loader";
 import { sharePost } from "../../../../redux/actionCreators/postActionCreator";
 import moment from "moment";
-import user from '../../../../Assets/Images/user.png'
+import user from "../../../../Assets/Images/user.png";
 import { getAllPostWithLimit } from "../../../../redux/actionCreators/rootsActionCreator";
 
-const SharePostModal = ({
-  handleClose,
-}) => {
-
+const SharePostModal = ({ handleClose }) => {
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
@@ -37,14 +34,14 @@ const SharePostModal = ({
     },
   };
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const reducerData = useSelector((state) => {
     return {
       activePost: state.rootsReducer.activePost || {},
       profile: state.profileReducer.profile || {},
       myUnionList: state.unionReducer.myUnionList,
-    }
-  } );
+    };
+  });
   const { activePost, profile, myUnionList } = reducerData;
   const { text, image } = activePost;
   const isPersonal = profile?.profiletype === "Personal";
@@ -53,11 +50,11 @@ const SharePostModal = ({
     return { name: item?.groupName };
   });
   const postPrivacyList = isPersonal
-  ? [...privacyList, ...unions]
-  : [{ name: "Friends" }, ...unions];
+    ? [...privacyList, ...unions]
+    : [{ name: "Friends" }, ...unions];
 
-  const [state, setState] = useState({})
-  const { postPrivacy, content, loading } = state
+  const [state, setState] = useState({});
+  const { postPrivacy, content, loading } = state;
 
   useEffect(() => {
     dispatch(getMyUnion(profile?.id));
@@ -72,12 +69,12 @@ const SharePostModal = ({
   };
 
   const handleShare = () => {
-    setState({...state, loading: true})
+    setState({ ...state, loading: true });
     const payload = {
       shareto: postPrivacy?.name,
       type: "personal",
       template: "template1",
-      userid: '',
+      userid: "",
       postid: activePost.id,
       sharetext: content,
       suggesttemp: "sugest1",
@@ -91,20 +88,20 @@ const SharePostModal = ({
       postdate: moment().format("DD-MM-YYYY HH:mm:ms"),
     };
     dispatch(sharePost(payload)).then((res) => {
-      if(res.status){
+      if (res.status) {
         handleClose();
-        setState({...state, loading: false})
-        dispatch(getAllPostWithLimit(profile.id))
+        setState({ ...state, loading: false });
+        dispatch(getAllPostWithLimit(profile.id));
       }
-    })
-  }
+    });
+  };
   return (
     <>
       <div
         className="w-[95%] sm:w-[50%] lg:w-[30%] bg-white flex-col flex items-center rounded-xl fixed top-[50%] left-[50%]
   transform translate-x-[-50%] translate-y-[-50%] z-50"
       >
-      {loading && <Loader/>}
+        {loading && <Loader />}
         {/* Top Section */}
         <section className="flex w-full justify-between my-2 px-3">
           {/* <span className="text-md font-bold">Custom Group</span> */}
@@ -115,54 +112,52 @@ const SharePostModal = ({
             Next
           </button> */}
           <div className="flex w-[46px] h-[46px]">
-              {/* due to img broke dynamic src commented */}
-              <img
-                src={profile?.pimage ? profile?.pimage : user}
-                alt=""
-                className="w-full h-full rounded-full mt-1 object-cover"
-              />
+            {/* due to img broke dynamic src commented */}
+            <img
+              src={profile?.pimage ? profile?.pimage : user}
+              alt=""
+              className="w-full h-full rounded-full mt-1 object-cover"
+            />
+          </div>
+          <div className="flex flex-col flex-1 justify-center ml-2">
+            <div className="flex items-center">
+              {/*font weight removed*/}
+              <span className="ml-1 font-bold">
+                {`${profile?.fname || "User"} ${profile?.lname || ""}`}
+              </span>
+              <div className="text-xs ml-2 font-semibold mt-0.5">
+                {profile?.job}
+              </div>
             </div>
-            <div className="flex flex-col flex-1 justify-center ml-2">
-              <div className="flex items-center">
-                {/*font weight removed*/}
-                <span className="ml-1 font-bold">
-                  {`${profile?.fname || "User"} ${
-                   profile?.lname || ""
-                  }`}
-                </span>
-                <div className="text-xs ml-2 font-semibold mt-0.5">
-                  {profile?.job}
-                </div>
-              </div>
-              </div>
+          </div>
         </section>
         <div className="w-[95%] h-0.5 bg-gray-500"></div>
         <section className="flex w-full px-5">
-        <span className="w-[100px] text-xs sm:text-[10px] flex items-center">
-                Share with
-        </span>
+          <span className="w-[100px] text-xs sm:text-[10px] flex items-center">
+            Share with
+          </span>
 
-              {/* <SelectDropdown /> */}
-              <Dropdown
-                selectedValue={postPrivacy}
-                handleChange={handlePostPrivacy}
-                name="Select who can see your post"
-                options={[
-                  ...postPrivacyList,
-                  {
-                    name: "Create your own union",
-                    onClick: true,
-                    link: "/create-union",
-                  },
-                ]}
-                keyName="name"
-              />
+          {/* <SelectDropdown /> */}
+          <Dropdown
+            selectedValue={postPrivacy}
+            handleChange={handlePostPrivacy}
+            name="Select who can see your post"
+            options={[
+              ...postPrivacyList,
+              {
+                name: "Create your own union",
+                onClick: true,
+                link: "/create-union",
+              },
+            ]}
+            keyName="name"
+          />
         </section>
         {/* Message Section */}
         <section className="flex w-full justify-between px-2 lg:py-1 xl:py-2 lg:h-[90px] xl:h-[120px]">
           <textarea
             value={content}
-            onChange={(e) => setState({...state, content: e.target.value})}
+            onChange={(e) => setState({ ...state, content: e.target.value })}
             type="text"
             className="w-[98%] h-[80px] lg:h-[80px] xl:h-[100px] outline-none pl-2 text-black mt-1 text-xs rounded-lg  lg:pt-1 xl:pt-2 bg-gray-300"
             placeholder="Write something..."
@@ -171,41 +166,38 @@ const SharePostModal = ({
 
         {/* Content Section */}
         <section className="flex w-full justify-between px-2">
-          <p className="text-[14px] mt-1 text-gray-800 text-semibold">
-            {text}
-          </p>
+          <p className="text-[14px] mt-1 text-gray-800 text-semibold">{text}</p>
         </section>
-        { image &&
+        {image && (
           <>
-        <hr />
-        <div className="w-[95%] h-[1px] bg-gray-500 my-2"></div>
+            <hr />
+            <div className="w-[95%] h-[1px] bg-gray-500 my-2"></div>
 
-        {/* Image Slider Section */}
-        <section className="flex w-full justify-between px-2">
-          <Carousel
-            responsive={responsive}
-            containerClass={`w-full h-full flex items-center`}
-            itemClass="carousel-item-padding-40-px"
-            showDots={true}
-            // renderDotsOutside
-          >
-            {image?.split('@')?.map((elem, index) => (
-              <div
-                key={index}
-                className="rounded-lg p-2 relative flex items-center justify-center"
+            {/* Image Slider Section */}
+            <section className="flex w-full justify-between px-2">
+              <Carousel
+                responsive={responsive}
+                containerClass={`w-full h-full flex items-center`}
+                itemClass="carousel-item-padding-40-px"
+                showDots={true}
+                // renderDotsOutside
               >
-                <img
-                  src={elem}
-                  alt=""
-                  className="w-[95%] object-cover h-[220px] rounded-lg"
-                />
-              </div>
-            ))}
-          </Carousel>
-        </section>
-        </>
-
-        }
+                {image?.split("@")?.map((elem, index) => (
+                  <div
+                    key={index}
+                    className="rounded-lg p-2 relative flex items-center justify-center"
+                  >
+                    <img
+                      src={elem}
+                      alt=""
+                      className="w-[95%] object-cover h-[220px] rounded-lg"
+                    />
+                  </div>
+                ))}
+              </Carousel>
+            </section>
+          </>
+        )}
 
         {/* Button Section */}
 

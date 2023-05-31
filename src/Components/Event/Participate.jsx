@@ -15,7 +15,7 @@ const Participate = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [formError, setFormError] = useState("");
   const { profile } = useSelector((state) => state.profileReducer);
-console.log("ProfileId",profile);
+  console.log("ProfileId", profile);
   // Function for timestamp
   // const timestamp = (date) => {
   //   const now = moment();
@@ -91,7 +91,7 @@ console.log("ProfileId",profile);
     if (!sucessMessage?.status) {
       return toasterFunction(sucessMessage?.message);
     }
-    dispatch(sponseredTabSelected("Post"))
+    dispatch(sponseredTabSelected("Post"));
     setCaption("");
     setFile(null);
     setTermsAccepted(false);
@@ -157,7 +157,10 @@ console.log("ProfileId",profile);
             onChange={handleTermsChange}
             required
           />
-          <label className="inline-block text-sm sm:font-medium" htmlFor="terms">
+          <label
+            className="inline-block text-sm sm:font-medium"
+            htmlFor="terms"
+          >
             I accept the <a href="#">terms and conditions</a>
           </label>
           <img

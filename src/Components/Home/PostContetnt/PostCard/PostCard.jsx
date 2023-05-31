@@ -20,7 +20,7 @@ import {
   getCommentByPostid,
   getLikesById,
 } from "../../../../redux/actionCreators/rootsActionCreator";
-import user from '../../../../Assets/Images/user.png'
+import user from "../../../../Assets/Images/user.png";
 import OriginalPostModal from "../../Modal/OriginalPostModal/OriginalPostModal";
 import UpdatePostModal from "../../Modal/CreatePostModal/CreatePostModal";
 import LikeModal from "../../Modal/LikeModal/LikeModal";
@@ -40,7 +40,7 @@ import moment from "moment";
 import ConfirmationModal from "../../../common/ConfirmationModal";
 import { BsThreeDots } from "react-icons/bs";
 
-const PostCard = ({ userData, item ={} }) => {
+const PostCard = ({ userData, item = {} }) => {
   const navigate = useNavigate();
   const ispenComment = true;
   const [showMore, setShowMore] = useState(false);
@@ -57,8 +57,8 @@ const PostCard = ({ userData, item ={} }) => {
     externalShare: false,
   });
   const [alert, setAlert] = useState();
-  const [state, setState] = useState({})
-  const { modalData, modalOpen, blockModal, deleteModal} = state
+  const [state, setState] = useState({});
+  const { modalData, modalOpen, blockModal, deleteModal } = state;
 
   const { likedDetails } = useSelector((state) => state.rootsReducer);
   const reducerData = useSelector((state) => {
@@ -72,7 +72,8 @@ const PostCard = ({ userData, item ={} }) => {
     /* implementing dynamic description, some redesign the postcard component */
   }
   const description = item?.text ? item?.text : "";
-  const postOption = item?.profile?.id !== profile?.id ? otherPostOption : ownPostOption
+  const postOption =
+    item?.profile?.id !== profile?.id ? otherPostOption : ownPostOption;
 
   const shortDescription = description.substring(0, 300);
   const onShowShareModal = () => {
@@ -122,9 +123,9 @@ const PostCard = ({ userData, item ={} }) => {
     });
     let payload = {
       pageNumber: 0,
-      pageSize: 10
-    }
-    dispatch(getCommentByPostid(item?.id, payload))
+      pageSize: 10,
+    };
+    dispatch(getCommentByPostid(item?.id, payload));
     setOpenModal({
       ...openModal,
       commentModal: true,
@@ -219,22 +220,22 @@ const PostCard = ({ userData, item ={} }) => {
       setPostMenuModal({ ...postMenuModal, originalPost: true });
     } else if (modalName === "External Share") {
       setPostMenuModal({ ...postMenuModal, showReportModal: true });
-    } else if(modalName === 'Block user'){
-      setState({...state, blockModal: true})
-    } else if(modalName === 'Delete Post'){
-      setState({...state, deleteModal: true})
+    } else if (modalName === "Block user") {
+      setState({ ...state, blockModal: true });
+    } else if (modalName === "Delete Post") {
+      setState({ ...state, deleteModal: true });
     }
   };
 
   const handleDelete = () => {
-        dispatch(deletePostByPostId(profile?.id, activePost.id)).then((res) => {
-        dispatch(getAllPostWithLimit(profile?.id))
-        if(res?.status){
-          setState({...state, deleteModal: false })
-          toast.success(res?.message)
-        }
-      })
-  }
+    dispatch(deletePostByPostId(profile?.id, activePost.id)).then((res) => {
+      dispatch(getAllPostWithLimit(profile?.id));
+      if (res?.status) {
+        setState({ ...state, deleteModal: false });
+        toast.success(res?.message);
+      }
+    });
+  };
 
   const handleCloseModal = () => {
     setPostMenuModal({
@@ -245,8 +246,8 @@ const PostCard = ({ userData, item ={} }) => {
     });
   };
   const handleModal = (data) => {
-    setState({ ...state, modalOpen: !modalOpen, modalData: data })
-  }
+    setState({ ...state, modalOpen: !modalOpen, modalData: data });
+  };
   return (
     <>
       <div
@@ -271,8 +272,9 @@ const PostCard = ({ userData, item ={} }) => {
               <div className="flex items-center">
                 {/*font weight removed*/}
                 <span className="ml-1 font-bold">
-                  {`${item?.profile?.fname || "User"} ${item?.profile?.lname || ""
-                    }`}
+                  {`${item?.profile?.fname || "User"} ${
+                    item?.profile?.lname || ""
+                  }`}
                 </span>
                 <span className="text-xs ml-2 font-semibold mt-0.5">
                   {item?.profile?.job}
@@ -290,7 +292,7 @@ const PostCard = ({ userData, item ={} }) => {
                 )}
                 <span className="text-[11px] ">
                   {item?.updatpostdatetime === null ||
-                    item?.updatpostdatetime === ""
+                  item?.updatpostdatetime === ""
                     ? item?.postdatetime
                     : item?.updatpostdatetime}
                 </span>
@@ -319,7 +321,7 @@ const PostCard = ({ userData, item ={} }) => {
           </div>
           {
             <MenuDropdown
-              placement={'left-end'}
+              placement={"left-end"}
               arrow={true}
               button={
                 <BsThreeDots
@@ -372,45 +374,41 @@ const PostCard = ({ userData, item ={} }) => {
                   />
                 </div>
               </>
+            ) : item.image?.split("@").length > 1 ? (
+              <Carousel
+                infinite
+                arrows
+                responsive={responsive}
+                showDots={true}
+                className="w-full"
+              >
+                {item.image?.split("@").map((item) => {
+                  return (
+                    <div className="flex justify-center ">
+                      <div className="w-[300px] sm:w-full max-w-[500px] h-[260px] border border-gray-400">
+                        <img
+                          src={item}
+                          alt="image"
+                          className="mb-3 w-full h-full object-cover"
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </Carousel>
             ) : (
-              item.image?.split("@").length > 1 ?
-                <Carousel
-                  infinite
-                  arrows
-                  responsive={responsive}
-                  showDots={true}
-                  className="w-full"
+              <>
+                <div
+                  className="m-3 mb-0 w-[300px] sm:w-full max-w-[500px] h-[260px] rounded-full"
+                  onClick={() => handleModal(item)}
                 >
-                  {
-                    item.image?.split("@").map((item) => {
-                      return (
-                        <div className="flex justify-center ">
-                          <div className="w-[300px] sm:w-full max-w-[500px] h-[260px] border border-gray-400">
-                            <img
-                              src={item}
-                              alt="image"
-                              className="mb-3 w-full h-full object-cover"
-                            />
-                          </div>
-                        </div>
-                      );
-                    })
-                  }
-
-                </Carousel>
-                :
-                <>
-                  <div
-                    className="m-3 mb-0 w-[300px] sm:w-full max-w-[500px] h-[260px] rounded-full"
-                    onClick={() => handleModal(item)}
-                  >
-                    <img
-                      src={item?.image}
-                      alt=""
-                      className="w-full h-full object-cover border border-gray-500"
-                    />
-                  </div>
-                </>
+                  <img
+                    src={item?.image}
+                    alt=""
+                    className="w-full h-full object-cover border border-gray-500"
+                  />
+                </div>
+              </>
             )
           ) : (
             ""
@@ -548,24 +546,24 @@ const PostCard = ({ userData, item ={} }) => {
           <VideoCommentsModal roots onClose={onHandleCloseModal} post={posts} />
         </Portals>
       )}
-      { blockModal &&
-        <Portals closeModal={() => setState({...state, blockModal: false})}>
+      {blockModal && (
+        <Portals closeModal={() => setState({ ...state, blockModal: false })}>
           <BlockModal
             handleBlock={handleBlock}
-            closeModalOption={() => setState({...state, blockModal: false})}
+            closeModalOption={() => setState({ ...state, blockModal: false })}
           />
         </Portals>
-      }
-      { deleteModal &&
-        <Portals closeModal={() => setState({...state, deleteModal: false})}>
-          <ConfirmationModal 
-            message={'Are you sure you want to delete this post?'}
-            button={'Confirm'}
-            closeModal={() => setState({...state, deleteModal: false})}
+      )}
+      {deleteModal && (
+        <Portals closeModal={() => setState({ ...state, deleteModal: false })}>
+          <ConfirmationModal
+            message={"Are you sure you want to delete this post?"}
+            button={"Confirm"}
+            closeModal={() => setState({ ...state, deleteModal: false })}
             handleAccept={handleDelete}
           />
         </Portals>
-      }
+      )}
     </>
   );
 };

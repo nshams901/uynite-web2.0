@@ -128,7 +128,7 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
         closeModalOption();
         toast.success(res?.message);
         dispatch(getFriendsList(profile?.id));
-        setModalType({ ...modalType, unFriend: false })
+        setModalType({ ...modalType, unFriend: false });
       } else {
         toast.error(res.message);
       }
@@ -177,17 +177,17 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
   const handleBlock = (data) => {
     const payload = {
       blockedid: id,
-      myprofileid: profile.id
-    }
+      myprofileid: profile.id,
+    };
     dispatch(blockUser(payload)).then((res) => {
       if (res?.status) {
-        dispatch(getFriendsList(profile.id))
-        toast.success(res.message)
-        setModalType({ ...modalType, block: false })
+        dispatch(getFriendsList(profile.id));
+        toast.success(res.message);
+        setModalType({ ...modalType, block: false });
       } else {
-        toast.error(res.message)
+        toast.error(res.message);
       }
-    })
+    });
   };
   return (
     <>

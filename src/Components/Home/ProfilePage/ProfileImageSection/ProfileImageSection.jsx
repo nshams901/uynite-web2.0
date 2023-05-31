@@ -1,52 +1,88 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
-import { BsCamera, BsPeopleFill } from 'react-icons/bs'
-import { FaWalking } from 'react-icons/fa'
-import { IoIosPeople } from 'react-icons/io'
+import { BsCamera, BsPeopleFill } from "react-icons/bs";
+import { FaWalking } from "react-icons/fa";
+import { IoIosPeople } from "react-icons/io";
 import FollowersModal from "../../Modal/FollowersModal/FollowersModal";
 import Portals from "../../../Portals/Portals";
 import { useDispatch } from "react-redux";
-import { getFollower, getFollowing } from "../../../../redux/actionCreators/profileAction";
+import {
+  getFollower,
+  getFollowing,
+} from "../../../../redux/actionCreators/profileAction";
 import { data } from "autoprefixer";
-import { getFriendsList, removeFollowers, removeFriend, unfollow } from "../../../../redux/actionCreators/friendsAction";
+import {
+  getFriendsList,
+  removeFollowers,
+  removeFriend,
+  unfollow,
+} from "../../../../redux/actionCreators/friendsAction";
 import { toast } from "react-toastify";
-import User from '../../../../Assets/Images/user.png'
+import User from "../../../../Assets/Images/user.png";
 
-const ProfileImageSection = ({ isOther, data={}, following, followers, friends, uploadImage, coverImg, profileImg}) => {
-  const { id } = data || {}
-  const friendsCount =  friends?.length || 0;
+const ProfileImageSection = ({
+  isOther,
+  data = {},
+  following,
+  followers,
+  friends,
+  uploadImage,
+  coverImg,
+  profileImg,
+}) => {
+  const { id } = data || {};
+  const friendsCount = friends?.length || 0;
   const followingCount = following?.length || 0;
   const followersCount = followers?.length || 0;
 
   const userName = data?.fname + data?.lname;
 
-  const [state, setState] = useState({})
+  const [state, setState] = useState({});
   const { showModal, modalName, modalData } = state;
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const handleModal =async (name) => {
-    if(name === "Friends"){
-      const data =await dispatch(getFriendsList(id))
-      setState({...state, showModal: true, modalName: name, modalData: friends})
-    }else if(name === 'Followers'){
-      dispatch(getFollower(id))
-       setState({...state, showModal: true, modalName: name, modalData: followers})
-    }else if( name === 'Following'){
-      dispatch(getFollowing(id))
-       setState({...state, showModal: true, modalName: name, modalData: following})
+  const handleModal = async (name) => {
+    if (name === "Friends") {
+      const data = await dispatch(getFriendsList(id));
+      setState({
+        ...state,
+        showModal: true,
+        modalName: name,
+        modalData: friends,
+      });
+    } else if (name === "Followers") {
+      dispatch(getFollower(id));
+      setState({
+        ...state,
+        showModal: true,
+        modalName: name,
+        modalData: followers,
+      });
+    } else if (name === "Following") {
+      dispatch(getFollowing(id));
+      setState({
+        ...state,
+        showModal: true,
+        modalName: name,
+        modalData: following,
+      });
     }
-  }
+  };
   const handleRemove = (friend) => {
     const payload = {
       profileid: id,
-      friendprofileid: friend?.profile?.id
+      friendprofileid: friend?.profile?.id,
     };
     dispatch(
-      modalName === "Friends" ? removeFriend(payload) :
-      modalName === "Following" ? unfollow(payload) :
-      modalName === "Followers" ? removeFollowers(payload) : {type: ""}
-      ).then((res) => {
-      if(res?.status){
+      modalName === "Friends"
+        ? removeFriend(payload)
+        : modalName === "Following"
+        ? unfollow(payload)
+        : modalName === "Followers"
+        ? removeFollowers(payload)
+        : { type: "" }
+    ).then((res) => {
+      if (res?.status) {
         dispatch(
           modalName === "Friends"
             ? getFriendsList(id)
@@ -56,16 +92,16 @@ const ProfileImageSection = ({ isOther, data={}, following, followers, friends, 
             ? getFollower(id)
             : { type: "" }
         ).then((res) => {
-          if(res.status){
-            setState({...state, modalData: res.data})
+          if (res.status) {
+            setState({ ...state, modalData: res.data });
           }
         });
-        toast.success(res?.message)
-      }else{
-        toast.error(res?.message)
+        toast.success(res?.message);
+      } else {
+        toast.error(res?.message);
       }
-    })
-  }
+    });
+  };
   return (
     <div className="w-[95%] lg:w-[80%] xl:w-[70%] bg-white rounded-xl flex flex-col items-center mb-3">
       {/*Cover Image Section */}
@@ -80,15 +116,15 @@ const ProfileImageSection = ({ isOther, data={}, following, followers, friends, 
         htmlFor={`${isOther ? "" : "cover-pic"}`}
         className="w-[95%] h-[100px] cursor-pointer sm:h-[150px] lg:h-[200px] rounded-xl flex items-center justify-center mt-3 border border-gray-400"
       >
-       {coverImg || data?.pcoverimage ?
-        <img
-          src={coverImg || data?.pcoverimage}
-          alt=""
-          className="w-full lg:h-full rounded-xl border border-gray-400 object-cover"
-        />
-        :
-        <BsCamera size={28} className="text-gray-600" />
-        }
+        {coverImg || data?.pcoverimage ? (
+          <img
+            src={coverImg || data?.pcoverimage}
+            alt=""
+            className="w-full lg:h-full rounded-xl border border-gray-400 object-cover"
+          />
+        ) : (
+          <BsCamera size={28} className="text-gray-600" />
+        )}
       </label>
 
       {/* Profile Image Section  */}
@@ -167,9 +203,12 @@ const ProfileImageSection = ({ isOther, data={}, following, followers, friends, 
       } */}
       {showModal && (
         <Portals closeModal={() => setState({ ...state, showModal: false })}>
-          <FollowersModal handleClick={handleRemove} modalName={`Your ${modalName}`} 
-          emptyMessage= { `No ${modalName}`}
-          data={modalData} />
+          <FollowersModal
+            handleClick={handleRemove}
+            modalName={`Your ${modalName}`}
+            emptyMessage={`No ${modalName}`}
+            data={modalData}
+          />
         </Portals>
       )}
     </div>

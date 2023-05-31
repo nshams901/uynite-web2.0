@@ -10,7 +10,7 @@ import kicksComments from "../../../../Assets/Images/Kicks Comment.png";
 import kicksShare from "../../../../Assets/Images/Kicks Share.png";
 import collection from "../../../../Assets/Images/Collections.png";
 import kicksLiked from "../../../../Assets/Images/KicksLike.png";
-import unmute from "../../../../Assets/Images/Un-Mute.png"
+import unmute from "../../../../Assets/Images/Un-Mute.png";
 import OwnUserVideoModal from "../OwnUserVideoModal";
 import DeleteVideoModal from "../DeleteVideoModal";
 import EditMyVideoModal from "../EditMyVideoModal";
@@ -27,9 +27,9 @@ import { startFollowing } from "../../../../redux/actionCreators/profileAction";
 import { toast } from "react-toastify";
 import SelectedVideoModal from "../../SearchKicksPage/SelectedVideoModal";
 import { HiPlus } from "react-icons/hi";
-import shortVideo from "../../../../Assets/Videos/v1.mp4"
-import user from "../../../../Assets/Images/user2.png"
-import "../kicks.css"
+import shortVideo from "../../../../Assets/Videos/v1.mp4";
+import user from "../../../../Assets/Images/user2.png";
+import "../kicks.css";
 import { useEffect } from "react";
 import { debounce } from "../../../Utility/utility";
 import { GrWaypoint } from "react-icons/gr";
@@ -41,8 +41,8 @@ const VideoComponent = ({ dataList, data }) => {
   const dispatch = useDispatch();
   const reducerData = useSelector((state) => {
     return {
-      profileDetail: state.profileReducer.profile
-    }
+      profileDetail: state.profileReducer.profile,
+    };
   });
   const { profileDetail } = reducerData;
   const [isMyVideo, setIsMyVideo] = useState(false);
@@ -57,10 +57,8 @@ const VideoComponent = ({ dataList, data }) => {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [isVideoPlaying, setIsvideoPlaying] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
-  console.log(selectVideo)
+  console.log(selectVideo);
   const videoRef = useRef(null);
-  ;
-
   // const handleButtonActions = (elem) => {
   //   if (elem.title == "mute") {
   //     console.log(isMuted, videoRef.current.muted);
@@ -78,7 +76,7 @@ const VideoComponent = ({ dataList, data }) => {
       videoRef.current.play();
       setIsvideoPlaying(true);
     }
-  }
+  };
   const [state, setState] = useState({});
   const { isMute = true } = state;
   const {
@@ -113,7 +111,7 @@ const VideoComponent = ({ dataList, data }) => {
 
   const handleIsMyVideo = (data) => {
     // console.log(data)
-    console.log(profileDetail)
+    console.log(profileDetail);
     dispatch({
       type: "ACTIVE_POST",
       payload: data,
@@ -130,8 +128,8 @@ const VideoComponent = ({ dataList, data }) => {
   const handleIconClick = (title) => {
     dispatch({
       type: "ACTIVE_POST",
-      payload: data
-    })
+      payload: data,
+    });
     if (title === "comments") {
       dispatch(getCommentsByPostid(id));
       setCommentVideo(true);
@@ -174,51 +172,54 @@ const VideoComponent = ({ dataList, data }) => {
           }
         });
       }
-
-    } else if (title === 'follow') {
+    } else if (title === "follow") {
       const payload = {
         myprofileid: profileDetail?.id,
         followerprofileid: profileid,
-        datetimes: moment().format('YYYY-MM-DD'),
+        datetimes: moment().format("YYYY-MM-DD"),
       };
-      console.log("")
-      dispatch(startFollowing(payload)).then((res) => {
-        title === "unfollo"
-        console.log("followed success", res)
-        // if (res?.status) {
-        //   toast.success(res?.message)
-        // } else {
-        //   toast.error(res?.message)
-        // }
-      }).catch((err) => {
-        console.log("followed denyed", err);
-      })
-    }
-    else if (title === 'unfollow') {
+      console.log("");
+      dispatch(startFollowing(payload))
+        .then((res) => {
+          title === "unfollo";
+          console.log("followed success", res);
+          // if (res?.status) {
+          //   toast.success(res?.message)
+          // } else {
+          //   toast.error(res?.message)
+          // }
+        })
+        .catch((err) => {
+          console.log("followed denyed", err);
+        });
+    } else if (title === "unfollow") {
       const payload = {
         profileid: profileDetail?.id,
-        friendprofileid: profileid
+        friendprofileid: profileid,
       };
-      dispatch(unfollow(payload)).then((res) => {
-        console.log("unfollowed success", res)
-      }).catch((err) => {
-        console.log("unfollowed denyed", err)
-      })
+      dispatch(unfollow(payload))
+        .then((res) => {
+          console.log("unfollowed success", res);
+        })
+        .catch((err) => {
+          console.log("unfollowed denyed", err);
+        });
     }
-
   };
 
   const handleBlock = () => {
     const payload = {
       blockedid: id,
-      myprofileid: profileid
-    }
-    dispatch(blockUser(payload)).then((res) => {
-      console.log("user is blocked", res)
-    }).catch((err) => {
-      console.log("user is not blocked", err)
-    })
-  }
+      myprofileid: profileid,
+    };
+    dispatch(blockUser(payload))
+      .then((res) => {
+        console.log("user is blocked", res);
+      })
+      .catch((err) => {
+        console.log("user is not blocked", err);
+      });
+  };
 
   const [isVideoPlayings, setisVideoPlayings] = useState(false);
 
@@ -244,22 +245,24 @@ const VideoComponent = ({ dataList, data }) => {
       vidRef.current.play();
     }
 
-
-
-    window.addEventListener("resize", () => {
-      const ismobile = window.innerWidth < 900;
-      if (ismobile !== isMobile) setIsMobile(ismobile);
-    }, false);
+    window.addEventListener(
+      "resize",
+      () => {
+        const ismobile = window.innerWidth < 900;
+        if (ismobile !== isMobile) setIsMobile(ismobile);
+      },
+      false
+    );
   }, [isMobile]);
   return (
     <div key={profile?.id} className="snap-y snap-mandatory">
       <div className="">
-
         <section className="relative snap-y snap-mandatory justify-center flex items-center bg-black hideScroll right-0  left-0 h-1/2 w-full z-0">
-
           <div className="video-cards">
             <video
-              className={`video-player cursor-pointer ${isMobile ? "w-full h-[386px]" : ""}`}
+              className={`video-player cursor-pointer ${
+                isMobile ? "w-full h-[386px]" : ""
+              }`}
               loop={true}
               autoPlay="autoplay"
               muted={isMute}
@@ -267,7 +270,6 @@ const VideoComponent = ({ dataList, data }) => {
               onClick={onVideoClick1}
               // src={video}
               src={shortVideo}
-
             >
               {/* <source
                 // src={data?.video} type="video/mp4"
@@ -290,31 +292,38 @@ const VideoComponent = ({ dataList, data }) => {
                   className="w-[27px] h-[27px] text-white"
                 />
               </div>
-              {dataList?.map((elem, index) => (
-                (elem.title === 'follow' & profileid === profileDetail?.id) ? "" :
+              {dataList?.map((elem, index) =>
+                (elem.title === "follow") &
+                (profileid === profileDetail?.id) ? (
+                  ""
+                ) : (
                   <div
                     key={elem?.title}
                     onClick={() => handleIconClick(elem?.title)}
                     className="flex items-end mb-3 gap- font-semibold flex-col"
                   >
                     <img
-                      src={(elem?.title === 'likes' && isliked) ? kicksLiked : (elem?.title === 'mute' && isMute) ? unmute : elem?.img}
+                      src={
+                        elem?.title === "likes" && isliked
+                          ? kicksLiked
+                          : elem?.title === "mute" && isMute
+                          ? unmute
+                          : elem?.img
+                      }
                       alt=""
                       className="w-[30px] cursor-pointer "
                     />
 
                     <div className="text-[12px] text-white flex items-center mr-[12px]">
-
                       {elem?.title === "likes"
                         ? `${likecount}`
                         : elem?.title === "comments"
-                          ? `${commentcount}`
-                          : ''}
+                        ? `${commentcount}`
+                        : ""}
                     </div>
-
                   </div>
-
-              ))}
+                )
+              )}
               <span>
                 <label
                   onClick={() => setSelectVideo(true)}
@@ -328,9 +337,11 @@ const VideoComponent = ({ dataList, data }) => {
           </div>
         </section>
 
-
-
-        <div className={`flex relative bottom-[85px] ${isMobile ? "bottom-[100px]" : "bottom-[85px]"}`}>
+        <div
+          className={`flex relative bottom-[85px] ${
+            isMobile ? "bottom-[100px]" : "bottom-[85px]"
+          }`}
+        >
           <div className="">
             <div className="flex gap-2 items-center mb-3">
               <img src={eye} alt="" className="w-[25px] h-[15px] ml-2" />
@@ -345,16 +356,15 @@ const VideoComponent = ({ dataList, data }) => {
               <span className="font-semibold flex items-start">
                 {name ? `${profile?.fname} ${profile?.lname}` : "User"}
               </span>
-
             </div>
             <div className="ml-[53px] mt-[-22px]">
-              <span className="px-3 py-[2px] border-white p-1 text-[10px] rounded-lg bg-white text-slate-400 mr-4">Adventures</span>
+              <span className="px-3 py-[2px] border-white p-1 text-[10px] rounded-lg bg-white text-slate-400 mr-4">
+                Adventures
+              </span>
               <span className="text-[10px] font-medium">5 hours ago</span>
             </div>
           </div>
         </div>
-
-
       </div>
       {/* <ReactPlayer url='https://www.youtube.com/watch?v=vNeN13EQbqk' /> */}
 
@@ -372,7 +382,10 @@ const VideoComponent = ({ dataList, data }) => {
         />
       )}
       {showOthersVideoModal && (
-        <OtherUserVideoModal handleBlock={handleBlock} onClose={() => setShowOthersVideoModal(false)} />
+        <OtherUserVideoModal
+          handleBlock={handleBlock}
+          onClose={() => setShowOthersVideoModal(false)}
+        />
       )}
       {editVideo && <EditMyVideoModal onClose={() => setEditVideo(false)} />}
       {deleteVideo && (
@@ -382,14 +395,12 @@ const VideoComponent = ({ dataList, data }) => {
         <VideoCommentsModal onClose={() => setCommentVideo(false)} />
       )}
 
-      {selectVideo &&
+      {selectVideo && (
         <SelectedVideoModal
           selectedVideo={selectedVideo}
           onClose={() => setSelectVideo(false)}
         />
-      }
-
-
+      )}
     </div>
   );
 };

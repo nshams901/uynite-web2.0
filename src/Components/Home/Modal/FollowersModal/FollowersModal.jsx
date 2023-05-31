@@ -1,8 +1,14 @@
 import React from "react";
 import { useEffect } from "react";
-import User from "../../../../Assets/Images/user.png"
+import User from "../../../../Assets/Images/user.png";
 import { Link } from "react-router-dom";
-const FollowersModal = ({title, modalName, data, emptyMessage= '', handleClick}) => {
+const FollowersModal = ({
+  title,
+  modalName,
+  data,
+  emptyMessage = "",
+  handleClick,
+}) => {
   return (
     <div
       onClick={(e) => e.stopPropagation()}

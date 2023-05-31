@@ -1,14 +1,14 @@
-import { AiOutlineCloseCircle } from 'react-icons/ai'
-import { MdKeyboardArrowRight } from 'react-icons/md'
-import wishes from '../../../../../Assets/Images/Umeet/wishesTemplate.webp';
+import { AiOutlineCloseCircle } from "react-icons/ai";
+import { MdKeyboardArrowRight } from "react-icons/md";
+import wishes from "../../../../../Assets/Images/Umeet/wishesTemplate.webp";
 // import createEventTemplate from '../../'
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 const ChooseTemplate = ({ onClose, handleImageChange, saveTemplate }) => {
-  const dispatch = useDispatch()
-  const [state, setState] = useState({})
-  const { templatesImage = [], templates = []} = state
+  const dispatch = useDispatch();
+  const [state, setState] = useState({});
+  const { templatesImage = [], templates = [] } = state;
   const handleUpload = (file) => {
     const payload = {
       eventid: "12",
@@ -18,8 +18,12 @@ const ChooseTemplate = ({ onClose, handleImageChange, saveTemplate }) => {
       category: "marrage",
     };
     // dispatch(createEventTemplate())
-    setState({...state, templatesImage: [...templatesImage,file], templates: [...templates, URL.createObjectURL(file)]})
-  }
+    setState({
+      ...state,
+      templatesImage: [...templatesImage, file],
+      templates: [...templates, URL.createObjectURL(file)],
+    });
+  };
   return (
     <div
       className="absolut fixed top-8 w-full h-full flex justify-center items-center"
@@ -33,7 +37,8 @@ const ChooseTemplate = ({ onClose, handleImageChange, saveTemplate }) => {
               htmlFor="templateInput"
               className="px-5 py-1 cursor-pointer rounded-md text-white border bg-[#649B8E]"
             >
-              <input onChange={(e) => handleUpload(e.target.files[0])}
+              <input
+                onChange={(e) => handleUpload(e.target.files[0])}
                 type="file"
                 accept="image/*"
                 className="hidden"
@@ -59,7 +64,10 @@ const ChooseTemplate = ({ onClose, handleImageChange, saveTemplate }) => {
         </div>
 
         <div>
-          <button onClick={() => saveTemplate} className="w-full py-1 rounded-md text-white border border-[#649B8E] bg-[#649B8E]">
+          <button
+            onClick={() => saveTemplate}
+            className="w-full py-1 rounded-md text-white border border-[#649B8E] bg-[#649B8E]"
+          >
             Save
           </button>
           <button
@@ -72,6 +80,6 @@ const ChooseTemplate = ({ onClose, handleImageChange, saveTemplate }) => {
       </div>
     </div>
   );
-}
+};
 
-export default ChooseTemplate
+export default ChooseTemplate;

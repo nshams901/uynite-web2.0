@@ -1,5 +1,5 @@
 import React from "react";
-import LikeIcon from "../../assets/images/KicksLike.png";
+import LikeIcon from "../../Assets/Images/KicksLike.png";
 const EventResultCard = () => {
   return (
     <div className="flex w-full flex-col bg-white rounded-[20px] px-4 py-2 gap-2 mt-2">
@@ -25,7 +25,11 @@ const EventResultCard = () => {
             </div>
           </div>
         </div>
-        <img src="./images/groups.png" alt="" className="w-[28px] h-[28px] sm:w-[35px] sm:h-[35px]" />
+        <img
+          src="./images/groups.png"
+          alt=""
+          className="w-[28px] h-[28px] sm:w-[35px] sm:h-[35px]"
+        />
       </section>
       <div className="h-[200px]bg-white rounded-[20px] w-full pb-2 flex flex-col gap-2">
         <img

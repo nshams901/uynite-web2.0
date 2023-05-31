@@ -5,9 +5,12 @@ import EventGuests from "./EventGuests";
 import EventChat from "./EventChat";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { getEventDetails, getAllEventChatMessage } from "../../../../redux/actionCreators/umeetActionCreator";
+import {
+  getEventDetails,
+  getAllEventChatMessage,
+} from "../../../../redux/actionCreators/umeetActionCreator";
 import { useSelector, useDispatch } from "react-redux";
-import '../Umeet.css'
+import "../Umeet.css";
 
 const responsive = {
   superLargeDesktop: {
@@ -30,40 +33,45 @@ const responsive = {
 };
 
 const EventDetails = ({
-  myEvent, handleDeleteEvent, handleEditEvent,
-  handleShareEvent, handleRvspModal, singleEvent,
-  handleFeedbacks }) => {
+  myEvent,
+  handleDeleteEvent,
+  handleEditEvent,
+  handleShareEvent,
+  handleRvspModal,
+  singleEvent,
+  handleFeedbacks,
+}) => {
   const [details, setDetails] = useState(true);
   const [guests, setGuests] = useState(false);
   const [chat, setChat] = useState(false);
 
-console.log(details, guests, chat)
+  console.log(details, guests, chat);
 
   const dispatch = useDispatch();
-  const { umeetReducer } = useSelector(state=>state)
-  
-  const eventDetail = umeetReducer?.eventDetail
-  
-  const handleDetails = ()=>{
-    setDetails(true)
-    setGuests(false)
-    setChat(false)
-  }
+  const { umeetReducer } = useSelector((state) => state);
+
+  const eventDetail = umeetReducer?.eventDetail;
+
+  const handleDetails = () => {
+    setDetails(true);
+    setGuests(false);
+    setChat(false);
+  };
 
   const handleGuests = () => {
-    setGuests(true)
-    setDetails(false)    
-    setChat(false)
+    setGuests(true);
+    setDetails(false);
+    setChat(false);
   };
 
   const handleChat = () => {
-    setChat(true)
-    setDetails(false)
-    setGuests(false)      
+    setChat(true);
+    setDetails(false);
+    setGuests(false);
   };
 
   function RenderStatus() {
-    if (details){
+    if (details) {
       return (
         <DetailsOfEvent
           myEvent={myEvent}
@@ -72,12 +80,13 @@ console.log(details, guests, chat)
           handleShareEvent={handleShareEvent}
           handleFeedbacks={handleFeedbacks}
           eventDetail={eventDetail}
-        />)
-    }else if(guests){
-     return <EventGuests />;
-    }else if(chat){
-     return <EventChat />;
-    }     
+        />
+      );
+    } else if (guests) {
+      return <EventGuests />;
+    } else if (chat) {
+      return <EventChat />;
+    }
   }
 
   return (
@@ -87,21 +96,24 @@ console.log(details, guests, chat)
       <div className="w-[96%] lg:w-[60%] flex flex-col items-center">
         <div className="p-3 w-full bg-white rounded-xl">
           <h3 className="py-2 text-xl font-medium flex justify-center">
-            {(eventDetail && eventDetail.eventName) ? eventDetail.eventName : (
-              <div className='flex flex-col'>
-               <p className='skeleton-text skeleton'></p>
-               <p className='skeleton-text skeleton'></p>
-              </div>)
-            }
+            {eventDetail && eventDetail.eventName ? (
+              eventDetail.eventName
+            ) : (
+              <div className="flex flex-col">
+                <p className="skeleton-text skeleton"></p>
+                <p className="skeleton-text skeleton"></p>
+              </div>
+            )}
           </h3>
           <div className="w-full overflow-hidden">
-            {eventDetail ? 
-             <img
-              src={eventDetail ? eventDetail.eventTemplate : wishes}
-              className="w-full h-[300px] object-cover rounded-xl"
-            /> : <div className='skeleton w-full h-[300px] rounded-xl object-cover'></div>
-            }
-            
+            {eventDetail ? (
+              <img
+                src={eventDetail ? eventDetail.eventTemplate : wishes}
+                className="w-full h-[300px] object-cover rounded-xl"
+              />
+            ) : (
+              <div className="skeleton w-full h-[300px] rounded-xl object-cover"></div>
+            )}
           </div>
           <div className="flex justify-center my-4">
             <button
@@ -116,22 +128,25 @@ console.log(details, guests, chat)
         <div className="p-2.5 my-3 flex w-full bg-white rounded-xl">
           <div
             onClick={handleDetails}
-            className={`${details ? "bg-[#649B8E] text-white" : "bg-[#E4E4E4]"
-              } rounded-lg flex justify-center py-1 px-4 w-1/3 cursor-pointer`}
+            className={`${
+              details ? "bg-[#649B8E] text-white" : "bg-[#E4E4E4]"
+            } rounded-lg flex justify-center py-1 px-4 w-1/3 cursor-pointer`}
           >
             Details
           </div>
           <div
             onClick={handleGuests}
-            className={`${guests ? "bg-[#649B8E] text-white" : "bg-[#E4E4E4]"
-              } rounded-lg flex justify-center py-1 px-4 w-1/3 mx-2 cursor-pointer`}
+            className={`${
+              guests ? "bg-[#649B8E] text-white" : "bg-[#E4E4E4]"
+            } rounded-lg flex justify-center py-1 px-4 w-1/3 mx-2 cursor-pointer`}
           >
             Guests
           </div>
           <div
             onClick={handleChat}
-            className={`${chat ? "bg-[#649B8E] text-white" : "bg-[#E4E4E4]"
-              } rounded-lg flex justify-center py-1 px-4 w-1/3 cursor-pointer`}
+            className={`${
+              chat ? "bg-[#649B8E] text-white" : "bg-[#E4E4E4]"
+            } rounded-lg flex justify-center py-1 px-4 w-1/3 cursor-pointer`}
           >
             Chat
           </div>

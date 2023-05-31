@@ -28,44 +28,44 @@ const EventPostCard = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [like, setLike] = useState(false);
   const { likedDetails } = useSelector((state) => state.rootsReducer);
- const [likeCount,setLikeCount] = useState(0)
+  const [likeCount, setLikeCount] = useState(0);
   useEffect(() => {
     setLike(item?.isliked);
-    setLikeCount(item?.likecount)
+    setLikeCount(item?.likecount);
   }, [likedDetails]);
-  const onLikeHandleClick = async() => {
-  
-        if (like) {
-        const dislikeResponse = await  dispatch(
-            decreaseLikeByLikeId(
-              defaultRootData?.data?.postdata?.profileid,
-              item?.likeid
-            )
-          );
-          console.log("dislikeResponse",dislikeResponse);
-         if (dislikeResponse?.status) {
-          dispatch(getAllPostWithLimit(defaultRootData?.data?.postdata?.profileid));
-          setLike(false);
-          setLikeCount(likeCount-1)
-         }
-        } else {
-          const postDeatils = {
-            datetime: Date.now().toString(),
-            postid: item?.id,
-            profileid: item?.profileid,
-            type: "p",
-          };
-    
-          const response = await dispatch(getLikesById(postDeatils));
-          if (response?.status) {
-            dispatch(
-              getAllPostWithLimit(defaultRootData?.data?.postdata?.profileid)
-            );
-            setLike(true);
-            setLikeCount(likeCount+1)
-          }
-        }
-    
+  const onLikeHandleClick = async () => {
+    if (like) {
+      const dislikeResponse = await dispatch(
+        decreaseLikeByLikeId(
+          defaultRootData?.data?.postdata?.profileid,
+          item?.likeid
+        )
+      );
+      console.log("dislikeResponse", dislikeResponse);
+      if (dislikeResponse?.status) {
+        dispatch(
+          getAllPostWithLimit(defaultRootData?.data?.postdata?.profileid)
+        );
+        setLike(false);
+        setLikeCount(likeCount - 1);
+      }
+    } else {
+      const postDeatils = {
+        datetime: Date.now().toString(),
+        postid: item?.id,
+        profileid: item?.profileid,
+        type: "p",
+      };
+
+      const response = await dispatch(getLikesById(postDeatils));
+      if (response?.status) {
+        dispatch(
+          getAllPostWithLimit(defaultRootData?.data?.postdata?.profileid)
+        );
+        setLike(true);
+        setLikeCount(likeCount + 1);
+      }
+    }
   };
 
   const onHandleChange = (event) => {
@@ -130,14 +130,21 @@ const EventPostCard = (props) => {
       <div className="w-full h-[0.05rem] bg-gray-400 mb-3"></div>
       <div className="flex items-center justify-center gap-8 relative">
         <div>
-         {like ? <img
-            src={kicksAfterLike}
-            className="h-[40px] w-[40px] cursor-pointer absolute bottom-[0.03rem] left-1"
-            alt="like"
-            onClick={onLikeHandleClick}
-          />
-         : 
-       <img src={kicksBeforeLike} className='h-[40px] w-[40px] cursor-pointer absolute bottom-[0.03rem] left-1' alt="like" onClick={onLikeHandleClick}/> }
+          {like ? (
+            <img
+              src={kicksAfterLike}
+              className="h-[40px] w-[40px] cursor-pointer absolute bottom-[0.03rem] left-1"
+              alt="like"
+              onClick={onLikeHandleClick}
+            />
+          ) : (
+            <img
+              src={kicksBeforeLike}
+              className="h-[40px] w-[40px] cursor-pointer absolute bottom-[0.03rem] left-1"
+              alt="like"
+              onClick={onLikeHandleClick}
+            />
+          )}
         </div>
 
         <input

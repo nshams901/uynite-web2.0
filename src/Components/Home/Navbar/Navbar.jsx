@@ -8,8 +8,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { isTabSelected } from "../../../redux/actionCreators/userActionCreator";
 import { BsChevronCompactDown } from "react-icons/bs";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import g from "../../../assets/images/notification1.png";
-import User from '../../../Assets/Images/user.png'
+
+import User from "../../../Assets/Images/user.png";
 import "./navbar.css";
 import { getUsers } from "../../../redux/actionCreators/friendsAction";
 import ItemList from "../../common/ItemList";
@@ -22,13 +22,13 @@ const Navbar = () => {
   const [notificationModal, setNotificationModal] = useState(false);
   const [friendsModal, setFriendsModal] = useState(false);
   const [state, setState] = useState({});
-  const { searchInput = '' } = state
+  const { searchInput = "" } = state;
   const { selectedTab } = useSelector((state) => state.userReducer);
   const profile = useSelector((state) => state?.profileReducer?.profile);
-  const { usersList } = useSelector((state) => state.friendReducer || {})
+  const { usersList } = useSelector((state) => state.friendReducer || {});
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
   const userFriendsModal = () => {
     setFriendsModal(!friendsModal);
   };
@@ -65,14 +65,14 @@ const Navbar = () => {
 
   const handleFriendOption = (item) => {
     console.log(item);
-    if(item === 'Find Friend'){
-      navigate(`/find-friend`)
-    }else if(item === 'My Friend'){
-      navigate(`/myfriend`)
-    }else if(item === 'Friend Request'){
-      navigate(`/friend-request`)
+    if (item === "Find Friend") {
+      navigate(`/find-friend`);
+    } else if (item === "My Friend") {
+      navigate(`/myfriend`);
+    } else if (item === "Friend Request") {
+      navigate(`/friend-request`);
     }
-  }
+  };
 
   const onClickSlectedTab = (option) => {
     dispatch(isTabSelected(option?.url));
@@ -80,20 +80,19 @@ const Navbar = () => {
   };
 
   function searchUser(value) {
-    dispatch(getUsers(value))
+    dispatch(getUsers(value));
   }
   const processChange = debounce((e) => searchUser(e));
 
   const handleChange = (e) => {
     const { value } = e.target;
-    setState({ ...state, searchInput: value })
-    if (value.startsWith('#')) {
-
+    setState({ ...state, searchInput: value });
+    if (value.startsWith("#")) {
     } else {
       // dispatch(getUsers())
-      processChange(value)
+      processChange(value);
     }
-  }
+  };
 
   return (
     <section className="h-[65px] w-full fixed flex bg-white z-10 responsive_navbar2">
@@ -102,13 +101,9 @@ const Navbar = () => {
       <div className="md:w-[30%] flex h-[65px] flex-row justify-center items-center">
         {/* Logo Section */}
 
-          <div className="w-[50px] mx-[14px]">
-            <img
-              src="./images/Logo.png"
-              alt=""
-              className=" w-[52px] h-[52px]"
-            />
-          </div>
+        <div className="w-[50px] mx-[14px]">
+          <img src="./images/Logo.png" alt="" className=" w-[52px] h-[52px]" />
+        </div>
 
         {/* Search Bar Section */}
         <div className=" w-[80%] h-[38px] rounded-md relative bg-[#e4e7ec]  md:mr-5 hide_searchbar">
@@ -123,17 +118,13 @@ const Navbar = () => {
             alt=""
             className="w-5 h-5 cursor-pointer absolute top-[30%] right-[6%]"
           />
-          {searchInput &&
+          {searchInput && (
             <div className="bg-white  h-[400px] overflow-y-scroll overflow-x-hidden">
-              {
-                usersList?.map((item) => {
-                  return <ItemList user item={item} />
-                })
-              }
-
+              {usersList?.map((item) => {
+                return <ItemList user item={item} />;
+              })}
             </div>
-
-          }
+          )}
         </div>
       </div>
 
@@ -145,17 +136,20 @@ const Navbar = () => {
             {dataList?.map((elem) => (
               <div
                 key={elem?.name}
-                className={`w-[40%] items-center rounded-t-md cursor-pointer gap-2 h-[90%] justify-center ${isMobile ? "" : "flex"
-                  }`}
+                className={`w-[40%] items-center rounded-t-md cursor-pointer gap-2 h-[90%] justify-center ${
+                  isMobile ? "" : "flex"
+                }`}
                 style={{
-                  backgroundColor:
-                    location.pathname?.includes(elem?.url) ? "#6780AF" : "#D8D8D8",
+                  backgroundColor: location.pathname?.includes(elem?.url)
+                    ? "#6780AF"
+                    : "#D8D8D8",
                 }}
                 onClick={() => onClickSlectedTab(elem)}
               >
                 <div
-                  className={`h-full flex items-center justify-center ${isMobile ? "w-full text-center pt-1" : "w-[35px]"
-                    }`}
+                  className={`h-full flex items-center justify-center ${
+                    isMobile ? "w-full text-center pt-1" : "w-[35px]"
+                  }`}
                 >
                   <img
                     src={
@@ -170,8 +164,9 @@ const Navbar = () => {
 
                 <div className="flex flex-col justify-center w-[85px]">
                   <h1
-                    className={`text-sm font-bold  ${isMobile ? "text-center" : ""
-                      }`}
+                    className={`text-sm font-bold  ${
+                      isMobile ? "text-center" : ""
+                    }`}
                   >
                     {elem?.name}
                   </h1>
@@ -198,39 +193,35 @@ const Navbar = () => {
               className="flex flex-col items-center cursor-pointer relative -mb-[17px] text-[12px]"
               onClick={() => onHandleClick(elem)}
             >
-              {
-                elem?.name === 'Friends' ?
-                  <>
-                    <MenuDropdown
-                      classes={'mt-2'}
-                      handleOption={handleFriendOption}
-                      placement={'bottom-start'}
-                      button={
-                        <>
-                          <img
-                            src={elem?.icon}
-                            className="ml-2 h-[30px]"
-                          />
-                          <div className=" font-bold">{elem?.name}</div>
-                        </>
-                      }
-                      options={
-                        [{ name: 'My Friends' }, { name: 'Find Friend' }, { name: 'Friend Request' }]
-                      }
-                    />
-
-                  </>
-                  :
-                  <>
-                    <img
-                      src={elem?.icon}
-                      alt={elem?.name}
-                      className="h-[30px] profile_img"
-                    />
-                    <div className=" font-bold">{elem?.name}</div>
-                  </>
-              }
-
+              {elem?.name === "Friends" ? (
+                <>
+                  <MenuDropdown
+                    classes={"mt-2"}
+                    handleOption={handleFriendOption}
+                    placement={"bottom-start"}
+                    button={
+                      <>
+                        <img src={elem?.icon} className="ml-2 h-[30px]" />
+                        <div className=" font-bold">{elem?.name}</div>
+                      </>
+                    }
+                    options={[
+                      { name: "My Friends" },
+                      { name: "Find Friend" },
+                      { name: "Friend Request" },
+                    ]}
+                  />
+                </>
+              ) : (
+                <>
+                  <img
+                    src={elem?.icon}
+                    alt={elem?.name}
+                    className="h-[30px] profile_img"
+                  />
+                  <div className=" font-bold">{elem?.name}</div>
+                </>
+              )}
             </div>
           ))}
 
@@ -247,12 +238,10 @@ const Navbar = () => {
             <BsChevronCompactDown className="" /> */}
 
             <ProfileMenu data={profile} />
-
           </div>
           {/* {profileModal && <ProfileModal profile={profile} />} */}
           {notificationModal && <NotificationModal />}
           {/* {friendsModal && <FriendsModal setFriendsModal={setFriendsModal} />} */}
-
         </div>
       </div>
     </section>

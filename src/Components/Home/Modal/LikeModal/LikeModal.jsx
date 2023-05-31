@@ -1,32 +1,32 @@
 import React, { useEffect } from "react";
-import LikeIcon from "../../../../assets/images/afterLike.png";
+import LikeIcon from "../../../../Assets/Images/afterLike.png";
 import LikedProfile from "./LikedProfile";
 import { RxCrossCircled } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import { getPostLike } from "../../../../redux/actionCreators/postActionCreator";
 import { useState } from "react";
 const LikeModal = ({ closeLikeModal }) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const reducerData = useSelector((state) => {
     return {
       // allLikesList: state.postReducer.postLikes,
       activePost: state.rootsReducer.activePost,
-    }
+    };
   });
-  const {  activePost, postLikes} = reducerData;
-  const [state, setState] = useState({})
-  const { allLikesList} = state
+  const { activePost, postLikes } = reducerData;
+  const [state, setState] = useState({});
+  const { allLikesList } = state;
   useEffect(() => {
-     let payload = {
-       pageNumber: 0,
-       pageSize: 10,
-     };
-     dispatch(getPostLike(activePost?.id, payload)).then((res) => {
-      if(res?.status){
-        setState({...state, allLikesList: res.data})
+    let payload = {
+      pageNumber: 0,
+      pageSize: 10,
+    };
+    dispatch(getPostLike(activePost?.id, payload)).then((res) => {
+      if (res?.status) {
+        setState({ ...state, allLikesList: res.data });
       }
-     });
-  }, [])
+    });
+  }, []);
 
   return (
     <div

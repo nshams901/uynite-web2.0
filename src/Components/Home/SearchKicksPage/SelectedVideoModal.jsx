@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import profile from '../../../Assets/Images/Person.jpg'
-import videoImg from '../../../Assets/Images/videoImg.jpg'
-import { useDispatch, useSelector } from 'react-redux'
-import { MdDelete } from 'react-icons/md';
-import { imageUploadApi } from '../../../redux/actionCreators/rootsActionCreator';
-import { createKicksPost } from '../../../redux/actionCreators/kicksActionCreator';
-import moment from 'moment';
-import { toast } from 'react-toastify';
+import { useState } from "react";
+import profile from "../../../Assets/Images/Person.jpg";
+import videoImg from "../../../Assets/Images/videoImg.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { MdDelete } from "react-icons/md";
+import { imageUploadApi } from "../../../redux/actionCreators/rootsActionCreator";
+import { createKicksPost } from "../../../redux/actionCreators/kicksActionCreator";
+import moment from "moment";
+import { toast } from "react-toastify";
 
 const dataList = [
-  'Adventures', 'Action', 'Arts & Craft', 'Beauty Tips', 'Comedy', 'Drama', 'Fiction', 'Novel', 'Romance'
-]
+  "Adventures",
+  "Action",
+  "Arts & Craft",
+  "Beauty Tips",
+  "Comedy",
+  "Drama",
+  "Fiction",
+  "Novel",
+  "Romance",
+];
 
 export default function SelectedVideoModal({ onClose, selectedVideo }) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const reducerDate = useSelector((state) => {
     return {
-      profile: state.profileReducer.profile
-    }
+      profile: state.profileReducer.profile,
+    };
   });
 
   const { profile } = reducerDate;
   const name = profile?.fname + profile?.lname;
 
-  const [state, setState] = useState({})
+  const [state, setState] = useState({});
   const { videoFile, postContent } = state;
   const handleFileSelection = (e) => {
     const file = e.target.files[0];
-    setState({ ...state, videoFile: file })
-  }
+    setState({ ...state, videoFile: file });
+  };
 
   const addPost = async () => {
     const payload = {
@@ -43,24 +51,24 @@ export default function SelectedVideoModal({ onClose, selectedVideo }) {
       delete: false,
       close: "close",
       profileid: profile?.id,
-      postdate: moment().format('YYYY-MM-DDTHH:mm'),
+      postdate: moment().format("YYYY-MM-DDTHH:mm"),
     };
     const uploadVideo = await dispatch(imageUploadApi(videoFile));
     try {
       if (uploadVideo?.status) {
-        payload.video = uploadVideo?.path
+        payload.video = uploadVideo?.path;
         const createPost = await dispatch(createKicksPost(payload));
         if (createPost.status) {
-          toast.success(createPost.message)
-          onClose()
+          toast.success(createPost.message);
+          onClose();
         } else {
-          throw createPost
+          throw createPost;
         }
       }
     } catch (err) {
-      toast.error(err.message)
+      toast.error(err.message);
     }
-  }
+  };
 
   return (
     <div
@@ -88,30 +96,46 @@ export default function SelectedVideoModal({ onClose, selectedVideo }) {
               ))}
             </select>
           </div>
-          <label htmlFor='chooseVideos' className="w-[500px] h-[200px] flex justify-center items-center  ml-30 cursor-pointer border border-gray-400 rounded-md">
+          <label
+            htmlFor="chooseVideos"
+            className="w-[500px] h-[200px] flex justify-center items-center  ml-30 cursor-pointer border border-gray-400 rounded-md"
+          >
             <input
-              accept='video/*'
+              accept="video/*"
               type="file"
               id="chooseVideos"
               onChange={handleFileSelection}
               className="hidden"
             />
-            {
-              videoFile ?
-                <div className='flex flex-col w-full h-full bg-black'>
-                  <video className='h-full w-full'
-                    height={200} controls autoPlay src={URL.createObjectURL(videoFile)}></video>
-                  <div className='bg-white flex justify-center' onClick={() => setState({ ...state, videoFile: '' })}><MdDelete size={24} color='red' /></div>
+            {videoFile ? (
+              <div className="flex flex-col w-full h-full bg-black">
+                <video
+                  className="h-full w-full"
+                  height={200}
+                  controls
+                  autoPlay
+                  src={URL.createObjectURL(videoFile)}
+                ></video>
+                <div
+                  className="bg-white flex justify-center"
+                  onClick={() => setState({ ...state, videoFile: "" })}
+                >
+                  <MdDelete size={24} color="red" />
                 </div>
-                :
-                <spna className='bg-gray-200 py-2 px-3 rounded-md'>Select video</spna>
-            }
+              </div>
+            ) : (
+              <spna className="bg-gray-200 py-2 px-3 rounded-md">
+                Select video
+              </spna>
+            )}
           </label>
         </section>
 
         <section className="px-4">
           <textarea
-            onChange={(e) => setState({ ...state, postContent: e.target.value })}
+            onChange={(e) =>
+              setState({ ...state, postContent: e.target.value })
+            }
             value={postContent}
             rows="5"
             id="message"
@@ -121,8 +145,10 @@ export default function SelectedVideoModal({ onClose, selectedVideo }) {
           />
 
           <div className="py-4">
-            <button onClick={() => addPost()}
-              className="bg-[#dd8e58] text-white font-bold border border-[#dd8e58] px-5 w-[90%] mx-3 py-2 rounded-lg mb-3">
+            <button
+              onClick={() => addPost()}
+              className="bg-[#dd8e58] text-white font-bold border border-[#dd8e58] px-5 w-[90%] mx-3 py-2 rounded-lg mb-3"
+            >
               Post
             </button>
             <button

@@ -1,6 +1,5 @@
-import notification from "../../../assets/images/notification1.png";
-import friends from "../../../assets/images/groups.png";
-import chat from "../../../assets/images/chat1.png";
+import friends from "../../../Assets/Images/groups.png";
+import chat from "../../../Assets/Images/chat1.png";
 
 export const dataList = [
   {
@@ -35,7 +34,6 @@ export const dataList = [
   },
 ];
 export const data = [
-  
   {
     name: "Chat",
     icon: chat,

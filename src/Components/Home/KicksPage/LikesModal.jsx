@@ -1,8 +1,8 @@
 import React from "react";
-import LikeIcon from "../../../assets/images/KicksLike.png";
+import LikeIcon from "../../../Assets/Images/KicksLike.png";
 import LikedProfile from "../Modal/LikeModal/LikedProfile";
-import { AiOutlineCloseCircle } from 'react-icons/ai'
-import './kicks.css'
+import { AiOutlineCloseCircle } from "react-icons/ai";
+import "./kicks.css";
 
 const LikeModal = ({ onClose }) => {
   return (

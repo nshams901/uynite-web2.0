@@ -26,11 +26,11 @@ import {
   imageUploadApi,
 } from "../../../redux/actionCreators/rootsActionCreator";
 import { useNavigate } from "react-router-dom";
-import user from '../../../Assets/Images/user.png'
+import user from "../../../Assets/Images/user.png";
 
 export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const reducerData = useSelector((state) => {
     return {
       commentsList: state?.kicksReducer.comments,
@@ -42,9 +42,9 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
 
   const { commentsList = [], activePost, profile } = reducerData;
   const [state, setState] = useState({
-    msgText: ""
+    msgText: "",
   });
-  const { commentImage, imgFile, alert, msgText} = state;
+  const { commentImage, imgFile, alert, msgText } = state;
   const [openInput, setOpenInput] = useState(false);
   const [id, setid] = useState("");
 
@@ -74,29 +74,28 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
         emogi: "emogi",
         datetime: new Date().getTime(),
       };
-      if(roots){
+      if (roots) {
         const params = {
           pageNumber: 0,
-          pageSize: 10
-        }
+          pageSize: 10,
+        };
         const res = await dispatch(addPostReply(payload));
         dispatch(getCommentByPostid(activePost?.id, params));
-        setState({...state, msgText: ""})
-      }else {
-  
-      if (ispenComment == true) {
-        dispatch(addCommentReplyOnRoots(payload)).then((res) => {
-          console.log(res);
-        });
+        setState({ ...state, msgText: "" });
       } else {
-        dispatch(addCommentReplyOnKicks(payload)).then((res) => {
+        if (ispenComment == true) {
+          dispatch(addCommentReplyOnRoots(payload)).then((res) => {
+            console.log(res);
+          });
+        } else {
+          dispatch(addCommentReplyOnKicks(payload)).then((res) => {
             console.log(res);
             if (res?.status) {
               dispatch(getCommentsReplyByPostid(id));
             } else {
               toast.error(res?.message);
             }
-        });
+          });
           dispatch(getCommentsByPostid(activePost?.id));
         }
       }
@@ -152,17 +151,15 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
     }
   };
 
-  const handleLike = (itemId) => {
-
-  };
+  const handleLike = (itemId) => {};
   const handleEmojiClick = (emoji) => {
     console.log(emoji);
-    setState({...state, msgText: msgText+emoji.emoji})
-  }
+    setState({ ...state, msgText: msgText + emoji.emoji });
+  };
 
   const handleFile = (e) => {
-    if(e === 'remove'){
-      return setState({...state, commentImage: "", imgFile: ""})
+    if (e === "remove") {
+      return setState({ ...state, commentImage: "", imgFile: "" });
     }
     const file = URL.createObjectURL(e.target.files[0]);
     console.log(file, ">>>>>>>>>>>>>>>>");
@@ -211,12 +208,12 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                       <div className="flex justify-between">
                         <div>
                           <span className="font-semibold text-[15px]">
-                            {name ? `${profile?.fname} ${profile?.lname}` : "User"}
+                            {name
+                              ? `${profile?.fname} ${profile?.lname}`
+                              : "User"}
                           </span>
                           <span className="text-[10px] px-2">
-                            {moment(datetime, "x").format(
-                              "DD MMM, YYYY"
-                            )}
+                            {moment(datetime, "x").format("DD MMM, YYYY")}
                           </span>
                         </div>
                         <div>
@@ -236,7 +233,10 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                     {/* <input type="text" /> */}
 
                     <div className="w-1/6 pl-2 text-[#666666]">
-                      <AiFillHeart className="text-2xl" onClick={() => handleLike(id)} />
+                      <AiFillHeart
+                        className="text-2xl"
+                        onClick={() => handleLike(id)}
+                      />
                       <TiArrowBack
                         className="text-2xl cursor-pointer"
                         onClick={() => openReplyModal(id)}
@@ -244,7 +244,14 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                     </div>
                   </div>
                   {replycount?.map((item, i) => {
-                    const { text, emoji, commentid, profile, likecount, datetime } = item;
+                    const {
+                      text,
+                      emoji,
+                      commentid,
+                      profile,
+                      likecount,
+                      datetime,
+                    } = item;
                     const name = profile?.fname + profile?.lname;
                     return (
                       <div
@@ -269,7 +276,7 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                                   : "User"}
                               </span>
                               <span className="text-[10px] px-2">
-                                { moment(datetime, 'x').format('DD MMM, YYYY')}
+                                {moment(datetime, "x").format("DD MMM, YYYY")}
                               </span>
                             </div>
                             <div>
@@ -301,7 +308,6 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
               );
             }
           )}
-
         </div>
 
         <div className="absolute w-full bottom-[0%]  bg-blue-200  rounded-md ">
@@ -326,16 +332,18 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                 msgFile={commentImage}
                 handleFile={handleFile}
                 placeholder="Reply comment....."
-                handleInputChange={(e) => setState({...state, msgText: e.target.value})}
+                handleInputChange={(e) =>
+                  setState({ ...state, msgText: e.target.value })
+                }
                 sendMessage={handleSendReply}
                 inputValue={msgText}
               />
-            <div className="ml-auto">
-            <AiOutlineCloseCircle
-                onClick={() => setOpenInput(false)}
-                className="w-7 h-7 text-gray-700 cursor-pointer mr-4"
-                // className="w-7 h-7 text-gray-700 cursor-pointer mr-4 absolute right-[-3%] bottom-3"
-              /> 
+              <div className="ml-auto">
+                <AiOutlineCloseCircle
+                  onClick={() => setOpenInput(false)}
+                  className="w-7 h-7 text-gray-700 cursor-pointer mr-4"
+                  // className="w-7 h-7 text-gray-700 cursor-pointer mr-4 absolute right-[-3%] bottom-3"
+                />
               </div>
             </div>
           )}

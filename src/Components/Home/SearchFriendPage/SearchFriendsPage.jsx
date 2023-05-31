@@ -14,7 +14,7 @@ import {
   getUsers,
   removeFriend,
 } from "../../../redux/actionCreators/friendsAction";
-import user from '../../../Assets/Images/user.png'
+import user from "../../../Assets/Images/user.png";
 import Loader from "../../common/Loader";
 import moment from "moment/moment";
 import { useMemo } from "react";
@@ -97,26 +97,28 @@ const SearchFriendsPage = ({ isFriend }) => {
     navigate(`/profile/${id}`);
   }
   const handleSendRequest = () => {
-      const payloads = {
-          myprofileid: profile?.id,
-          followerprofileid: activeProfile?.id,
-          datetimes: moment().format("YYYY-MM-DDTHH:mm:ss"),
-        };
-    dispatch(startFollowing(payloads))
+    const payloads = {
+      myprofileid: profile?.id,
+      followerprofileid: activeProfile?.id,
+      datetimes: moment().format("YYYY-MM-DDTHH:mm:ss"),
+    };
+    dispatch(startFollowing(payloads));
     const { id, fname, lname } = profile || {};
-    const data = relationOptions.flatMap((item) => item.checked ? item.key : false)
+    const data = relationOptions.flatMap((item) =>
+      item.checked ? item.key : false
+    );
     let payload = {
-    // private String friendtype;
-    // private Boolean classment;
-    // private Boolean relative;
-    // private Boolean collgues;
-    // private Boolean isFriend;
-    // private Boolean party;
-    // private Boolean org;
-    // private String profileid;
-    // private String userid;
-    // private String requesttype;
-    // private String reqdatetime;
+      // private String friendtype;
+      // private Boolean classment;
+      // private Boolean relative;
+      // private Boolean collgues;
+      // private Boolean isFriend;
+      // private Boolean party;
+      // private Boolean org;
+      // private String profileid;
+      // private String userid;
+      // private String requesttype;
+      // private String reqdatetime;
       id: profile?.id,
       fname: fname,
       lname: lname,
@@ -125,8 +127,8 @@ const SearchFriendsPage = ({ isFriend }) => {
       profileid: id,
       requesttype: "send",
       isFriend: "true",
-      classment: data.includes('classmate'),
-      relative: data?.includes('relative'),
+      classment: data.includes("classmate"),
+      relative: data?.includes("relative"),
       isFriend: true,
       party: "",
       org: false,
@@ -135,7 +137,7 @@ const SearchFriendsPage = ({ isFriend }) => {
     dispatch(addFriend(payload)).then((res) => {
       if (res.status) {
         toast.success(res?.message);
-        setState({...state, requestModal: false})
+        setState({ ...state, requestModal: false });
       } else {
         toast.error(res?.message);
       }
@@ -175,7 +177,7 @@ const SearchFriendsPage = ({ isFriend }) => {
     const selected = relationOptions.map((item) => {
       return item?.name === name ? { ...item, checked: value } : item;
     });
-    setState({ ...state, relationOptions: selected});
+    setState({ ...state, relationOptions: selected });
   };
 
   const onCLoseModal = () => {
