@@ -21,9 +21,10 @@ export default function Dropdown({
   selectedValue,
   keyName,
   heading,
-  InputValue,
+  inputValue,
   onHandleChange,
   filteredData,
+  selectedOption,
 }) {
   return (
     <div className="flex items-center  w-[90%]">
@@ -36,10 +37,10 @@ export default function Dropdown({
         <div>
           <Listbox.Button
             className={`inline-flex w-full gap-x-1.5 rounded-md bg-white px-3 py-1.5 border-[1px] border-[#7E8082]  outline-none text-xs font-bold  ${
-              selectedValue ? "text-black" : "text-gray-400"
+              selectedOption ? "text-black" : "text-gray-400"
             } shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50`}
           >
-            {selectedValue?.[keyName] || selectedValue || name}
+            {selectedOption && selectedOption[keyName] || name}
             <MdArrowDropDown
               className="-mr-1 h-5 w-5 ml-auto text-gray-400"
               aria-hidden="true"
@@ -71,44 +72,53 @@ export default function Dropdown({
                     type="text"
                     placeholder="Search..."
                     className="border-b-2 border-[#48B2DB] text-[#7E8082] outline-none"
-                    value={InputValue}
+                    value={inputValue}
                     onChange={onHandleChange}
                   />
                 </div>
                 {heading}
-                {filteredData?.map((item, index) => {
-                  return (
-                    <Listbox.Option key={index} value={item}>
-                      {({ active }) =>
-                        item?.onClick ? (
-                          <Link
-                            to={item?.link}
-                            className={classNames(
-                              active
-                                ? "bg-gray-100 text-gray-900"
-                                : "text-[#707070] ",
-                              "block px-4 py-2 text-sm"
-                            )}
-                          >
-                            {item[keyName]}
-                          </Link>
-                        ) : (
-                          <a
-                            href="#"
-                            className={classNames(
-                              active
-                                ? "bg-gray-100 text-gray-900"
-                                : "text-[#707070] ",
-                              "block px-4 py-2 text-sm"
-                            )}
-                          >
-                            {item[keyName]}
-                          </a>
-                        )
-                      }
-                    </Listbox.Option>
-                  );
-                })}
+                {options
+                  .filter((elem) => {
+                    if (inputValue === "") {
+                      return true;
+                    } else {
+                      return elem[keyName].toLowerCase().includes(inputValue);
+                    }
+                  })
+
+                  ?.map((item, index) => {
+                    return (
+                      <Listbox.Option key={index} value={item}>
+                        {({ active }) =>
+                          item?.onClick ? (
+                            <Link
+                              to={item?.link}
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900"
+                                  : "text-[#707070] ",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              {item[keyName]}
+                            </Link>
+                          ) : (
+                            <a
+                              href="#"
+                              className={classNames(
+                                active
+                                  ? "bg-gray-100 text-gray-900"
+                                  : "text-[#707070] ",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              {item[keyName]}
+                            </a>
+                          )
+                        }
+                      </Listbox.Option>
+                    );
+                  })}
               </div>
             )}
           </Listbox.Options>
