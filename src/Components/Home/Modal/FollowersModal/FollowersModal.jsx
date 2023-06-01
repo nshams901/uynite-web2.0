@@ -2,12 +2,14 @@ import React from "react";
 import { useEffect } from "react";
 import User from "../../../../Assets/Images/user.png";
 import { Link } from "react-router-dom";
+import Logo from '../../../../Assets/Images/Logo.png'
 const FollowersModal = ({
   title,
   modalName,
   data,
   emptyMessage = "",
   handleClick,
+  closeModal
 }) => {
   return (
     <div
@@ -21,13 +23,14 @@ const FollowersModal = ({
       <section className=" w-[95%] flex rounded-md flex-col items-center mt-2 h-[350px] overflow-scroll">
         {data?.length ? (
           data?.map((friend) => {
-            const { fname, lname, pimage, id } = friend?.profile || friend;
+            const { fname, lname, pimage, id, celibrity } = friend?.profile || friend;
             const name = fname + lname;
             return (
               <>
                 <div className="flex w-full pb-1 flex-col">
                   <div className="flex items-center py-1">
                     <Link
+                    onClick={closeModal}
                       to={`/profile/${id}`}
                       className="flex items-center gap-2 flex-1"
                     >
@@ -38,14 +41,17 @@ const FollowersModal = ({
                       />
                       <span className="font-bold text-sm">{`${
                         name ? `${fname} ${lname}` : "User"
-                      }`}</span>
+                      }`}</span> 
                     </Link>
-                    <div className="flex ">
+                    <div className="flex gap-3">
+                    <span>{celibrity ? 
+                      <img className="w-5" src={Logo}/>: ""
+                      }</span>
                       <button
                         onClick={() => handleClick(friend)}
-                        className="font-bold text-blue-400 text-[10px] border-[1px] border-blue-300 px-3 py-0.5 rounded-sm"
+                        className="font-bold text-[#05b7fd] text-[10px] border-[1px] border-[#05b7fd] px-3 py-0.5 rounded-sm"
                       >
-                        {modalName === "Your Following" ? "Unfollow" : "Remove"}
+                        {modalName === "Following" ? "Unfollow" : "Remove"}
                       </button>
                     </div>
                   </div>

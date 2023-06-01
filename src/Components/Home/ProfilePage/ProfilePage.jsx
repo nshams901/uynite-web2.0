@@ -21,7 +21,7 @@ import { toast } from "react-toastify";
 import PostCard from "../PostContetnt/PostCard/PostCard";
 import { createPost } from "../../../redux/actionCreators/postActionCreator";
 import moment from "moment";
-import { imageUploadApi } from "../../../redux/actionCreators/rootsActionCreator";
+import { getUserPostList, imageUploadApi } from "../../../redux/actionCreators/rootsActionCreator";
 
 const ProfilePage = ({ isOther }) => {
   const [selectedOption, setSelectedOption] = useState("Posts");
@@ -60,7 +60,10 @@ const ProfilePage = ({ isOther }) => {
     dispatch(getFollowing(user?.id));
     dispatch(getFollower(user?.id));
     dispatch(getFriendsList(user?.id));
-  }, []);
+    // dispatch
+    dispatch(getUserPostList(user.id));
+
+  }, [params?.id]);
 
   const handleUploadImage = async (name, value) => {
     const objUrl = URL.createObjectURL(value[0])

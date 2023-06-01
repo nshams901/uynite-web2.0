@@ -4,6 +4,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getLatestKicks } from "../../../redux/actionCreators/kicksActionCreator";
+import user from '../../../Assets/Images/user.png'
 
 const SliderSection = () => {
   // const { kicksList } = useSelector((state) => state.rootsReducer);
@@ -41,7 +42,7 @@ const SliderSection = () => {
   };
   return (
     <div className="flex flex-col w-[95%] sm:w-[50%]  lg:w-[40%] relative">
-      <div className="flex justify-between w-full pt-2">
+      <div className="flex justify-between w-full p-2">
         <span className="font-bold text-sm">Recent Kicks</span>
         <span className="text-sm text-[#788eb7] font-medium">
           <Link to="/kicks/Latest">View All</Link>
@@ -91,7 +92,7 @@ const SliderSection = () => {
                 <div className="absolute cursor-pointer bottom-[10px] mx-6 items-center flex gap-5">
 
                 <img
-                  src={profile?.pimage}
+                  src={profile?.pimage || user}
                   alt=""
                   className="w-9 h-9 rounded-full "
                   onClick={() => navigate(`/profile/${profile.id}`)}
