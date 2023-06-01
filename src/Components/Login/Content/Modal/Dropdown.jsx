@@ -26,7 +26,7 @@ export default function Dropdown({
   filteredData,
 }) {
   return (
-    <div className="flex items-center  w-full">
+    <div className="flex items-center  w-[90%]">
       {label && <div className="w-[40%] md:min-w-[165px] ">{label}</div>}
       <Listbox
         as="div"

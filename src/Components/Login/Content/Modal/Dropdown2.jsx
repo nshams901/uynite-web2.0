@@ -19,7 +19,7 @@ export default function Dropdown2({
   param,
 }) {
   // const countryFilteredList = countryList?;
-  console.log("options", typeof options);
+ 
   return (
     <div className="flex items-center my-1">
       {label && <div className="min-w-[165px]">{label}</div>}
@@ -58,21 +58,20 @@ export default function Dropdown2({
                   type="text"
                   placeholder="Search..."
                   className="border-b-2 border-[#48B2DB] text-[#7E8082] outline-none"
-                  value={inputValue}
+                  value={inputValue.country}
                   onChange={onHandleChange}
                 />
               </div>
              
+              {console.log("_inputValue", inputValue)}
               {options
                 ?.filter((item) => {
-                 
                   if (inputValue === "") {
                     return true;
-                  }
-                  else{
+                  } else {
                     return item[param]
                       .toLowerCase()
-                      .includes(inputValue?.toLowerCase());
+                      .includes(inputValue.country?.toLowerCase());
                   }
                 })
                 ?.map((item, index) => {

@@ -79,21 +79,27 @@ const Modal = ({ modalType, handleClose }) => {
   }, []);
   const handleCountry = (val) => {
     setCountry(val);
+    setState({
+      ...states,
+      state: "",
+      district: "",
+      loksabha: "",
+      assembly: "",
+    });
     dispatch(getStateList(val.code));
   };
+
   const orgCategoryFilteration = organizationCategory?.filter((item) => {
     if (orgCategory === "") {
       return true;
     }
     return item.category.toLowerCase().includes(orgCategory.toLowerCase());
   });
-  console.log("=============countryList", countryList);
-
   const stateFilteredData = stateList?.filter((item) => {
     if (states?.state === "") {
       return true;
     }
-    return item.state.toLowerCase().includes(states?.state.toLowerCase());
+    // return item.state.toLowerCase().includes(states?.state.toLowerCase());
   });
 
   const handleChange = (name, value) => {
@@ -241,30 +247,16 @@ const Modal = ({ modalType, handleClose }) => {
     // console.log(response);
   };
   const countryCode = ["1"];
-  console.log(countryCode?.includes(country?.code));
+
   const removeProfilePic = () => {
     setState({ ...states, imgFile: "" });
   };
 
-  const checkDisable = () => {
-    // if (isPersonal) {
-    // } else {
-    //   //  return !(orgName && category?.category && fname)
-    // }
-    // if (!isPersonal) {
-    //   if () {
-    //     return false;
-    //   } else {
-    //     return true;
-    //   }
-    // }
-  };
   const nameRules = /^(?=.*\d).{5,}$/;
   const validateName = (name) => {
     return nameRules.test(name);
   };
 
-  console.log("category", category?.category);
   return (
     {
       /* corner radius added to componenet */
@@ -285,7 +277,7 @@ const Modal = ({ modalType, handleClose }) => {
           <div className="md:w-1/2 mr-4 border-r-[3px] border-grey-400">
             {/* font-weight removed, font-size reduced, padding added,*/}
             <h2 className="text-xl py-3">Add Profile Picture</h2>
-            <div>
+            <div className="relative">
               <input
                 id="profilePic"
                 type="file"
@@ -297,7 +289,7 @@ const Modal = ({ modalType, handleClose }) => {
               />
               <label
                 htmlFor="profilePic"
-                className="flex relative justify-center items-center cursor-pointer w-[10rem] h-[10rem] sm:w-[13rem] sm:h-[13rem] lg:w-[14rem] lg:h-[14rem] xl:w-[15rem] xl:h-[15rem] mx-auto rounded-full bg-gray-200"
+                className="flex justify-center items-center cursor-pointer w-[10rem] h-[10rem] sm:w-[13rem] sm:h-[13rem] lg:w-[14rem] lg:h-[14rem] xl:w-[15rem] xl:h-[15rem] mx-auto rounded-full bg-gray-200"
               >
                 {imgFile ? (
                   <>
@@ -307,12 +299,6 @@ const Modal = ({ modalType, handleClose }) => {
                       }
                       src={URL.createObjectURL(imgFile)}
                     />
-                    <div
-                      className="absolute top-0 right-[34px] bg-white w-[24px] h-[24px] rounded-full border-1 border-white"
-                      onClick={removeProfilePic}
-                    >
-                      <TiDeleteOutline size={24} />
-                    </div>
                   </>
                 ) : (
                   <img
@@ -324,6 +310,14 @@ const Modal = ({ modalType, handleClose }) => {
                   />
                 )}
               </label>
+              {imgFile && (
+                <div
+                  className="absolute top-0 sm:top-2 right-[32%] sm:right[32%]  lg:right[36%] xl:right[33%] bg-white w-[24px] h-[24px] rounded-full border-1 border-white"
+                  onClick={removeProfilePic}
+                >
+                  <TiDeleteOutline size={24} />
+                </div>
+              )}
               <div className="pt-6">
                 {/* bg-color, padding, font-weight of label changed */}
                 <label
@@ -335,7 +329,7 @@ const Modal = ({ modalType, handleClose }) => {
               </div>
             </div>
           </div>
-          <div className="md:w-1/2 max-w-[25rem] px-4 relative bg-white">
+          <div className="md:w-1/2 max-w-[25rem] px-2 relative bg-white">
             <div className="mx-auto">
               {/* last name field added */}
               <div className="mt-[9px] mb-1">
@@ -384,11 +378,14 @@ const Modal = ({ modalType, handleClose }) => {
               {isPersonal ? (
                 <>
                   <input
-                    type="date"
+                    type="text"
                     onChange={handleDate}
-                    className="w-full h-9 border-[1px] my-1 px-2 text-gray-500 outline-none border-gray-300 rounded-[5px]"
-                    placeholder="Date of Birth"
+                    className="w-full h-9 border-[1px] my-1 !p-2 text-[#AEB2B1] font-bold outline-none border-[#7E8082] rounded-[5px] text-xs"
+                    placeholder="Date of Birth*"
                     max="2010-05-31"
+                    onFocus={() => (ref.current.type = "date")}
+                    onBlur={() => (ref.current.type = "text")}
+                    ref={ref}
                   />
                   {/* size of radio button incresed, accent color of button changed,
                     margin top of rdio button removed and margin added to input component*/}
@@ -444,7 +441,9 @@ const Modal = ({ modalType, handleClose }) => {
                     inputValue={country}
                     options={countryList}
                     handleCountry={handleCountry}
-                    onHandleChange={(e) => setCountry(e.target.value)}
+                    onHandleChange={(e) => {
+                      console.log("&*********",e.target.value);
+                      setCountry(e.target.value)}}
                     param="country"
                   />
 
@@ -455,23 +454,25 @@ const Modal = ({ modalType, handleClose }) => {
                   {country ? (
                     <>
                       <div className="flex flex-col">
-                        <Dropdown
-                          name={"State*"}
-                          options={stateList}
-                          selectedValue={state}
-                          keyName={"state"}
-                          inputValue={states?.state}
-                          handleChange={(value) => handleChange("state", value)}
-                          onHandleChange={(e) =>
-                            setState({
-                              ...states,
-                              state: e.target.value,
-                            })
-                          }
-                          filteredData={stateFilteredData}
-                        />
-                        {countryCode?.includes(country?.code) && (
-                          <>
+                        <div className="flex flex-col sm:flex-row  gap-[5px]">
+                          <Dropdown
+                            name={"State*"}
+                            options={stateList}
+                            selectedValue={state}
+                            keyName={"state"}
+                            inputValue={states?.state}
+                            handleChange={(value) =>
+                              handleChange("state", value)
+                            }
+                            onHandleChange={(e) =>
+                              setState({
+                                ...states,
+                                state: e.target.value,
+                              })
+                            }
+                            filteredData={stateFilteredData}
+                          />
+                          {countryCode?.includes(country?.code) && (
                             <Dropdown
                               name={"District*"}
                               options={districtList}
@@ -488,8 +489,11 @@ const Modal = ({ modalType, handleClose }) => {
                                 })
                               }
                             />
-
-                            <div className="flex flex-col sm:flex-row">
+                          )}
+                        </div>
+                        {countryCode?.includes(country?.code) && (
+                          <>
+                            <div className="flex flex-col sm:flex-row gap-5">
                               <Dropdown
                                 name={"Loksabha*"}
                                 keyName={"loksabha"}
@@ -550,8 +554,9 @@ const Modal = ({ modalType, handleClose }) => {
                     onBlur={() => (ref.current.type = "text")}
                     ref={ref}
                     onChange={handleDate}
-                    className="w-full h-9 border-[1px] my-1 px-2 text-gray-500 outline-none border-gray-300 rounded-[5px]"
-                    placeholder="Hello"
+                    className="w-full h-9 border-[1px] my-1 !p-2 text-[#AEB2B1] outline-none border-[#7E8082] rounded-[5px] text-xs font-bold"
+                    placeholder="Date of Birth*"
+                    max="2010-05-31"
                   />
 
                   <div className="flex justify-between items-center">

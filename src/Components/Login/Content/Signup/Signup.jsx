@@ -12,6 +12,7 @@ import Modal from "../Modal/Modal";
 import {
   checkingIsEmailExist,
   getCountryList,
+  otpType,
   saveUserSignupData,
   settingOtp,
 } from "../../../../redux/actionCreators/authActionCreator";
@@ -83,10 +84,10 @@ const Signup = () => {
           message:
             "Password should be minimum of 8 length characters with one numerical value",
         }),
-      phone: Yup.string().matches(phoneNumberRules, {
-        excludeEmptyString: true,
-        message: "Please enter a valid phone number",
-      }),
+      // phone: Yup.string().matches(phoneNumberRules, {
+      //   excludeEmptyString: true,
+      //   message: "Please enter a valid phone number",
+      // }),
       termsAndConditions: Yup.bool().oneOf(
         [true],
         "You need to accept the terms and conditions"
@@ -98,7 +99,11 @@ const Signup = () => {
       const isExist = await checkUserExist(
         formik.values.email || formik.values.phone
       );
-
+      if (formik.values.email) {
+        dispatch(otpType(true));
+      } else {
+        dispatch(otpType(false));
+      }
       if (!validateEmail(formik.values.email)) {
         setIsLoading(false);
         return toast.error("Enter valid email address");
@@ -201,7 +206,7 @@ const Signup = () => {
   const closeCountryModal = () => {
     setCountryCode(false);
   };
-
+  const onHandleReset = () => {};
   return (
     <>
       {/* padding increased */}
@@ -232,18 +237,18 @@ const Signup = () => {
           name="email"
           inputValue={formik.values.email}
           errorMessage={formik.errors.email}
-          touched={
-            formik.touched.email &&
-            formik.errors.email &&
-            toasterFunction(formik.errors.email)
-          }
+          // touched={
+          //   formik.touched.email &&
+          //   formik.errors.email &&
+          //   toasterFunction(formik.errors.email)
+          // }
           onHandleChange={(e) => {
             if (e.target.value.length > 32) {
-              if (formik.values.phone.length > 0) {
-                formik.handleChange(
-                  e.target.value.replace(formik.values.email)
-                );
-              }
+              // if (formik.values.phone.length > 0) {
+              //   formik.handleChange(
+              //     e.target.value.replace(formik.values.email)
+              //   );
+              // }
               formik.handleChange(
                 e.target.value.slice(0, e.target.value.length - 1)
               );
@@ -291,7 +296,7 @@ const Signup = () => {
               //  if (formik.values.phone.length > 0) {
 
               //  }
-              if (event.target.value.length > 12) {
+              if (event.target.value.length > 10) {
                 formik.handleChange(
                   event.target.value.slice(event.target.value.length - 1)
                 );
@@ -327,7 +332,7 @@ const Signup = () => {
           touched={formik.touched.password}
           disabled={
             formik.values.email === ""
-              ? formik.values.phone.toString().length < 12
+              ? formik.values.phone.toString().length < 10
               : !validateEmail(formik.values.email)
           }
         />

@@ -7,6 +7,7 @@ const initialState = {
   emailExist: {},
   mailSended: {},
   countryList: [],
+  isEmailOtp:false
 };
 
 const authReducer = (state = initialState, action) => {
@@ -61,6 +62,10 @@ const authReducer = (state = initialState, action) => {
       return { ...state, loksabhaList: action.payload.data };
     case "GET_ASSEMBLY_LIST":
       return { ...state, assemblyList: action.payload.data };
+
+    case "OTP_TYPE":
+      console.log("Action.PAylaod isEmailOtp++++", action.payload);
+      return { ...state, isEmailOtp: action.payload };
     default:
       return state;
   }

@@ -418,3 +418,15 @@ export const getLocationsList = (data) => async (dispatch) => {
     throw err.response.data;
   }
 };
+
+export const otpType = (typeOfOtp) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "OTP_TYPE",
+      payload: typeOfOtp,
+    });
+  } catch (err) {
+    console.log(err, "errror login");
+    throw err;
+  }
+};

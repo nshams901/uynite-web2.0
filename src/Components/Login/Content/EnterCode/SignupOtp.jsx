@@ -33,7 +33,7 @@ const SignupOtp = ({ title }) => {
     /* send code timing implemented dynamically */
   }
   const phoneNumberRules = /[0-9]{10}$/;
-
+  const navigate = useNavigate();
   const [timer, setTimer] = useState(true);
   const params = useParams();
   const location = useLocation();
@@ -41,8 +41,12 @@ const SignupOtp = ({ title }) => {
   const { showModal } = state;
   const dispatch = useDispatch();
   const [loading, setIsLoading] = useState(false);
-  const { otp, signupData } = useSelector((state) => state.authReducer);
+  const { otp, signupData, isEmailOtp } = useSelector(
+    (state) => state.authReducer
+  );
 
+
+  console.log("isEmailOtp-----------", isEmailOtp);
   const timerFunction = async () => {
     const dataObj = {
       datetime: Date.now().toString(),
@@ -96,13 +100,20 @@ const SignupOtp = ({ title }) => {
           // User couldn't sign in (bad verification code?)
         });
     } else {
+      console.log("+++++profileType++++++", signupData?.profileType);
       setState({ ...state, showModal: true });
+      navigate(`/auth/verification/signup?${signupData?.profileType}`);
+      console.log("+++++profileType++++++2222222222", signupData?.profileType);
+
       const result = await dispatch(matchingOtp(signupData?.uemail, otp));
-      
+
       if (!result?.status) {
         setIsLoading(false);
         toasterFunction(result?.message);
       }
+      // else {
+      //   setState({ ...state, showModal: true });
+      // }
     }
     getFirebaseToken()
       .then(async (res) => {
@@ -115,13 +126,13 @@ const SignupOtp = ({ title }) => {
           //  "umobile": "weware5007@fectode.com"
         };
         const resp = await dispatch(userRegistration(data));
-         setIsLoading(false);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
     // navigate("/auth/createUser")
-     setIsLoading(false);
+    setIsLoading(false);
     toasterFunction(result?.message);
   };
 
@@ -192,7 +203,7 @@ const SignupOtp = ({ title }) => {
       dispatch(settingOtp(event.target.value));
     }
   };
-  const navigate = useNavigate();
+
   return (
     <>
       {/* padding added */}
@@ -237,7 +248,7 @@ const SignupOtp = ({ title }) => {
       {showModal && (
         <Portals>
           <Modal
-            modalType={location.search.slice(1)}
+            modalType={signupData?.profileType}
             handleClose={handleClose}
           />
         </Portals>
