@@ -462,7 +462,6 @@ const PostCard = ({ userData, item = {} }) => {
                   onClick={onLikeIncrease}
                 />
               )}
-
               {/* <RiDislikeFill/> */}
 
               <span className="text-xs font-semibold mt-1">Like</span>
