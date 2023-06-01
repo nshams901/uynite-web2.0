@@ -3,7 +3,7 @@ import React, { useState } from "react";
 const CatergorySection = ({selectedOption,setSelectedOption}) => {
  
   const data = [
-    { title: "Post" },
+    { title: "Posts" },
     { title: "Photos" },
     { title: "Videos" },
     { title: "Kicks" },

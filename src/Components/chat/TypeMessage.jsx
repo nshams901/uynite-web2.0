@@ -35,6 +35,7 @@ const TypeMessage = ({ placeholder, alert, inputValue, handleEmojiClick, sendMes
         id="sendFile"
         type="file"
         className="hidden"
+        accept='image/*'
         onChange={handleFile}
       />
       <div className="mx-2 w-[70%] relative">

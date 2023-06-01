@@ -41,11 +41,9 @@ const SignupOtp = ({ title }) => {
   const { showModal } = state;
   const dispatch = useDispatch();
   const [loading, setIsLoading] = useState(false);
-  const { otp, signupData, isEmailOtp } = useSelector(
+  const { otp, signupData, isEmailOtp, isPhoneNo } = useSelector(
     (state) => state.authReducer
   );
-
-
   console.log("isEmailOtp-----------", isEmailOtp);
   const timerFunction = async () => {
     const dataObj = {
@@ -56,6 +54,9 @@ const SignupOtp = ({ title }) => {
     };
     setIsLoading(true);
     dispatch(settingOtp(""));
+
+    // if (isEmailOtp) {
+    // }
     const resendOtp = await dispatch(saveUserSignupData(dataObj));
     if (resendOtp?.data?.status) {
       setIsLoading(false);
@@ -100,20 +101,17 @@ const SignupOtp = ({ title }) => {
           // User couldn't sign in (bad verification code?)
         });
     } else {
-      console.log("+++++profileType++++++", signupData?.profileType);
-      setState({ ...state, showModal: true });
-      navigate(`/auth/verification/signup?${signupData?.profileType}`);
-      console.log("+++++profileType++++++2222222222", signupData?.profileType);
-
+        //  setState({ ...state, showModal: true });
+        //  navigate(`/auth/verification/signup?${signupData?.profileType}`);
       const result = await dispatch(matchingOtp(signupData?.uemail, otp));
 
       if (!result?.status) {
         setIsLoading(false);
         toasterFunction(result?.message);
+      } else {
+        setState({ ...state, showModal: true });
+        navigate(`/auth/verification/signup?${signupData?.profileType}`);
       }
-      // else {
-      //   setState({ ...state, showModal: true });
-      // }
     }
     getFirebaseToken()
       .then(async (res) => {
@@ -173,13 +171,20 @@ const SignupOtp = ({ title }) => {
   function Timer() {
     const [seconds, setSeconds] = useState(5 * 60);
 
-    useEffect(() => {
-      const intervalId = setInterval(() => {
-        setSeconds((prevSeconds) => prevSeconds - 1);
-      }, 1000);
+   useEffect(() => {
+     const intervalId = setInterval(() => {
+       setSeconds((prevSeconds) => {
+         if (prevSeconds <= 1) {
+           clearInterval(intervalId);
+           setTimer(false);
+           return 0;
+         }
+         return prevSeconds - 1;
+       });
+     }, 1000);
 
-      return () => clearInterval(intervalId);
-    }, [timer]);
+     return () => clearInterval(intervalId);
+   }, []);
 
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -195,12 +200,22 @@ const SignupOtp = ({ title }) => {
     );
   }
   const onChangeHandler = (event) => {
-    if (event.target.value.length > 4) {
-      dispatch(
-        settingOtp(event.target.value.slice(0, event.target.value.length - 1))
-      );
+    if (isEmailOtp) {
+      if (event.target.value.length > 4) {
+        dispatch(
+          settingOtp(event.target.value.slice(0, event.target.value.length - 1))
+        );
+      } else {
+        dispatch(settingOtp(event.target.value));
+      }
     } else {
-      dispatch(settingOtp(event.target.value));
+      if (event.target.value.length > 6) {
+        dispatch(
+          settingOtp(event.target.value.slice(0, event.target.value.length - 1))
+        );
+      } else {
+        dispatch(settingOtp(event.target.value));
+      }
     }
   };
 
@@ -211,8 +226,9 @@ const SignupOtp = ({ title }) => {
         <Heading title={title} />
         {/* font-size increased, color changed */}
         <p className="text-[10px] font-bold w-[78%] text-center mb-2">
-          Please enter the code which we’ve sent to your Email : &nbsp;
-          {signupData?.uemail}
+          Please enter the code which we’ve sent to your
+          {signupData?.uemail ? " Email " : " Phone no "} : &nbsp;
+          {signupData?.uemail ? signupData?.uemail : isPhoneNo}
         </p>
         <div className="w-[85%]">
           <Input
@@ -231,7 +247,7 @@ const SignupOtp = ({ title }) => {
           title="Confirm"
           onClick={onConfirmOtp}
           otp={otp}
-          disabled={otp?.length < 4 || otp?.length > 4}
+          disabled={isEmailOtp ? otp?.length != 4 : otp?.length != 6}
         />
         {/* padding added to send code button */}
         {timer ? (

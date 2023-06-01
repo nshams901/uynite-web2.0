@@ -102,19 +102,15 @@ const Modal = ({ modalType, handleClose }) => {
     }
     return item.category.toLowerCase().includes(orgCategory.toLowerCase());
   });
-  const stateFilteredData = stateList?.filter((item) => {
-    if (states?.state === "") {
-      return true;
-    }
-    // return item.state.toLowerCase().includes(states?.state.toLowerCase());
-  });
-
+  
   const handleChange = (name, value) => {
+    console.log("Value =========",value.statecode);
     const obj = {
-      state: getDistrict(value.statecode),
-      district: getLoksabha(value.did),
-      loksabha: getAssenbly(value.lid),
+      selectedState: getDistrict(value.statecode),
+      selectedDistrict: getLoksabha(value.did),
+      selectedLoksabha: getAssenbly(value.lid),
     };
+    console.log("name",name);
     obj[name] && dispatch(obj[name]);
     if (value.length > 32) {
       setState({ ...states, [name]: value.slice(0, value.length - 1) });
@@ -253,7 +249,7 @@ const Modal = ({ modalType, handleClose }) => {
           });
     // console.log(response);
   };
-  const countryCode = "1";
+  const countryCode = ["1"];
 
   const removeProfilePic = () => {
     setState({ ...states, imgFile: "" });
@@ -450,7 +446,6 @@ const Modal = ({ modalType, handleClose }) => {
                     handleCountry={handleCountry}
                     selectedCountry={selectedCountry}
                     onHandleChange={(e) => {
-                      console.log("&*********", e.target.value);
                       setCountry(e.target.value);
                     }}
                     setCountry={setCountry}
@@ -483,12 +478,17 @@ const Modal = ({ modalType, handleClose }) => {
                               })
                             }
                           />
+
+                          {console.log(
+                            "selectedCountry?.code",
+                            selectedCountry?.code
+                          )}
                           {countryCode?.includes(selectedCountry?.code) && (
                             <Dropdown
                               name={"District*"}
                               options={districtList}
                               selectedValue={district}
-                              keyName={"district"}
+                              keyName={"distric"}
                               inputValue={states?.district}
                               handleChange={(value) => {
                                 handleChange("district", "");

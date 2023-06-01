@@ -14,7 +14,7 @@ const PersonalAccount = ({
 }) => {
   const { state, district, assembly, loksabha } = states;
   const {
-    pgadress,
+    // pgadress,
     pgbranch,
     pgdegree,
     pgpassyear,

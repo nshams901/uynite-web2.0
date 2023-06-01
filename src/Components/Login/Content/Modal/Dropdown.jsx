@@ -26,8 +26,11 @@ export default function Dropdown({
   filteredData,
   selectedOption,
 }) {
+
+
+  console.log("Opppppppp+++++++++---------=====",options);
   return (
-    <div className="flex items-center  w-[90%]">
+    <div className="flex items-center w-full">
       {label && <div className="w-[40%] md:min-w-[165px] ">{label}</div>}
       <Listbox
         as="div"
@@ -87,6 +90,8 @@ export default function Dropdown({
                   })
 
                   ?.map((item, index) => {
+
+                    console.log("============",item);
                     return (
                       <Listbox.Option key={index} value={item}>
                         {({ active }) =>

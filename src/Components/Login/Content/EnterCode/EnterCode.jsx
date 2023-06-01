@@ -70,7 +70,6 @@ const EnterCode = ({ title }) => {
     const [seconds, setSeconds] = useState(5*60);
 
     useEffect(() => {
-      console.log("++++++++++++++++======");
       const intervalId = setInterval(() => {
         setSeconds((prevSeconds) => {
           if (prevSeconds <= 1) {
@@ -80,21 +79,11 @@ const EnterCode = ({ title }) => {
           }
           return prevSeconds - 1;
         });
-
-        // setSeconds((prevSeconds) => prevSeconds - 1);
       }, 1000);
 
       return () => clearInterval(intervalId);
     }, []);
 
-    // const minutes = Math.floor(seconds / 60);
-    // const remainingSeconds = seconds % 60;
-
-    // const otpTimerFunction = ()=>{
-    //   setTimeout(() => {
-
-    //   }, timeout);
-    // }
     return (
       <div
         disabled="disabled"

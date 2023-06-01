@@ -10,7 +10,6 @@ import {
   getFollower,
   getFollowing,
 } from "../../../../redux/actionCreators/profileAction";
-import { data } from "autoprefixer";
 import {
   getFriendsList,
   removeFollowers,
@@ -19,6 +18,9 @@ import {
 } from "../../../../redux/actionCreators/friendsAction";
 import { toast } from "react-toastify";
 import User from "../../../../Assets/Images/user.png";
+import { Typography } from "@material-tailwind/react";
+import ImageModal from "../../../common/ImageModal";
+import { useNavigate } from "react-router-dom";
 
 const ProfileImageSection = ({
   isOther,
@@ -30,6 +32,7 @@ const ProfileImageSection = ({
   coverImg,
   profileImg,
 }) => {
+  const navigate = useNavigate()
   const { id } = data || {};
   const friendsCount = friends?.length || 0;
   const followingCount = following?.length || 0;
@@ -38,18 +41,19 @@ const ProfileImageSection = ({
   const userName = data?.fname + data?.lname;
 
   const [state, setState] = useState({});
-  const { showModal, modalName, modalData } = state;
+  const { showModal, modalName, modalData, coverImgModal, profileImgModal } = state;
   const dispatch = useDispatch();
 
   const handleModal = async (name) => {
     if (name === "Friends") {
-      const data = await dispatch(getFriendsList(id));
-      setState({
-        ...state,
-        showModal: true,
-        modalName: name,
-        modalData: friends,
-      });
+      // const data = await dispatch(getFriendsList(id));
+      // setState({
+      //   ...state,
+      //   showModal: true,
+      //   modalName: name,
+      //   modalData: friends,
+      // });
+      navigate('/myfriend')
     } else if (name === "Followers") {
       dispatch(getFollower(id));
       setState({
@@ -105,15 +109,8 @@ const ProfileImageSection = ({
   return (
     <div className="w-[95%] lg:w-[80%] xl:w-[70%] bg-white rounded-xl flex flex-col items-center mb-3">
       {/*Cover Image Section */}
-      <input
-        id="cover-pic"
-        type="file"
-        accept="image/*"
-        className="hidden"
-        onChange={(e) => uploadImage("coverImg", e.target.files)}
-      />
       <label
-        htmlFor={`${isOther ? "" : "cover-pic"}`}
+        onClick={() => setState({...state, coverImgModal: true})}
         className="w-[95%] h-[100px] cursor-pointer sm:h-[150px] lg:h-[200px] rounded-xl flex items-center justify-center mt-3 border border-gray-400"
       >
         {coverImg || data?.pcoverimage ? (
@@ -130,21 +127,16 @@ const ProfileImageSection = ({
       {/* Profile Image Section  */}
       <section className="w-[95%] my-2 rounded-xl flex flex-col">
         <div className="flex sm:h-[90px] lg:h-[140px] justify-between items-center">
-          <input
-            type="file"
-            id="profile-pic"
-            accept="image/*"
-            onChange={(e) => uploadImage("profileImg", e.target.files)}
-            className="hidden"
-          />
           <label
-            htmlFor={`${isOther ? "" : "profile-pic"}`}
+            onClick={() => {
+              setState({...state, profileImgModal: true})
+            }}
             className="sm:min-w-[180px] sm:h-[180px] min-w-[125px] h-[125px] relative top-[-30px] sm:top-[-60px] lg:top-[-40px]"
           >
             <img
               src={profileImg || data?.pimage || User}
               alt=""
-              className="w-full bg-white h-full cursor-pointer border-2 border-[#6780af] rounded-full ml-1 object-cover"
+              className="w-full bg-white h-full cursor-pointer border-2 border-gray-500 rounded-full ml-1 object-cover"
             />
           </label>
 
@@ -157,8 +149,9 @@ const ProfileImageSection = ({
               alt=""
               className="w-6 h-6 sm:w-7 sm:h-7 text-[#7991bd] py-0.5"
             />
-            <span className="w-[90%] sm:w-[97%] font-bold text-[7px] sm:text-[9px] xl:text-[11px] my-1 py-[1px] bg-[#d7deeb] px-4  rounded-md">
-              {friendsCount} Friends
+            <Typography variant='small' >Friends</Typography>
+            <span className="w-[90%] text-center sm:w-[97%] font-bold text-[7px] sm:text-[9px] xl:text-[11px] my-1 py-[1px] bg-gray-300 px-4  rounded-md">
+              {friendsCount}
             </span>
           </section>
 
@@ -170,12 +163,10 @@ const ProfileImageSection = ({
               alt=""
               className="w-6 h-6 sm:w-7 sm:h-7 text-[#7991bd] py-0.5"
             />
-
-            <span className=" w-[90%] sm:w-[97%] font-bold text-[7px] sm:text-[9px] xl:text-[11px] my-1 py-[1px] bg-[#d7deeb] px-3 sm:px-4 rounded-md">
-              {followersCount} Followers
+            <Typography variant='small' >Followers</Typography>
+            <span className="text-center w-[90%] sm:w-[97%] font-bold text-[7px] sm:text-[9px] xl:text-[11px] my-1 py-[1px] bg-gray-300 px-3 sm:px-4 rounded-md">
+              {followersCount} 
             </span>
-
-            <span></span>
           </section>
 
           <section
@@ -183,9 +174,9 @@ const ProfileImageSection = ({
             onClick={() => handleModal("Following")}
           >
             <IoIosPeople className="w-6 h-6 sm:w-7 sm:h-7 text-[#7991bd] py-0.5" />
-
-            <span className="w-[90%] sm:w-[97%] font-bold text-[7px] sm:text-[9px] xl:text-[11px] my-1 py-[1px] bg-[#d7deeb] px-3 sm:px-4 rounded-md">
-              {followingCount} Following
+            <Typography variant='small' >Following</Typography>
+            <span className="w-[90%] sm:w-[97%] text-center font-bold text-[7px] sm:text-[9px] xl:text-[11px] my-1 py-[1px] bg-gray-300 px-3 sm:px-4 rounded-md">
+              {followingCount} 
             </span>
           </section>
         </div>
@@ -211,6 +202,20 @@ const ProfileImageSection = ({
           />
         </Portals>
       )}
+
+      {
+        (coverImgModal || profileImgModal) &&
+        <Portals closeModal={() => setState({...state, coverImgModal: false, profileImgModal: false})}>
+
+        <ImageModal
+          closeModal={() => setState({...state, coverImgModal: false, profileImgModal: false})}
+          profileImgModal={ profileImgModal}
+          handleImage={uploadImage}
+          file={profileImgModal ? (profileImg|| data?.pimage) : (coverImg || data?.coverImg)}
+          leftBtn={'Remove'}
+        />
+        </Portals>
+      }
     </div>
   );
 };

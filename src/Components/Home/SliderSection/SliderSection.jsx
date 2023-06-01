@@ -18,7 +18,7 @@ const SliderSection = () => {
   });
   const { kicksList = { content: [] }, profile } = reducerData;
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   const responsive = {
     superLargeDesktop: {
@@ -53,32 +53,55 @@ const SliderSection = () => {
         containerClass={`w-full h-[200px] z-[1]`}
       >
         {kicksList?.content?.map((data) => {
-          const { profile, video } = data || {};
+          const { profile, video, image } = data || {};
           const shortName = ` ${profile?.fname} ${profile?.lname}`;
           return (
-            <div className="w-[91%] mt-5 mb-2 h-[160px] bg-black rounded-3xl ml-1">
-              <div>
+            <div className="w-[91%] h-[200px] relative bg-black rounded-2xl overflow-hidden ml-1">
+              {/* <div> */}
                 <Link to={'/kicks'} className="h-full">
-                  <video
-                    height={"100%"}
-                    className="h-full"
-                    width={"200px"}
-                    src={video}
-                    muted
-                  ></video>
+                  {
+                    image ?
+                      <>
+                        {/* <picture
+                          height={"100%"}
+                          className="h-full overflow-hidden"
+                          width={"200px"}
+                        > */}
+                          {/* <source src={image} type="video/mp4"></source> */}
+                          <img className="h-full w-full" src={image} />
+                        {/* </picture> */}
+                      </>
+                      :
+                      <>
+                        <video
+                          height={"100%"}
+                          className="h-full"
+                          width={"200px"}
+                          src={video}
+                          muted
+                          typeof="video/mp4"
+                        >
+                          <source src={video} type="video/mp4"></source>
+                        </video>
+                      </>
+                  }
+
                 </Link>
                 {/* title name tag added */}
+                <div className="absolute cursor-pointer bottom-[10px] mx-6 items-center flex gap-5">
+
                 <img
                   src={profile?.pimage}
                   alt=""
-                  className="w-9 h-9 absolute cursor-pointer bottom-[20px] left-2 rounded-full "
+                  className="w-9 h-9 rounded-full "
                   onClick={() => navigate(`/profile/${profile.id}`)}
                 />
                 <span onClick={() => navigate(`/profile/${profile.id}`)}
-                className="absolute cursor-pointer text-white font-medium text-[13px] bottom-[28px] left-[50px]">
-                  {`${shortName?.length > 6 ? shortName.slice(0,6) : shortName} `}
+                  className=" text-white font-medium text-[13px]">
+                  {`${shortName?.length > 6 ? shortName.slice(0, 6) : shortName} `}
                 </span>
-              </div>
+                </div>
+              {/* </div> */}
             </div>
           );
         }) || []}
