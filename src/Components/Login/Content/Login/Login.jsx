@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom"; // import the Link component
 import Input from "../InputBox/Input";
 import Heading from "../Heading/Heading";
@@ -13,6 +13,7 @@ import textLogo from "./textLogo.png";
 import {
   checkingIsEmailExist,
   loginUser,
+  otpType,
   sendingMailForOtp,
   settingOtp,
 } from "../../../../redux/actionCreators/authActionCreator";
@@ -28,6 +29,7 @@ import { toast } from "react-toastify";
 import getErrorMessage from "../../../Utility/firbaseError";
 import { getProfileById } from "../../../../redux/actionCreators/profileAction";
 import axios from "axios";
+import Loader from "../../../common/Loader";
 // import { sendOTP } from "./firebase";
 // import { onSignInSubmit } from "./firebase_login";
 
@@ -37,7 +39,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const passwordRules = /^(?=.*\d)(?=.*[a-z]).{5,}$/;
   const phoneNumberRules = /[0-9]{10}$/;
-
+  const [loading, setIsLoading] = useState(false);
   const validateEmail = (email) => {
     return Yup.string().email().isValidSync(email);
   };
@@ -76,14 +78,17 @@ const Login = () => {
         .matches(passwordRules, {
           message:
             "min 5 characters, 1 upper case letter, 1 lower case letter, 1 numeric digit",
-        })
-        // .required("Required"),
+        }),
+      // .required("Required"),
     }),
     onSubmit: async (e) => {
       const email = formik.values.email || formik.values.phone;
       const password = formik.values.password;
+      // setIsLoading(true);
+
       const isExist = await dispatch(checkingIsEmailExist(email));
       if (!isExist.status) {
+        setIsLoading(false);
         return toast.error("Your email/phone is not registered with us");
       }
       try {
@@ -97,9 +102,11 @@ const Login = () => {
         axios.defaults.headers.common["Accept-Language"] = "en";
         // const profile = await dispatch(getProfileById(userResponse?.data?.id))
         if (!userResponse?.status) {
+          setIsLoading(false);
           toast.error(userResponse.message);
           return userResponse?.message;
         }
+        setIsLoading(false);
         toast.success(userResponse?.message);
         const userCredential = {
           uemail: email,
@@ -110,6 +117,7 @@ const Login = () => {
         };
         dispatch(getProfileById(userResponse?.data?.id));
         await setDataOnStorage(userCredential);
+        setIsLoading(false);
         navigate("/select");
       } catch (error) {
         console.log(error);
@@ -118,13 +126,21 @@ const Login = () => {
   });
 
   const onForgetPasswordClick = async () => {
-      dispatch(settingOtp(""));
-    const email = formik.values.email;
+    dispatch(settingOtp(""));
+    setIsLoading(true);
+    let email = formik.values.email;
+    if (validateEmail(email)) {
+      dispatch(otpType(true));
+    } else {
+      dispatch(otpType(false));
+    }
     if (email.trim() === "") {
+      setIsLoading(false);
       return toasterFunction("Please Enter Email");
     }
     const mailStatus = await dispatch(checkingIsEmailExist(email));
     if (!mailStatus.status) {
+      setIsLoading(false);
       return toasterFunction(
         "Entered email/phone number is not registered with us"
       );
@@ -144,6 +160,7 @@ const Login = () => {
     } else {
       const otpStatus = await dispatch(sendingMailForOtp(data));
       if (!otpStatus.status) {
+        setIsLoading(false);
         return toasterFunction(otpStatus.message);
       }
       navigate("/auth/entercode");
@@ -168,7 +185,9 @@ const Login = () => {
     const auth = getAuth();
     try {
       configureRecaptcha(phoneNumber, auth);
+      // setIsLoading(false);
     } catch (err) {
+      setIsLoading(false);
       console.log(err, "captcha error");
     }
 
@@ -179,9 +198,11 @@ const Login = () => {
         window.confirmationResult = confirmationResult;
         captchaEl.current.innerHTML = "";
         navigate("/auth/entercode");
+        setIsLoading(false);
       })
       .catch((err) => {
         captchaEl.current.innerHTML = "";
+        setIsLoading(false);
         toast.error(err.message);
       });
   }
@@ -189,17 +210,17 @@ const Login = () => {
   const handleClick = (event) => {
     setProfileType(event.target.id);
   };
-  function checkUserExist(email) {
-    if (email) {
-      return dispatch(checkingIsEmailExist(email)).then((res) => {
-        if (res?.data?.id) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-    }
-  }
+  // function checkUserExist(email) {
+  //   if (email) {
+  //     return dispatch(checkingIsEmailExist(email)).then((res) => {
+  //       if (res?.data?.id) {
+  //         return true;
+  //       } else {
+  //         return false;
+  //       }
+  //     });
+  //   }
+  // }
 
   const validatePassword = (password) => {
     return passwordRules.test(password);
@@ -275,6 +296,7 @@ const Login = () => {
         </div>
         <div ref={captchaEl} id="sign-in-button"></div>
       </div>
+      {loading && <Loader />}
     </>
   );
 };
