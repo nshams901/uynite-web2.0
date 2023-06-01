@@ -12,6 +12,7 @@ import { TbBrandRedhat } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { useSelector } from "react-redux";
+import { Typography } from "@material-tailwind/react";
 
 const AboutSection = ({ isOther, data }) => {
   const navigate = useNavigate();
@@ -63,103 +64,95 @@ const AboutSection = ({ isOther, data }) => {
           </button>
         )}
       </section>
-      <div className="w-[93%] h-0.5 bg-gray-500"></div>
+      {/* <div className="w-[93%] h-0.5 bg-gray-500"></div> */}
 
       {/* Details Section */}
-      <section className="flex flex-col w-[90%] my-4 gap-2">
-        <strong className="text-lg font-[800]">Personal Info :</strong>
+        <Typography className="text-lg w-full py-1 px-4 bg-gray-300  font-[800]">Personal Info</Typography>
+      <section className="flex flex-col my-4 gap-2">
 
         {/* DOB Section */}
-        <div className="flex items-center gap-2">
-          <div className="w-7">
-            <BsCalendarEvent alt="" className="w-5 h-6 text-[#6c6c6c]" />
-          </div>
-          <p className="text-sm">
-            <strong className="text-md font-medium">Date of Birth : </strong>
-            <strong>{moment(data?.dob).format("DD-MMM-YYYY")}</strong>
+        <div className="flex items-center gap-2 px-4">
+          
+          <p className="text-sm w-full">
+            <strong className="text-md inline-block font-medium w-1/2">Date of Birth</strong>
+            <strong>: {moment(data?.dob).format("MMM-DD-YYYY")}</strong>
           </p>
         </div>
 
         {/* Gender Section */}
-        <div className="flex items-center gap-2">
-          <div className="w-7">
-            <CgProfile alt="" className="w-6 h-6 text-[#6c6c6c]" />
-          </div>
-          <p className="text-sm">
-            <strong className="text-md font-medium">Gender : </strong>
-            <strong>{data?.gender}</strong>
+        <div className="flex items-center gap-2 px-4">
+
+          <p className="text-sm w-full">
+            <strong className="text-md inline-block font-medium w-1/2">Gender</strong>
+            <strong>: {data?.gender}</strong>
           </p>
         </div>
 
         {/* Phone Number Section */}
-        <div className="flex items-center gap-2">
-          <div className="w-7">
-            <BsPhone alt="" className="w-6 h-6 text-[#6c6c6c]" />
-          </div>
-          <p className="text-sm">
-            <strong className="text-md font-medium">Phone : </strong>
-            <strong>{`${countrycode || ""} ${mobile || ""}`}</strong>
+        <div className="flex items-center gap-2 px-4">
+
+          <p className="text-sm w-full">
+            <strong className="text-md font-medium w-1/2 inline-block">Phone </strong>
+            :<strong className="text-[#05b7fd]"> {`${"" || ""} ${mobile || ""}`}</strong>
           </p>
         </div>
 
         {/* Email Section */}
-        <div className="flex items-center gap-2">
-          <div className="w-7">
-            <MdOutlineMarkEmailUnread
-              alt=""
-              className="w-6 h-6 text-[#6c6c6c]"
-            />
-          </div>
-          <p className="text-sm">
-            <strong className="text-md font-medium">Email : </strong>
-            <strong>{data?.email}</strong>
+        <div className="flex items-center gap-2 px-4">
+
+          <p className="text-sm w-full">
+            <strong className="text-md font-medium w-1/2 inline-block">Email</strong>
+            :<strong className="text-[#05b7fd]"> {data?.email}</strong>
           </p>
         </div>
 
         {/* Location Section */}
-        <strong className="text-lg font-[800]">Location :</strong>
+        {/* <strong className="text-lg font-[800]">Location :</strong> */}
+
+        <Typography className="text-lg w-full py-1 px-4 bg-gray-300  font-[800]">Location</Typography>
 
         {/* Living Location */}
-        <div className="flex items-center gap-2">
-          <div className="w-7">
-            <GoLocation alt="" className="w-6 h-6 text-[#6c6c6c]" />
-          </div>
-          <p className="text-sm">
-            <strong className="text-md font-medium">Living Location : </strong>
-            <strong> {`${city ? `${city} ` : ""}`} </strong>
+        <div className="flex items-center gap-2 px-4">
+
+          <p className="text-sm w-full">
+            <strong className="text-md font-medium w-1/2 inline-block">Living Location</strong>
+            <strong>: {`${city ? `${city} ` : ""}`} </strong>
           </p>
         </div>
 
         {/*Assembly Section */}
-        <div className="flex items-center gap-2">
-          <div className="w-7">
-            <GoLocation alt="" className="w-6 h-6 text-[#6c6c6c]" />
-          </div>
-          <p className="text-sm">
-            <strong className="text-md font-medium">Assembly : </strong>
-            <strong> {`${assembly ? `${assembly} ` : ""}`} </strong>
+        <div className="flex items-center gap-2 px-4">
+ 
+          <p className="text-sm w-full">
+            <strong className="text-md font-medium w-1/2 inline-block">Assembly </strong>
+            <strong>: {`${assembly ? `${assembly} ` : ""}`} </strong>
           </p>
         </div>
 
         {/*LokSabha Section */}
-        <div className="flex items-center gap-2">
-          <div className="w-7">
-            <GoLocation alt="" className="w-6 h-6 text-[#6c6c6c]" />
-          </div>
-          <p className="text-sm">
-            <strong className="text-md font-medium">Loksabha : </strong>
-            <strong> {`${loksabha ? `${loksabha} ` : ""}`} </strong>
+        <div className="flex items-center gap-2 px-4">
+
+          <p className="text-sm w-full">
+            <strong className="text-md font-medium w-1/2 inline-block">Loksabha</strong>
+            <strong>: {`${loksabha ? `${loksabha} ` : ""}`} </strong>
+          </p>
+        </div>
+
+              {/*Distric Section */}
+        <div className="flex items-center gap-2 px-4">
+
+          <p className="text-sm w-full">
+            <strong className="text-md font-medium w-1/2 inline-block">District</strong>
+            <strong>: {`${"" ? `${""} ` : ""}`} </strong>
           </p>
         </div>
 
         {/*State Section */}
-        <div className="flex items-center gap-2">
-          <div className="w-7">
-            <GoLocation alt="" className="w-6 h-6 text-[#6c6c6c]" />
-          </div>
-          <p className="text-sm">
-            <strong className="text-md font-medium">State : </strong>
-            <strong> {`${state ? `${state} ` : ""}`} </strong>
+        <div className="flex items-center gap-2 px-4">
+
+          <p className="text-sm w-full">
+            <strong className="text-md font-medium w-1/2 inline-block">State</strong>
+            <strong>: {`${state ? `${state} ` : ""}`} </strong>
           </p>
         </div>
         {/*District Section */}
@@ -167,43 +160,36 @@ const AboutSection = ({ isOther, data }) => {
           <div className="w-7">
             <GoLocation alt="" className="w-6 h-6 text-[#6c6c6c]" />
           </div>
-          <p className="text-sm">
-            <strong className="text-md font-medium">District : </strong>
+          <p className="text-sm w-full">
+            <strong className="text-md font-medium w-1/3 inline-block">District : </strong>
             <strong> {`${city ? `${city} ` : ""}`} </strong>
           </p>
         </div> */}
 
         {/*Country Section */}
-        <div className="flex items-center gap-2">
-          <div className="w-7">
-            <GoLocation alt="" className="w-6 h-6 text-[#6c6c6c]" />
-          </div>
-          <p className="text-sm">
-            <strong className="text-md font-medium">Country : </strong>
-            <strong> {`${country ? `${country} ` : ""}`} </strong>
+        <div className="flex items-center gap-2 px-4">
+          <p className="text-sm w-full">
+            <strong className="text-md font-medium w-1/2 inline-block">Country</strong>
+            <strong>: {`${country ? `${country} ` : ""}`} </strong>
           </p>
         </div>
 
         {/*Profession Section */}
-        <strong className="text-lg font-[800]">Profession :</strong>
-        <div className="flex items-center gap-2">
-          <div className="w-7">
-            <GoLocation alt="" className="w-6 h-6 text-[#6c6c6c]" />
-          </div>
-          <p className="text-sm">
-            <strong className="text-md font-medium">Company : </strong>
+        <Typography className="text-lg w-full py-1 px-4 bg-gray-300  font-[800]">Profession</Typography>
+
+        <div className="flex items-center gap-2 px-4">
+          <p className="text-sm w-full">
+            <strong className="text-md font-medium w-1/2 inline-block">Company</strong>
             {/* <strong> {`${profession ? `${profession} ` : ""}`} </strong> */}
           </p>
         </div>
         {isPersonal ? (
           <>
-            <strong className="text-lg font-[800]">Education :</strong>
+        <Typography className="text-lg w-full py-1 px-4 bg-gray-300  font-[800]">Education Details</Typography>
+            
             {/* Scholling Section */}
             {schooladdress || schoolname ? (
-              <div className="flex items-center gap-2">
-                <div className="w-7">
-                  <TbBrandRedhat alt="" className="w-6 h-6 text-[#6c6c6c]" />
-                </div>
+              <div className="flex items-center gap-2 px-4">
                 <p className="text-sm">
                   Completed schooling from
                   <strong>
@@ -219,10 +205,7 @@ const AboutSection = ({ isOther, data }) => {
             )}
             {/* Graduation Section */}
             {collagenameug || ugaddress ? (
-              <div className="flex items-center gap-2">
-                <div className="w-7">
-                  <TbBrandRedhat alt="" className="w-6 h-6 text-[#6c6c6c]" />
-                </div>
+              <div className="flex items-center gap-2 px-4">
                 <p className="text-sm">
                   Graduation details :{" "}
                   <strong>
@@ -238,10 +221,7 @@ const AboutSection = ({ isOther, data }) => {
 
             {/* Graduation Section */}
             {collagenamepg || pgaddress || pgdegree || pgbranch ? (
-              <div className="flex items-center gap-2">
-                <div className="w-7">
-                  <TbBrandRedhat alt="" className="w-6 h-6 text-[#6c6c6c]" />
-                </div>
+              <div className="flex items-center gap-2 px-4">
                 <p className="text-sm">
                   Post Graduation Details :
                   <strong>
@@ -256,24 +236,18 @@ const AboutSection = ({ isOther, data }) => {
           </>
         ) : (
           <>
-            <div className="items-center gap-2">
+            <div className="items-center gap-2 px-4">
               <div className="mb-2">
                 <strong>Professional Info : </strong>
               </div>
               <p className="text-sm">
                 {/* ORGANIZATION NAME */}
-                <div className="flex items-center gap-2">
-                  <div className="w-7">
-                    <CgOrganisation alt="" className="w-6 h-6 text-[#6c6c6c]" />
-                  </div>
+                <div className="flex items-center gap-2 px-4">
                   Organization Name :
                   <strong className="text-sm">{orgname}</strong>
                 </div>
                 {/* ORGANIZATION CATEGORY */}
-                <div className="flex items-center gap-2">
-                  <div className="w-7">
-                    <MdWorkOutline alt="" className="w-6 h-6 text-[#6c6c6c]" />
-                  </div>
+                <div className="flex items-center gap-2 px-4">
                   Organization Type :
                   <strong className="text-sm">{businesscategory}</strong>
                 </div>

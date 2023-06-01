@@ -6,7 +6,7 @@ const Portals = ({ children, closeModal }) => {
     <>
       <div
         onClick={closeModal}
-        style={{ backgroundColor: "rgba(0,0,0,.7)" }}
+        style={{ backgroundColor: "rgba(0,0,0,.6)" }}
         className="fixed top-0 w-[100%] h-[100%] z-20 flex items-center justify-center"
       ></div>
       {children}

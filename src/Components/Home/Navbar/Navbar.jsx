@@ -67,7 +67,7 @@ const Navbar = () => {
     console.log(item);
     if (item === "Find Friend") {
       navigate(`/find-friend`);
-    } else if (item === "My Friend") {
+    } else if (item === "My Friends") {
       navigate(`/myfriend`);
     } else if (item === "Friend Request") {
       navigate(`/friend-request`);
@@ -94,6 +94,11 @@ const Navbar = () => {
     }
   };
 
+  const handleListItem = (item) => {
+    setState({...state, searchInput: ''})
+    navigate(`/profile/${item?.id}`);
+  }
+
   return (
     <section className="h-[65px] w-full fixed flex bg-white z-10 responsive_navbar2">
       {/* -------------------------------------------------------------------------------------------------------------------------------------------------- */}
@@ -108,6 +113,7 @@ const Navbar = () => {
         {/* Search Bar Section */}
         <div className=" w-[80%] h-[38px] rounded-md relative bg-[#e4e7ec]  md:mr-5 hide_searchbar">
           <input
+            value={searchInput}
             type="text"
             className="outline-none rounded-sm h-[38px] bg-[#e4e7ec]"
             placeholder="Search..."
@@ -121,7 +127,7 @@ const Navbar = () => {
           {searchInput && (
             <div className="bg-white  h-[400px] overflow-y-scroll overflow-x-hidden">
               {usersList?.map((item) => {
-                return <ItemList user item={item} />;
+                return <ItemList user item={item} handleListItem={() =>handleListItem(item)}   />;
               })}
             </div>
           )}

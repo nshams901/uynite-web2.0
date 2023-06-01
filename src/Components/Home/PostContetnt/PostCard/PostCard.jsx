@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import {
   addCommentOnPost,
   decreaseLikeByLikeId,
+  deletePostByPostId,
   getAllPostWithLimit,
   getCommentByPostid,
   getLikesById,
@@ -25,9 +26,9 @@ import OriginalPostModal from "../../Modal/OriginalPostModal/OriginalPostModal";
 import UpdatePostModal from "../../Modal/CreatePostModal/CreatePostModal";
 import LikeModal from "../../Modal/LikeModal/LikeModal";
 import VideoCommentsModal from "../../KicksPage/VideoCommentsModal";
-import { getPostLike } from "../../../../redux/actionCreators/postActionCreator";
+import { getPostHistory, getPostLike } from "../../../../redux/actionCreators/postActionCreator";
 import { Alert } from "@material-tailwind/react";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import AlertSmall from "../../../common/AlertSmall";
 import MenuDropdown from "../../../common/MenuDropdown";
 import { otherPostOption, ownPostOption } from "../../dataList";
@@ -217,6 +218,7 @@ const PostCard = ({ userData, item = {} }) => {
     if (modalName === "Edit Post") {
       setPostMenuModal({ ...postMenuModal, editPost: true });
     } else if (modalName === "History") {
+      dispatch(getPostHistory(item.id))
       setPostMenuModal({ ...postMenuModal, originalPost: true });
     } else if (modalName === "External Share") {
       setPostMenuModal({ ...postMenuModal, showReportModal: true });
@@ -293,8 +295,8 @@ const PostCard = ({ userData, item = {} }) => {
                 <span className="text-[11px] ">
                   {item?.updatpostdatetime === null ||
                   item?.updatpostdatetime === ""
-                    ? item?.postdatetime
-                    : item?.updatpostdatetime}
+                    ? moment(item?.postdatetime, 'x').format('DD MMM, YYYY')
+                    : moment(item?.updatpostdatetime, 'x').format('DD MMM, YYYY')}
                 </span>
 
                 {/* <img
@@ -305,10 +307,10 @@ const PostCard = ({ userData, item = {} }) => {
                 {/* font size reduced */}
                 {/* <span className="text-[11px] font-semibold">1 year ago</span> */}
                 {item?.location ? (
-                  <>
-                    <span className="text-xs">{item?.location}</span>
+                  <div className="flex gap-1 items-center">
                     <GrLocation size={10} />
-                  </>
+                    <span className="text-xs">{item?.location}</span>
+                  </div>
                 ) : (
                   ""
                 )}
@@ -418,13 +420,13 @@ const PostCard = ({ userData, item = {} }) => {
         {/* Like share Comment Button Sections  */}
         <section className="flex justify-between w-full mt-2 mb-1  px-2">
           <div
-            className="flex justify-center gap-2 items-center cursor-pointer"
+            className="flex justify-center gap-2 text-[12px] text-gray-600 items-center cursor-pointer"
             onClick={onHandleOpenLikeModal}
           >
-            <HiUserGroup size={16} />
+            {/* <HiUserGroup size={16} /> */}
 
-            <span className="lg:text-[13px] xl:text-[14px] font-medium">
-              {item?.likecount}
+            <span className=" cursor-pointer ">
+              {item?.likecount} likes
             </span>
           </div>
 
@@ -467,11 +469,11 @@ const PostCard = ({ userData, item = {} }) => {
               <span className="text-xs font-semibold mt-1">Like</span>
             </div>
             {/* Input Box Section */}
-            <div className="relative flex grow items-center outline-gray-300 py-1 border-[1px] w-[100%] border-gray-500 justify-center gap-2 mx-3 rounded-xl mt-1.5 h-[38px]">
+            <div className="relative flex grow overflow-hidden items-center outline-gray-300 py-1 border-[1px] w-[100%] border-gray-500 justify-center gap-2 mx-3 rounded-xl mt-1.5 h-[38px]">
               <input
                 type="text"
                 className="w-full h-full outline-none rounded-xl pl-3"
-                placeholder="add comment"
+                placeholder="Add your comment"
                 value={inputComment}
                 onChange={onHandleChange}
               />
@@ -492,7 +494,7 @@ const PostCard = ({ userData, item = {} }) => {
             </div>
 
             <div
-              className="mr-2 flex flex-col items-center"
+              className="mr-2 flex flex-col items-center justify-center"
               onClick={onShowShareModal}
             >
               <img
@@ -500,18 +502,16 @@ const PostCard = ({ userData, item = {} }) => {
                 alt=""
                 className="w-[54%] cursor-pointer"
               />
-              <span className="text-xs font-semibold mt-1">Share</span>
             </div>
           </div>
-          <hr className="w-full mb-2 text-gray-500 mt-2" />
         </section>
       </div>
       {showShareModal?.shareModal && (
         <Portals closeModal={onHandleShareModal}>
           <SharePostModal
-            handleCloseModal={onHandleShareModal}
             showShareModal={showShareModal}
             onClickOnNext={onClickOnNext}
+            handleClose={onHandleShareModal}
           />
         </Portals>
       )}

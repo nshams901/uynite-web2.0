@@ -1,6 +1,7 @@
 import React from "react";
 import { GrLocation } from "react-icons/gr";
 import { useSelector } from "react-redux";
+import user from '../../../../Assets/Images/user.png'
 
 const OriginalPostModal = ({ handleCloseModal }) => {
   const reducerData = useSelector((state) => {
@@ -9,7 +10,6 @@ const OriginalPostModal = ({ handleCloseModal }) => {
       activePost: state.rootsReducer.activePost
     }
   })
-
   const { postHistory = [], activePost = {}} = reducerData;
   const {  profile, text, location, image} = activePost 
 
@@ -26,7 +26,7 @@ const OriginalPostModal = ({ handleCloseModal }) => {
           <section className="w-full flex items-center pl-3">
             <div className="flex w-[50px] h-[50px]">
               <img
-                src={profile?.pimage}
+                src={profile?.pimage || user}
                 alt=""
                 className="w-[45px] h-[45px] rounded-full"
               />
@@ -44,13 +44,13 @@ const OriginalPostModal = ({ handleCloseModal }) => {
               </div>
 
               <div className="flex items-center gap-1">
-                {/* <HiUserGroup size={16} /> */}
-                <img src="./images/groups.png" alt="" className="w-[12px]" />
+              
+                {/* <img src="./images/groups.png" alt="" className="w-[12px]" />
 
                 <span className="text-xs font-semibold">1 year ago</span>
-                <GrLocation size={10} />
-                {/* <img src="" alt="" /> */}
-                <span className="text-xs font-semibold"> {location}</span>
+                <GrLocation size={10} /> */}
+                
+                {/* <span className="text-xs font-semibold"> {location}</span> */}
               </div>
             </div>
           </section>
@@ -97,7 +97,7 @@ const OriginalPostModal = ({ handleCloseModal }) => {
                 <section className="w-full flex items-center ml-3 justify-around">
                   <div className="flex w-[50px] h-[50px]">
                     <img
-                      src={profile?.pimage}
+                      src={profile?.pimage || user}
                       alt=""
                       className="w-[45px] h-[45px] rounded-full"
                     />
@@ -112,14 +112,14 @@ const OriginalPostModal = ({ handleCloseModal }) => {
                     </div>
 
                     <div className="flex items-center gap-1">
-                      <img
+                      {/* <img
                         src="./images/groups.png"
                         alt=""
                         className="w-[12px]"
-                      />
+                      /> */}
 
-                      <span className="text-xs font-semibold">1 year ago</span>
-                      <GrLocation size={10} />
+                      {/* <span className="text-xs font-semibold">1 year ago</span>
+                      <GrLocation size={10} /> */}
                       {/* <img src="" alt="" /> */}
                       <span className="text-xs font-semibold"> {location}</span>
                     </div>

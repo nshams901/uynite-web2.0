@@ -75,7 +75,7 @@ const ProfileImageSection = ({
   const handleRemove = (friend) => {
     const payload = {
       profileid: id,
-      friendprofileid: friend?.profile?.id,
+      friendprofileid: friend?.profile?.id || friend?.id,
     };
     dispatch(
       modalName === "Friends"
@@ -196,9 +196,10 @@ const ProfileImageSection = ({
         <Portals closeModal={() => setState({ ...state, showModal: false })}>
           <FollowersModal
             handleClick={handleRemove}
-            modalName={`Your ${modalName}`}
+            modalName={modalName }
             emptyMessage={`No ${modalName}`}
             data={modalData}
+            closeModal={() => setState({...state, showModal: false})}
           />
         </Portals>
       )}

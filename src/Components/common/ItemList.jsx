@@ -1,11 +1,11 @@
 import { List, ListItem, Card } from "@material-tailwind/react";
 import userIcon from "../../Assets/Images/user.png";
 
-export default function ItemList({ item, user }) {
+export default function ItemList({ item, user , handleListItem}) {
   const { id, pimage, fname, lname } = item || {};
 
   return (
-    <Card className="border-none px-3 py-2">
+    <Card className="border-none px-3 py-2 cursor-pointer" onClick={handleListItem}>
       {user ? (
         <div>
           <div
