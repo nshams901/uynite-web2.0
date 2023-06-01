@@ -129,7 +129,7 @@ export default function MainCarousel({
               </div>
             </div>
           )}
-          {files.length ? (
+          {files?.length ? (
             <div className="flex h-full sm:w-[100%] lg:w-full justify-center py-2">
               <div className="mb-4 w-[90%] sm:w-full sm:h-[45vh] lg:h-[50vh] flex justify-center items-center ">
                 <label

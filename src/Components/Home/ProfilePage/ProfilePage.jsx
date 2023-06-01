@@ -24,7 +24,7 @@ import moment from "moment";
 import { imageUploadApi } from "../../../redux/actionCreators/rootsActionCreator";
 
 const ProfilePage = ({ isOther }) => {
-  const [selectedOption, setSelectedOption] = useState("Post");
+  const [selectedOption, setSelectedOption] = useState("Posts");
   const dispatch = useDispatch();
   const params = useParams()
   
@@ -68,7 +68,7 @@ const ProfilePage = ({ isOther }) => {
     const coverImg = new FormData();
     coverImg.append('file', value[0])
     const uploadResponse =await dispatch(imageUploadApi(value[0]))
-    console.log(uploadResponse, "____________ YYYY");
+
     if(name === "coverImg"){
       let payloads = {...profile, state: profile?.state||"", pcoverimage: uploadResponse.path}
       dispatch(updateProfile(payloads)).then((res) => {

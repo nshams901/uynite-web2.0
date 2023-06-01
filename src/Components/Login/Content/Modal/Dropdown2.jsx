@@ -58,7 +58,7 @@ export default function Dropdown2({
                   type="text"
                   placeholder="Search..."
                   className="border-b-2 border-[#48B2DB] text-[#7E8082] outline-none"
-                  value={inputValue.country}
+                  value={inputValue?.country}
                   onChange={onHandleChange}
                 />
               </div>
@@ -69,8 +69,8 @@ export default function Dropdown2({
                   if (inputValue === "") {
                     return true;
                   } else {
-                    return item[param]
-                      .toLowerCase()
+                    return item?.[param]
+                      ?.toLowerCase()
                       .includes(inputValue.country?.toLowerCase());
                   }
                 })

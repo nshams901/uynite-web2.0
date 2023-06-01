@@ -6,7 +6,7 @@ import { Avatar } from "@material-tailwind/react";
 import { useSelector } from "react-redux";
 import userIcon from "../../../Assets/Images/user.png";
 
-const PostForm = ({ width, bgColor }) => {
+const PostForm = ({ width, bgColor, rightIcon }) => {
   // const [showCreatePostModal, setShowCreatePostModal] = useState(false);
   const [state, setState] = useState({});
   const { showModal } = state;
@@ -31,9 +31,12 @@ const PostForm = ({ width, bgColor }) => {
           placeholder="Write Your Thoughts....."
           className="outline-none rounded-md"
         />
+        {
+          rightIcon &&
         <span className="mr-2">
           <BsImage size={25} />
         </span>
+        }
       </div>
       {showModal && (
         <Portals

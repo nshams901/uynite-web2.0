@@ -29,6 +29,7 @@ import { GrWaypoint } from "react-icons/gr";
 import { unfollow } from "../../../../redux/actionCreators/friendsAction";
 import { select } from "@material-tailwind/react";
 import { blockUser } from "../../../../redux/actionCreators/settingsActionCreator";
+import kicksLiked from '../../../../Assets/Images/kicksLike.png'
 
 const VideoComponent = ({ dataList, data }) => {
   const dispatch = useDispatch();

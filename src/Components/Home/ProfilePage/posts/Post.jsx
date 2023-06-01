@@ -33,7 +33,7 @@ const Post = () => {
         const { userData } = post;
         return (
           <div className="w-full flex items-center justify-center flex-col ">
-            <PostCard userData={userData || []} item={post} />
+            <PostCard userData={userData || []} item={post}  />
           </div>
         );
       })}
