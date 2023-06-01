@@ -71,6 +71,9 @@ const Modal = ({ modalType, handleClose }) => {
     city,
     selectedCountry,
     selectedState,
+    selectedDistrict,
+    selectedLoksabha,
+    selectedAssembly,
     selectedCategory,
   } = states;
   const isPersonal = modalType === "Personal";
@@ -485,17 +488,19 @@ const Modal = ({ modalType, handleClose }) => {
                               name={"District*"}
                               options={districtList}
                               selectedValue={district}
-                              keyName={"distric"}
+                              keyName={"district"}
                               inputValue={states?.district}
-                              handleChange={(value) =>
-                                handleChange("district", value)
-                              }
+                              handleChange={(value) => {
+                                handleChange("district", "");
+                                handleChange("selectedDistrict", value);
+                              }}
                               onHandleChange={(e) =>
                                 setState({
                                   ...states,
                                   district: e.target.value,
                                 })
                               }
+                              selectedOption={selectedDistrict}
                             />
                           )}
                         </div>
@@ -507,10 +512,12 @@ const Modal = ({ modalType, handleClose }) => {
                                 keyName={"loksabha"}
                                 options={loksabhaList}
                                 selectedValue={loksabha}
+                                selectedOption={selectedLoksabha}
                                 inputValue={states?.loksabha}
-                                handleChange={(value) =>
-                                  handleChange("loksabha", value)
-                                }
+                                handleChange={(value) => {
+                                  handleChange("loksabha", "");
+                                  handleChange("selectedLoksabha", value);
+                                }}
                                 onHandleChange={(e) =>
                                   setState({
                                     ...states,
@@ -523,10 +530,12 @@ const Modal = ({ modalType, handleClose }) => {
                                 keyName={"assembly"}
                                 options={assemblyList}
                                 selectedValue={assembly}
+                                selectedOption={selectedAssembly}
                                 inputValue={states?.assembly}
-                                handleChange={(value) =>
-                                  handleChange("assembly", value)
-                                }
+                                handleChange={(value) => {
+                                  handleChange("assembly", "");
+                                  handleChange("selectedAssembly", value);
+                                }}
                                 onHandleChange={(e) =>
                                   setState({
                                     ...states,
@@ -634,7 +643,7 @@ const Modal = ({ modalType, handleClose }) => {
               <button
                 className="flex justify-center"
                 onClick={handleCreateProfile}
-                disabled={!states?.orgName && !states?.selectedOption}
+                // disabled={!states?.orgName && !states?.selectedOption}
               >
                 <label
                   htmlFor=""
