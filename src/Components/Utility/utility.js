@@ -53,7 +53,7 @@ export const isEmpty = (data) => {
   } else return true;
 }
 
-export function debounce(func, timeout = 1000) {
+export function debounce(func, timeout = 1200) {
   let timer;
   return (...args) => {
     clearTimeout(timer);

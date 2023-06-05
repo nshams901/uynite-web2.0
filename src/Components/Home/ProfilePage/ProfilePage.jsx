@@ -65,62 +65,14 @@ const ProfilePage = ({ isOther }) => {
 
   }, [params?.id]);
 
-  const handleUploadImage = async (name, value) => {
-    const objUrl = URL.createObjectURL(value[0])
-    setState({...state, [name]: objUrl})
-    const coverImg = new FormData();
-    coverImg.append('file', value[0])
-    const uploadResponse =await dispatch(imageUploadApi(value[0]))
 
-    if(name === "coverImg"){
-      let payloads = {...profile, state: profile?.state||"", pcoverimage: uploadResponse.path}
-      dispatch(updateProfile(payloads)).then((res) => {
-        if(res?.status){
-          toast.success(res?.message)
-        }else{
-          toast.error(res?.message)
-        }
-      })
-    }else if(name === "profileImg"){
-      let payloads = {...profile, state: profile?.state||"", pimage: uploadResponse.path, };
-      dispatch(updateProfile(payloads)).then((res) => {
-        if(res?.message){
-          toast.success(res?.message)
-        }else{
-          toast.error(res?.message)
-        }
-      });
-    }
-    handleCreatePost(uploadResponse.data?.path, name)
-  }
   function getEducation (){
     dispatch(getEducationDetail(user?.id))
-  }
-
-  const handleCreatePost = (img, type) => {
-        const payload = {
-          shareto: '',
-          type: "personal",
-          template: "template1",
-          image: img,
-          text: type === 'profileImg' ? 'profile pic' : type === 'coverImg' ? 'cover pic' : "",
-          suggesttemp: "sugest1",
-          utag: null,
-          delete: false,
-          close: "close",
-          profileid: profile?.id,
-          city: '',
-          viptype:type === 'profileImg' ? 5 : type === 'coverImg' ? 6 : "", 
-          postdatetime: new Date().getTime(),
-          createdatetime: new Date().getTime()
-        };
-        dispatch(createPost(payload))
   }
   return (
     <div className="w-full flex flex-col sm:flex-row justify-evenly bg-[#E4E7EC] mt-2">
       <section className="flex sm:w-[50%] flex-col mt-2 items-center lg:items-end">
         <ProfileImageSection
-          uploadImage={handleUploadImage}
           data={ isOther ? friendDetail : profile }
           friends={friends}
           following={following}

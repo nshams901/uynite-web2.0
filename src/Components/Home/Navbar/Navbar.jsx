@@ -216,6 +216,7 @@ const Navbar = () => {
                       { name: "Find Friend" },
                       { name: "Friend Request" },
                     ]}
+                    itemClass={'font-bold'}
                   />
                 </>
               ) : (

@@ -268,7 +268,7 @@ export const imageUploadApi = (file) => async (dispatch) => {
     const getStoredData = await getUserDataFromLocalStorage();
     const body = { file: file };
     const getUploadedResult = await axios.post(
-      `http://web.uynite.com/fileservice/s3/upload`,
+      `https://web.uynite.com/fileservice/s3/upload`,
       body,
       {
         headers: {

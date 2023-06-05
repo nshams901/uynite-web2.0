@@ -6,7 +6,7 @@ import {
   Button,
 } from "@material-tailwind/react";
 
-export default function MenuDropdown({ button, options, handleOption, arrow, placement, classes }) {
+export default function MenuDropdown({ button, options, handleOption, arrow,itemClass, placement, classes }) {
   return (
     <Menu placement={placement}>
       <MenuHandler >
@@ -21,7 +21,7 @@ export default function MenuDropdown({ button, options, handleOption, arrow, pla
           return <MenuItem className="px-4 hover:bg-gray-300 py-2 flex rounded-none"
           onClick={() => handleOption(item.name)} key={item?.name}>
           {item.icon && <img src={item.icon} className="w-6 mr-2"/>} 
-          <span>{item.name}</span> </MenuItem>;
+          <span className={itemClass}>{item.name}</span> </MenuItem>;
         })}
         {/* <MenuItem>Menu Item 1</MenuItem>
         <MenuItem>Menu Item 2</MenuItem>

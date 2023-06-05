@@ -49,6 +49,21 @@ export const getUsers = (data) => async (dispatch) => {
   }
 };
 
+export const findFriends = (data, profileid) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `https://web.uynite.com/profile/api/profile/search/${profileid}/${data}`
+    );
+    dispatch({
+      type: "",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const addFriend = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
@@ -120,7 +135,21 @@ export const getRequestList = (data) => async (dispatch) => {
     const response = await axios.get(
       `https://web.uynite.com/friend/api/friend/getfriendrequest/${data}/Send`
     );
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa", response);
+    dispatch({
+      type: "GET_REQUEST_LIST",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getRequestsList = (data) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `https://web.uynite.com/friend/api/friend/getprofileidwithdetail/${data}`
+    );
     dispatch({
       type: "GET_REQUEST_LIST",
       payload: response.data,
