@@ -22,9 +22,7 @@ const Post = () => {
   });
   const { profile, postList = [] } = reducerData;
   const params = useParams()
-  const isOther = params.id !== profile?.id
-  console.log(isOther, params.id, "LLLLLLL");
-
+  const isOther = params.id ? params.id !== profile?.id : false
 
   return (
     <div className="flex flex-col justify-center items-center ">
