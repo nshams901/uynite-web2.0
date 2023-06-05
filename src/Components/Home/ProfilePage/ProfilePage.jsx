@@ -82,7 +82,7 @@ const ProfilePage = ({ isOther }) => {
         }
       })
     }else if(name === "profileImg"){
-      let payloads = {...profile, state: profile?.state||"", pimage: uploadResponse.path};
+      let payloads = {...profile, state: profile?.state||"", pimage: uploadResponse.path, };
       dispatch(updateProfile(payloads)).then((res) => {
         if(res?.message){
           toast.success(res?.message)
@@ -111,7 +111,8 @@ const ProfilePage = ({ isOther }) => {
           profileid: profile?.id,
           city: '',
           viptype:type === 'profileImg' ? 5 : type === 'coverImg' ? 6 : "", 
-          postdate: new Date().getTime(),
+          postdatetime: new Date().getTime(),
+          createdatetime: new Date().getTime()
         };
         dispatch(createPost(payload))
   }
