@@ -44,7 +44,7 @@ const ProfilePage = ({ isOther }) => {
     return  isOther ? { id: params?.id} : profile;
   }, [isOther, params.id])
 
-  const isPersonal = profile?.profiletype === "Personal";
+  const isPersonal = isOther ? friendDetail?.profiletype === 'personal' : profile?.profiletype === "Personal";
   const [state, setState ] = useState({})
   const { coverImg, profileImg, showEditModal} = state
   useEffect(() => {

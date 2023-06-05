@@ -100,6 +100,7 @@ const ProfileImageSection = ({
       }
     });
   };
+
   return (
     <div className="w-[95%] lg:w-[80%] xl:w-[70%] bg-white rounded-xl flex flex-col items-center mb-3">
       {/*Cover Image Section */}
