@@ -37,9 +37,9 @@ const Post = () => {
           </div>
           :
           postList?.map((post) => {
-            const { userData } = post;
+            const { userData, id } = post;
             return (
-              <div className="w-full flex items-center justify-center flex-col ">
+              <div key={id} className="w-full flex items-center justify-center flex-col ">
                 <PostCard userData={userData || []} item={post} />
               </div>
             );

@@ -78,6 +78,10 @@ const PostCard = ({ userData, item = {} }) => {
 
   const shortDescription = description.substring(0, 300);
   const onShowShareModal = () => {
+    dispatch({
+      type: "ACTIVE_POST",
+      payload: item,
+    });
     // console.log("jwww");
     setShowShareModal({ ...showShareModal, shareModal: true });
   };
@@ -466,7 +470,7 @@ const PostCard = ({ userData, item = {} }) => {
               )}
               {/* <RiDislikeFill/> */}
 
-              <span className="text-xs font-semibold mt-1">Like</span>
+              {/* <span className="text-xs font-semibold mt-1">Like</span> */}
             </div>
             {/* Input Box Section */}
             <div className="relative flex grow overflow-hidden items-center outline-gray-300 py-1 border-[1px] w-[100%] border-gray-500 justify-center gap-2 mx-3 rounded-xl mt-1.5 h-[38px]">

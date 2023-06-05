@@ -274,6 +274,8 @@ export const imageUploadApi = (file) => async (dispatch) => {
         headers: {
           "Accept-Language": "en",
           "Content-Type": "multipart/form-data",
+          'Access-Control-Allow-Origin':'*',
+          'Access-Control-Allow-Methods':'POST,PATCH,OPTIONS',
           Authorization: `Bearer ${getStoredData?.token}`,
         },
       }

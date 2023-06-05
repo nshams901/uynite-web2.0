@@ -45,6 +45,5 @@
 input[type=text] {
     width: 100%;
     border-radius: 4px;
-    padding: 3px;
     resize: vertical;
 }

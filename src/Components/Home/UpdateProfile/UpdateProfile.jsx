@@ -26,6 +26,7 @@ import { Typography } from "@material-tailwind/react";
 import { getUserDataFromLocalStorage, isEmpty } from "../../Utility/utility";
 import Locations from "./Locations";
 import { imageUploadApi } from "../../../redux/actionCreators/rootsActionCreator";
+import DropdownComp from "../../common/DropdownComp";
 
 const UpdateProfile = () => {
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ const UpdateProfile = () => {
   const { educationDetails, profile } = reducerData;
   const [states, setState] = useState( {
     ...profile,
+    gender: {name: profile.gender},
     state : { state: profile.state},
     district : { district: profile.district},
     loksabha :  {loksabha: profile?.loksabha},
@@ -49,6 +51,8 @@ const UpdateProfile = () => {
   const [country, setCountry] = useState({country : profile?.country});
   const [education, setEducation] = useState(educationDetails || {});
   const [orgDetail, setOrgDetail] = useState({
+    ...profile,
+    fname: profile?.fname,
     orgname: profile.orgname,
     businesscategory: profile.businesscategory,
   });
@@ -58,7 +62,7 @@ const UpdateProfile = () => {
     lname = profile?.lname,
     email = profile?.email,
     dob = profile?.dob,
-    gender = profile.gender,
+    gender ,
     profiletype = profile.profiletype,
     userid = profile.userid,
     id = profile.id,
@@ -71,6 +75,9 @@ const UpdateProfile = () => {
     mobile,
     orgname,
     businesscategory,
+    others_address,
+    personalname,
+    personalLastName
   } = states;
 
   const isPersonal = profiletype === "Personal";
@@ -106,6 +113,9 @@ const UpdateProfile = () => {
       loksabha: getAssenbly(value.lid),
     };
     obj[name] && dispatch(obj[name]);
+    if(name === 'state'){
+      setState({...states, [name]: value, district: "", loksabha: "", assembly: ""})
+    }else 
     setState({ ...states, [name]: value });
   };
 
@@ -113,7 +123,7 @@ const UpdateProfile = () => {
     setOrgDetail({...orgDetail, [name]: value})
   }
   const handleSubmit = async () => {
-    if (email !== profile?.email) {
+    if ((email !== profile?.email ) || (mobile !== profile?.mobile)) {
       const checkEmail = await dispatch(checkingIsEmailExist(email));
       console.log(checkEmail, );
       if(checkEmail?.status){
@@ -129,33 +139,34 @@ const UpdateProfile = () => {
       dob: moment(dob).format("YYYY-MM-DD"), //from user input
       email: email, //from signup screen.
       fname: fname, //from user input BUSINESS NAME
-      gender: gender,
+      gender: gender?.name,
       mobile: mobile,
       pimage: pimage, //if profile image is there, add the URL here.
       loksabha: states.loksabha?.loksabha,
       state: states.state?.state || "",
       city: location,
       lname: lname, //from user input – profile lnamein SLIDE 4
-      personalname: fname, //from user input – profilefnamein SLIDE 4
+      personalname: !isPersonal ?  personalname : "", //from user input – profilefnamein SLIDE 4
+      personalLastName: !isPersonal ? personalLastName : "",
       profiletype: isPersonal ? "Personal" : "Organization", //profile type, while we passing in signup screen
       updatedate: Date.now(), //Current UTC time in milliseconds
       userid: userid, // stored User ID from (Slide 3)
       ...(!isPersonal && {
         businesscategory: orgDetail?.businesscategory,
         orgname: orgDetail.orgname,
+        others_address: orgDetail.others_address,
+        orgemail: orgDetail.orgemail,
+        others_website: orgDetail.others_website,
+        fname: orgDetail.fname
       }),
     };
     if (profilePic) {
-      const file = new FormData();
-      file.append("file", profilePic);
-      let response = await dispatch(imageUploadApi(file));
-      payloads.pimage = response.data.path;
+      let response = await dispatch(imageUploadApi(profilePic));
+      payloads.pimage = response.path;
     }
     if (coverPic) {
-      const file = new FormData();
-      file.append("file", coverPic);
-      let response = await dispatch(imageUploadApi(file));
-      payloads.pcoverimage = response.data.path;
+      let response = await dispatch(imageUploadApi(coverPic));
+      payloads.pcoverimage = response.path;
     }
     education.isEditEdu ? isPersonal ? addEducation() : addProfession() : ""
     dispatch(updateProfile(payloads))
@@ -198,7 +209,7 @@ const UpdateProfile = () => {
       <div className="updateTitle text-center rounded-xl flex-wrap mt-2 mb-6 bg-[#FFFFFF] text-[#000] text-xl ">
         <h3 className="p-2 font-bold">Let's update your profile</h3>
         <h4 className=" text-[#666567]">
-          This will help us others get to know better!
+          This will help others to get to know you better!
         </h4>
       </div>
       <div className="grid grid-cols-2 gap-4 justify-center rounded-2xl md:grid-cols-2 ">
@@ -235,7 +246,7 @@ const UpdateProfile = () => {
         </div>
         <div className="bg-[#fff] rounded-2xl ">
           <h3 className="p-2 font-bold text-center text-[20px]">
-            Profile Picture :
+            Profile Picture
           </h3>
           <img
             src={pimage}
@@ -270,7 +281,7 @@ const UpdateProfile = () => {
         <div className="m-2 p-6">
           <div action="">
             <div className="mb-3 text-white ps-4 py-2 mt-6 text-[20px] bg-[#7991bd]">
-              Personal Info :
+              Personal Info
             </div>
 
             <div>
@@ -279,24 +290,24 @@ const UpdateProfile = () => {
                   classes={"my-2"}
                   label={"First Name"}
                   attributes={{
-                    name: "fname",
-                    onChange: (e) =>
+                    name: isPersonal ? "fname" : 'personalname',
+                    onChange: (e) => e.target.value?.length < 16 &&
                       handleChange(e.target.name, e.target.value),
                     type: "text",
                     placeholder: "First Name",
-                    value: fname,
+                    value: isPersonal ? fname : personalname,
                   }}
                 />
                 <Input
                   classes={"my-2"}
                   label={"Last Name"}
                   attributes={{
-                    name: "lname",
-                    onChange: (e) =>
+                    name: isPersonal ? "lname" : "personalLastName",
+                    onChange: (e) => e.target.value?.length < 16 &&
                       handleChange(e.target.name, e.target.value),
                     type: "text",
                     placeholder: "Last Name",
-                    value: lname,
+                    value: isPersonal ? lname : personalLastName,
                   }}
                 />
               </div>
@@ -333,16 +344,19 @@ const UpdateProfile = () => {
                   value: email,
                 }}
               />
-              <div className="my-3 gap-2 flex w-full justify-between">
-                <Dropdown
+              <div className="my-3 gap-2 flex w-full items-center justify-between">
+                <DropdownComp
+                  labelClass={'mr-[5.5rem]'}
                   style={"w-full"}
                   label={"Phone"}
                   options={[{ code: "+91" }, { code: "+1" }]}
                   keyName={"code"}
+                  name={'code'}
                   selectedValue={code}
                   handleChange={(value) => handleChange("code", value)}
                 />
                 <Input
+                  labelclass={'w-1/4'}
                   classes={"w-full"}
                   //   label={"First Name"}
                   attributes={{
@@ -357,13 +371,13 @@ const UpdateProfile = () => {
                 {/* <input
                   type="tel"
                   placeholder="7878787878"
-                  className="mb-6   ml-3 w-full border-none  p-2 outline-none  w-[70%] "
+                  className="mb-6   ml-3 border-none  p-2 outline-none  w-[70%] "
                 /> */}
               </div>
               <div className=" gap-2 my-2 ">
                 <div className="">
                   <Input
-                    labelclass={"min-w-[165px]"}
+                    labelclass={'w-1/4'}
                     classes={"flex"}
                     label={"Date of birth*"}
                     attributes={{
@@ -380,7 +394,7 @@ const UpdateProfile = () => {
                   {/* <label className="block me-6 text-gray-900">
                     Gender
                   </label> */}
-                  <Dropdown
+                  {/* <Dropdown
                     label={"Gender"}
                     style={"w-full"}
                     name={"Gender"}
@@ -388,6 +402,15 @@ const UpdateProfile = () => {
                     selectedValue={gender}
                     keyName={"name"}
                     handleChange={(value) => handleChange("gender", value)}
+                  /> */}
+
+                  <DropdownComp
+                    label={'Gender'}
+                    name={'Gender'}
+                    options={[{ name: "Male" }, { name: "Female" }]}
+                    selectedValue={gender}
+                    keyName={'name'}
+                    handleChange={(value) => handleChange('gender', value)}
                   />
                 </div>
               </div>
@@ -411,7 +434,7 @@ const UpdateProfile = () => {
               ) : (
                 <OrganizationAccount
                   states={states}
-                  orgDetail={orgDetail}
+                  orgDetail={{...profile, ...orgDetail, }}
                   handleChange={handleOrganization}
                 />
               )}
@@ -422,7 +445,7 @@ const UpdateProfile = () => {
                   onClick={handleSubmit}
                   className="w-[180px] pr-3 bg-[#7991BD] p-1 px-2 rounded-lg text-white mt-4"
                 >
-                  Save & Continue
+                  Update Profile
                 </button>
                 <button
                   onClick={() => navigate("/profile")}

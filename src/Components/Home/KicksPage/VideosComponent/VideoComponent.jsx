@@ -21,7 +21,7 @@ import { toast } from "react-toastify";
 import SelectedVideoModal from "../../SearchKicksPage/SelectedVideoModal";
 import { HiPlus } from "react-icons/hi";
 import shortVideo from "../../../../Assets/Videos/v1.mp4";
-import user from "../../../../Assets/Images/user2.png";
+import user from "../../../../Assets/Images/user.png";
 import "../kicks.css";
 import { useEffect } from "react";
 import { debounce } from "../../../Utility/utility";

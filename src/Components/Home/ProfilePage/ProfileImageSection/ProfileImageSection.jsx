@@ -31,6 +31,7 @@ const ProfileImageSection = ({
   uploadImage,
   coverImg,
   profileImg,
+  isPersonal
 }) => {
   const navigate = useNavigate()
   const { id } = data || {};
@@ -46,13 +47,6 @@ const ProfileImageSection = ({
 
   const handleModal = async (name) => {
     if (name === "Friends") {
-      // const data = await dispatch(getFriendsList(id));
-      // setState({
-      //   ...state,
-      //   showModal: true,
-      //   modalName: name,
-      //   modalData: friends,
-      // });
       navigate('/myfriend')
     } else if (name === "Followers") {
       dispatch(getFollower(id));
@@ -117,7 +111,7 @@ const ProfileImageSection = ({
           <img
             src={coverImg || data?.pcoverimage}
             alt=""
-            className="w-full lg:h-full rounded-xl border border-gray-400 object-cover"
+            className="w-full h-full rounded-xl border border-gray-400 object-cover"
           />
         ) : (
           <BsCamera size={28} className="text-gray-600" />
@@ -181,9 +175,16 @@ const ProfileImageSection = ({
           </section>
         </div>
         <div className="flex gap-2 items-center mb-3 mt-1">
+        {
+          isPersonal ? 
           <span className="font-bold sm:text-xl lg:text-2xl flex items-center justify-center">{`${
             userName ? `${data?.fname} ${data?.lname || ""}` : "User"
           }`}</span>
+          :
+          <span className="font-bold sm:text-xl lg:text-2xl flex items-center justify-center">{`${
+            userName ? `${data?.personalname || ""} ${data?.personalLastName|| ""}` : "User"
+          }`}</span>
+        }
           <span className=" text-xs lg:text-sm font-medium text-gray-700  2xl:text-[20px] flex items-center justify-center">
             {data?.job ? `@${data?.job}` : ""}
           </span>
@@ -212,7 +213,7 @@ const ProfileImageSection = ({
           closeModal={() => setState({...state, coverImgModal: false, profileImgModal: false})}
           profileImgModal={ profileImgModal}
           handleImage={uploadImage}
-          file={profileImgModal ? (profileImg|| data?.pimage) : (coverImg || data?.coverImg)}
+          file={profileImgModal ? (profileImg|| data?.pimage) : (coverImg || data?.pcoverImg)}
           leftBtn={'Remove'}
         />
         </Portals>

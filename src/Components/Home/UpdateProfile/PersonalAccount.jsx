@@ -6,6 +6,7 @@ import Accordion from "../../Accordion/Accordion";
 import Dropdown2 from "../../Login/Content/Modal/Dropdown2";
 import { useSelector } from "react-redux";
 import AutocompletePlace from "../../googlemap/AutocompletePlace";
+import DropdownComp from "../../common/DropdownComp";
 
 const PersonalAccount = ({
   states ,
@@ -75,12 +76,11 @@ const PersonalAccount = ({
   const getGraduation = () => {
 
   }
-  const countryName = ['India']
-console.log(ugaddress, education, "???????????????");
+  console.log(schoolname, 'KKKKKKKKKK');
   return (
     <>
       <div className="mb-6 text-white ps-4 py-2 mt-6 text-[20px] bg-[#7991bd]">
-        Education Detail:
+        Education Details
       </div>
       <p>Let's start with school</p>
       <div className="flex w-full my-2 gap-3">
@@ -89,7 +89,8 @@ console.log(ugaddress, education, "???????????????");
             livePlace={(schoolLocation) =>
               handleEducation("schoolname", schoolLocation)
             }
-            value={`${schoolname || "" } ${schooladdress || ""}`}
+            // value={`${schoolname || "" } ${schooladdress || ""}`}
+            value={schoolname}
             handleChangeLocation={(value) => handleEducation('schoolname', value)}
             placeholder={"Enter your school"}
           />
@@ -104,13 +105,13 @@ console.log(ugaddress, education, "???????????????");
           }}
         /> */}
 
-        <Dropdown
+        <DropdownComp
           name={"Choose Year"}
           style={"w-full"}
           options={year}
           keyName={"year"}
           handleChange={(value) => handleEducation("schoolpass", value.year)}
-          selectedValue={schoolpass}
+          selectedValue={{year: schoolpass}}
         />
       </div>
       <div className="flex gap-3">
@@ -124,17 +125,31 @@ console.log(ugaddress, education, "???????????????");
               </p>
             }
           >
+          {
+            collegenameug ?
             <Input
               attributes={{
                 name: "collegenameug",
                 type: "text",
                 onChange: (e) => handleEducation(e.target.name, e.target.value),
-                value: `${collegenameug||""} ${ugaddress}`,
+                value: `${collegenameug}`,
                 placeholder: "College Name",
               }}
             />
+            :
+            <Input
+              attributes={{
+                name: "ugaddress",
+                type: "text",
+                onChange: (e) => handleEducation(e.target.name, e.target.value),
+                value: `${ugaddress}`,
+                placeholder: "College Name",
+              }}
+            />
+
+          }
             <div className="">
-              <Dropdown
+              <DropdownComp
                 up={true}
                 style={"my-2 w-full"}
                 options={ugdegreeList}
@@ -143,9 +158,9 @@ console.log(ugaddress, education, "???????????????");
                 handleChange={(value) =>
                   handleEducation("ugdegree", value.degree)
                 }
-                selectedValue={ugdegree}
+                selectedValue={{degree: ugdegree}}
               />
-              <Dropdown
+              <DropdownComp
                 up={true}
                 style={" w-full"}
                 options={ugdegreeList}
@@ -154,10 +169,10 @@ console.log(ugaddress, education, "???????????????");
                 handleChange={(value) =>
                   handleEducation("ugbranch", value.branch)
                 }
-                selectedValue={ugbranch}
+                selectedValue={{branch: ugbranch}}
               />
             </div>
-            <Dropdown
+            <DropdownComp
               up={true}
               style={"my-2 w-full"}
               options={year}
@@ -166,7 +181,7 @@ console.log(ugaddress, education, "???????????????");
               handleChange={(value) =>
                 handleEducation("ugpassyear", value.year)
               }
-              selectedValue={ugpassyear}
+              selectedValue={{year: ugpassyear}}
             />
           </Accordion>
         </div>
@@ -184,12 +199,12 @@ console.log(ugaddress, education, "???????????????");
                 name: "collegenamepg",
                 type: "text",
                 onChange: (e) => handleEducation(e.target.name, e.target.value),
-                value: `${collegenamepg||""} ${pgaddress}`,
+                value: `${collegenamepg}`,
                 placeholder: "College Name",
               }}
             />
             <div className="">
-              <Dropdown
+              <DropdownComp
                 up={true}
                 style={"my-2 w-full"}
                 name={"Select Degree"}
@@ -198,9 +213,9 @@ console.log(ugaddress, education, "???????????????");
                 handleChange={(value) =>
                   handleEducation("pgdegree", value.degree)
                 }
-                selectedValue={pgdegree}
+                selectedValue={{degree: pgdegree}}
               />
-              <Dropdown
+              <DropdownComp
                 up={true}
                 style={" w-full"}
                 options={pgdegreeList}
@@ -209,10 +224,10 @@ console.log(ugaddress, education, "???????????????");
                 handleChange={(value) =>
                   handleEducation("pgbranch", value.branch)
                 }
-                selectedValue={pgbranch}
+                selectedValue={{branch: pgbranch}}
               />
             </div>
-            <Dropdown
+            <DropdownComp
               up={true}
               style={"my-2 w-full"}
               name={"Select Year"}
@@ -221,7 +236,7 @@ console.log(ugaddress, education, "???????????????");
               handleChange={(value) =>
                 handleEducation("pgpassyear", value.year)
               }
-              selectedValue={pgpassyear}
+              selectedValue={{year: pgpassyear}}
             />
           </Accordion>
         </div>

@@ -23,12 +23,12 @@ const ImageModal = ({ showModal, handleModal, closeModal, confirmClick, handleIm
                 <CardHeader shadow={false} floated={false} className="h-[300px] w-[350px] flex items-center">
 
                     <input
-                        id="cover-pic"
+                        id= {profileImgModal ? "profile-pic" : "cover-pic"}
                         type="file"
                         accept="image/*"
                         className="hidden"
                         onChange={(e) => {
-                            handleImage("profileImg", e.target.files)
+                            handleImage(profileImgModal ? "profileImg" : "coverImg", e.target.files)
                             setState({...state, image: e.target.files[0]})
                         }}
                     />
@@ -36,7 +36,7 @@ const ImageModal = ({ showModal, handleModal, closeModal, confirmClick, handleIm
                         profileImgModal ?
                         <label
                         // onClick={() => setState({ ...state, imageModal: true })}
-                        htmlFor={`${isOther ? "" : "cover-pic"}`}
+                        htmlFor={`${isOther ? "" : "profile-pic"}`}
                         className="w-[250px] h-[250px] cursor-pointer rounded-full m-auto flex items-center justify-center border border-gray-400"
                     >
                         { image ?
@@ -65,9 +65,16 @@ const ImageModal = ({ showModal, handleModal, closeModal, confirmClick, handleIm
                                 alt=""
                                 className="w-full h-full rounded-xl border border-gray-400 object-cover"
                             />
-                        ) : (
+                        ) :
+                         file ?
+                         <img
+                                src={ file || user }
+                                alt=""
+                                className="w-full h-full border border-gray-400 object-cover"
+                            /> 
+                            : 
                             <BsCamera size={28} className="text-gray-600" />
-                        )}
+                        }
                     </label>
                     }
                     

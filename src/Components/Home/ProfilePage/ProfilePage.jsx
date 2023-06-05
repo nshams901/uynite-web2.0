@@ -111,7 +111,7 @@ const ProfilePage = ({ isOther }) => {
           profileid: profile?.id,
           city: '',
           viptype:type === 'profileImg' ? 5 : type === 'coverImg' ? 6 : "", 
-          postdate: moment().format("DD-MM-YYYY HH:mm:ms"),
+          postdate: new Date().getTime(),
         };
         dispatch(createPost(payload))
   }
@@ -127,6 +127,7 @@ const ProfilePage = ({ isOther }) => {
           coverImg={coverImg}
           profileImg={profileImg}
           isOther={isOther}
+          isPersonal={isPersonal}
         />
 
         {/* About Section */}
