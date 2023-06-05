@@ -208,7 +208,7 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
           <span className="font-medium ">
             {name ? `${fname} ${lname}` : "User"}
           </span>
-          {desc.length >0 && (
+          {desc?.length >0 && (
             <p className="text-[12px] font-bold text-gray-500">
               {relations.map((item) => {
                 return <span className="mr-1">{item ? `${item}, ` : ""}</span>;
