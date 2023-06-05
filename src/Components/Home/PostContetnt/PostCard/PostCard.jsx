@@ -194,6 +194,10 @@ const PostCard = ({ userData, item = {} }) => {
   };
 
   const onCommetIncrease = () => {
+        dispatch({
+      type: "ACTIVE_POST",
+      payload: item,
+    });
     const commentData = {
       datetime: Date.now(),
       postid: item?.id,
@@ -263,7 +267,7 @@ const PostCard = ({ userData, item = {} }) => {
         <section className="w-full flex items-centern justify-between">
           <div
             className="flex cursor-pointer"
-            onClick={() => navigate("/profile/${6}")}
+            onClick={() => navigate(`/profile/${item?.profile.id}`)}
           >
             <div className="flex w-[46px] h-[46px]">
               {/* due to img broke dynamic src commented */}
