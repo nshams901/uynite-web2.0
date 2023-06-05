@@ -366,7 +366,14 @@ const PostCard = ({ userData, item = {} }) => {
               )}
             </p>
           </div>
-          {item?.image ? (
+          
+          { item?.sharedpostid ? 
+          <div className="w-full">
+          <SharedPost postid={item.sharedpostid} profileid={item?.shareprofileid}/>
+          </div>
+          
+          :
+            item?.image ? (
             item.viptype === 5 ? (
               <>
                 <div

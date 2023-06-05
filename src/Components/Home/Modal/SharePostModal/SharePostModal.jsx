@@ -12,6 +12,9 @@ import { sharePost } from "../../../../redux/actionCreators/postActionCreator";
 import moment from "moment";
 import user from "../../../../Assets/Images/user.png";
 import { getAllPostWithLimit } from "../../../../redux/actionCreators/rootsActionCreator";
+import DropdownComp from "../../../common/DropdownComp";
+import { useNavigate } from "react-router-dom";
+import { Typography } from "@material-tailwind/react";
 
 const SharePostModal = ({ handleClose }) => {
   const responsive = {
@@ -35,6 +38,7 @@ const SharePostModal = ({ handleClose }) => {
   };
 
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const reducerData = useSelector((state) => {
     return {
       activePost: state.rootsReducer.activePost || {},
@@ -54,7 +58,7 @@ const SharePostModal = ({ handleClose }) => {
     : [{ name: "Friends" }, ...unions];
 
   const [state, setState] = useState({});
-  const { postPrivacy, content, loading } = state;
+  const { postPrivacy = {name: 'Public'}, content, loading } = state;
 
   useEffect(() => {
     dispatch(getMyUnion(profile?.id));
@@ -138,20 +142,28 @@ const SharePostModal = ({ handleClose }) => {
           </span>
 
           {/* <SelectDropdown /> */}
-          <Dropdown
-            selectedValue={postPrivacy}
-            handleChange={handlePostPrivacy}
-            name="Select who can see your post"
-            options={[
-              ...postPrivacyList,
-              {
-                name: "Create your own union",
-                onClick: true,
-                link: "/create-union",
-              },
-            ]}
-            keyName="name"
-          />
+          <DropdownComp
+                selectedValue={postPrivacy}
+                handleChange={handlePostPrivacy}
+                name="Manage who can see your post"
+                options={[
+                  ...postPrivacyList,
+                  {
+                    name: "Create your own union",
+                    onClick: () => navigate('/create-union'),
+                  },
+                ]}
+                heading={
+                  <Typography
+                    disabled
+                    variant="small"
+                    className="p-3 w-full bg-gray-300"
+                  >
+                    Manage who can see your post
+                  </Typography>
+                }
+                keyName="name"
+              />
         </section>
         {/* Message Section */}
         <section className="flex w-full justify-between px-2 lg:py-1 xl:py-2 lg:h-[90px] xl:h-[120px]">
