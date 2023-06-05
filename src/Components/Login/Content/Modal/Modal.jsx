@@ -69,23 +69,27 @@ const Modal = ({ modalType, handleClose }) => {
     assembly,
     category,
     city,
+    selectedCountry,
+    selectedState,
+    selectedCategory,
   } = states;
-
-  console.log("bbbbbbbbbbbbbb", state);
   const isPersonal = modalType === "Personal";
   // let autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'), { })
   useEffect(() => {
     isPersonal ? dispatch(getCountryList()) : dispatch(getOrgCategory());
   }, []);
   const handleCountry = (val) => {
-    setCountry(val);
+    setCountry("");
     setState({
       ...states,
       state: "",
       district: "",
       loksabha: "",
       assembly: "",
+      city: "",
+      selectedCountry: val,
     });
+
     dispatch(getStateList(val.code));
   };
 
@@ -246,7 +250,7 @@ const Modal = ({ modalType, handleClose }) => {
           });
     // console.log(response);
   };
-  const countryCode = ["1"];
+  const countryCode = "1";
 
   const removeProfilePic = () => {
     setState({ ...states, imgFile: "" });
@@ -437,13 +441,16 @@ const Modal = ({ modalType, handleClose }) => {
                   <Dropdown2
                     style={"w-full"}
                     name={"Country*"}
-                    country={country}
+                    // country={country}
                     inputValue={country}
                     options={countryList}
                     handleCountry={handleCountry}
+                    selectedCountry={selectedCountry}
                     onHandleChange={(e) => {
-                      console.log("&*********",e.target.value);
-                      setCountry(e.target.value)}}
+                      console.log("&*********", e.target.value);
+                      setCountry(e.target.value);
+                    }}
+                    setCountry={setCountry}
                     param="country"
                   />
 
@@ -451,7 +458,7 @@ const Modal = ({ modalType, handleClose }) => {
                     for this local state added, a function created for
                     getting value from child componenet*/}
 
-                  {country ? (
+                  {selectedCountry ? (
                     <>
                       <div className="flex flex-col">
                         <div className="flex flex-col sm:flex-row  gap-[5px]">
@@ -461,18 +468,19 @@ const Modal = ({ modalType, handleClose }) => {
                             selectedValue={state}
                             keyName={"state"}
                             inputValue={states?.state}
-                            handleChange={(value) =>
-                              handleChange("state", value)
-                            }
+                            handleChange={(value) => {
+                              handleChange("state", "");
+                              handleChange("selectedState", value);
+                            }}
+                            selectedOption={selectedState}
                             onHandleChange={(e) =>
                               setState({
                                 ...states,
                                 state: e.target.value,
                               })
                             }
-                            filteredData={stateFilteredData}
                           />
-                          {countryCode?.includes(country?.code) && (
+                          {countryCode?.includes(selectedCountry?.code) && (
                             <Dropdown
                               name={"District*"}
                               options={districtList}
@@ -491,9 +499,9 @@ const Modal = ({ modalType, handleClose }) => {
                             />
                           )}
                         </div>
-                        {countryCode?.includes(country?.code) && (
+                        {countryCode?.includes(selectedCountry?.code) && (
                           <>
-                            <div className="flex flex-col sm:flex-row gap-5">
+                            <div className="flex flex-col sm:flex-row gap-[5px]">
                               <Dropdown
                                 name={"Loksabha*"}
                                 keyName={"loksabha"}
@@ -606,10 +614,14 @@ const Modal = ({ modalType, handleClose }) => {
                   <Dropdown
                     name={"Organization Category*"}
                     options={organizationCategory}
-                    handleChange={(value) => handleChange("category", value)}
+                    handleChange={(value) => {
+                      handleChange("category", "");
+                      handleChange("selectedCategory", value);
+                    }}
+                    selectedOption={selectedCategory}
                     selectedValue={category}
                     keyName={"category"}
-                    InputValue={orgCategory}
+                    inputValue={orgCategory}
                     filteredData={orgCategoryFilteration}
                     onHandleChange={(e) => setOrgCategory(e.target.value)}
                   />
@@ -622,11 +634,11 @@ const Modal = ({ modalType, handleClose }) => {
               <button
                 className="flex justify-center"
                 onClick={handleCreateProfile}
+                disabled={!states?.orgName && !states?.selectedOption}
               >
                 <label
                   htmlFor=""
                   className="bg-[#48B2DB] w-52 text-xs sm:text-sm flex justify-center py-1 rounded-xl cursor-pointer mt-2 text-black font-medium"
-                  // disabled={states?.orgName?.length > 3 ? false : false}
                 >
                   Create Profile
                 </label>

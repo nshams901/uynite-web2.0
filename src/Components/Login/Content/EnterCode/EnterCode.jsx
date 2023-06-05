@@ -23,7 +23,9 @@ const EnterCode = ({ title }) => {
   const [timer, setTimer] = useState(true);
   const [loading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-  const { otp, emailExist } = useSelector((state) => state.authReducer);
+  const { otp, emailExist, isEmailOtp } = useSelector(
+    (state) => state.authReducer
+  );
   const timerFunction = async () => {
     const dataObj = {
       datetime: Date.now().toString(),
@@ -65,7 +67,7 @@ const EnterCode = ({ title }) => {
   };
 
   function Timer() {
-    const [seconds, setSeconds] = useState(10);
+    const [seconds, setSeconds] = useState(5*60);
 
     useEffect(() => {
       console.log("++++++++++++++++======");
@@ -73,7 +75,7 @@ const EnterCode = ({ title }) => {
         setSeconds((prevSeconds) => {
           if (prevSeconds <= 1) {
             clearInterval(intervalId);
-            setTimer(false)
+            setTimer(false);
             return 0;
           }
           return prevSeconds - 1;
@@ -98,21 +100,32 @@ const EnterCode = ({ title }) => {
         disabled="disabled"
         className="bg-gray-600 text-white w-[70%] rounded-3xl py-2 text-center font-bold text-xs"
       >
-        { Math.floor(seconds / 60)}:{seconds % 60 < 10 ? "0" : ""}
+        {Math.floor(seconds / 60)}:{seconds % 60 < 10 ? "0" : ""}
         {seconds % 60}
       </div>
     );
   }
   const onChangeHandler = (event) => {
-    if (event.target.value.length > 4) {
-      dispatch(
-        settingOtp(event.target.value.slice(0, event.target.value.length - 1))
-      );
+    if (isEmailOtp) {
+      if (event.target.value.length > 4) {
+        dispatch(
+          settingOtp(event.target.value.slice(0, event.target.value.length - 1))
+        );
+      } else {
+        dispatch(settingOtp(event.target.value));
+      }
     } else {
-      dispatch(settingOtp(event.target.value));
+      if (event.target.value.length > 6) {
+        dispatch(
+          settingOtp(event.target.value.slice(0, event.target.value.length - 1))
+        );
+      } else {
+        dispatch(settingOtp(event.target.value));
+      }
     }
   };
   const navigate = useNavigate();
+  console.log("emailExist?.data", emailExist?.data);
   return (
     <>
       {/* padding added */}
@@ -121,7 +134,9 @@ const EnterCode = ({ title }) => {
         {/* font-size increased, color changed */}
         <p className="text-[10px] font-bold w-[78%] text-center mb-2">
           Please enter the code which we’ve sent to your Email : &nbsp;
-          {emailExist?.data?.uemail}
+          {emailExist?.data?.uemail
+            ? emailExist?.data?.uemail
+            : emailExist?.data?.umobile}
         </p>
         <div className="w-[85%] mb-2">
           <Input
@@ -137,8 +152,13 @@ const EnterCode = ({ title }) => {
         <Button2
           title="Confirm"
           onClick={onConfirmOtp}
-          disabled={otp?.length < 4 || otp?.length > 4}
+          disabled={
+            isEmailOtp
+              ? otp.toString()?.length != 4
+              : otp.toString()?.length != 6
+          }
         />
+        {otp.toString()?.length > 4}
         {/* padding added to send code button */}
         {timer ? (
           <Timer />
