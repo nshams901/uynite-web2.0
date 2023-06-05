@@ -71,9 +71,7 @@ export default function Dropdown2({
                   if (inputValue === "") {
                     return true;
                   } else {
-                    return item?.[param]
-                      ?.toLowerCase()
-                      .includes(inputValue.country?.toLowerCase());
+                    return item[param].toLowerCase().includes(inputValue);
                   }
                 })
                 ?.map((item, index) => {

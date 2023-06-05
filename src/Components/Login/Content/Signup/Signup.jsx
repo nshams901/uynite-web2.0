@@ -15,6 +15,7 @@ import {
   otpType,
   saveUserSignupData,
   settingOtp,
+  savingPhoneNo,
 } from "../../../../redux/actionCreators/authActionCreator";
 import { useDispatch, useSelector } from "react-redux";
 import firebaseApp, { auth } from "../../../../config/firebase";
@@ -46,7 +47,9 @@ const Signup = () => {
   const phoneNumberRules = /[0-9]{10}$/;
   const navigate = useNavigate();
   const [loading, setIsLoading] = useState(false);
-  const { countryList, signupData } = useSelector((state) => state.authReducer);
+  const { countryList, signupData, isPhoneNo } = useSelector(
+    (state) => state.authReducer
+  );
 
   const validateEmail = (email) => {
     return Yup.string().email().isValidSync(email);
@@ -130,12 +133,18 @@ const Signup = () => {
         uemail: formik.values.email ? formik.values.email : formik.values.phone,
         password: formik.values.password,
       };
-      const response = await dispatch(saveUserSignupData(dataObj));
+
+      const response = formik.values.email
+        ? await dispatch(saveUserSignupData(dataObj))
+        : dispatch(savingPhoneNo(formik.values.phone));
+
+      console.log(" formik?.values.phon", formik.values.phone);
       if (formik.values.phone) {
         setIsLoading(false);
+        console.log("After");
         signIn(
-          formik?.values.phone?.startsWith("91") ||
-            formik?.values.phone?.startsWith("+91")
+          `${formik?.values.phone}`?.startsWith("91") ||
+            `${formik?.values.phone}`?.startsWith("+91")
             ? formik.values.phone
             : `+91${formik.values.phone}`
         );
@@ -148,7 +157,6 @@ const Signup = () => {
       }
     },
   });
-
   function configureRecaptcha(phoneNumber, auth) {
     window.recaptchaVerifier = new RecaptchaVerifier(
       "sign-in-button",
@@ -174,10 +182,13 @@ const Signup = () => {
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
         captchaEl.current.innerHTML = "";
+
         navigate(`/auth/verification/signup?${profileType}`);
       })
       .catch((err) => {
         captchaEl.current.innerHTML = "";
+
+        console.log(err);
         toast.error(err.message);
       });
   }
@@ -202,11 +213,12 @@ const Signup = () => {
 
   const [countryCode, setCountryCode] = useState(false);
   const [countryData, setCountryData] = useState({});
+  const [activeField, setActiveField] = useState(false);
 
   const closeCountryModal = () => {
     setCountryCode(false);
   };
-  const onHandleReset = () => {};
+
   return (
     <>
       {/* padding increased */}
@@ -235,25 +247,25 @@ const Signup = () => {
         <Input
           title="Email"
           name="email"
-          inputValue={formik.values.email}
+          inputValue={activeField ? "" : formik.values.email}
           errorMessage={formik.errors.email}
           // touched={
           //   formik.touched.email &&
           //   formik.errors.email &&
           //   toasterFunction(formik.errors.email)
           // }
+          id="email"
           onHandleChange={(e) => {
+            //  if (formik.values.email.length) {
+            //   setActiveEmail(false);
+            //  }
             if (e.target.value.length > 32) {
-              // if (formik.values.phone.length > 0) {
-              //   formik.handleChange(
-              //     e.target.value.replace(formik.values.email)
-              //   );
-              // }
               formik.handleChange(
                 e.target.value.slice(0, e.target.value.length - 1)
               );
             } else {
               formik.handleChange(e);
+              // onHandleReset();
             }
           }}
         />
@@ -291,11 +303,12 @@ const Signup = () => {
             className="outline-none border-[1px] border-[#7E8082] h-full rounded-[5px] w-full text-xs text-[#AEB2B1] !p-2 font-semibold disabled:bg-gray-300"
             name="phone"
             type="number"
-            value={formik.values.phone}
+            id="phone"
+            value={activeField ? formik.values.phone : ""}
             onChange={(event) => {
-              //  if (formik.values.phone.length > 0) {
-
-              //  }
+            //  if (formik.values.phone.length) {
+            //    setActivePhone(true);
+            //  }
               if (event.target.value.length > 10) {
                 formik.handleChange(
                   event.target.value.slice(event.target.value.length - 1)
