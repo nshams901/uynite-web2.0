@@ -114,7 +114,7 @@ const MyFriendsPage = () => {
         </section>
         {/* <hr className="" /> */}
 
-        <section className="h-[345px] lg:h-[470px] overflow-y-scroll pt-2 flex flex-col gap-4">
+        <section className="h-[345px] lg:h-[80vh] overflow-y-scroll pt-2 flex flex-col gap-4">
           {isEmpty(friendList) ? (
             <EmptyComponent
               message={`No ${
