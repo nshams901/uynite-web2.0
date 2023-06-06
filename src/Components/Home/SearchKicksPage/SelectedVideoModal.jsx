@@ -4,20 +4,22 @@ import videoImg from "../../../Assets/Images/videoImg.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { MdDelete } from "react-icons/md";
 import { imageUploadApi } from "../../../redux/actionCreators/rootsActionCreator";
-import { createKicksPost } from "../../../redux/actionCreators/kicksActionCreator";
+import { createKicksPost, getCategoryList } from "../../../redux/actionCreators/kicksActionCreator";
 import moment from "moment";
 import { toast } from "react-toastify";
+import { useEffect } from "react";
+import DropdownComp from "../../common/DropdownComp";
 
 const dataList = [
-  "Adventures",
-  "Action",
-  "Arts & Craft",
-  "Beauty Tips",
-  "Comedy",
-  "Drama",
-  "Fiction",
-  "Novel",
-  "Romance",
+  {name: "Adventures"},
+  {name: "Action"},
+  // "Arts & Craft",
+  // "Beauty Tips",
+  // "Comedy",
+  // "Drama",
+  // "Fiction",
+  // "Novel",
+  // "Romance",
 ];
 
 export default function SelectedVideoModal({ onClose, selectedVideo }) {
@@ -33,7 +35,15 @@ export default function SelectedVideoModal({ onClose, selectedVideo }) {
   const name = profile?.fname + profile?.lname;
 
   const [state, setState] = useState({});
-  const { videoFile, postContent } = state;
+  const { videoFile, postContent, categoryList, category } = state;
+
+  useEffect(() => {
+    dispatch(getCategoryList(profile?.id)).then((res) => {
+      if(res.status){
+        setState({...state, categoryList: res.data})
+      }
+    })
+  }, [])
   const handleFileSelection = (e) => {
     const file = e.target.files[0];
     setState({ ...state, videoFile: file });
@@ -69,6 +79,7 @@ export default function SelectedVideoModal({ onClose, selectedVideo }) {
       toast.error(err.message);
     }
   };
+  console.log(categoryList);
 
   return (
     <div
@@ -90,11 +101,14 @@ export default function SelectedVideoModal({ onClose, selectedVideo }) {
                 {name ? `${profile?.fname} ${profile?.lname}` : "User"}
               </span>
             </div>
-            <select className="w-full outline-none h-12 px-2 border-gray-300 rounded overflow-hidden bg-white border text-black">
-              {dataList.map((data, i) => (
-                <option key={i}>{data}</option>
-              ))}
-            </select>
+            
+            <DropdownComp
+              options={dataList}
+              keyName={'name'}
+              selectedValue={category || {name: 'Adventures'}}
+
+              handleChange={(value) => setState({...state, category: value})}
+            />
           </div>
           <label
             htmlFor="chooseVideos"
@@ -144,16 +158,16 @@ export default function SelectedVideoModal({ onClose, selectedVideo }) {
             className="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-xl focus:outline-none focus:border-blue-500 my-3 mr-2 bg-gray-100"
           />
 
-          <div className="py-4">
+          <div className="py-4 flex">
             <button
               onClick={() => addPost()}
-              className="bg-[#dd8e58] text-white font-bold border border-[#dd8e58] px-5 w-[90%] mx-3 py-2 rounded-lg mb-3"
+              className="bg-[#dd8e58] text-white font-bold border border-[#dd8e58] px-5 w-[90%] mx-3 py-1 rounded-lg mb-3"
             >
               Post
             </button>
             <button
               onClick={onClose}
-              className="px-5 w-[90%] border text-[#dd8e58] border-[#dd8e58] py-2 mx-3 rounded-lg"
+              className="px-5 w-[90%] border text-[#dd8e58] border-[#dd8e58] py-1 mx-3 mb-3 rounded-lg"
             >
               Cancel
             </button>

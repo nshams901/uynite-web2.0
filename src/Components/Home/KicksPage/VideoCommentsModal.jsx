@@ -55,7 +55,6 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
 
   // comment Reply api intregration....
   const handleSendReply = async () => {
-    console.log(msgText, "::::::");
     if (!msgText) {
       setState({ ...state, alert: true });
     }

@@ -90,7 +90,7 @@ const Locations = ({
         </>
       )}
       <div className="mt-2 flex">
-        <div className="w-[160px]">Living Location</div>
+        <div className="w-[180px]">Living Location</div>
         <div className="flex-1">
           <AutocompletePlace
             livePlace={(location) => handleLocation(location)}

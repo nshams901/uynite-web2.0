@@ -67,7 +67,7 @@ const SearchKicksPage = () => {
           <div className="">
             <div className="flex w-full items-center my-1">
               <input placeholder="Search by name/keywords/hashtags" type='search' className='w-full mx-2 h-10 rounded-lg outline-none px-2' onFocus={() => setIsFocused(true)} width={95} bgColor="#fff" />
-              <img src={serch} alt="" width={50} />
+              <img src={search} alt="" width={50} />
 
               <input type='file' id='chooseVideo' onChange={handleFileSelection} className='hidden' />
               {/* <span><label onClick={() => setSelectVideo(true)} htmlFor='chooseVideo'>

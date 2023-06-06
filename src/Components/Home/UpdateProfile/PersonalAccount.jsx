@@ -76,7 +76,7 @@ const PersonalAccount = ({
   const getGraduation = () => {
 
   }
-  console.log(schoolname, 'KKKKKKKKKK');
+
   return (
     <>
       <div className="mb-6 text-white ps-4 py-2 mt-6 text-[20px] bg-[#7991bd]">
@@ -90,7 +90,7 @@ const PersonalAccount = ({
               handleEducation("schoolname", schoolLocation)
             }
             // value={`${schoolname || "" } ${schooladdress || ""}`}
-            value={schoolname}
+            value={schoolname ? schoolname : schooladdress}
             handleChangeLocation={(value) => handleEducation('schoolname', value)}
             placeholder={"Enter your school"}
           />
@@ -194,15 +194,27 @@ const PersonalAccount = ({
               </p>
             }
           >
-            <Input
+            { collegenamepg ?
+              <Input
               attributes={{
                 name: "collegenamepg",
                 type: "text",
                 onChange: (e) => handleEducation(e.target.name, e.target.value),
-                value: `${collegenamepg}`,
+                value: `${collegenamepg || ""}`,
                 placeholder: "College Name",
               }}
             />
+            :
+            <Input
+              attributes={{
+                name: "pgaddress",
+                type: "text",
+                onChange: (e) => handleEducation(e.target.name, e.target.value),
+                value: `${pgaddress || ""}`,
+                placeholder: "College Name",
+              }}
+            />
+            }
             <div className="">
               <DropdownComp
                 up={true}
@@ -217,7 +229,7 @@ const PersonalAccount = ({
               />
               <DropdownComp
                 up={true}
-                style={" w-full"}
+                style={"max-w-full"}
                 options={pgdegreeList}
                 keyName="branch"
                 name={"Select Branch"}

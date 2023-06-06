@@ -357,7 +357,7 @@ const PostCard = ({ userData, item = {} }) => {
         {/* Content/About And Images Section */}
         <section className="w-full flex flex-col items-center mt-2 px-2">
           <div className=" w-full ">
-            <p className="text-[11px] sm:text-[12px] lg:text-[13px] font-[400] text-gray-500">
+            <p className="text-[11px] sm:text-[12px] break-words lg:text-[13px] font-[400] text-gray-500">
               {showMore ? description : `${shortDescription}`}
 
               {description.length > 150 && (

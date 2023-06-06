@@ -287,7 +287,7 @@ const UpdateProfile = () => {
             <div>
               <div className="flex gap-2">
                 <Input
-                  classes={"my-2"}
+                  classes={"my-2 w-1/2"}
                   label={"First Name"}
                   attributes={{
                     name: isPersonal ? "fname" : 'personalname',
@@ -299,7 +299,7 @@ const UpdateProfile = () => {
                   }}
                 />
                 <Input
-                  classes={"my-2"}
+                  classes={"my-2 w-1/2"}
                   label={"Last Name"}
                   attributes={{
                     name: isPersonal ? "lname" : "personalLastName",
@@ -346,7 +346,7 @@ const UpdateProfile = () => {
               />
               <div className="my-3 gap-2 flex w-full items-center justify-between">
                 <DropdownComp
-                  labelClass={'mr-[5.5rem]'}
+                  labelClass={'mr-[6rem]'}
                   style={"w-full"}
                   label={"Phone"}
                   options={[{ code: "+91" }, { code: "+1" }]}

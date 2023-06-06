@@ -225,3 +225,18 @@ export const deletePostLike = (data) => async (dispatch) => {
 };
 // https://web.uynite.com/instance/api/instancepost/getpoststag/utag1/utype1
 // https://web.uynite.com/instance/api/instancetag/getprofile/utag
+
+export const getCategoryList = (data) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `https://web.uynite.com/instance/api/instancepost/getvideocat/${data}`,
+    );
+    dispatch({
+      type: "",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

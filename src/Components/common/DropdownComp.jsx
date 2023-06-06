@@ -7,7 +7,7 @@ export default function DropdownComp({ label, options,keyName, name, selectedVal
     <div className="w-full mb-2 items-center flex">
         { label && <div className={`mr-3 w-1/4 ${labelClass}`}>{label}</div>}
       <Listbox value={selectedValue} onChange={handleChange}>
-        <div className="relative flex-1 mt-1">
+        <div className="relative w-full flex-1 mt-1">
           <Listbox.Button className="relative border border-1 border-gray-300 cursor-pointer w-full rounded-md bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange sm:text-sm">
             <span className="block truncate">{selectedValue?.[keyName] || name}</span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">

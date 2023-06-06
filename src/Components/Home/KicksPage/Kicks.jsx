@@ -68,7 +68,7 @@ const Kicks = () => {
       : kicksType === "Latest"
       ? latestContents
       : {};
-  }, [kicksType]);
+  }, [kicksType, followingsContent, trendingContents, latestContents]);
 
   useEffect(() => {
     getKicks("Following");
@@ -94,7 +94,7 @@ const Kicks = () => {
     { title: "follow", img: beforeFollow },
     { title: "comments", img: Messages },
     { title: "collection", img: Collections },
-    { title: "share", img: `${isMobile ? share_mobi : share}` },
+    { title: "share", img: `${isMobile ? '' : share}` },
     // { title: "save", img: collection },
   ];
 
@@ -111,7 +111,7 @@ const Kicks = () => {
 
   // const { kicksType } = useSelector((state) => state.userReducer);
 
-  const getKicks = () => {
+  const getKicks = (kicksType) => {
     dispatch({ type: "KICKS_SEGMENT", payload: kicksType });
     setState({ ...state, kicksType: kicksType });
     const data = {
@@ -188,8 +188,8 @@ const Kicks = () => {
           </div>
           {/*  */}
           <section
-            className={`video-container mt-[3%] flex-1 text-white bg-black ${
-              isMobile ? "video-container_mobile" : "hidden"
+            className={`video-container w-1/4 mt-[3%] text-white bg-black ${
+              isMobile ? "video-container_mobile" : ""
             }`}
             id="video-container"
           >
@@ -201,7 +201,7 @@ const Kicks = () => {
               videoData?.content?.map((item) => {
                 const { text, id } = item;
                 return (
-                  <div className="" key={id}>
+                  <div className="w-1/3 inline-block" key={id}>
                     <VideoComponent dataList={dataList} data={item} />
                   </div>
                 );

@@ -51,7 +51,7 @@ const VideoComponent = ({ dataList, data }) => {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [isVideoPlaying, setIsvideoPlaying] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
-  console.log(selectVideo);
+
   const videoRef = useRef(null);
   // const handleButtonActions = (elem) => {
   //   if (elem.title == "mute") {
@@ -72,7 +72,7 @@ const VideoComponent = ({ dataList, data }) => {
     }
   };
   const [state, setState] = useState({});
-  const { isMute = true } = state;
+  const { isMute = true, createKickPost } = state;
   const {
     id,
     commentcount = "",
@@ -91,7 +91,7 @@ const VideoComponent = ({ dataList, data }) => {
     viptype,
     profileid,
   } = data;
-  // console.log("main like count show", likecount)
+  
   const name = profile?.fname + profile?.lname;
   const handleDelete = () => {
     setShowOwnVideoModal(false);
@@ -127,18 +127,19 @@ const VideoComponent = ({ dataList, data }) => {
     if (title === "comments") {
       dispatch(getCommentsByPostid(id));
       setCommentVideo(true);
+      dispatch({ type: 'INCREASE_COMMENT', payload: id})
     } else if (title === "mute") {
       setState({ ...state, isMute: !isMute });
     } else if (title === "likes") {
       // console.log("isliked", likecount)
       if (isliked) {
-        // console.log("likes is called")
+        console.log("likes is called", id)
         dispatch({ type: "REMOVE_LIKE", payload: id });
         const payload = {
           postid: id,
           profileid: profileid,
-          type: "c",
-          datetime: moment().format("YYYY-MM-DDTHH:mm:ss:ms"),
+          type: "P",
+          datetime: new Date().getTime(),
         };
         dispatch(deletePostLike(id)).then((res) => {
           if (res.status) {
@@ -148,13 +149,12 @@ const VideoComponent = ({ dataList, data }) => {
           }
         });
       } else {
-        console.log(id, "LIKKKKKKKKKKKKKKKKK+++++++++++++++++");
         dispatch({ type: "INCREASE_LIKE", payload: id });
         const payload = {
           postid: id,
           profileid: profileid,
-          type: "c",
-          datetime: moment().format("YYYY-MM-DDTHH:mm:ss:ms"),
+          type: "P",
+          datetime: new Date().getTime(),
         };
         // console.log("add like payload", payload)
         dispatch(addLikes(payload)).then((res) => {
@@ -248,6 +248,14 @@ const VideoComponent = ({ dataList, data }) => {
       false
     );
   }, [isMobile]);
+
+
+  const handleCreateKicksPost = () => {
+    console.log('KKKKKKKKK');
+    setState({...state, createKickPost: true})
+  }
+
+  console.log(createKickPost);
   return (
     <div key={profile?.id} className="snap-y snap-mandatory">
       <div className="">
@@ -298,11 +306,8 @@ const VideoComponent = ({ dataList, data }) => {
                   >
                     <img
                       src={
-                        elem?.title === "likes" && isliked
-                          ? kicksLiked
-                          : elem?.title === "mute" && isMute
-                          ? unmute
-                          : elem?.img
+                        (elem?.title === "likes" && isliked) ? kicksLiked :
+                        (elem?.title === 'mute' && isMute) ? unmute : elem.img
                       }
                       alt=""
                       className="w-[30px] cursor-pointer "
@@ -320,11 +325,10 @@ const VideoComponent = ({ dataList, data }) => {
               )}
               <span>
                 <label
-                  onClick={() => setSelectVideo(true)}
-                  htmlFor="chooseVideo"
-                  className="z-50"
+                  onClick={  handleCreateKicksPost}
+                  className="z-50 cursor-pointer"
                 >
-                  <HiPlus className="w-8 h-8 p-0.5 bg-[#dd8e58] cursor-pointer rounded-full text-white ml-[52px] z-50" />
+                  <HiPlus className="w-8 h-8 p-0.5 bg-[#dd8e58] cursor-pointer rounded-full text-white ml-[52px] z-[" />
                 </label>
               </span>
             </div>
@@ -332,7 +336,7 @@ const VideoComponent = ({ dataList, data }) => {
         </section>
 
         <div
-          className={`flex relative bottom-[85px] ${
+          className={`flex relative w-3/4 bottom-[85px] ${
             isMobile ? "bottom-[100px]" : "bottom-[85px]"
           }`}
         >
@@ -341,7 +345,7 @@ const VideoComponent = ({ dataList, data }) => {
               <img src={eye} alt="" className="w-[25px] h-[15px] ml-2" />
               <p className="text-[10px]">{viewcount} Views </p>
             </div>
-            <div className="flex">
+            <div className="flex ">
               <img
                 src={profile?.pimage ? profile?.pimage : user}
                 alt=""
@@ -389,10 +393,10 @@ const VideoComponent = ({ dataList, data }) => {
         <VideoCommentsModal onClose={() => setCommentVideo(false)} />
       )}
 
-      {selectVideo && (
+      {createKickPost && (
         <SelectedVideoModal
           selectedVideo={selectedVideo}
-          onClose={() => setSelectVideo(false)}
+          onClose={() => setState({...state, createKickPost: false})}
         />
       )}
     </div>
