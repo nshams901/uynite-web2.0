@@ -4,7 +4,7 @@ import Dropdown2 from "./Dropdown2";
 import Input from "../InputBox/Input";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { TbPhotoPlus } from "react-icons/tb";
-// import User from "../../../../../public/images/user2.png";
+import User from "../../../../../public/images/user2.png";
 import user from "../../../../Assets/Images/user.png"
 import {
   createProfile,
