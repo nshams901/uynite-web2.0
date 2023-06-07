@@ -306,9 +306,9 @@ const Signup = () => {
             id="phone"
             value={activeField ? formik.values.phone : ""}
             onChange={(event) => {
-            //  if (formik.values.phone.length) {
-            //    setActivePhone(true);
-            //  }
+              //  if (formik.values.phone.length) {
+              //    setActivePhone(true);
+              //  }
               if (event.target.value.length > 10) {
                 formik.handleChange(
                   event.target.value.slice(event.target.value.length - 1)
@@ -366,10 +366,10 @@ const Signup = () => {
                 formik.values.password.length < 8
               }
             />
-            <p className="text-[10px] font-semibold pt-2 text-[#7E8082] w-full">
-              I accept and agree to all
+            <p className="text-[10px] font-semibold text-[#7E8082] w-full">
+              I agree to all
               <Link to="/auth/reals" className="text-[#05B7FD]">
-                &nbsp; Terms & Conditions, Cookies & Privacy
+                &nbsp; Terms, Data, Cookies & Privacy.
               </Link>
             </p>
             <br />
@@ -384,7 +384,7 @@ const Signup = () => {
         <div ref={captchaEl} id="sign-in-button"></div>
         <Button2
           id="sign"
-          title="Sign Up"
+          title="Register"
           disabled={
             (formik.values.email === ""
               ? formik.values.phone.toString().length < 10
