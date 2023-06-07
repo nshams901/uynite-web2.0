@@ -123,6 +123,24 @@ export const getEventByProfileid = (data) => async (dispatch) => {
   }
 };
 
+// get invited events
+export const getAllInvitedEvents = (data) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `https://web.uynite.com/event/api/invities/getmyevent/${data}/1684318282119`,
+      data
+    );
+    console.log(response.data, "getAllInvitedEvents");
+    dispatch({
+      type: "GET_ALL_INVITED_EVENTS",
+      payload: response.data,
+    });
+  } catch (error) {
+    console.log('jd2')
+    throw error;
+  }
+};
+
 export const getInviteList = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
@@ -403,23 +421,6 @@ export const getAllPgFriends = (data) => async (dispatch) => {
       payload: response.data,
     });
   } catch (error) {
-    throw error;
-  }
-};
-
-export const getAllInvitedEvents = (data) => async (dispatch) => {
-  try {
-    const response = await axios.get(
-      `https://web.uynite.com/event/api/invities/getmyevent/630dbf9c67ceca0570e4bfc9/1684318282119`,
-      data
-    );
-    console.log(response.data, "getAllInvitedEvents");
-    dispatch({
-      type: "GET_ALL_INVITED_EVENTS",
-      payload: response.data,
-    });
-  } catch (error) {
-    console.log('jd2')
     throw error;
   }
 };
