@@ -15,9 +15,11 @@ import {
 import Locations from "../../googlemap/Locations";
 import Dropdown from "../../Login/Content/Modal/Dropdown";
 import { useMemo } from "react";
+import DropdownComp from "../../common/DropdownComp";
+import { getMyUnion } from "../../../redux/actionCreators/unionActionCreator";
 
 const MyFriendsPage = () => {
-  const isPersonal = true;
+
   const dispatch = useDispatch();
 
   const reducerData = useSelector((state) => {
@@ -27,33 +29,40 @@ const MyFriendsPage = () => {
       // friends: state?.profileReducer?.friends?.data,
       friends: state.friendReducer.friends,
       profile: state.profileReducer.profile,
+      unionList: state.unionReducer.myUnionList
     };
   });
-  const { following, followers, friends, profile } = reducerData;
+  const { following, followers, friends, profile, unionList } = reducerData;
   const [state, setState] = useState({});
   const { relation = { name: "Friends", key: "friends" }, friendList = friends} = state;
+  const isPersonal = profile.profiletype === 'Personal'
   useEffect(() => {
     const profileid = JSON.parse(localStorage.getItem("profile"))?.id;
     if (isEmpty(friendList)) {
       dispatch(getFriendsList(profileid));
     }
+    dispatch(getMyUnion(profileid))
     dispatch(getTypeOfFriends(profileid));
   }, []);
   // console.log(isEmpty(friends), "CHHHH", friends);
   const option = useMemo(() => {
+     const unions = unionList.map((item) => ({name: item.groupName, key: item.groupId}))
     const forPersonalAcc = [
+      { name: 'All', key: 'all'},
       { name: "Friends", key: "friends" },
       { name: "Relatives", key: "relatives" },
       { name: "Classmates", key: "classmates" },
       { name: "Officemates", key: "officemates" },
+      ...unions
     ];
     const forOrgAcc = [
       { name: "Friends", key: "friends" },
+      ...unions
     ];
     return {
       filterOptions: isPersonal ? forPersonalAcc : forOrgAcc,
     };
-  }, []);
+  }, [unionList]);
 
   const handleChange = (name, value) => {
     setState({ ...state, [name]: value });
@@ -81,7 +90,7 @@ const MyFriendsPage = () => {
       <div className="w-[95%] sm:w-[50%] lg:w-[40%] bg-white text-black mt-1 mx-auto">
         <section className="flex gap-2 px-2 items-center flex-col-reverse lg:flex-row ">
           <div className="w-full flex">
-            <Dropdown
+            <DropdownComp
               label="View by"
               options={filterOptions}
               name={"Friends"}
@@ -105,7 +114,7 @@ const MyFriendsPage = () => {
         </section>
         {/* <hr className="" /> */}
 
-        <section className="h-[345px] lg:h-[470px] overflow-y-scroll pt-2 flex flex-col gap-4">
+        <section className="h-[345px] lg:h-[80vh] overflow-y-scroll pt-2 flex flex-col gap-4">
           {isEmpty(friendList) ? (
             <EmptyComponent
               message={`No ${

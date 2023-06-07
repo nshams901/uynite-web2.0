@@ -10,6 +10,7 @@ import PostCard from "../../PostContetnt/PostCard/PostCard";
 import userData from "../../dataList";
 import { isEmpty } from "../../../Utility/utility";
 import EmptyComponent from "../../../empty component/EmptyComponent";
+import { useParams } from "react-router-dom";
 
 const Post = () => {
   // 6451d620e3601831e45125da
@@ -19,16 +20,18 @@ const Post = () => {
       postList: state.profileReducer.userPostList || [],
     };
   });
-
   const { profile, postList = [] } = reducerData;
-  // useEffect(() => {
-  //   dispatch(getUserPostList(profile.id));
-  // }, [profile?.id]);
+  const params = useParams()
+  const isOther = params.id ? params.id !== profile?.id : false
+
   return (
     <div className="flex flex-col justify-center items-center ">
+    {
+      !isOther &&
       <div className="bg-white rounded-md w-full flex py-2">
         <PostForm />
       </div>
+    }
       {
         isEmpty(postList)
           ?
@@ -37,9 +40,9 @@ const Post = () => {
           </div>
           :
           postList?.map((post) => {
-            const { userData } = post;
+            const { userData, id } = post;
             return (
-              <div className="w-full flex items-center justify-center flex-col ">
+              <div key={id} className="w-full flex items-center justify-center flex-col ">
                 <PostCard userData={userData || []} item={post} />
               </div>
             );

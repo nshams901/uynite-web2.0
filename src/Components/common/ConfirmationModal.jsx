@@ -19,13 +19,13 @@ const ConfirmationModal = ({title, button, handleAccept, closeModal, message}) =
       </div>
       <div className="border-2 text-gray-500 w-full flex justify-center rounded-b-lg">
         <button
-          className="bg-[#7991BD] text-white border-[1px] border-gray-500 w-[50%] rounded-bl-lg text-sm font-semibold py-1"
+          className="bg-[#05b7fd] text-white border-[1px] border-gray-500 w-[50%] rounded-bl-lg text-sm font-semibold py-1"
           onClick={handleAccept}
         >
           {button}
         </button>
         <button
-          className="text-[#7991BD] border-[1px] border-gray-500  w-[50%] rounded-br-lg text-sm font-semibold py-1"
+          className="text-[#05b7fd] border-[1px] border-gray-500  w-[50%] rounded-br-lg text-sm font-semibold py-1"
           onClick={closeModal}
         >
           Cancel

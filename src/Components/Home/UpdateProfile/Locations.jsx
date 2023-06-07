@@ -6,6 +6,7 @@ import Accordion from "../../Accordion/Accordion";
 import Dropdown2 from "../../Login/Content/Modal/Dropdown2";
 import { useSelector } from "react-redux";
 import AutocompletePlace from "../../googlemap/AutocompletePlace";
+import DropdownComp from "../../common/DropdownComp";
 
 const Locations = ({
   location,
@@ -37,58 +38,59 @@ const Locations = ({
 
   return (
     <>
-      <Dropdown2
+      <DropdownComp
         style={"w-full"}
         label={"Country: "}
         name={"Select country"}
-        country={country}
+        keyName={'country'}
+        selectedValue={country}
         options={countryList}
-        handleCountry={handleCountry}
+        handleChange={handleCountry}
       />
-      <Dropdown
+      <DropdownComp
         style={"w-full my-2"}
         label={"State"}
         name={"State"}
         options={stateList}
-        selectedValue={state.state}
+        selectedValue={state}
         keyName={"state"}
         handleChange={(value) => handleChange("state", value)}
       />
       {countryName?.includes(country?.country) && (
         <>
-          <Dropdown
+          <DropdownComp
             style={"w-[77%] my-2"}
             label={"District"}
             name={"District"}
             options={districtList}
-            selectedValue={district.distric}
+            selectedValue={district}
             keyName={"distric"}
             handleChange={(value) => handleChange("district", value)}
           />
           <div className="flex gap-2">
-            <Dropdown
+            <DropdownComp
               style={"w-1/2 my-2"}
               label={"Loksabha"}
               name={"Loksabha"}
               keyName={"loksabha"}
               options={loksabhaList}
-              selectedValue={loksabha.loksabha}
+              selectedValue={loksabha}
               handleChange={(value) => handleChange("loksabha", value)}
             />
-            <Dropdown
+            <DropdownComp
               style={"w-full my-2"}
               label={"Assembly"}
               name={"Assembly"}
               keyName={"assembly"}
               options={assemblyList}
-              selectedValue={assembly.assembly}
+              selectedValue={assembly}
               handleChange={(value) => handleChange("assembly", value)}
             />
           </div>
         </>
       )}
       <div className="mt-2 flex">
-        <div className="w-[165px]">Living Location</div>
+        <div className="w-[180px]">Living Location</div>
         <div className="flex-1">
           <AutocompletePlace
             livePlace={(location) => handleLocation(location)}

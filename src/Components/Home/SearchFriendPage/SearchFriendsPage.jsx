@@ -8,8 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   acceptFriendRequest,
   addFriend,
+  findFriends,
   getMutualFriends,
   getRequestList,
+  getRequestsList,
   getUserByMail,
   getUsers,
   removeFriend,
@@ -40,11 +42,12 @@ const SearchFriendsPage = ({ isFriend }) => {
   const { userList, profile, requestList, unionList, mutualFriend } =
     reducerData;
 
-  const options = useMemo(() => {
-    dispatch(getMyUnion(profile?.id));
+  const options = useMemo(async () => {
+    await dispatch(getMyUnion(profile?.id));
     const union = unionList.map((item) => ({
       name: item.groupName,
       key: item.groupId,
+      union: true
     }));
     const forPersonalAcc = [
       { name: "Friends", key: "friend", checked: true, disable: true },
@@ -65,7 +68,7 @@ const SearchFriendsPage = ({ isFriend }) => {
   const { relationOption } = options;
 
   const [sendRequest, setSendRequest] = useState(false);
-  const [state, setState] = useState({ usersList: userList });
+  const [state, setState] = useState({ usersList: userList || []});
   const [searchQuery, setSearchQuery] = useState();
   const {
     acceptRequest,
@@ -74,11 +77,12 @@ const SearchFriendsPage = ({ isFriend }) => {
     loading,
     relationOptions = relationOption,
     cancelModal,
+    usersList 
   } = state;
 
   useEffect(() => {
     if (isFriend) {
-      dispatch(getRequestList(profile?.id));
+      dispatch(getRequestsList(profile?.id));
     } else {
       dispatch(getMutualFriends(profile?.id));
       setSearchQuery("");
@@ -97,7 +101,7 @@ const SearchFriendsPage = ({ isFriend }) => {
     navigate(`/profile/${id}`);
   }
   const handleSendRequest = () => {
-    const payloads = {
+  const payloads = {
       myprofileid: profile?.id,
       followerprofileid: activeProfile?.id,
       datetimes: moment().format("YYYY-MM-DDTHH:mm:ss"),
@@ -107,6 +111,9 @@ const SearchFriendsPage = ({ isFriend }) => {
     const data = relationOptions.flatMap((item) =>
       item.checked ? item.key : false
     );
+    const userCredential = JSON.parse(localStorage.getItem('userCredential'));
+
+    const group = data?.filter((item) => item.union)
     let payload = {
       // private String friendtype;
       // private Boolean classment;
@@ -119,20 +126,33 @@ const SearchFriendsPage = ({ isFriend }) => {
       // private String userid;
       // private String requesttype;
       // private String reqdatetime;
+
       id: profile?.id,
       fname: fname,
       lname: lname,
       friendprofileid: activeProfile?.id,
-      friendtype: "friend",
+      friendtype: "Friend",
       profileid: id,
-      requesttype: "send",
+      requesttype: "Send",
       isFriend: "true",
-      classment: data.includes("classmate"),
-      relative: data?.includes("relative"),
+      
+      classment: data.some((item) => item?.key === 'classmate'),
+      collgues: data.some((item) => item?.key === 'officemate'),
+      relative: data.some((item) => item?.key === 'relative'),
+
       isFriend: true,
       party: "",
-      org: false,
-      reqdatetime: moment(new Date()).format("YYYY-MM-DD"),
+      groupsUpdate: group?.map((item) => (
+        {
+          groupId: item.key,
+          groupName: item.name,
+          isAdd: false,
+          isRemove: false,
+          profileid: activeProfile.id
+        }
+      )),
+      userid: userCredential.id,
+      reqdatetime: new Date().getTime(),
     };
     dispatch(addFriend(payload)).then((res) => {
       if (res.status) {
@@ -154,8 +174,10 @@ const SearchFriendsPage = ({ isFriend }) => {
         setState({ ...state, loading: false, usersList: res.data });
       });
     } else {
-      dispatch(getUsers(value)).then((res) => {
-        setState({ ...state, usersList: res.data, loading: false });
+      dispatch(findFriends(value, profile.id)).then((res) => {
+        if(true){
+          setState({ ...state, usersList: res.data, loading: false });
+        }
       });
     }
   }
@@ -190,7 +212,7 @@ const SearchFriendsPage = ({ isFriend }) => {
     const payload = {
       profileid: profile?.id,
       // friendprofileid: activeProfile?.id
-      friendprofileid: "64467a007c2c17757005a469",
+      friendprofileid: activeProfile.profile?.id,
     };
     dispatch(removeFriend(payload)).then((res) => {
       if (res?.status) {
@@ -201,29 +223,32 @@ const SearchFriendsPage = ({ isFriend }) => {
       }
     });
   };
+
   const handleAcceptRequest = () => {
     const { fname, lname, id } = activeProfile;
     const payload = {
-      id: "600bc283b42f9c4b2eb0cdce",
-      fname: fname,
-      lname: lname,
-      friendprofileid: activeProfile?.id,
-      friendtype: "friend",
+      id: activeProfile.profile?.id,
+      fname: activeProfile.profile?.fname,
+      lname: activeProfile.profile?.lname,
+      isFriend: true,
+      friendprofileid: activeProfile?.profile.id,
+      friendtype: "Friend",
       profileid: profile.id,
-      requesttype: "recived",
-      getIsFriend: false,
-      reqdatetime: moment().format("YYYY-MM-DD HH:mm:ms"),
+      requesttype: "Accepted",
+      groupsUpdate: [],
+      reqdatetime: new Date().getTime(),
     };
     dispatch(acceptFriendRequest(payload)).then((res) => {
       if (res?.status) {
         toast.success(res.message);
+        dispatch(getRequestsList(profile?.id))
       } else {
         toast.error(res.message);
       }
     });
   };
 
-  // console.log(isFriend,isPersonal, "{{{{{{{{{{{{{{{{}}}}}}}}}}}}")
+  console.log( activeProfile, "{{{{{{{{{{{{{{{{}}}}}}}}}}}}")
   return (
     <>
       <div className="w-[100%] mt-2 flex-1 bg-[#E4E7EC] flex justify-center py-2 ">
@@ -240,7 +265,7 @@ const SearchFriendsPage = ({ isFriend }) => {
               className="w-[94%] rounded-md pl-3 py-1.5 bg-[#E4E7EC] outline-none"
             />
             {/* search icon size reduced */}
-            <span className="pr-3">
+            <span className="pr-3" onClick={() => searchUser(searchQuery)}>
               <img src="./images/Search.png" alt="" className="w-[19px]" />
             </span>
           </section>
@@ -261,7 +286,7 @@ const SearchFriendsPage = ({ isFriend }) => {
               ? requestList
               : !searchQuery
               ? mutualFriend
-              : userList
+              : usersList
             )?.map((item) => {
               const {
                 fname = "",
@@ -277,7 +302,7 @@ const SearchFriendsPage = ({ isFriend }) => {
               return (
                 <>
                   <div
-                    className="cursor-pointer flex w-full pb-1 flex-col"
+                    className="cursor-pointer hover:bg-gray-300 flex w-full pb-1 flex-col"
                     key={id}
                   >
                     <div className="bg-gray-500 w-full h-[1px] mb-1"></div>

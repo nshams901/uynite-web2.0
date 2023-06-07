@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function SharePostCard({ data, profileData }) {
   const navigate = useNavigate();
-  const { text } = data;
+  const { text, image } = data;
   const { pimage, fname, lname, job, id } = profileData;
   return (
     <Card color="transparent" shadow={false} className="w-full max-w-[26rem]">
@@ -42,6 +42,12 @@ export default function SharePostCard({ data, profileData }) {
       </CardHeader>
       <CardBody className="mb-2 p-0">
         <Typography> {text} </Typography>
+        {
+          image && 
+          <div className="h-[250px]">
+            <img className="w-full h-full object-cover" src={image}/>
+          </div>
+        }
       </CardBody>
     </Card>
   );

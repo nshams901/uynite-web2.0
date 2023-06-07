@@ -191,7 +191,7 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
   };
   return (
     <>
-      <div className="flex h-[50px] px-4 items-center py- relative">
+      <div className="flex hover:bg-gray-300 h-[50px] px-4 items-center py-2 relative">
         {/* {openMenuModal && <CommentMenuModal data={data} leftPosition={50} topPosition={34}/>} */}
 
         <Link to={`/profile/${userid}`} className="">
@@ -205,10 +205,10 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
           to={`/profile/${userid}`}
           className=" flex flex-1 flex-col justify-center ml-4"
         >
-          <span className="font-medium">
+          <span className="font-medium ">
             {name ? `${fname} ${lname}` : "User"}
           </span>
-          {desc && (
+          {desc?.length >0 && (
             <p className="text-[12px] font-bold text-gray-500">
               {relations.map((item) => {
                 return <span className="mr-1">{item ? `${item}, ` : ""}</span>;

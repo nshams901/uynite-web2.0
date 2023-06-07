@@ -24,6 +24,7 @@ import { Alert, Typography } from "@material-tailwind/react";
 import user from "../../../../Assets/Images/user.png";
 import { getMyUnion } from "../../../../redux/actionCreators/unionActionCreator";
 import ImageEditor from "../../../Roots/ImageEditor";
+import DropdownComp from "../../../common/DropdownComp";
 
 export let privacyList = [
   { name: "Public" },
@@ -38,6 +39,7 @@ const CreatePostModal = ({
   handleCloseModal,
 }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const reducerData = useSelector((state) => {
     return {
       profile: state.profileReducer.profile,
@@ -264,7 +266,7 @@ const CreatePostModal = ({
               </span>
 
               {/* <SelectDropdown /> */}
-              <Dropdown
+              <DropdownComp
                 selectedValue={postPrivacy}
                 handleChange={handlePostPrivacy}
                 name="Manage who can see your post"
@@ -272,8 +274,7 @@ const CreatePostModal = ({
                   ...postPrivacyList,
                   {
                     name: "Create your own union",
-                    onClick: true,
-                    link: "/create-union",
+                    onClick: () => navigate('/create-union'),
                   },
                 ]}
                 heading={

@@ -17,6 +17,7 @@ import { Typography } from "@material-tailwind/react";
 const AboutSection = ({ isOther, data }) => {
   const navigate = useNavigate();
   const {
+    fname, lname,
     countrycode,
     mobile,
     country,
@@ -28,6 +29,9 @@ const AboutSection = ({ isOther, data }) => {
     profiletype,
     orgname,
     businesscategory,
+    createdate,
+    orgemail,
+    orgmobile, others_address, personalname, personalLastName, others_website
   } = data || {};
   const reducerData = useSelector((state) => {
     return {
@@ -43,6 +47,7 @@ const AboutSection = ({ isOther, data }) => {
     ugdegree,
     collagenameug,
     ugaddress,
+    ugpassyear,
     pgpassyear,
     pgbranch,
     pgdegree,
@@ -67,12 +72,22 @@ const AboutSection = ({ isOther, data }) => {
       {/* <div className="w-[93%] h-0.5 bg-gray-500"></div> */}
 
       {/* Details Section */}
-        <Typography className="text-lg w-full py-1 px-4 bg-gray-300  font-[800]">Personal Info</Typography>
-      <section className="flex flex-col my-4 gap-2">
-
+      <Typography className="text-lg w-full py-1 px-4 bg-gray-300  font-[800]">Personal Info</Typography>
+      <section className="flex flex-col w-full my-4 gap-2">
+          {
+            !isPersonal &&
+            <div className="items-center gap-2 px-4">
+              <p className="text-sm w-full">
+                <strong className="text-md font-medium w-1/2 inline-block">Full Name</strong>
+                <strong>: {
+                  `${personalname || ""} ${personalLastName || ""}`
+                } </strong>
+              </p>
+            </div>
+          }
         {/* DOB Section */}
         <div className="flex items-center gap-2 px-4">
-          
+
           <p className="text-sm w-full">
             <strong className="text-md inline-block font-medium w-1/2">Date of Birth</strong>
             <strong>: {moment(data?.dob).format("MMM-DD-YYYY")}</strong>
@@ -122,7 +137,7 @@ const AboutSection = ({ isOther, data }) => {
 
         {/*Assembly Section */}
         <div className="flex items-center gap-2 px-4">
- 
+
           <p className="text-sm w-full">
             <strong className="text-md font-medium w-1/2 inline-block">Assembly </strong>
             <strong>: {`${assembly ? `${assembly} ` : ""}`} </strong>
@@ -138,7 +153,7 @@ const AboutSection = ({ isOther, data }) => {
           </p>
         </div>
 
-              {/*Distric Section */}
+        {/*Distric Section */}
         <div className="flex items-center gap-2 px-4">
 
           <p className="text-sm w-full">
@@ -175,18 +190,17 @@ const AboutSection = ({ isOther, data }) => {
         </div>
 
         {/*Profession Section */}
-        <Typography className="text-lg w-full py-1 px-4 bg-gray-300  font-[800]">Profession</Typography>
+        {/* <Typography className="text-lg w-full py-1 px-4 bg-gray-300  font-[800]">Profession</Typography>
 
         <div className="flex items-center gap-2 px-4">
           <p className="text-sm w-full">
             <strong className="text-md font-medium w-1/2 inline-block">Company</strong>
-            {/* <strong> {`${profession ? `${profession} ` : ""}`} </strong> */}
           </p>
-        </div>
+        </div> */}
         {isPersonal ? (
           <>
-        <Typography className="text-lg w-full py-1 px-4 bg-gray-300  font-[800]">Education Details</Typography>
-            
+            <Typography className="text-lg w-full py-1 px-4 bg-gray-300  font-[800]">Education Details</Typography>
+            <div className="px-4 font-bold text-gray-500">School</div>
             {/* Scholling Section */}
             {schooladdress || schoolname ? (
               <div className="flex items-center gap-2 px-4">
@@ -205,59 +219,109 @@ const AboutSection = ({ isOther, data }) => {
             )}
             {/* Graduation Section */}
             {collagenameug || ugaddress ? (
-              <div className="flex items-center gap-2 px-4">
-                <p className="text-sm">
-                  Graduation details :{" "}
-                  <strong>
-                    {collagenameug ? `${collagenameug}, ` : ""} {ugdegree},{" "}
-                    {ugbranch}
-                  </strong>
-                  {/* , {ugaddress} */}
-                </p>
-              </div>
+              <>
+                <div className="px-4 font-bold text-gray-500">Graduation</div>
+                <div className="flex items-center gap-2 px-4">
+                  <p className="text-sm">
+                    <strong> {ugdegree} </strong>
+                    {
+                      ugaddress ?
+                        <>form <strong>{ugaddress} </strong></>
+                        : ""
+                    }
+                    {
+                      ugpassyear ?
+                        <>in the year <strong>{ugpassyear} -  </strong></>
+                        : ""
+                    }
+                    <strong> <br />
+                      {ugbranch}
+                    </strong>
+                  </p>
+                </div>
+              </>
             ) : (
               ""
             )}
 
             {/* Graduation Section */}
             {collagenamepg || pgaddress || pgdegree || pgbranch ? (
-              <div className="flex items-center gap-2 px-4">
-                <p className="text-sm">
-                  Post Graduation Details :
-                  <strong>
-                    {collagenamepg} {pgdegree} {pgbranch}
-                  </strong>
-                  in the year <strong> {pgpassyear}</strong>
-                </p>
-              </div>
+              <>
+                <div className="px-4 text-gray-500 font-weight">Post Graduation</div>
+                <div className="flex items-center gap-2 px-4">
+                  <p className="text-sm">
+                    <strong> {pgdegree} </strong>
+                    {
+                      pgaddress ?
+                        <>form <strong>{pgaddress} </strong>
+                        </> : ""
+                    }
+                    {
+                      pgpassyear ?
+                        <>in the year <strong>{pgpassyear} -  </strong></>
+                        : ""
+                    }
+                    <strong> <br />
+                      {pgbranch}
+                    </strong>
+                  </p>
+                </div>
+              </>
             ) : (
               ""
             )}
           </>
         ) : (
           <>
+            <Typography className="text-lg w-full py-1 px-4 bg-gray-300  font-[800]">Professional Info</Typography>
+            <p className="text-sm w-full px-4">
+              <strong className="text-md font-medium w-1/2 inline-block">Organization Name</strong>
+              <strong>: {fname} </strong>
+            </p>
             <div className="items-center gap-2 px-4">
-              <div className="mb-2">
-                <strong>Professional Info : </strong>
-              </div>
-              <p className="text-sm">
-                {/* ORGANIZATION NAME */}
-                <div className="flex items-center gap-2 px-4">
-                  Organization Name :
-                  <strong className="text-sm">{orgname}</strong>
-                </div>
-                {/* ORGANIZATION CATEGORY */}
-                <div className="flex items-center gap-2 px-4">
-                  Organization Type :
-                  <strong className="text-sm">{businesscategory}</strong>
-                </div>
+              <p className="text-sm w-full">
+                <strong className="text-md font-medium w-1/2 inline-block">Organization Category</strong>
+                <strong>: {businesscategory} </strong>
+              </p>
+            </div>
+
+            <div className="items-center gap-2 px-4">
+              <p className="text-sm w-full">
+                <strong className="text-md font-medium w-1/2 inline-block">Website</strong>
+                <strong>: {others_website}  </strong>
+              </p>
+            </div>
+
+            <div className="items-center gap-2 px-4">
+              <p className="text-sm w-full">
+                <strong className="text-md font-medium w-1/2 inline-block">Email</strong>
+                <strong>: {orgemail} </strong>
+              </p>
+            </div>
+
+            <div className="items-center gap-2 px-4">
+              <p className="text-sm w-full">
+                <strong className="text-md font-medium w-1/2 inline-block">Phone</strong>
+                <strong>: {
+                  orgmobile
+                } </strong>
+              </p>
+            </div>
+
+            
+            <div className="items-center gap-2 px-4">
+              <p className="text-sm w-full">
+                <strong className="text-md font-medium w-1/2 inline-block">Address</strong>
+                <strong>: {
+                  others_address
+                } </strong>
               </p>
             </div>
           </>
         )}
       </section>
       <p className="mb-4 text-sm">
-        <strong>Uynited</strong> on <strong>February 2022</strong>
+        <strong>Uynited</strong> on <strong>{moment(createdate, 'x').format('DD MMMM, YYYY')}</strong>
       </p>
     </div>
   );

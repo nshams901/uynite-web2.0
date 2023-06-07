@@ -57,7 +57,7 @@ const OriginalPostModal = ({ handleCloseModal }) => {
 
           <section className="w-full flex flex-col items-center px-2">
             <div className=" w-full h-full pl-3">
-              <p className="text-[13px] font-[400] text-gray-500">{text}</p>
+              <p className="text-[13px] font-[400] break-words text-gray-500">{text}</p>
             </div>
             {image && (
               <div className="m-3 mb-0 w-full h-[60%] rounded-xl">
@@ -75,7 +75,7 @@ const OriginalPostModal = ({ handleCloseModal }) => {
 
       {/* Edit And Close Section */}
 
-      <div className="w-[100%] sm:w-[45%] lg:[345px] xl:h-[450px] overflow-y-scroll">
+      <div className="w-1/2 overflow-y-scroll">
         <div className="flex justify-between w-[95%]">
           <span className="text-md font-bold">Edit History</span>
           <button
@@ -127,7 +127,7 @@ const OriginalPostModal = ({ handleCloseModal }) => {
                 </section>
 
                 <div className=" w-full h-full flex justify-center">
-                  <p className="text-[12px] text-gray-500 w-[95%] mb-[6px] text-semibold">
+                  <p className="text-[12px] break-words text-gray-500 w-[95%] mb-[6px] text-semibold">
                     {text}
                   </p>
                 </div>

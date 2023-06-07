@@ -31,7 +31,7 @@ const profileReducer = (state = initialState, action) => {
         return { ...state, friendDetail: action.payload.data}
       case "INCREASE_COMMENT_COUNT":
           const { userPostList } = state;
-          const newData = userPostList.map((item) => {
+          const newData = userPostList?.map((item) => {
             return item?.id === action.payload
               ? { ...item, commentcount: item.commentcount + 1 }
               : item;

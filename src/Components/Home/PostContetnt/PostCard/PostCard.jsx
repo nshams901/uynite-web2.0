@@ -78,6 +78,10 @@ const PostCard = ({ userData, item = {} }) => {
 
   const shortDescription = description.substring(0, 300);
   const onShowShareModal = () => {
+    dispatch({
+      type: "ACTIVE_POST",
+      payload: item,
+    });
     // console.log("jwww");
     setShowShareModal({ ...showShareModal, shareModal: true });
   };
@@ -190,6 +194,10 @@ const PostCard = ({ userData, item = {} }) => {
   };
 
   const onCommetIncrease = () => {
+        dispatch({
+      type: "ACTIVE_POST",
+      payload: item,
+    });
     const commentData = {
       datetime: Date.now(),
       postid: item?.id,
@@ -259,7 +267,7 @@ const PostCard = ({ userData, item = {} }) => {
         <section className="w-full flex items-centern justify-between">
           <div
             className="flex cursor-pointer"
-            onClick={() => navigate("/profile/${6}")}
+            onClick={() => navigate(`/profile/${item?.profile.id}`)}
           >
             <div className="flex w-[46px] h-[46px]">
               {/* due to img broke dynamic src commented */}
@@ -349,7 +357,7 @@ const PostCard = ({ userData, item = {} }) => {
         {/* Content/About And Images Section */}
         <section className="w-full flex flex-col items-center mt-2 px-2">
           <div className=" w-full ">
-            <p className="text-[11px] sm:text-[12px] lg:text-[13px] font-[400] text-gray-500">
+            <p className="text-[11px] sm:text-[12px] break-words lg:text-[13px] font-[400] text-gray-500">
               {showMore ? description : `${shortDescription}`}
 
               {description.length > 150 && (
@@ -362,7 +370,14 @@ const PostCard = ({ userData, item = {} }) => {
               )}
             </p>
           </div>
-          {item?.image ? (
+          
+          { item?.sharedpostid ? 
+          <div className="w-full">
+          <SharedPost postid={item.sharedpostid} profileid={item?.shareprofileid}/>
+          </div>
+          
+          :
+            item?.image ? (
             item.viptype === 5 ? (
               <>
                 <div
@@ -466,7 +481,7 @@ const PostCard = ({ userData, item = {} }) => {
               )}
               {/* <RiDislikeFill/> */}
 
-              <span className="text-xs font-semibold mt-1">Like</span>
+              {/* <span className="text-xs font-semibold mt-1">Like</span> */}
             </div>
             {/* Input Box Section */}
             <div className="relative flex grow overflow-hidden items-center outline-gray-300 py-1 border-[1px] w-[100%] border-gray-500 justify-center gap-2 mx-3 rounded-xl mt-1.5 h-[38px]">

@@ -5,15 +5,12 @@ import { BsCamera } from 'react-icons/bs';
 import user from '../../Assets/Images/user.png'
 
 const ImageModal = ({ showModal, handleModal, closeModal, confirmClick, handleImage, 
-    file, isOther, leftBtn, rightBtn, profileImgModal
+    file, isOther, leftBtn, rightBtn, profileImgModal, handleSave,
  }) => {
 
     const [state, setState] = useState({});
     const { image } = state;
-
-    const handleLeftBtn = () => {
-        setState({...state, image: ""})
-    }
+console.log(file);
     return (
         <div
             onClick={(e) => e.stopPropagation()}
@@ -23,12 +20,12 @@ const ImageModal = ({ showModal, handleModal, closeModal, confirmClick, handleIm
                 <CardHeader shadow={false} floated={false} className="h-[300px] w-[350px] flex items-center">
 
                     <input
-                        id="cover-pic"
+                        id= {profileImgModal ? "profile-pic" : "cover-pic"}
                         type="file"
                         accept="image/*"
                         className="hidden"
                         onChange={(e) => {
-                            handleImage("profileImg", e.target.files)
+                            handleImage(profileImgModal ? "profileImg" : "coverImg", e.target.files)
                             setState({...state, image: e.target.files[0]})
                         }}
                     />
@@ -36,12 +33,12 @@ const ImageModal = ({ showModal, handleModal, closeModal, confirmClick, handleIm
                         profileImgModal ?
                         <label
                         // onClick={() => setState({ ...state, imageModal: true })}
-                        htmlFor={`${isOther ? "" : "cover-pic"}`}
+                        htmlFor={`${isOther ? "" : "profile-pic"}`}
                         className="w-[250px] h-[250px] cursor-pointer rounded-full m-auto flex items-center justify-center border border-gray-400"
                     >
-                        { image ?
+                        { file?.type ?
                             <img
-                                src={URL.createObjectURL(image) || file || user }
+                                src={URL.createObjectURL(file) || user }
                                 alt=""
                                 className="w-full h-full rounded-full border border-gray-400 object-cover"
                             />
@@ -59,15 +56,22 @@ const ImageModal = ({ showModal, handleModal, closeModal, confirmClick, handleIm
                         htmlFor={`${isOther ? "" : "cover-pic"}`}
                         className="w-full h-full cursor-pointer rounded-xl flex items-center justify-center border border-gray-400"
                     >
-                        {image ? (
+                        {file?.type ? (
                             <img
-                                src={URL.createObjectURL(image) || file }
+                                src={URL.createObjectURL(file) || file }
                                 alt=""
                                 className="w-full h-full rounded-xl border border-gray-400 object-cover"
                             />
-                        ) : (
+                        ) :
+                         file ?
+                         <img
+                                src={ file || user }
+                                alt=""
+                                className="w-full h-full border border-gray-400 object-cover"
+                            /> 
+                            : 
                             <BsCamera size={28} className="text-gray-600" />
-                        )}
+                        }
                     </label>
                     }
                     
@@ -76,9 +80,9 @@ const ImageModal = ({ showModal, handleModal, closeModal, confirmClick, handleIm
                 {/* <CardBody>
                 </CardBody> */}
 
-                <CardFooter className="py-3 flex justify-center">
+                <CardFooter className="py-3 flex gap-3 justify-center">
                     <Button
-                        onClick={handleLeftBtn}
+                        onClick={() => handleImage(profileImgModal, 'delete')}
                         ripple={false}
                         fullWidth={true}
                         className="w-24 bg-gray-300 text-blue-gray-900 shadow-none 
@@ -89,12 +93,13 @@ const ImageModal = ({ showModal, handleModal, closeModal, confirmClick, handleIm
                     </Button>
                     {
                         rightBtn &&
-
                     <Button
-                        onClick={() => handleImage('delete')}
+                        onClick={() => handleSave(profileImgModal)}
                         ripple={false}
                         fullWidth={true}
-                        className="bg-blue-gray-900/10 text-blue-gray-900 shadow-none hover:shadow-none hover:scale-105 focus:shadow-none focus:scale-105 active:scale-100"
+                        className="w-24 bg-gray-300 text-blue-gray-900 shadow-none 
+                        hover:shadow-none hover:scale-105 focus:shadow-none focus:scale-105
+                         active:scale-100"
                     >
                         {rightBtn}
                     </Button>

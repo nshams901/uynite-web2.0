@@ -54,7 +54,7 @@ const kicksReducer = (state = initialState, action) => {
         };
       }
 
-    case "INCREASE_LIKE":
+    case "REMOVE_LIKE":
       const { followingKicks: followingKick, latestKicks: latestKick, trendingKicks: trendingKick } = state;
       if (state.segment === "Following") {
         const liked = followingKick.content.map((item) => {
@@ -88,6 +88,43 @@ const kicksReducer = (state = initialState, action) => {
           ...state,
           totalLikes: action.payload.data,
           latestKicks: { ...latestKick, content: liked },
+        };
+      }
+    case 'INCREASE_COMMENT':
+      const { followingKicks: followingKicksCmnt, latestKicks: latestKicksCmnt, trendingKicks: trendingKicksCmnt } = state;
+      if (state.segment === "Following") {
+        const liked = followingKicksCmnt.content.map((item) => {
+          return action.payload === item.id
+            ? { ...item, commentcount: item?.commentcount + 1 }
+            : item;
+        });
+        console.log(liked);
+        return {
+          ...state,
+          totalLikes: action.payload.data,
+          followingKicks: { ...followingKicksCmnt, content: liked },
+        };
+      } else if (state.segment === "Trending") {
+        const liked = trendingKicksCmnt.content.map((item) => {
+          return action.payload === item.id
+            ? { ...item, commentcount: item?.commentcount + 1 }
+            : item;
+        });
+        return {
+          ...state,
+          totalLikes: action.payload.data,
+          trendingKicks: { ...trendingKicksCmnt, content: liked },
+        };
+      } else if (state.segment === "Latest") {
+        const liked = latestKicksCmnt.content.map((item) => {
+          return action.payload === item.id
+            ? { ...item, commentcount: item?.commentcount + 1 }
+            : item;
+        });
+        return {
+          ...state,
+          totalLikes: action.payload.data,
+          latestKicks: { ...latestKicksCmnt, content: liked },
         };
       }
     case "COMMENTS_LIST":
