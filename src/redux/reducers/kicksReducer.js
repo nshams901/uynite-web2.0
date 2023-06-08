@@ -5,6 +5,10 @@ const initialState = {
   comments: [],
   reply: [],
   segment: "Following",
+  kicksVideoList: [],
+  kicksTagList: [],
+  profileList: [],
+  userKickList: [],
 };
 
 const kicksReducer = (state = initialState, action) => {
@@ -127,10 +131,18 @@ const kicksReducer = (state = initialState, action) => {
           latestKicks: { ...latestKicksCmnt, content: liked },
         };
       }
+    case "KICKS_SEARCH_BY_TEXT":
+      return { ...state, kicksVideoList: action.payload.data }
+    case "KICKS_SEARCH_BY_TAG":
+      return { ...state, kicksTagList: action.payload.data}
+    case "GET_PROFILE_LIST": 
+      return { ...state, profileList: action.payload.data}
     case "COMMENTS_LIST":
       return { ...state, comments: action.payload.data };
     case "COMMENTS_REPLY_LIST":
       return { ...state, reply: action.payload.data };
+    case "GET_USER_KICKS":
+      return { ...state, userKickList: action.payload.data || []}
     case "KICKS_SEGMENT":
       return { ...state, segment: action.payload };
     default:

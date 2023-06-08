@@ -170,7 +170,7 @@ const ProfileImageSection = ({
       >
         {coverImg || data?.pcoverimage ? (
           <img
-            src={URL.createObjectURL(coverImg) || data?.pcoverimage}
+            src={coverImg?.type ?  URL.createObjectURL(coverImg) : data?.pcoverimage}
             alt=""
             className="w-full h-full rounded-xl border border-gray-400 object-cover"
           />

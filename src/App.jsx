@@ -51,6 +51,7 @@ import TermsAndConditions from "./Components/Home/ProfilePage/TermsAndConditionP
 import PrivacyPolicy from "./Components/Home/ProfilePage/PrivacyPolicy/PrivacyPolicy";
 import { getProfileById } from "./redux/actionCreators/profileAction";
 import Reals from "./screens/Reals/Reals";
+import UserKicks from "./Components/Home/KicksPage/UserKicks";
 
 const App = () => {
     const token = localStorage.getItem("token");
@@ -126,6 +127,8 @@ const App = () => {
             <Route path="kicks/:segment" element={<Kicks />} />
 
             <Route path="veiwallkicks" element={<SearchKicksPage />} />
+            <Route path="user-kicks" element={<UserKicks />} />
+
             <Route path="myfriend" element={<MyFriendsPage />} />
             <Route
               path="find-friend"

@@ -145,6 +145,7 @@ const UpdateProfile = () => {
       loksabha: states.loksabha?.loksabha,
       state: states.state?.state || "",
       city: location,
+      pcoverimage: pcoverimage,
       lname: lname, //from user input – profile lnamein SLIDE 4
       personalname: !isPersonal ?  personalname : "", //from user input – profilefnamein SLIDE 4
       personalLastName: !isPersonal ? personalLastName : "",
@@ -228,6 +229,7 @@ const UpdateProfile = () => {
               id="coverPic"
               className="hidden"
               type="file"
+              accept="image/*"
               onChange={(e) => handleUpload("cover", e.target.files[0])}
             />
             <label
@@ -258,6 +260,7 @@ const UpdateProfile = () => {
               className="hidden"
               type="file"
               id="profilePic"
+              accept="image/*"
               onChange={(e) => handleUpload("profile", e.target.files[0])}
             />
             <label

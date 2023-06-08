@@ -36,6 +36,7 @@ import { isEmpty } from "../../Utility/utility";
 import moment from "moment";
 import { BiCategory } from "react-icons/bi";
 import CategoriesModal from "../SearchKicksPage/CategoriesModal";
+import { checkFollowing } from "../../../redux/actionCreators/profileAction";
 
 const Kicks = () => {
   const dispatch = useDispatch();
@@ -60,14 +61,20 @@ const Kicks = () => {
   const [showCategories, setShowCategories] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
   const [openCat, setOpenCat] = useState(false);
-  const videoData = useMemo(() => {
-    return kicksType === "Following"
+  const videoData = useMemo(async () => {
+    const data = kicksType === "Following"
       ? followingsContent
       : kicksType === "Trending"
       ? trendingContents
       : kicksType === "Latest"
       ? latestContents
-      : {};
+      : [];
+
+    const dataList =await Promise.all(data?.content?.map(async (item) =>{
+      const result = await dispatch(checkFollowing({ownProfileId: profile?.id, othersProfileId: item.profile?.id}))
+      return {...item, isFollow: result.status}
+    })).then((res) => res);
+    return {...data, content: dataList}
   }, [kicksType, followingsContent, trendingContents, latestContents]);
 
   useEffect(() => {
@@ -188,7 +195,7 @@ const Kicks = () => {
           </div>
           {/*  */}
           <section
-            className={`video-container w-1/4 mt-[3%] text-white bg-black ${
+            className={`video-container mt-[3%] text-white bg-black ${
               isMobile ? "video-container_mobile" : ""
             }`}
             id="video-container"
@@ -280,7 +287,7 @@ const Kicks = () => {
             videoData?.content?.map((item) => {
               const { text, id } = item;
               return (
-                <div className="flex " key={id}>
+                <div className="flex h-full " key={id}>
                   <VideoComponent dataList={dataList} data={item} />
                 </div>
               );

@@ -18,7 +18,7 @@ export default function CategoriesModal({ onClose }) {
           }
         </div>
         <section className='py-1 pt-2 border-t flex justify-center items-center'>
-          <button className='text-[#dd8e58]  border border-[#dd8e58] px-5 w-36 mx-1 py-1.5 rounded-lg'>Close</button>
+          <button onClick={onClose} className='text-[#dd8e58]  border border-[#dd8e58] px-5 w-36 mx-1 py-1.5 rounded-lg'>Close</button>
           <button onClick={onClose} className='px-5 w-36 border text-[#dd8e58] border-[#dd8e58] py-1.5 mx-1 rounded-lg'>Save</button>
         </section>
       </div>
