@@ -1,19 +1,23 @@
 import { Avatar } from '@material-tailwind/react'
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router-dom'
+import userLogo from '../../../Assets/Images/user.png'
 
 const UserKicks = () => {
+    const params = useParams();
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const { userKickList } = useSelector((state) => state.kicksReducer);
-    console.log(userKickList?.[0]?.pimage, "{{{{{{{{{{{");
-    const user = userKickList?.[0]?.profile
+    const user = userKickList?.[0]?.profile;
+    useEffect(() => {
+    }, [])
     return (
         <div className='w-full md:w-1/2 bg-white mx-auto'>
             <div className='p-3'>
                 <Avatar
                     className='rounded-full w-20 h-20 mx-4 cursor-pointer'
-                    src={user?.pimage}
+                    src={user?.pimage || userLogo}
                     onClick={() => navigate(`/profile/${user.id}`)}
                 />
                 <span onClick={() => navigate(`/profile/${user?.id}`)}
@@ -24,7 +28,7 @@ const UserKicks = () => {
                             return (
                                 <div className='w-1/2 p-3 md:w-1/3 h-60' key={item?.id}>
                                     <div className='h-full bg-black cursor-pointer'>
-                                        <video className='h-full'><source src={item?.video}></source></video>
+                                        <img src={item?.image} className='h-full m-auto'/>
                                     </div>
                                 </div>
                         )

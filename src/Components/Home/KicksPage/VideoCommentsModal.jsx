@@ -102,13 +102,13 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
   };
 
   const handleSendComment = async () => {
-    setState({ ...state, msgText: "" });
+    setState({ ...state, msgText: "", imgFile: "" });
     if (!msgText) {
       setState({ ...state, alert: true });
     }
     let imgPath;
     if (commentImage) {
-      imgPath = dispatch(imageUploadApi(imgFile));
+      imgPath = await dispatch(imageUploadApi(imgFile));
     }
     if (msgText?.trim() || imgPath) {
       const commentData = {
@@ -116,6 +116,7 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
         postid: activePost?.id,
         profileid: profile?.id,
         text: msgText,
+        image: imgPath.path
       };
       if (roots) {
         const params = {
@@ -161,7 +162,6 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
       return setState({ ...state, commentImage: "", imgFile: "" });
     }
     const file = URL.createObjectURL(e.target.files[0]);
-    console.log(file, ">>>>>>>>>>>>>>>>");
     setState({ ...state, commentImage: file, imgFile: e.target.files[0] });
   };
 
@@ -189,6 +189,7 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                 likecount,
                 replycount,
                 datetime,
+                image,
                 postid,
                 profileid,
               } = data;
@@ -196,7 +197,8 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
               return (
                 <>
                   <div key={id} className="my-2 flex items-center z-50 ">
-                    <div className="w-1/6 flex justify-center">
+                    <div className="w-1/6 flex justify-center cursor-pointer"
+                     onClick={() => navigate(`/profile/${profile?.id}`)}>
                       <img
                         src={profile?.pimage}
                         className="w-12 h-12 border border-gray-500 rounded-full object-cover"
@@ -220,7 +222,9 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                         </div>
                       </div>
                       <div className="flex justify-between items-end">
-                        <span className="text-[14px]">{text}</span>
+                        <span className="text-[14px]">{text}
+                        { image ? <img className="w-24" src={ image } /> : ""}
+                        </span>
                         <div className="text-[11px]">
                           <span className="px-1">
                             {likecount?.length || 0} likes

@@ -48,20 +48,21 @@ const Kicks = () => {
       followingsContent: state.kicksReducer.followingKicks,
       trendingContents: state.kicksReducer.trendingKicks,
       latestContents: state.kicksReducer.latestKicks,
+      getData: state.kicksReducer.getData
     };
   });
 
-  const { profile, followingsContent, trendingContents, latestContents } =
+  const { profile, followingsContent, trendingContents, latestContents, getData } =
     reducerDate;
   const [state, setState] = useState({});
-  const { kicksType = params.segment || "Following" } = state;
+  const { kicksType = params.segment || "Following", videoData =[] } = state;
   const [comments, setComments] = useState(true);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectVideo, setSelectVideo] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
   const [openCat, setOpenCat] = useState(false);
-  const videoData = useMemo(async () => {
+  const kicksList = useMemo(async () => {
     const data = kicksType === "Following"
       ? followingsContent
       : kicksType === "Trending"
@@ -74,9 +75,10 @@ const Kicks = () => {
       const result = await dispatch(checkFollowing({ownProfileId: profile?.id, othersProfileId: item.profile?.id}))
       return {...item, isFollow: result.status}
     })).then((res) => res);
-    return {...data, content: dataList}
-  }, [kicksType, followingsContent, trendingContents, latestContents]);
+    setState({...state, videoData: {...data, content: dataList}})
 
+  }, [kicksType, followingsContent, trendingContents, latestContents, getData]);
+console.log(videoData, "JJJJJJJJJ");
   useEffect(() => {
     getKicks("Following");
     window.addEventListener(
@@ -280,9 +282,11 @@ const Kicks = () => {
           id="video-container"
         >
           {isEmpty(videoData?.content) ? (
-            <EmptyComponent
-              message={`There is no video in ${kicksType} section`}
-            />
+            <div className="w-1/3 h-full">
+              <EmptyComponent
+                message={`There is no video in ${kicksType} section`}
+              />
+            </div>
           ) : (
             videoData?.content?.map((item) => {
               const { text, id } = item;

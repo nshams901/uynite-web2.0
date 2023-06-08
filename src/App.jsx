@@ -127,7 +127,7 @@ const App = () => {
             <Route path="kicks/:segment" element={<Kicks />} />
 
             <Route path="veiwallkicks" element={<SearchKicksPage />} />
-            <Route path="user-kicks" element={<UserKicks />} />
+            <Route path="user-kicks/:id" element={<UserKicks />} />
 
             <Route path="myfriend" element={<MyFriendsPage />} />
             <Route

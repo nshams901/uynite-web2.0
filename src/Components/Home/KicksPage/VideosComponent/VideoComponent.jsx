@@ -94,6 +94,7 @@ const VideoComponent = ({ dataList, data }) => {
     viptype,
     profileid,
     utcategory,
+    isFollow
   } = data;
   
   const name = profile?.fname + profile?.lname;
@@ -107,15 +108,7 @@ const VideoComponent = ({ dataList, data }) => {
     setEditVideo(true);
   };
 
-  const isFollow = async () => {
-    const data = {
-      ownProfileId: profileDetail.id,
-      othersProfileId: profile?.id
-    }
-    const result = await dispatch(checkFollowing(data)).then(res => res.status);
-    console.log(result);
-    return result.status
-  }
+
   const handleIsMyVideo = (data) => {
     // console.log(data)
     console.log(profileDetail);
@@ -179,21 +172,23 @@ const VideoComponent = ({ dataList, data }) => {
         });
       }
     } else if (title === "follow") {
-      if(isFollow()){
-        dispatch(unfollow(profileDetail?.id, profile.id))
+      if(isFollow){
+        dispatch(unfollow({profileid: profileDetail?.id, friendprofileid: profile.id}));
+        dispatch({ type: "UNFOLLOW", payload: id});
       }else {
         const payload = {
           myprofileid: profileDetail?.id,
           followerprofileid: profileid,
           datetimes: moment().format("YYYY-MM-DD"),
         };
+        dispatch({ type: "START_FOLLOW", payload: id});
         dispatch(startFollowing(payload))
           .then((res) => {
             title === "unfollow";
             console.log("followed success", res);
           })
           .catch((err) => {
-            console.log("followed denyed", err);
+            console.log("followed denied", err);
           });
       }
     } else if (title === "unfollow") {
@@ -206,13 +201,13 @@ const VideoComponent = ({ dataList, data }) => {
           console.log("unfollowed success", res);
         })
         .catch((err) => {
-          console.log("unfollowed denyed", err);
+          console.log("unfollowed denied", err);
         });
     } else if(title === 'collection'){
-      const friendprofileid = id
+      const friendprofileid = profile?.id
       const userprofileid= profileDetail?.id;
-      navigate('/user-kicks')
-      dispatch(getUserKickList(friendprofileid, userprofileid))
+      navigate(`/user-kicks/${friendprofileid}`)
+      dispatch(getUserKickList(userprofileid, friendprofileid))
     }
   };
 
@@ -320,7 +315,7 @@ const VideoComponent = ({ dataList, data }) => {
                       src={
                         (elem?.title === "likes" && isliked) ? kicksLiked :
                         (elem?.title === 'mute' && isMute) ? unmute :
-                        (elem?.title === 'follow' && false ) ? follow : elem.img
+                        (elem?.title === 'follow' && isFollow ) ? follow : elem.img
                       }
                       alt=""
                       className="w-[30px] cursor-pointer "

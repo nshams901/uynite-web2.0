@@ -13,13 +13,13 @@ import DropdownComp from "../../common/DropdownComp";
 const dataList = [
   {name: "Adventures"},
   {name: "Action"},
-  // "Arts & Craft",
-  // "Beauty Tips",
-  // "Comedy",
-  // "Drama",
-  // "Fiction",
-  // "Novel",
-  // "Romance",
+  {name: "Arts & Craft"},
+  {name: "Beauty Tips"},
+  {name: "Comedy"},
+  {name: "Drama"},
+  {name: "Fiction"},
+  {name: "Novel"},
+  {name: "Romance"},
 ];
 
 export default function SelectedVideoModal({ onClose, selectedVideo }) {
