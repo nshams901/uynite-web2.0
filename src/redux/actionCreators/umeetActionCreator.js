@@ -108,7 +108,7 @@ export const getEventList = (data) => async (dispatch) => {
 export const getEventByProfileid = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/event/api/event/getmyallevent/${data}/${Date.now()}`,
+      `https://web.uynite.com/event/api/event/getmyallevent/${data}/1684318282119`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -154,6 +154,7 @@ export const getInviteList = (data) => async (dispatch) => {
     throw error;
   }
 };
+
 
 export const getInviteListByFood = (data) => async (dispatch) => {
   try {
@@ -205,7 +206,7 @@ export const addInvitee = (data) => async (dispatch) => {
 export const getInviteesList = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/event/api/invities/add`,
+      `http://3.233.82.34:8080/event/api/invities/getinvitietslist/64638b810fa7dd158fd35a5a`,
       data
     );
     console.log(response);
@@ -229,18 +230,21 @@ export const addInvitees = (data) => async (dispatch) => {
       type: "ADD_INVITIES",
       payload: response.data,
     });
-  } catch (error) {
+  } catch (error) { 
     throw error;
   }
 };
 
 export const createEventTemplate = (data) => async (dispatch) => {
   try {
+    // const formData = new FormData();
+    // formData.append('image', data);
+    // console.log(data, formData)
     const response = await axios.post(
       `https://web.uynite.com/event/api/eventtemp/createtemp`,
       data
     );
-    console.log(response);
+    console.log(response, 'ok ji');
     dispatch({
       type: "",
       payload: response.data,
@@ -468,12 +472,26 @@ export const handleInviteEmailUI = (data) => async (dispatch) => {
 
 export const handleCreateDataUI = (data) => async (dispatch) => {
   try {
-    console.log(data, 'ok dude')
     dispatch({
       type: "CREATE_DATA_UI",
       payload: data,
     })
   } catch (error) {
     console.log(error)
+  }
+};
+
+export const getReunionTemplates = (data) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+       `https://web.uynite.com/event/api/eventtemp/category/Reunion`
+    );
+    console.log(response.data, "getReunionTemplates");
+    dispatch({
+      type: "GET_REUNION_TEMPLATES",
+      payload: response.data,
+    });
+  } catch (error) {
+    throw error;
   }
 };
