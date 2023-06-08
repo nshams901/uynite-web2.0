@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import {
   getFollower,
   getFollowing,
+  getProfileById,
   updateProfile,
 } from "../../../../redux/actionCreators/profileAction";
 import {
@@ -27,7 +28,7 @@ import { createPost } from "../../../../redux/actionCreators/postActionCreator";
 
 const ProfileImageSection = ({
   isOther,
-  data = {},
+  data ,
   following,
   followers,
   friends,
@@ -118,10 +119,12 @@ const ProfileImageSection = ({
 
   const handleSavePic = async (profilePic) => {
     const uploadResponse =await dispatch(imageUploadApi(profileImgModal ? profileImg : coverImg))
+    const userid = localStorage.getItem('userCredential')?.id
     if(!profilePic){
       let payloads = {...data, state: data?.state||"", pcoverimage: uploadResponse.path}
       dispatch(updateProfile(payloads)).then((res) => {
         if(res?.status){
+          // dispatch(getProfileById(userid))
           toast.success(res?.message)
         }else{
           toast.error(res?.message)
@@ -131,14 +134,15 @@ const ProfileImageSection = ({
       let payloads = {...data, state: data?.state||"", pimage: uploadResponse.path, };
       dispatch(updateProfile(payloads)).then((res) => {
         if(res?.message){
-          setState({...state, coverImgModal: false, profileImgModal: false})
+          // dispatch(getProfileById(userid))
           toast.success(res?.message)
         }else{
           toast.error(res?.message)
         }
       });
     }
-    handleCreatePost(uploadResponse.data?.path, profilePic)
+    setState({...state, coverImgModal: false, profileImgModal: false})
+    handleCreatePost(uploadResponse?.path, profilePic)
   }
 
   const handleCreatePost = (img, isProfile) => {
@@ -170,7 +174,7 @@ const ProfileImageSection = ({
       >
         {coverImg || data?.pcoverimage ? (
           <img
-            src={URL.createObjectURL(coverImg) || data?.pcoverimage}
+            src={coverImg?.type ? URL.createObjectURL(coverImg) : data?.pcoverimage}
             alt=""
             className="w-full h-full rounded-xl border border-gray-400 object-cover"
           />

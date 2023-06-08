@@ -304,11 +304,8 @@ const Signup = () => {
             name="phone"
             type="number"
             id="phone"
-            value={activeField ? formik.values.phone : ""}
+            value={formik.values.phone}
             onChange={(event) => {
-            //  if (formik.values.phone.length) {
-            //    setActivePhone(true);
-            //  }
               if (event.target.value.length > 10) {
                 formik.handleChange(
                   event.target.value.slice(event.target.value.length - 1)

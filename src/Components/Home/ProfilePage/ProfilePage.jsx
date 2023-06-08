@@ -61,7 +61,7 @@ const ProfilePage = ({ isOther }) => {
     dispatch(getFollower(user?.id));
     dispatch(getFriendsList(user?.id));
     // dispatch
-    dispatch(getUserPostList(user.id));
+    dispatch(getUserPostList(user?.id));
 
   }, [params?.id]);
 
