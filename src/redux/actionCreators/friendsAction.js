@@ -258,3 +258,19 @@ export const getTypeOfFriends = (profileid) => async (dispatch) => {
     throw error;
   }
 };
+
+
+export const checkFollow = (userprofile, friendprofile) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `https://web.uynite.com/friend/api/follow/followyesno/${userprofile}/${friendprofile}`,
+    );
+    dispatch({
+      type: "KICKS_SEARCH_BY_TEXT",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

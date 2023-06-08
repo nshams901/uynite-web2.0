@@ -4,7 +4,7 @@ import videoImg from "../../../Assets/Images/videoImg.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { MdDelete } from "react-icons/md";
 import { imageUploadApi } from "../../../redux/actionCreators/rootsActionCreator";
-import { createKicksPost, getCategoryList } from "../../../redux/actionCreators/kicksActionCreator";
+import { createKicksPost, getCategoryList, getFollowingKicks } from "../../../redux/actionCreators/kicksActionCreator";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
@@ -51,17 +51,20 @@ export default function SelectedVideoModal({ onClose, selectedVideo }) {
 
   const addPost = async () => {
     const payload = {
-      shareto: "share1",
+      shareto: "Public",
       type: "type1",
       template: "template1",
       // image: "afadsf1,sdfasdf,dfasdf",
       text: postContent,
       suggesttemp: "sugest1",
-      utag: null,
+      utag: postContent,
+      isShowAds: false,
       delete: false,
       close: "close",
       profileid: profile?.id,
-      postdate: moment().format("YYYY-MM-DDTHH:mm"),
+      utcategory: category.name,
+      utcategoryid: "2",
+      postdatetime: new Date().getTime(),
     };
     const uploadVideo = await dispatch(imageUploadApi(videoFile));
     try {
@@ -69,6 +72,13 @@ export default function SelectedVideoModal({ onClose, selectedVideo }) {
         payload.video = uploadVideo?.path;
         const createPost = await dispatch(createKicksPost(payload));
         if (createPost.status) {
+          let params = { index: 0, size: 10 };
+          const data = {
+            categories: [],
+            profileId: profile?.id,
+            rootRequest: false,
+          };
+          dispatch(getFollowingKicks(params, { ...data, segment: "FOLLOWING" }));
           toast.success(createPost.message);
           onClose();
         } else {

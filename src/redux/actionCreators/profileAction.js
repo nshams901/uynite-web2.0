@@ -191,11 +191,11 @@ export const checkFollowing = (data) => async (dispatch) => {
     const response = await axios.get(
       `https://web.uynite.com/friend/api/follow/followyesno/${ownProfileId}/${othersProfileId}`
     );
-    console.log(response);
     dispatch({
       type: "",
       payload: response.data,
     });
+    return response.data
   } catch (error) {
     throw error;
   }
