@@ -7,7 +7,7 @@ export default function PoliticalAddBy({ onClose, whichBy, selectBy }) {
   const [addByMail, setAddByMail] = useState(false);
 
   const [addEmail, setAddEmail] = useState("");
-  console.log("State,,,,,,,,,,,,", selectBy);
+
   const { emailList } = useSelector((state) => state.umeetReducer);
   const onHandleEmailChange = (event) => {
     setAddEmail(event.target.value);
@@ -22,7 +22,7 @@ export default function PoliticalAddBy({ onClose, whichBy, selectBy }) {
     setAddEmail("")
     console.log("emailData", emailData);
   };
-console.log(whichBy)
+
   const onAddInvitesClick = () => {
     if (addByMail) {
       dispatch(allEmailInvites(emailData));

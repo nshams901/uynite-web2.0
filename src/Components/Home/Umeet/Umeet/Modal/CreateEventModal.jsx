@@ -11,6 +11,7 @@ import ToastWarning from '../../../../common/ToastWarning';
 import { toast } from 'react-toastify';
 import { AiOutlineEye } from 'react-icons/ai'
 import PreviewEvent from './PreviewEvent'
+import axios from 'axios'
 
 const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   handleCreatedEvent, handleShowTemplate, handleShowAddGroup,
@@ -18,7 +19,8 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   politicalPartyMeeting, handlePoliticalFeedbackQuestion,
   publicShopOpening, handlePersonalOtherModal, handleShowAddPeopleModal,
   showAddGroup, reunionModal, handleReuinion, selectedImage,
-  setSelectedImage, selectedImgFile }) => {
+  setSelectedImage, selectedImgFile, setSelectedImgFile,
+  handleSelectedImgFile }) => {
 
   const { profileReducer, umeetReducer } = useSelector(state => state)
 
@@ -44,6 +46,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   const [characterCount, setCharacterCount] = useState(0);
   const [feedbackVal, setFeedbackVal] = useState(false)
   const [noGuest, setNoGuest] = useState(null)
+  const [startDate, setStartDate] = useState(null)
 
   const dispatch = useDispatch()
   const phoneNumberRules = /[0-9]{10}$/;
@@ -109,23 +112,28 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     "createdatetime": new Date().toISOString().replace("Z", "+0000"),
     "date_created": Date.now().toString(),
     "event_category": whichType,
-    "profileid": profileReducer.profile.id,
-    "eventdateAndTime": new Date(formState.eventdateAndTime).toLocaleString('en-US', options),
-    "eventAddress": formState.eventAddress,
-    "eventHostPhnNumber": formState.eventHostPhnNumber,
+    "profileid": profileReducer?.profile?.id,
+    "eventdateAndTime": new Date(formState?.eventdateAndTime).toLocaleString('en-US', options),
+    "eventAddress": formState?.eventAddress,
+    "eventHostPhnNumber": formState?.eventHostPhnNumber,
     "eventfrndEducationType": "need",
     "eventPrivacyType": "need",
     "eventFrndId": "need",
     "eventType": selectedSpecificEvent,
-    "hostmailid": formState.hostmailid,
+    "hostmailid": formState?.hostmailid,
     "id": uuidv4(),
     "aboutevent": inputValue,
     "eventmode": eventMode,
     "eventTemplate": selectedImage,
-    "startdate": startingDate.getTime(),
-    "enddate": endingDate.getTime()
+    "startdate": startingDate?.getTime(),
+    "enddate": endingDate?.getTime(),
+    "eventQuestion": umeetReducer?.question?.question ? umeetReducer?.question?.question : null,
+    "eventquestionopt1": umeetReducer?.question?.option1 ? umeetReducer?.question?.option1 : null,
+    "eventquestionopt2": umeetReducer?.question?.option2 ? umeetReducer?.question?.option2 : null,
+    "eventquestionopt3": umeetReducer?.question?.option3 ? umeetReducer?.question?.option3 : null,
+    "eventquestionopt4": umeetReducer?.question?.option4 ? umeetReducer?.question?.option4 : null,
   }
-console.log(postData.enddate)
+
   const handleCreateEvent = () => {
     if(noGuest == null){
       return ToastWarning('Please select invities')
@@ -143,11 +151,11 @@ console.log(postData.enddate)
       }else if(!formState.eventAddress){
         return ToastWarning("please enter the location/url")
       }
-      // else if (!phoneNumberRules.test(formState?.eventHostPhnNumber)) {
-      //   return ToastWarning("Add valid mobile number")
-      // }else if(!formState.hostmailid.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)){
-      //   return ToastWarning("Add valid host mail id")
-      // }
+      else if (!phoneNumberRules.test(formState?.eventHostPhnNumber)) {
+        return ToastWarning("Add valid mobile number")
+      }else if(!formState.hostmailid.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)){
+        return ToastWarning("Add valid host mail id")
+      }
     }
     dispatch(createEvent(postData)).then((res) => {
        if(res?.status){
@@ -165,7 +173,7 @@ console.log(postData.enddate)
   }
 
   const handleGroupAndCreate = async()=>{    
-    await dispatch(handleCreateDataUI({...postData, eventMode}))
+    await dispatch(handleCreateDataUI({...postData, eventMode, startDate}))
     handleShowGroup()
   }
 
@@ -194,6 +202,14 @@ console.log(postData.enddate)
   }
 
   useEffect(()=>{
+    // if(selectedImgFile){
+    //   (async()=>{
+    //     const { data } = await 
+    //     axios.post(`https://web.uynite.com/fileservice/s3/upload`, 
+    //       selectedImgFile)
+    //     console.log(data)
+    //   })()
+    // }
     if(umeetReducer?.inviteEmailsUI){
       setNoGuest(umeetReducer?.inviteEmailsUI)
     }
@@ -207,6 +223,13 @@ console.log(postData.enddate)
     }
 
     if(umeetReducer?.createData){
+      const d = (umeetReducer?.createData?.eventdateAndTime == undefined) ? null : umeetReducer?.createData?.eventdateAndTime.toString()
+      const dateObj = new Date(d);
+      const formattedDate = `${dateObj.getFullYear()}-${(dateObj.getMonth() + 1).toString().padStart(2, "0")}-${dateObj.getDate().toString().padStart(2, "0")}T${dateObj.getHours().toString().padStart(2, "0")}:${dateObj.getMinutes().toString().padStart(2, "0")}`;
+      if(umeetReducer?.createData?.eventdateAndTime != undefined){
+       setStartDate(formattedDate)
+      }
+      setInputType('datetime-local')
       setInputValue(umeetReducer?.createData?.aboutevent)
       setEventMode(umeetReducer?.createData?.eventMode)
       setFoodType(umeetReducer?.createData?.foodType)
@@ -216,6 +239,7 @@ console.log(postData.enddate)
        eventAddress: umeetReducer?.createData?.eventAddress,
        eventHostPhnNumber: umeetReducer?.createData?.eventHostPhnNumber,
        hostmailid: umeetReducer?.createData?.hostmailid,       
+       eventdateAndTime: formattedDate
       }))       
     }
 
@@ -233,6 +257,7 @@ console.log(postData.enddate)
     }    
 
   }, [])
+
 //umeetReducer?.createData, showAddGroup, dispatch
   return (
     <div className='lg:fullPage pb-16 lg:pb-3 bg-white border-gray-300'>
@@ -293,7 +318,8 @@ console.log(postData.enddate)
            name='eventdateAndTime' 
            type={inputType} 
            onClick={handleToggle} 
-           onChange={handleChange} 
+           onChange={handleChange}
+           //value={startDate ? startDate : null}
            className='border-b focus:outline-none h-10 my-2 w-full text-gray-500' 
            placeholder='Start Date & Time*' />
           <input 
@@ -436,6 +462,8 @@ console.log(postData.enddate)
             <textarea 
              placeholder='What about it?' 
              rows='3' 
+             value={umeetReducer?.question ? umeetReducer?.question?.question : ''}
+             onChange={()=>{}}
              className='w-full outline-none my-2 rounded-xl relative border p-2' />
           </div>
 

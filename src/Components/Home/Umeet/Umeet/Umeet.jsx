@@ -101,6 +101,7 @@ export default function Umeet(){
               selectedImage={selectedImage}
               setSelectedImage={setSelectedImage} 
               selectedImgFile={selectedImgFile} 
+              setSelectedImgFile={setSelectedImgFile}
               handleSelectedImgFile={(file)=>setSelectedImgFile(file)}            
               />
     }else if(eventCreated){
@@ -121,7 +122,7 @@ export default function Umeet(){
   const handleAddByContactModal = ()=>{
    setShowAddByContactModal(true)
   }  
-console.log(selectedImage)
+
   const handleEditEvent = ()=>{
     setEventDetails(false)
     setEditMyEvent(true); 
@@ -216,6 +217,7 @@ console.log(selectedImage)
   const handleCreateEventForm = (data)=>{
     umeetReducer.inviteEmailsUI = null
     umeetReducer.createData = null
+    umeetReducer.question = {}
     setNoCreateEvent(false)
     setCreateEvent(true)
     setEditMyEvent(false)

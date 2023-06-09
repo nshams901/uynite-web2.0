@@ -11,67 +11,8 @@ import { useDispatch } from "react-redux";
 import {
   searchByCountryInUmeet,
   searchByStateInUmeet,
+  getStatesByCountry
 } from "../../../../../redux/actionCreators/umeetActionCreator";
-
-const CountryList = [
-  "India",
-  "United States",
-  "South Africa",
-  "Panama",
-  "Japan",
-  "Pakistan",
-  "India",
-  "United States",
-  "South Africa",
-  "Panama",
-  "Japan",
-  "Pakistan",
-];
-
-const StateList = [
-  "Tamilnadu",
-  "Punjab",
-  "South Africa",
-  "Panama",
-  "Japan",
-  "Pakistan",
-  "India",
-  "United States",
-  "South Africa",
-  "Panama",
-  "Japan",
-  "Pakistan",
-];
-
-const LoksabhaList = [
-  "Loksabha",
-  "United States",
-  "South Africa",
-  "Panama",
-  "Japan",
-  "Pakistan",
-  "India",
-  "United States",
-  "South Africa",
-  "Panama",
-  "Japan",
-  "Pakistan",
-];
-
-const AssemblyList = [
-  "Assembly",
-  "United States",
-  "South Africa",
-  "Panama",
-  "Japan",
-  "Pakistan",
-  "India",
-  "United States",
-  "South Africa",
-  "Panama",
-  "Japan",
-  "Pakistan",
-];
 
 const AddDataList = ["State", "Loksabha", "Assembly"];
 const PublicDataList = ["State", "District"]
@@ -115,7 +56,8 @@ const PoliticalGuestAddModal = ({ onClose, whichType }) => {
   };
 
   useEffect(() => {
-    dispatch(getCountryList());
+    dispatch(getCountryList())
+    dispatch(getStatesByCountry())
   }, [])
 
   const onHandleCountrySelection = async () => {

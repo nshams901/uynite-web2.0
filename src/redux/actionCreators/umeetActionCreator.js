@@ -322,7 +322,7 @@ export const searchByCountryInUmeet = (country) => async (dispatch) => {
     const response = await axios.get(
       `https://web.uynite.com/profile/api/profile/searchcountry/${country}`
     );
-    console.log("aaaaaaaaaaaa", response);
+    console.log(response, "earchByCountryInUmeet");
     dispatch({
       type: "",
       payload: response.data,
@@ -339,7 +339,7 @@ export const searchByStateInUmeet = (coutrycode) => async (dispatch) => {
     const response = await axios.get(
       `https://web.uynite.com/profile/api/country/getstate/${coutrycode}`
     );
-    console.log("asdsadasas", response);
+    console.log(response, 'searchByStateInUmeet');
     dispatch({
       type: "ADD_GUEST_BY_STATE",
       payload: response?.data,
@@ -495,3 +495,29 @@ export const getReunionTemplates = (data) => async (dispatch) => {
     throw error;
   }
 };
+
+export const handleCreateQuestionUI = (data) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "CREATE_QUESTION_UI",
+      payload: data,
+    })
+  } catch (error) {
+    console.log(error)
+  }
+};
+
+export const getStatesByCountry = (data) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+       `https://web.uynite.com/api/user/country/getstate/2`
+    );
+    console.log(response.data, "states dude");
+    dispatch({
+      type: "GET_STATES_BY_COUNTRY",
+      payload: response.data,
+    });
+  } catch (error) {
+    throw error;
+  }
+}; 

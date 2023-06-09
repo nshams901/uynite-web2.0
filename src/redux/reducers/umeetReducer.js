@@ -14,6 +14,7 @@ const initialState = {
   emailSendSuccess: false,
   inviteEmailsUI: null,
   createData: null,
+  question: null
 };
 
 const umeetReducer = (state = initialState, action) => {
@@ -55,11 +56,12 @@ const umeetReducer = (state = initialState, action) => {
           return { ...state, emailSendSuccess: true}
         }
       case "SEND_INVITE_EMAIL_UI":
-        console.log(action.payload)
         return {...state, inviteEmailsUI: action.payload}
       case "CREATE_DATA_UI":
-        console.log(action.payload)
         return { ...state, createData: action.payload }
+      case "CREATE_QUESTION_UI":
+        console.log(action.payload)
+        return { ...state, question: action.payload }
       default:
         return state;
     }

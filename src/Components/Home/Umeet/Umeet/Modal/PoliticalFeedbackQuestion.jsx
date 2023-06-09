@@ -1,6 +1,8 @@
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { MdKeyboardArrowRight } from 'react-icons/md'
 import { useState } from 'react'
+import { handleCreateQuestionUI } from "../../../../../redux/actionCreators/umeetActionCreator";
+import { useDispatch } from 'react-redux'
 
 const PoliticalFeedbackQuestion = ({ onClose }) => {
   const [inputValue, setInputValue] = useState('')
@@ -13,6 +15,16 @@ const PoliticalFeedbackQuestion = ({ onClose }) => {
   const [characterCount2, setCharacterCount2] = useState(0)
   const [characterCount3, setCharacterCount3] = useState(0)
   const [characterCount4, setCharacterCount4] = useState(0)
+
+  const dispatch = useDispatch()
+
+  const ques = {
+    question: inputValue,
+    option1: inputValue1,
+    option2: inputValue2,
+    option3: inputValue3,
+    option4: inputValue4,    
+  }
 
   const handleInputChange = (event) => {
     const input = event.target.value;
@@ -68,6 +80,11 @@ const PoliticalFeedbackQuestion = ({ onClose }) => {
       setCharacterCount4(85);
     }
   };
+
+  const handleQuestion = ()=>{
+    dispatch(handleCreateQuestionUI(ques))
+    onClose()
+  }
 
   return (
     <div className='absolut fixed top-0 left-0 h-full w-full flex justify-center items-center' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
@@ -131,7 +148,7 @@ const PoliticalFeedbackQuestion = ({ onClose }) => {
       </section>  
 
       <section className='w-full mx-'>
-         <button className='py-2.5 my-2 text-[17px] w-full rounded-lg text-white font-semibold bg-[#649B8E] '>Done</button>
+         <button onClick={handleQuestion} className='py-2.5 my-2 text-[17px] w-full rounded-lg text-white font-semibold bg-[#649B8E] '>Done</button>
       </section> 
      </div>
     </div>
