@@ -2,8 +2,6 @@ import { MdOutlineMusicNote } from "react-icons/md";
 import { TiArrowBack } from "react-icons/ti";
 import { AiFillHeart } from "react-icons/ai";
 import { IoSend } from "react-icons/io5";
-import profile from "../../../Assets/Images/Person.jpg";
-import profile2 from "../../../Assets/Images/bg2.jpg";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
 import { useState } from "react";
@@ -13,6 +11,7 @@ import TypeMessage from "../../chat/TypeMessage";
 import {
   addCommentOnKicks,
   addCommentReplyOnKicks,
+  commentLiked,
   getCommentsByPostid,
   getCommentsReplyByPostid,
 } from "../../../redux/actionCreators/kicksActionCreator";
@@ -27,6 +26,7 @@ import {
 } from "../../../redux/actionCreators/rootsActionCreator";
 import { useNavigate } from "react-router-dom";
 import user from "../../../Assets/Images/user.png";
+import liked from '../../../Assets/Images/kicksLike.png'
 
 export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
   const dispatch = useDispatch();
@@ -47,7 +47,6 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
   const { commentImage, imgFile, alert, msgText } = state;
   const [openInput, setOpenInput] = useState(false);
   const [id, setid] = useState("");
-
   const openReplyModal = (id) => {
     setOpenInput(true);
     setid(id);
@@ -116,7 +115,7 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
         postid: activePost?.id,
         profileid: profile?.id,
         text: msgText,
-        image: imgPath.path
+        image: imgPath?.path
       };
       if (roots) {
         const params = {
@@ -136,7 +135,6 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
       } else {
         dispatch(addCommentOnKicks(commentData))
           .then((res) => {
-            console.log(res);
             if (res?.status) {
               dispatch(getCommentsByPostid(activePost?.id));
             } else {
@@ -151,7 +149,22 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
     }
   };
 
-  const handleLike = (itemId) => {};
+  const handleLike = (itemId, dislike) => {
+    const payload = {
+      datetime: new Date().getTime(),
+      postid: itemId,
+      profileid: profile.id,
+      type: "c"
+    }
+    if(dislike) {
+
+    }else
+    dispatch(commentLiked(payload)).then(res => {
+      if(res?.status){
+        dispatch(getCommentsByPostid(activePost?.id));
+      }
+    })
+  };
   const handleEmojiClick = (emoji) => {
     console.log(emoji);
     setState({ ...state, msgText: msgText + emoji.emoji });
@@ -164,6 +177,12 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
     const file = URL.createObjectURL(e.target.files[0]);
     setState({ ...state, commentImage: file, imgFile: e.target.files[0] });
   };
+
+  const isLiked = (likes) => {
+    const data = likes?.find(item => item?.profileid === profile?.id);
+    if(data) return true;
+    else return false;
+  }
 
   return (
     <section
@@ -198,7 +217,7 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                 <>
                   <div key={id} className="my-2 flex items-center z-50 ">
                     <div className="w-1/6 flex justify-center cursor-pointer"
-                     onClick={() => navigate(`/profile/${profile?.id}`)}>
+                      onClick={() => navigate(`/profile/${profile?.id}`)}>
                       <img
                         src={profile?.pimage}
                         className="w-12 h-12 border border-gray-500 rounded-full object-cover"
@@ -223,7 +242,7 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                       </div>
                       <div className="flex justify-between items-end">
                         <span className="text-[14px]">{text}
-                        { image ? <img className="w-24" src={ image } /> : ""}
+                          {image ? <img className="w-24" src={image} /> : ""}
                         </span>
                         <div className="text-[11px]">
                           <span className="px-1">
@@ -236,10 +255,14 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                     {/* <input type="text" /> */}
 
                     <div className="w-1/6 pl-2 text-[#666666]">
+                    {
+                      isLiked(likecount) ? 
+                      <img className="w-6 cursor-pointer" src={liked} onClick={() => handleLike(id, "dislike")} /> :
                       <AiFillHeart
-                        className="text-2xl"
+                        className="text-2xl cursor-pointer"
                         onClick={() => handleLike(id)}
                       />
+                    }
                       <TiArrowBack
                         className="text-2xl cursor-pointer"
                         onClick={() => openReplyModal(id)}
@@ -345,7 +368,7 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                 <AiOutlineCloseCircle
                   onClick={() => setOpenInput(false)}
                   className="w-7 h-7 text-gray-700 cursor-pointer mr-4"
-                  // className="w-7 h-7 text-gray-700 cursor-pointer mr-4 absolute right-[-3%] bottom-3"
+                // className="w-7 h-7 text-gray-700 cursor-pointer mr-4 absolute right-[-3%] bottom-3"
                 />
               </div>
             </div>

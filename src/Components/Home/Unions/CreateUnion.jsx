@@ -18,7 +18,7 @@ const CreateUnion = () => {
   });
   const { profile } = reducerData
   const onCreateUnion = () => {
-    if(createUnion?.length < 4){
+    if(createUnion?.length < 3){
       toast.error("Please enter minimum three character")
     }else{
       const payload = {

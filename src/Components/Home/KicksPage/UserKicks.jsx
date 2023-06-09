@@ -28,7 +28,11 @@ const UserKicks = () => {
                             return (
                                 <div className='w-1/2 p-3 md:w-1/3 h-60' key={item?.id}>
                                     <div className='h-full bg-black cursor-pointer'>
-                                        <img src={item?.image} className='h-full m-auto'/>
+                                        { item?.image ? 
+                                        <img src={item.image} className='h-full m-auto'/>
+                                        :
+                                        <video className='h-full m-auto' src={item.video}></video>
+                                        }
                                     </div>
                                 </div>
                         )

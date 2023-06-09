@@ -25,7 +25,7 @@ import shortVideo from "../../../../Assets/Videos/v1.mp4";
 import user from "../../../../Assets/Images/user.png";
 import "../kicks.css";
 import { useEffect } from "react";
-import { debounce } from "../../../Utility/utility";
+import { debounce, getTimeDiff } from "../../../Utility/utility";
 import { GrWaypoint } from "react-icons/gr";
 import { unfollow } from "../../../../redux/actionCreators/friendsAction";
 import { select } from "@material-tailwind/react";
@@ -94,7 +94,8 @@ const VideoComponent = ({ dataList, data }) => {
     viptype,
     profileid,
     utcategory,
-    isFollow
+    isFollow,
+    postdatetime
   } = data;
   
   const name = profile?.fname + profile?.lname;
@@ -366,7 +367,7 @@ const VideoComponent = ({ dataList, data }) => {
               <span className="px-3 py-[2px] border-white p-1 text-[10px] rounded-lg bg-white text-slate-400 mr-4">
                 {utcategory}
               </span>
-              <span className="text-[10px] font-medium">5 hours ago</span>
+              <span className="text-[10px] font-medium">{getTimeDiff(moment(postdatetime, 'x'))} ago</span>
             </div>
           </div>
         </div>

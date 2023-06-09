@@ -25,6 +25,7 @@ function Autocomplete({ livePlace, placeholder, value, types, handleChangeLocati
   function onPlacesChanged (value){
     const place = searchBox.getPlaces()
     // console.log(place?.[0]?.formatted_address, "PPPPPP LLLLLLLLL");
+    console.log(place);
     livePlace(place?.[0]?.formatted_address);
   };
     const handleChange = (e) => {

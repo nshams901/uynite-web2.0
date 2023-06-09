@@ -201,7 +201,7 @@ export const removeFriend = (data) => async (dispatch) => {
     );
     dispatch({
       type: "ADD_FRIEND",
-      payload: response.data,
+      payload: response.data, 
     });
     return response.data;
   } catch (err) {
@@ -234,7 +234,7 @@ export const removeFollowers = (data) => async (dispatch) => {
       data
     );
     dispatch({
-      type: "ADD_FRIEND",
+      type: "REMOVE_FOLLOWER",
       payload: response.data,
     });
     return response.data;

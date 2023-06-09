@@ -305,3 +305,18 @@ export const getUserKickList = (frienduserid, userid = "") => async (dispatch) =
     throw error;
   }
 };
+
+export const commentLiked = (data) => async (dispatch) => {
+  try {
+    const response = await axios.post(
+      `https://web.uynite.com/instance/api/instancelike/add`, data
+    );
+    dispatch({
+      type: "COMMENT_LIKED",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
