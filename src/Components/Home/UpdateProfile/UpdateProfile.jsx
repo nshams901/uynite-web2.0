@@ -389,7 +389,7 @@ const UpdateProfile = () => {
                         handleChange(e.target.name, e.target.value),
                       type: "date",
                       placeholder: "",
-                      value: dob,
+                      value: dob ? dob : null,
                     }}
                   />
                 </div>

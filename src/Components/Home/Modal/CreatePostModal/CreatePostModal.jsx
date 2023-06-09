@@ -126,7 +126,7 @@ const CreatePostModal = ({
   }
 
   const unions = myUnionList.map((item) => {
-    return { name: item?.groupName };
+    return { name: item?.groupName, icon: home };
   });
   const postPrivacyList = isPersonal
     ? [...privacyList, ...unions]
