@@ -320,3 +320,18 @@ export const commentLiked = (data) => async (dispatch) => {
     throw error;
   }
 };
+
+export const commentPostLiked = (data) => async (dispatch) => {
+  try {
+    const response = await axios.post(
+      `https://web.uynite.com/post/api/like/add`, data
+    );
+    dispatch({
+      type: "COMMENT_LIKED",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

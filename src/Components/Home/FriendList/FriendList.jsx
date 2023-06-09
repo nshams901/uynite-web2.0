@@ -153,7 +153,7 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
       profileid: profile?.id,
       relative: relations.includes("Relative"),
       reqdatetime: new Date().valueOf(),
-      requesttype: "Send",
+      requesttype: "Change",
       userid: "63a67001a01d8442b1348496",
     };
 

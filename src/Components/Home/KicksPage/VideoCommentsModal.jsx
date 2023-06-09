@@ -12,6 +12,7 @@ import {
   addCommentOnKicks,
   addCommentReplyOnKicks,
   commentLiked,
+  commentPostLiked,
   getCommentsByPostid,
   getCommentsReplyByPostid,
 } from "../../../redux/actionCreators/kicksActionCreator";
@@ -155,6 +156,16 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
       postid: itemId,
       profileid: profile.id,
       type: "c"
+    }
+    let params ={
+      pageNumber: 0,
+      pageSize: 10
+    }
+    if(roots){
+       dispatch(commentPostLiked(payload)).then(res => {
+        dispatch(getCommentByPostid(activePost?.id, params))
+       })
+      return;
     }
     if(dislike) {
 
