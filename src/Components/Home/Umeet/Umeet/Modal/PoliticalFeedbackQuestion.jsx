@@ -3,6 +3,71 @@ import { MdKeyboardArrowRight } from 'react-icons/md'
 import { useState } from 'react'
 
 const PoliticalFeedbackQuestion = ({ onClose }) => {
+  const [inputValue, setInputValue] = useState('')
+  const [inputValue1, setInputValue1] = useState('')
+  const [inputValue2, setInputValue2] = useState('')
+  const [inputValue3, setInputValue3] = useState('')
+  const [inputValue4, setInputValue4] = useState('')
+  const [characterCount, setCharacterCount] = useState(0)
+  const [characterCount1, setCharacterCount1] = useState(0)
+  const [characterCount2, setCharacterCount2] = useState(0)
+  const [characterCount3, setCharacterCount3] = useState(0)
+  const [characterCount4, setCharacterCount4] = useState(0)
+
+  const handleInputChange = (event) => {
+    const input = event.target.value;
+    if (input.length <= 200) {
+      setInputValue(input);
+      setCharacterCount(input.length);
+    } else {
+      setInputValue(input.slice(0, 200));
+      setCharacterCount(200);
+    }
+  };
+
+  const handleInputChange1 = (event) => {
+    const input = event.target.value;
+    if (input.length <= 85) {
+      setInputValue1(input);
+      setCharacterCount1(input.length);
+    } else {
+      setInputValue1(input.slice(0, 85));
+      setCharacterCount1(85);
+    }
+  };
+
+  const handleInputChange2 = (event) => {
+    const input = event.target.value;
+    if (input.length <= 85) {
+      setInputValue2(input);
+      setCharacterCount2(input.length);
+    } else {
+      setInputValue2(input.slice(0, 85));
+      setCharacterCount2(85);
+    }
+  };
+
+  const handleInputChange3 = (event) => {
+    const input = event.target.value;
+    if (input.length <= 85) {
+      setInputValue3(input);
+      setCharacterCount3(input.length);
+    } else {
+      setInputValue3(input.slice(0, 85));
+      setCharacterCount3(85);
+    }
+  };      
+
+  const handleInputChange4 = (event) => {
+    const input = event.target.value;
+    if (input.length <= 85) {
+      setInputValue4(input);
+      setCharacterCount4(input.length);
+    } else {
+      setInputValue4(input.slice(0, 85));
+      setCharacterCount4(85);
+    }
+  };
 
   return (
     <div className='absolut fixed top-0 left-0 h-full w-full flex justify-center items-center' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
@@ -15,28 +80,53 @@ const PoliticalFeedbackQuestion = ({ onClose }) => {
       <section>
        <div className='relative'>
        	<label className='absolute z-10 text-[10px] left-4 bg-white px-2 font-semibold text-gray-400'>Enter Your Question</label>
-       	<textarea placeholder='What is good in event?' rows='2' className='w-full outline-none my-1 rounded-lg border border-gray-300 p-2'/>
-       	<p className='flex justify-end text-gray-600 text-[10px]'>40/140</p>
+       	<textarea
+         value={inputValue} 
+         onChange={handleInputChange}
+         placeholder='What is good in event?' rows='2' className='w-full outline-none my-1 rounded-lg border border-gray-300 p-2'/>
+        <label className={`${characterCount > 200 ? 'error' : ''} text-xs flex text-gray-600 justify-end`}>
+          {characterCount}/200
+        </label>
        </div>
        <div className='relative'>
        	<label className='absolute z-10 text-[10px] left-4 bg-white px-2 font-semibold text-gray-400'>Option 1*</label>
-       	<input className='w-full outline-none my-1 rounded-lg border border-gray-300 p-2'/>
-       	<p className='flex justify-end text-gray-600 text-[10px]'>40/85</p>
+       	<input
+         value={inputValue1} 
+         onChange={handleInputChange1}
+         className='w-full outline-none my-1 rounded-lg border border-gray-300 p-2'/>
+        <label className={`${characterCount > 200 ? 'error' : ''} text-xs flex text-gray-600 justify-end`}>
+          {characterCount1}/85
+        </label>
        </div>
        <div className='relative'>
        	<label className='absolute z-10 text-[10px] left-4 bg-white px-2 font-semibold text-gray-400'>Option 2*</label>
-       	<input className='w-full outline-none my-1 rounded-lg border border-gray-300 p-2'/>
-       	<p className='flex justify-end text-gray-600 text-[10px]'>40/85</p>
+       	<input
+         value={inputValue2} 
+         onChange={handleInputChange2}
+         className='w-full outline-none my-1 rounded-lg border border-gray-300 p-2'/>
+        <label className={`${characterCount > 200 ? 'error' : ''} text-xs flex text-gray-600 justify-end`}>
+          {characterCount2}/85
+        </label>
        </div>
        <div className='relative'>
        	<label className='absolute z-10 text-[10px] left-4 bg-white px-2 font-semibold text-gray-400'>Option 3 (optional)</label>
-       	<input className='w-full outline-none my-1 rounded-lg border border-gray-300 p-2'/>
-       	<p className='flex justify-end text-gray-600 text-[10px]'>40/85</p>
+       	<input 
+         value={inputValue3} 
+         onChange={handleInputChange3} 
+         className='w-full outline-none my-1 rounded-lg border border-gray-300 p-2'/>
+        <label className={`${characterCount > 200 ? 'error' : ''} text-xs flex text-gray-600 justify-end`}>
+          {characterCount3}/85
+        </label>
        </div>
        <div className='relative'>
        	<label className='absolute z-10 text-[10px] left-4 bg-white px-2 font-semibold text-gray-400'>Option 4 (optional)</label>
-       	<input className='w-full outline-none my-1 rounded-lg border border-gray-300 p-2'/>
-       	<p className='flex justify-end text-gray-600 text-[10px]'>40/85</p>
+       	<input 
+         value={inputValue4} 
+         onChange={handleInputChange4}
+         className='w-full outline-none my-1 rounded-lg border border-gray-300 p-2'/>
+        <label className={`${characterCount > 200 ? 'error' : ''} text-xs flex text-gray-600 justify-end`}>
+          {characterCount4}/85
+        </label>
        </div>                    
       </section>  
 

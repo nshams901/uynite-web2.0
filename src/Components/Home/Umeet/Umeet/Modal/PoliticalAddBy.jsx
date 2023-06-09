@@ -22,7 +22,7 @@ export default function PoliticalAddBy({ onClose, whichBy, selectBy }) {
     setAddEmail("")
     console.log("emailData", emailData);
   };
-
+console.log(whichBy)
   const onAddInvitesClick = () => {
     if (addByMail) {
       dispatch(allEmailInvites(emailData));
@@ -45,7 +45,7 @@ export default function PoliticalAddBy({ onClose, whichBy, selectBy }) {
             addByMail ? "bg-[#649b8e] text-white" : ""
           } border text-[#649b8e] w-1/2 cursor-pointer flex justify-center rounded-lg mx-1 border-[#649b8e] px-1 py-1`}
         >
-          Add By Email
+          Add By Phone/Email
         </span>
       </div>
 
@@ -66,6 +66,16 @@ export default function PoliticalAddBy({ onClose, whichBy, selectBy }) {
               Add
             </button>
           </div>
+
+          <div className='flex items-center pb-3 border-b border-gray-300'>  
+           <select className='bg-gray-200 mr-2 outline-none h-9 rounded-lg px-2 border border-gray-200'>          
+            <option>+91</option>
+            <option>USA</option>
+           </select>      
+          <input className='w-full outline-none bg-gray-200 border border-gray-200 rounded-lg h-9 pl-1' placeholder='9879867543' />
+          <button className='px-4 py-1.5 text-sm rounded-md text-white ml-1 border bg-[#649B8E]'>Add</button>
+         </div>
+
           {emailList?.map((email) => (
             <div>{email?.umail}</div>
           ))}
