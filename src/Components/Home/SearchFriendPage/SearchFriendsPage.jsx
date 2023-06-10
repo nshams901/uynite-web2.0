@@ -26,7 +26,7 @@ import { getMyUnion } from "../../../redux/actionCreators/unionActionCreator";
 import { startFollowing } from "../../../redux/actionCreators/profileAction";
 
 const SearchFriendsPage = ({ isFriend }) => {
-  const isPersonal = true;
+ 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -41,7 +41,7 @@ const SearchFriendsPage = ({ isFriend }) => {
   });
   const { userList, profile, requestList, unionList, mutualFriend } =
     reducerData;
-
+    const isPersonal = profile?.profiletype === 'Personal'
   const options = useMemo(async () => {
     await dispatch(getMyUnion(profile?.id));
     const union = unionList.map((item) => ({
@@ -49,6 +49,7 @@ const SearchFriendsPage = ({ isFriend }) => {
       key: item.groupId,
       union: true
     }));
+
     const forPersonalAcc = [
       { name: "Friends", key: "friend", checked: true, disable: true },
       { name: "Relative", key: "relative", checked: false },
@@ -60,12 +61,8 @@ const SearchFriendsPage = ({ isFriend }) => {
       { name: "Friend", key: "friend", checked: true, disable: true },
       ...union,
     ];
-    return {
-      relationOption: isPersonal ? forPersonalAcc : forOrgAcc,
-    };
+    setState({...state, relationOptions: isPersonal ? forPersonalAcc: forOrgAcc})
   }, []);
-
-  const { relationOption } = options;
 
   const [sendRequest, setSendRequest] = useState(false);
   const [state, setState] = useState({ usersList: userList || []});
@@ -75,7 +72,7 @@ const SearchFriendsPage = ({ isFriend }) => {
     requestModal,
     activeProfile,
     loading,
-    relationOptions = relationOption,
+    relationOptions,
     cancelModal,
     usersList 
   } = state;
@@ -112,7 +109,7 @@ const SearchFriendsPage = ({ isFriend }) => {
       item.checked ? item.key : false
     );
     const userCredential = JSON.parse(localStorage.getItem('userCredential'));
-
+    console.log(data.some((item) => item?.key === 'classmate'), data);
     const group = data?.filter((item) => item.union)
     let payload = {
       // private String friendtype;
@@ -136,9 +133,9 @@ const SearchFriendsPage = ({ isFriend }) => {
       requesttype: "Send",
       isFriend: "true",
       
-      classment: data.some((item) => item?.key === 'classmate'),
-      collgues: data.some((item) => item?.key === 'officemate'),
-      relative: data.some((item) => item?.key === 'relative'),
+      classment: data.includes("classmate"),
+      collgues: data.includes("officemate"),
+      relative: data.includes("relative"),
 
       isFriend: true,
       party: "",
@@ -248,7 +245,6 @@ const SearchFriendsPage = ({ isFriend }) => {
     });
   };
 
-  console.log( activeProfile, "{{{{{{{{{{{{{{{{}}}}}}}}}}}}")
   return (
     <>
       <div className="w-[100%] mt-2 flex-1 bg-[#E4E7EC] flex justify-center py-2 ">

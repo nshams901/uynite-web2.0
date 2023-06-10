@@ -201,7 +201,7 @@ export const removeFriend = (data) => async (dispatch) => {
     );
     dispatch({
       type: "ADD_FRIEND",
-      payload: response.data,
+      payload: response.data, 
     });
     return response.data;
   } catch (err) {
@@ -234,7 +234,7 @@ export const removeFollowers = (data) => async (dispatch) => {
       data
     );
     dispatch({
-      type: "ADD_FRIEND",
+      type: "REMOVE_FOLLOWER",
       payload: response.data,
     });
     return response.data;
@@ -251,6 +251,22 @@ export const getTypeOfFriends = (profileid) => async (dispatch) => {
     console.log("GET_TYPE_OF_FRIENDS", response);
     dispatch({
       type: "GET_TYPE_OF_FRIENDS",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const checkFollow = (userprofile, friendprofile) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `https://web.uynite.com/friend/api/follow/followyesno/${userprofile}/${friendprofile}`,
+    );
+    dispatch({
+      type: "KICKS_SEARCH_BY_TEXT",
       payload: response.data,
     });
     return response.data;

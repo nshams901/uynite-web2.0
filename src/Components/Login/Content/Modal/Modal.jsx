@@ -4,7 +4,6 @@ import Dropdown2 from "./Dropdown2";
 import Input from "../InputBox/Input";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { TbPhotoPlus } from "react-icons/tb";
-import User from "../../../../../public/images/user2.png";
 import user from "../../../../Assets/Images/user.png"
 import {
   createProfile,
@@ -310,7 +309,7 @@ const Modal = ({ modalType, handleClose }) => {
                       "w-full h-full"
                       // "w-[10rem] h-[10rem] sm:w-[13rem] sm:h-[13rem] lg:w-[14rem] lg:h-[14rem] xl:w-[15rem] xl:h-[15rem] mx-auto relative rounded-full block"
                     }
-                    src={User}
+                    src={user}
                   />
                 )}
               </label>

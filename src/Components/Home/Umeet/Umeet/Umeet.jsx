@@ -19,7 +19,8 @@ import PoliticalGuestAddModal from './Modal/PoliticalGuestAddModal'
 import PoliticalFeedbackQuestion from './Modal/PoliticalFeedbackQuestion'
 import PersonalOtherGuest from './Modal/PersonalOtherGuest'
 import ViewFeedbacks from './Modal/ViewFeedbacks'
-import { getEventByProfileid, getAllInvitedEvents, getEventDetails } from "../../../../redux/actionCreators/umeetActionCreator"
+import { getEventByProfileid, getAllInvitedEvents, 
+getEventDetails } from "../../../../redux/actionCreators/umeetActionCreator"
 import { useDispatch, useSelector } from 'react-redux'
 import AddPeopleModal from './Modal/AddPeopleModal'
 import AddByContactModal from './Modal/AddByContactModal'
@@ -40,7 +41,11 @@ export default function Umeet(){
   const [eventSuccess, setEventSuccess] = useState(false)
   const [selectEventType, setSelectEventType] = useState([])
   const [singleEvent, setSingleEvent] = useState('')
+  const [templateSelected, setTemplateSelected] = useState('')
+  const [selectedImage, setSelectedImage] = useState(null)
+  const [selectedImgFile, setSelectedImgFile] = useState(null)
 
+  {/* modals related states*/}
   const [showRvspModal, setShowRvspModal] = useState(false)
   const [showTemplate, setShowTemplate] = useState(false)
   const [showAddGroup, setShowAddGroup] = useState(false)
@@ -52,7 +57,7 @@ export default function Umeet(){
   const [showAddByContactModal, setShowAddByContactModal] = useState(false)
   const [reunionModal, setReunionModal] = useState(true)
 
-  const [isInvitedAll, setIsInvitedAll] = useState('Events')
+  const [isInvitedAll, setIsInvitedAll] = useState('All Events')
 
   const [state, setState] = useState({})
   const { templateImage }  = state
@@ -92,7 +97,12 @@ export default function Umeet(){
               handlePersonalOtherModal={()=>setShowAddGroupPersonalOthers(true)}
               handleShowAddPeopleModal={handleShowAddPeopleModal}
               showAddGroup={showAddGroup}
-              reunionModal={reunionModal}              
+              reunionModal={reunionModal}
+              selectedImage={selectedImage}
+              setSelectedImage={setSelectedImage} 
+              selectedImgFile={selectedImgFile} 
+              setSelectedImgFile={setSelectedImgFile}
+              handleSelectedImgFile={(file)=>setSelectedImgFile(file)}            
               />
     }else if(eventCreated){
       return <SuccessCreate handleBothDetails={handleBothDetails}/>
@@ -143,7 +153,7 @@ export default function Umeet(){
     setEventDetails(false)
     setCreateEvent(true)
     setSelectSpecificEvent(false)
-    setSelectedSpecificEvent(false)
+    setSelectedSpecificEvent(false)    
   }
 
   const handleShowAddPeopleModal = ()=>{
@@ -173,13 +183,13 @@ export default function Umeet(){
     dispatch(getEventDetails(id))
   }  
 
-  const handleImageChange = (event) => {
+  const handleImageChange = (data) => {
     if (event.target.files && event.target.files[0]) {
       const image = event.target.files[0];
       setSelectedImage(URL.createObjectURL(image));
-    }
+    }    
   };
-  
+
   const handleSelectEventType = ( data )=>{
     setSelectSpecificEvent(true)
     if(data.title.toLowerCase() == 'personal'){
@@ -195,17 +205,24 @@ export default function Umeet(){
   }
 
   useEffect(() => {    
-    dispatch(getEventByProfileid(profileReducer?.profile?.userid))
-    dispatch(getAllInvitedEvents(profileReducer?.profile?.userid))
+    dispatch(getEventByProfileid(profileReducer?.profile?.id))
+    dispatch(getAllInvitedEvents(profileReducer?.profile?.id))
   }, [])  
 
+  useEffect(()=>{
+    if(editMyEvent){
+      setSelectedImage(umeetReducer?.eventDetail?.eventTemplate)
+    }
+  },[])
   const handleCreateEventForm = (data)=>{
     umeetReducer.inviteEmailsUI = null
     umeetReducer.createData = null
+    umeetReducer.question = {}
     setNoCreateEvent(false)
     setCreateEvent(true)
     setEditMyEvent(false)
     setSelectedSpecificEvent(data.event)
+    setSelectedImage(null)
     if(data.event == 'Party Feedback'){
       setPoliticalPartyFeedback(true)
     }else if(data.event == 'Party Meeting'){
@@ -306,7 +323,6 @@ export default function Umeet(){
         <div className='flex justify-end text-sm items-center my-2 mr-5'>
          <span className='text-gray-600'>view by:</span>
          <select onChange={handleEventSelectChange} value={isInvitedAll} className='h-8 outline-none bg-white mx-2 px-6 rounded border-gray-400 border'>
-          <option>Events</option>
           <option>All Events</option>
           <option>Inprogress Events</option>
           <option>Upcoming Events</option>
@@ -327,7 +343,7 @@ export default function Umeet(){
         handleSingleEventDetail={handleEventDetails}
         isInvitedAll={isInvitedAll}
         handleBothDetails={handleBothDetails}
-        />
+       />
       </div>
      </section>
     )
@@ -368,47 +384,53 @@ export default function Umeet(){
 
      {showDeleteMyEvent && 
       <EventDeleteModal 
-      onClose={()=>setShowDeleteMyEvent(false)} />}
+       onClose={()=>setShowDeleteMyEvent(false)} />}
      {showShareMyEvent && 
       <EventShareModal 
-      onClose={()=>setShowShareMyEvent(false)} />}
+       onClose={()=>setShowShareMyEvent(false)} />}
      {showRvspModal && 
       <RvspModal 
-      onClose={()=>setShowRvspModal(false)} />}
+       onClose={()=>setShowRvspModal(false)} />}
      {showTemplate && 
-      <ChooseTemplate onClose={()=>setShowTemplate(false)} 
-      saveTemplate={handleTemplateImage} 
-      handleImageChange={handleImageChange} />}
+      <ChooseTemplate 
+       onClose={()=>setShowTemplate(false)} 
+       saveTemplate={handleTemplateImage} 
+       handleImageChange={handleImageChange}
+       selectedSpecificEvent={selectedSpecificEvent}
+       setTemplateSelected={(urlid)=>setSelectedImage(urlid)} 
+       handleSelectedImgFile={(file)=>setSelectedImgFile(file)}
+      />}
      {showAddGroup && 
       <AddGuestModal 
-      education={education} 
-      handleEducation={(eduData)=>setEducation(eduData)} 
-      onClose={()=>{setShowAddGroup(false); setReunionModal(false)} }
-      handleShowAddPeopleModal={handleShowAddPeopleModal}
-      showAddPeopleModal={showAddPeopleModal}
-      handlePeopleModalClose={()=>setShowAddPeopleModal(false)} />}
+       education={education} 
+       handleEducation={(eduData)=>setEducation(eduData)} 
+       onClose={()=>{setShowAddGroup(false); setReunionModal(false)} }
+       handleShowAddPeopleModal={handleShowAddPeopleModal}
+       showAddPeopleModal={showAddPeopleModal}
+       handlePeopleModalClose={()=>setShowAddPeopleModal(false)} />}
      {showAddGroupPersonalOthers && 
       <PersonalOtherGuest 
-      handleAddByContactModal={handleAddByContactModal}
-      onClose={()=>setShowAddGroupPersonalOthers(false)} />}
+       handleAddByContactModal={handleAddByContactModal}
+       onClose={()=>setShowAddGroupPersonalOthers(false)} />}
      {showPoliticalAddGroup && 
       <PoliticalGuestAddModal 
-      onClose={()=>setShowPoliticalAddGroup(false)} />}  
+       onClose={()=>setShowPoliticalAddGroup(false)}
+       whichType={whichType} />}  
      {showPoliticalFeedbackQuestionModal && 
       <PoliticalFeedbackQuestion 
-      onClose={()=>setShowPoliticalFeedbackQuestionModal(false)} />}
+       onClose={()=>setShowPoliticalFeedbackQuestionModal(false)} />}
      {showFeedbackModule && 
       <ViewFeedbacks 
-      onClose={()=>setShowFeedbackModule(false)} />}
+       onClose={()=>setShowFeedbackModule(false)} />}
      {showAddPeopleModal && 
       <AddPeopleModal 
-      education={education} 
-      handleAddByContactModal={handleAddByContactModal}
-      showAddByContactModal={showAddByContactModal}
-      handlePeopleModalClose={()=>setShowAddPeopleModal(false)} />}
-      {showAddByContactModal && 
-       <AddByContactModal 
-       onClose={()=>setShowAddByContactModal(false)} />}
+       education={education} 
+       handleAddByContactModal={handleAddByContactModal}
+       showAddByContactModal={showAddByContactModal}
+       handlePeopleModalClose={()=>setShowAddPeopleModal(false)} />}
+     {showAddByContactModal && 
+      <AddByContactModal 
+        onClose={()=>setShowAddByContactModal(false)} />}
     </div>
   )
 }

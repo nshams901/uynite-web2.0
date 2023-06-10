@@ -1,4 +1,10 @@
 import { toast } from "react-toastify";
+import globe from '../../Assets/Images/globe.png';
+import home from '../../Assets/Images/home.png';
+import friend from '../../Assets/Images/friendsIcon.png';
+import union from '../../Assets/Images/unionIcon.png';
+// import relative from '../'
+import moment from "moment";
 
 // Showing Toast Message
 export const toasterFunction = (message) => {
@@ -61,4 +67,21 @@ export function debounce(func, timeout = 1200) {
       func.apply(this, args);
     }, timeout);
   };
+}
+
+
+export const getPrivacy = (relation) => {
+  const obj = {
+    Public: globe,
+    Relatives: home,
+    Friends: friend,
+  }
+  return obj[relation] || union
+}
+
+export const getTimeDiff = (startDate, endDate = new Date().getTime()) => {
+    let moment1 = moment(startDate);
+    let moment2 = moment(endDate);
+    let duration = moment.duration(moment1.diff(moment2));
+    return duration.humanize()
 }

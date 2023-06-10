@@ -240,3 +240,98 @@ export const getCategoryList = (data) => async (dispatch) => {
     throw error;
   }
 };
+
+
+
+export const getKicksByText = (data, id) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `https://web.uynite.com/instance/api/instancepost/searchkikstext/${id}/${data}`,
+    );
+    dispatch({
+      type: "KICKS_SEARCH_BY_TEXT",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getKicksByTag = (data, id) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `https://web.uynite.com/instance/api/instancetag/searchtags/${data}`,
+    );
+    dispatch({
+      type: "KICKS_SEARCH_BY_TAG",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getProfileList = (data, id) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `https://web.uynite.com/profile/api/profile/search/${id}/${data}`,
+    );
+    dispatch({
+      type: "GET_PROFILE_LIST",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getUserKickList = (frienduserid, userid = "") => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `https://web.uynite.com/instance/api/instancepost/getallmyposts/${frienduserid}/${userid}`,
+    );
+    dispatch({
+      type: "GET_USER_KICKS",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const commentLiked = (data) => async (dispatch) => {
+  try {
+    const response = await axios.post(
+      `https://web.uynite.com/instance/api/instancelike/add`, data
+    );
+    dispatch({
+      type: "COMMENT_LIKED",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const commentPostLiked = (data) => async (dispatch) => {
+  try {
+    const response = await axios.post(
+      `https://web.uynite.com/post/api/like/add`, data
+    );
+    dispatch({
+      type: "COMMENT_LIKED",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

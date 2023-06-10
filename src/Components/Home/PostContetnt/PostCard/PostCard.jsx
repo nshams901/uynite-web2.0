@@ -40,6 +40,7 @@ import { blockUser } from "../../../../redux/actionCreators/settingsActionCreato
 import moment from "moment";
 import ConfirmationModal from "../../../common/ConfirmationModal";
 import { BsThreeDots } from "react-icons/bs";
+import { getPrivacy, getTimeDiff } from "../../../Utility/utility";
 
 const PostCard = ({ userData, item = {} }) => {
   const navigate = useNavigate();
@@ -300,6 +301,7 @@ const PostCard = ({ userData, item = {} }) => {
                 ) : (
                   ""
                 )}
+                <span><img className="w-5" src={getPrivacy(item?.shareto)}/></span>
                 <span className="text-[11px] ">
                   {item?.updatpostdatetime === null ||
                   item?.updatpostdatetime === ""
@@ -307,6 +309,7 @@ const PostCard = ({ userData, item = {} }) => {
                     : moment(item?.updatpostdatetime, "x").format(
                         "DD MMM, YYYY"
                       )}
+                  {getTimeDiff( moment(item.createdatetime))} ago
                 </span>
 
                 {/* <img

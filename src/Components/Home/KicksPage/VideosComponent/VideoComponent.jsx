@@ -14,9 +14,10 @@ import {
   addLikes,
   deletePostLike,
   getCommentsByPostid,
+  getUserKickList,
 } from "../../../../redux/actionCreators/kicksActionCreator";
 import moment from "moment/moment";
-import { startFollowing } from "../../../../redux/actionCreators/profileAction";
+import { checkFollowing, startFollowing } from "../../../../redux/actionCreators/profileAction";
 import { toast } from "react-toastify";
 import SelectedVideoModal from "../../SearchKicksPage/SelectedVideoModal";
 import { HiPlus } from "react-icons/hi";
@@ -24,15 +25,17 @@ import shortVideo from "../../../../Assets/Videos/v1.mp4";
 import user from "../../../../Assets/Images/user.png";
 import "../kicks.css";
 import { useEffect } from "react";
-import { debounce } from "../../../Utility/utility";
+import { debounce, getTimeDiff } from "../../../Utility/utility";
 import { GrWaypoint } from "react-icons/gr";
 import { unfollow } from "../../../../redux/actionCreators/friendsAction";
 import { select } from "@material-tailwind/react";
 import { blockUser } from "../../../../redux/actionCreators/settingsActionCreator";
 import kicksLiked from '../../../../Assets/Images/kicksLike.png'
-
+import { useNavigate } from "react-router-dom";
+import follow from '../../../../Assets/Images/Kicks Follow.png'
 const VideoComponent = ({ dataList, data }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const reducerData = useSelector((state) => {
     return {
       profileDetail: state.profileReducer.profile,
@@ -90,6 +93,9 @@ const VideoComponent = ({ dataList, data }) => {
     viewcount,
     viptype,
     profileid,
+    utcategory,
+    isFollow,
+    postdatetime
   } = data;
   
   const name = profile?.fname + profile?.lname;
@@ -102,6 +108,7 @@ const VideoComponent = ({ dataList, data }) => {
     setShowOwnVideoModal(false);
     setEditVideo(true);
   };
+
 
   const handleIsMyVideo = (data) => {
     // console.log(data)
@@ -133,7 +140,6 @@ const VideoComponent = ({ dataList, data }) => {
     } else if (title === "likes") {
       // console.log("isliked", likecount)
       if (isliked) {
-        console.log("likes is called", id)
         dispatch({ type: "REMOVE_LIKE", payload: id });
         const payload = {
           postid: id,
@@ -167,25 +173,25 @@ const VideoComponent = ({ dataList, data }) => {
         });
       }
     } else if (title === "follow") {
-      const payload = {
-        myprofileid: profileDetail?.id,
-        followerprofileid: profileid,
-        datetimes: moment().format("YYYY-MM-DD"),
-      };
-      console.log("");
-      dispatch(startFollowing(payload))
-        .then((res) => {
-          title === "unfollo";
-          console.log("followed success", res);
-          // if (res?.status) {
-          //   toast.success(res?.message)
-          // } else {
-          //   toast.error(res?.message)
-          // }
-        })
-        .catch((err) => {
-          console.log("followed denyed", err);
-        });
+      if(isFollow){
+        dispatch(unfollow({profileid: profileDetail?.id, friendprofileid: profile.id}));
+        dispatch({ type: "UNFOLLOW", payload: id});
+      }else {
+        const payload = {
+          myprofileid: profileDetail?.id,
+          followerprofileid: profileid,
+          datetimes: moment().format("YYYY-MM-DD"),
+        };
+        dispatch({ type: "START_FOLLOW", payload: id});
+        dispatch(startFollowing(payload))
+          .then((res) => {
+            title === "unfollow";
+            console.log("followed success", res);
+          })
+          .catch((err) => {
+            console.log("followed denied", err);
+          });
+      }
     } else if (title === "unfollow") {
       const payload = {
         profileid: profileDetail?.id,
@@ -196,8 +202,13 @@ const VideoComponent = ({ dataList, data }) => {
           console.log("unfollowed success", res);
         })
         .catch((err) => {
-          console.log("unfollowed denyed", err);
+          console.log("unfollowed denied", err);
         });
+    } else if(title === 'collection'){
+      const friendprofileid = profile?.id
+      const userprofileid= profileDetail?.id;
+      navigate(`/user-kicks/${friendprofileid}`)
+      dispatch(getUserKickList(userprofileid, friendprofileid))
     }
   };
 
@@ -251,18 +262,17 @@ const VideoComponent = ({ dataList, data }) => {
 
 
   const handleCreateKicksPost = () => {
-    console.log('KKKKKKKKK');
     setState({...state, createKickPost: true})
   }
 
-  console.log(createKickPost);
+  // console.log(isFollow());
   return (
-    <div key={profile?.id} className="snap-y snap-mandatory">
-      <div className="">
-        <section className="relative snap-y snap-mandatory justify-center flex items-center bg-black hideScroll right-0  left-0 h-1/2 w-full z-0">
-          <div className="video-cards">
+    <div key={profile?.id} className="snap-y w-3/4 md:w-1/2 snap-mandatory">
+      <div className="h-full">
+        <section className="relative h-full snap-y snap-mandatory justify-center flex items-center bg-black hideScroll right-0  left-0 w-full z-0">
+          <div className="video-cards w-full h-full">
             <video
-              className={`video-player cursor-pointer ${
+              className={`video-player w-full cursor-pointer ${
                 isMobile ? "w-full h-[386px]" : ""
               }`}
               loop={true}
@@ -270,16 +280,14 @@ const VideoComponent = ({ dataList, data }) => {
               muted={isMute}
               ref={vidRef}
               onClick={onVideoClick1}
-              // src={video}
-              src={shortVideo}
+              src={video}
+              // src={shortVideo}
             >
-              {/* <source
-                // src={data?.video} type="video/mp4"
-                src={video} type="video/mp4"
-              /> */}
             </video>
 
-            <div className="absolute right-[5%] bottom-[8%]">
+            
+          </div>
+          <div className="">
               {/* <span >
                 <label
                   onClick={() => setSelectVideo(true)}
@@ -288,7 +296,7 @@ const VideoComponent = ({ dataList, data }) => {
                   <HiPlus className="w-8 h-8 p-0.5 bg-[#dd8e58] cursor-pointer rounded-full text-white ml-[52px]" />
                 </label>
               </span> */}
-              <div className="cursor-pointer flex items-end mb-3 gap- font-semibold flex-col">
+              <div className="cursor-pointer ml-3 mb-3 gap- font-semibold">
                 <BsThreeDotsVertical
                   onClick={() => handleIsMyVideo(data)}
                   className="w-[27px] h-[27px] text-white"
@@ -302,18 +310,19 @@ const VideoComponent = ({ dataList, data }) => {
                   <div
                     key={elem?.title}
                     onClick={() => handleIconClick(elem?.title)}
-                    className="flex items-end mb-3 gap- font-semibold flex-col"
+                    className="flex ml-3 mb-3 font-semibold flex-col"
                   >
                     <img
                       src={
                         (elem?.title === "likes" && isliked) ? kicksLiked :
-                        (elem?.title === 'mute' && isMute) ? unmute : elem.img
+                        (elem?.title === 'mute' && isMute) ? unmute :
+                        (elem?.title === 'follow' && isFollow ) ? follow : elem.img
                       }
                       alt=""
                       className="w-[30px] cursor-pointer "
                     />
 
-                    <div className="text-[12px] text-white flex items-center mr-[12px]">
+                    <div className="text-[12px] ml-3">
                       {elem?.title === "likes"
                         ? `${likecount}`
                         : elem?.title === "comments"
@@ -328,11 +337,10 @@ const VideoComponent = ({ dataList, data }) => {
                   onClick={  handleCreateKicksPost}
                   className="z-50 cursor-pointer"
                 >
-                  <HiPlus className="w-8 h-8 p-0.5 bg-[#dd8e58] cursor-pointer rounded-full text-white ml-[52px] z-[" />
+                  <HiPlus className="w-8 h-8 p-0.5 bg-[#dd8e58] cursor-pointer rounded-full text-white ml-3" />
                 </label>
               </span>
             </div>
-          </div>
         </section>
 
         <div
@@ -340,26 +348,26 @@ const VideoComponent = ({ dataList, data }) => {
             isMobile ? "bottom-[100px]" : "bottom-[85px]"
           }`}
         >
-          <div className="">
+          <div className=" cursor-pointer">
             <div className="flex gap-2 items-center mb-3">
               <img src={eye} alt="" className="w-[25px] h-[15px] ml-2" />
               <p className="text-[10px]">{viewcount} Views </p>
             </div>
-            <div className="flex ">
+            <div className="flex " onClick={() => navigate(`/profile/${profileid}`)}>
               <img
                 src={profile?.pimage ? profile?.pimage : user}
                 alt=""
                 className="w-[50px] h-[50px] rounded-full object-cover inline mr-3"
               />
-              <span className="font-semibold flex items-start">
+              <span className="font-semibold flex items-start whitespace-nowrap" onClick={() => navigate(`/profile/${profileid}`)}>
                 {name ? `${profile?.fname} ${profile?.lname}` : "User"}
               </span>
             </div>
             <div className="ml-[53px] mt-[-22px]">
               <span className="px-3 py-[2px] border-white p-1 text-[10px] rounded-lg bg-white text-slate-400 mr-4">
-                Adventures
+                {utcategory}
               </span>
-              <span className="text-[10px] font-medium">5 hours ago</span>
+              <span className="text-[10px] font-medium">{getTimeDiff(moment(postdatetime, 'x'))} ago</span>
             </div>
           </div>
         </div>

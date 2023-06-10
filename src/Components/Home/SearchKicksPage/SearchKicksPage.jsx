@@ -10,8 +10,14 @@ import SelectedVideoModal from './SelectedVideoModal'
 import SearchVideo from './SearchVideo'
 import SearchPeople from './SearchPeople'
 import SearchHastag from './SearchHastag'
+import { useDispatch, useSelector } from "react-redux";
+import { getKicksByTag, getKicksByText, getProfileList } from "../../../redux/actionCreators/kicksActionCreator";
 
 const SearchKicksPage = () => {
+  const dispatch = useDispatch();
+  const { profile } = useSelector((state) => state.profileReducer)
+
+  const { kicksVideoList } = useSelector((state) => state.kicksReducer)
   const [showCategories, setShowCategories] = useState(false)
   const [selectVideo, setSelectVideo] = useState(false)
   const [selectedVideo, setSelectedVideo] = useState(null);
@@ -49,6 +55,12 @@ const SearchKicksPage = () => {
     setHastag(false)
   }
 
+  const handleKicksSearch = (searchText) => {
+    dispatch(getKicksByText(searchText, profile?.id));
+    dispatch(getProfileList(searchText, profile?.id));
+    dispatch(getKicksByTag(searchText, profile?.id))
+  }
+
   const data = [
     { title: "Following" },
     { title: "Latest" },
@@ -61,12 +73,15 @@ const SearchKicksPage = () => {
     else if (hastag) return <SearchHastag />
   }
   return (
-    <div className={`w-full relative flex lg:h-[90vh] xl:h-[90vh]`}>
+    <div className={`w-full relative flex flex-1 lg:h-[90vh] xl:h-[90vh]`}>
       <div className='w-full flex justify-center bg-black'>
         <section className="flex md:w-[42%] w-[92%] col-span-2 flex-col">
           <div className="">
             <div className="flex w-full items-center my-1">
-              <input placeholder="Search by name/keywords/hashtags" type='search' className='w-full mx-2 h-10 rounded-lg outline-none px-2' onFocus={() => setIsFocused(true)} width={95} bgColor="#fff" />
+              <input placeholder="Search by name/keywords/hashtags" type='search' className='w-full h-10 rounded-lg outline-none px-2'
+               onFocus={() => setIsFocused(true)} bgColor="#fff" 
+                onChange={(e) => handleKicksSearch(e.target.value)}
+               />
               <img src={search} alt="" width={50} />
 
               <input type='file' id='chooseVideo' onChange={handleFileSelection} className='hidden' />

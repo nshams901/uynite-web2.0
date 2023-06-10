@@ -23,7 +23,7 @@ const FollowersModal = ({
       <section className=" w-[95%] flex rounded-md flex-col items-center mt-2 h-[350px] overflow-scroll">
         {data?.length ? (
           data?.map((friend) => {
-            const { fname, lname, pimage, id, celibrity } = friend?.profile || friend;
+            const { fname, lname, pimage, id, celibrity } = friend?.profile || friend || {};
             const name = fname + lname;
             return (
               <>

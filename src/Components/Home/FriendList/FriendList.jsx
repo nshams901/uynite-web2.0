@@ -153,7 +153,7 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
       profileid: profile?.id,
       relative: relations.includes("Relative"),
       reqdatetime: new Date().valueOf(),
-      requesttype: "Send",
+      requesttype: "Change",
       userid: "63a67001a01d8442b1348496",
     };
 
@@ -189,6 +189,8 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
       }
     });
   };
+
+  console.log(relations, "?????");
   return (
     <>
       <div className="flex hover:bg-gray-300 h-[50px] px-4 items-center py-2 relative">
@@ -208,13 +210,13 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
           <span className="font-medium ">
             {name ? `${fname} ${lname}` : "User"}
           </span>
-          {desc?.length >0 && (
+          {
             <p className="text-[12px] font-bold text-gray-500">
               {relations.map((item) => {
                 return <span className="mr-1">{item ? `${item}, ` : ""}</span>;
               })}
             </p>
-          )}
+          }
         </Link>
         {icon ? (
           <div>

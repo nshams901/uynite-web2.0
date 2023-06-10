@@ -26,7 +26,7 @@ import mute from "../../../Assets/Images/Mute.png";
 import Messages from "../../../Assets/Images/Messages.png";
 import like from "../../../Assets/Images/KicksBeforeLike.png";
 import share from "../../../Assets/Images/share.png";
-import Collections from "../../../Assets/Images/collection.png";
+import Collections from "../../../Assets/Images/Collections.png";
 import "./kicks.css";
 import { Link, useParams } from "react-router-dom";
 import KicksComment from "./KicksComment";
@@ -36,6 +36,7 @@ import { isEmpty } from "../../Utility/utility";
 import moment from "moment";
 import { BiCategory } from "react-icons/bi";
 import CategoriesModal from "../SearchKicksPage/CategoriesModal";
+import { checkFollowing } from "../../../redux/actionCreators/profileAction";
 
 const Kicks = () => {
   const dispatch = useDispatch();
@@ -47,29 +48,37 @@ const Kicks = () => {
       followingsContent: state.kicksReducer.followingKicks,
       trendingContents: state.kicksReducer.trendingKicks,
       latestContents: state.kicksReducer.latestKicks,
+      getData: state.kicksReducer.getData
     };
   });
 
-  const { profile, followingsContent, trendingContents, latestContents } =
+  const { profile, followingsContent, trendingContents, latestContents, getData } =
     reducerDate;
   const [state, setState] = useState({});
-  const { kicksType = params.segment || "Following" } = state;
+  const { kicksType = params.segment || "Following", videoData =[] } = state;
   const [comments, setComments] = useState(true);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectVideo, setSelectVideo] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
   const [openCat, setOpenCat] = useState(false);
-  const videoData = useMemo(() => {
-    return kicksType === "Following"
+  const kicksList = useMemo(async () => {
+    const data = kicksType === "Following"
       ? followingsContent
       : kicksType === "Trending"
       ? trendingContents
       : kicksType === "Latest"
       ? latestContents
-      : {};
-  }, [kicksType, followingsContent, trendingContents, latestContents]);
+      : [];
 
+    const dataList =await Promise.all(data?.content?.map(async (item) =>{
+      const result = await dispatch(checkFollowing({ownProfileId: profile?.id, othersProfileId: item.profile?.id}))
+      return {...item, isFollow: result.status}
+    })).then((res) => res);
+    setState({...state, videoData: {...data, content: dataList}})
+
+  }, [kicksType, followingsContent, trendingContents, latestContents, getData]);
+console.log(videoData, "JJJJJJJJJ");
   useEffect(() => {
     getKicks("Following");
     window.addEventListener(
@@ -188,7 +197,7 @@ const Kicks = () => {
           </div>
           {/*  */}
           <section
-            className={`video-container w-1/4 mt-[3%] text-white bg-black ${
+            className={`video-container mt-[3%] text-white bg-black ${
               isMobile ? "video-container_mobile" : ""
             }`}
             id="video-container"
@@ -273,14 +282,16 @@ const Kicks = () => {
           id="video-container"
         >
           {isEmpty(videoData?.content) ? (
-            <EmptyComponent
-              message={`There is no video in ${kicksType} section`}
-            />
+            <div className="w-1/3 h-full">
+              <EmptyComponent
+                message={`There is no video in ${kicksType} section`}
+              />
+            </div>
           ) : (
             videoData?.content?.map((item) => {
               const { text, id } = item;
               return (
-                <div className="flex " key={id}>
+                <div className="flex h-full " key={id}>
                   <VideoComponent dataList={dataList} data={item} />
                 </div>
               );

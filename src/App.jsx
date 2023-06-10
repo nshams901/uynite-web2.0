@@ -53,6 +53,7 @@ import { getProfileById } from "./redux/actionCreators/profileAction";
 import Reals from "./screens/Reals/Reals";
 import ProfileType from "./Components/Login/Content/Signup/ProfileType";
 import CountrySelection from "./Components/Login/Content/Signup/CountrySelection";
+import UserKicks from "./Components/Home/KicksPage/UserKicks";
 
 const App = () => {
   const token = localStorage.getItem("token");
@@ -141,6 +142,8 @@ const App = () => {
             <Route path="kicks/:segment" element={<Kicks />} />
 
             <Route path="veiwallkicks" element={<SearchKicksPage />} />
+            <Route path="user-kicks/:id" element={<UserKicks />} />
+
             <Route path="myfriend" element={<MyFriendsPage />} />
             <Route
               path="find-friend"

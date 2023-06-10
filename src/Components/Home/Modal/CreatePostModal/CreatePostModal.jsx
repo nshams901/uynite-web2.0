@@ -25,13 +25,18 @@ import user from "../../../../Assets/Images/user.png";
 import { getMyUnion } from "../../../../redux/actionCreators/unionActionCreator";
 import ImageEditor from "../../../Roots/ImageEditor";
 import DropdownComp from "../../../common/DropdownComp";
+import globe from '../../../../Assets/Images/globe.png';
+import friends from '../../../../Assets/Images/friendsIcon.png';
+import home from '../../../../Assets/Images/home.png';
+import books from '../../../../Assets/Images/books.png';
+import person from '../../../../Assets/Images/personIcon.png';
 
 export let privacyList = [
-  { name: "Public" },
-  { name: "Friends" },
-  { name: "Relatives" },
-  { name: "Classmates" },
-  { name: "Officemates" },
+  { name: "Public", icon: globe },
+  { name: "Friends" , icon: friends},
+  { name: "Relatives", icon: home },
+  { name: "Classmates", icon: books },
+  { name: "Officemates", icon: person},
 ];
 const CreatePostModal = ({
   // setShowCreatePostModal,
@@ -55,7 +60,7 @@ const CreatePostModal = ({
   const isPersonal = profile?.profiletype === "Personal";
 
   const {
-    postPrivacy = isEdit ? activePost?.shareto : { name: "Public" },
+    postPrivacy = isEdit ? activePost?.shareto : { name: "Public", icon: globe },
     postContent = isEdit ? activePost?.text : "",
     location = isEdit ? activePost?.location : state?.location,
     uploadFileList = [],
@@ -95,7 +100,6 @@ const CreatePostModal = ({
         return toast.error("You can't select more than 5 images");
       } else {
         const video = fileArray.filter((item) => item?.type?.includes("video"));
-        console.log(fileArray, video, "IIIIIII PPPPPPPP");
         if (video.length > 1) {
           return toast.error("You can't select more than one video");
         }
@@ -110,11 +114,9 @@ const CreatePostModal = ({
       setState({ ...state, loading: true });
       await Promise.all(
         allFiles?.map((item) => {
-          console.log(item, "IIIII MMMMMMM AAAAAAAA");
           return dispatch(imageUploadApi(item));
         })
       ).then((res) => {
-        console.log(res, "res  +++++++++++++++");
         const paths = res.map((item) => item.path);
         console.log(paths, "UPLODAD");
         createPosts(paths);
@@ -124,7 +126,7 @@ const CreatePostModal = ({
   }
 
   const unions = myUnionList.map((item) => {
-    return { name: item?.groupName };
+    return { name: item?.groupName, icon: home };
   });
   const postPrivacyList = isPersonal
     ? [...privacyList, ...unions]

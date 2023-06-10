@@ -1,5 +1,6 @@
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { MdKeyboardArrowRight } from "react-icons/md";
+import { GrPrevious } from 'react-icons/gr'
 import { useEffect, useState } from "react";
 import AddPeopleModal from "./AddPeopleModal";
 import { BiRightArrowAlt } from "react-icons/bi";
@@ -10,92 +11,36 @@ import { useDispatch } from "react-redux";
 import {
   searchByCountryInUmeet,
   searchByStateInUmeet,
+  getStatesByCountry
 } from "../../../../../redux/actionCreators/umeetActionCreator";
 
-const CountryList = [
-  "India",
-  "United States",
-  "South Africa",
-  "Panama",
-  "Japan",
-  "Pakistan",
-  "India",
-  "United States",
-  "South Africa",
-  "Panama",
-  "Japan",
-  "Pakistan",
-];
-
-const StateList = [
-  "Tamilnadu",
-  "Punjab",
-  "South Africa",
-  "Panama",
-  "Japan",
-  "Pakistan",
-  "India",
-  "United States",
-  "South Africa",
-  "Panama",
-  "Japan",
-  "Pakistan",
-];
-
-const LoksabhaList = [
-  "Loksabha",
-  "United States",
-  "South Africa",
-  "Panama",
-  "Japan",
-  "Pakistan",
-  "India",
-  "United States",
-  "South Africa",
-  "Panama",
-  "Japan",
-  "Pakistan",
-];
-
-const AssemblyList = [
-  "Assembly",
-  "United States",
-  "South Africa",
-  "Panama",
-  "Japan",
-  "Pakistan",
-  "India",
-  "United States",
-  "South Africa",
-  "Panama",
-  "Japan",
-  "Pakistan",
-];
-
 const AddDataList = ["State", "Loksabha", "Assembly"];
+const PublicDataList = ["State", "District"]
 
-const PoliticalGuestAddModal = ({ onClose }) => {
+const PoliticalGuestAddModal = ({ onClose, whichType }) => {
   const [showAddPeopleModal, setShowAddPeopleModal] = useState(false);
   const [selectCountry, setSelectCountry] = useState(false);
   const [country, setCountry] = useState("");
   const [whichBy, setWhichBy] = useState("");
   const [selectBy, setSelectBy] = useState([]);
   const [isSelectedBy, setIsSelectedBy] = useState(false);
+  const [byOption, setByOption] = useState('')
+
+  const dispatch = useDispatch();
   const { countryList } = useSelector((state) => state.authReducer);
   const { guestByStateList } = useSelector((state) => state.umeetReducer);
+
   const handleShowAddPeopleModal = () => {
     setShowAddPeopleModal(true);
   };
-  console.log("guestByStateList", guestByStateList);
+
   const handleOptionChange = (event) => {
     console.log(event.target.value);
     setCountry(event.target.value);
   };
 
   const handleAddBy = (data) => {
-    setIsSelectedBy(true);
-    console.log(data);
-    if (data.toLowerCase() == "state") {
+    setIsSelectedBy(true);    if (data.toLowerCase() == "state") {
       setWhichBy("State");
       setSelectBy(guestByStateList?.data);
     } else if (data.toLowerCase() == "loksabha") {
@@ -104,12 +49,17 @@ const PoliticalGuestAddModal = ({ onClose }) => {
     } else if (data.toLowerCase() == "assembly") {
       setWhichBy("Assembly");
       setSelectBy(AssemblyList);
+    } else if (data.toLowerCase() == "district") {
+      setWhichBy("District");
+      //setSelectBy(AssemblyList);
     }
   };
-  const dispatch = useDispatch();
+
   useEffect(() => {
-    dispatch(getCountryList());
-  }, []);
+    dispatch(getCountryList())
+    dispatch(getStatesByCountry())
+  }, [])
+
   const onHandleCountrySelection = async () => {
     const countryList = await dispatch(searchByCountryInUmeet(country));
     console.log("countryList", countryList);
@@ -122,13 +72,15 @@ const PoliticalGuestAddModal = ({ onClose }) => {
       }
     }
   };
+
   return (
     <div
-      className="absolut fixed top-0 z-20 left-0 h-full w-full flex justify-center items-center"
+      className="fixed top-0 z-20 left-0 h-full w-full flex justify-center items-center"
       style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
     >
       <div className="w-[96%] md:w-[60%] lg:w-[40%] xl:w-[30%] h-[80%] bg-white rounded-xl p-3">
         <div className="flex justify-between py-1 text-gray-600">
+          {selectCountry && <GrPrevious onClick={()=>setSelectCountry(false)} className={`${isSelectedBy ? 'hidden' : ''} w-6 h-6 cursor-pointer`}/>}
           <div className="text-[18px] flex justify-center font-bold text-gray-700 text-gray-800 w-11/12">
             Add Guests
           </div>
@@ -199,12 +151,23 @@ const PoliticalGuestAddModal = ({ onClose }) => {
             <>
               {selectCountry ? (
                 country.toLowerCase() == "india" ? (
-                  <section className="flex flex-col justify-center w-full">
-                    {AddDataList.map((data) => (
+                  <section className={`flex flex-col justify-center w-full`}>
+                    {(whichType !== 'public') && AddDataList.map((data) => (
                       <div
                         key={data}
                         onClick={() => handleAddBy(data)}
-                        className="flex items-center justify-center py-2 rounded-lg cursor-pointer my-2 text-center bg-[#519d8b] text-white py-2 font-bold"
+                        className={`flex items-center justify-center py-2 rounded-lg cursor-pointer my-2 text-center bg-[#519d8b] text-white py-2 font-bold`}
+                      >
+                        Add By {data}
+                        <BiRightArrowAlt className="w-7 h-7" />
+                      </div>
+                    ))}
+
+                    {(whichType == 'public') && PublicDataList.map((data) => (
+                      <div
+                        key={data}
+                        onClick={() => handleAddBy(data)}
+                        className={`flex items-center justify-center py-2 rounded-lg cursor-pointer my-2 text-center bg-[#519d8b] text-white py-2 font-bold`}
                       >
                         Add By {data}
                         <BiRightArrowAlt className="w-7 h-7" />
