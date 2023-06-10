@@ -89,7 +89,7 @@ const SliderSection = () => {
 
                 </Link>
                 {/* title name tag added */}
-                <div className="absolute cursor-pointer bottom-[10px] mx-6 items-center flex gap-5">
+                <div className="absolute cursor-pointer bottom-[10px] mx-2 items-center flex gap-2">
 
                 <img
                   src={profile?.pimage || user}

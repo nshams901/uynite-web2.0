@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
   addProfilePrivacy,
+  checkOldPassword,
   updatePassword,
 } from "../../redux/actionCreators/privacyAction";
 
@@ -25,7 +26,7 @@ const Setting = () => {
     };
   });
   const { profile } = reducerData;
-
+  console.log("asjkhgasuyigasdjhgasdhjgfe", profile);
   const OldPasswordChange = () => {
     setOldPassword(true);
   };
@@ -126,10 +127,10 @@ const Setting = () => {
       updatedate: "Thu May 18 12:32:09 UTC 2023",
       viewprofile: privacy?.profile,
     };
-    console.log("Proapppuyydd",payload);
+    console.log("Proapppuyydd", payload);
     // dispatch({ type: "YYY"})
     dispatch(addProfilePrivacy(payload)).then((res) => {
-      console.log("Resss",res);
+      console.log("Resss", res);
       if (res?.status) {
         toast.success(res?.message);
       } else {
@@ -140,13 +141,27 @@ const Setting = () => {
 
   const handlePasswordSave = (value = {}) => {
     const { confirmPassword, newPassword, oldPassword } = value;
-    const payload = {
-      uemail: "",
-      oldPassword,
-      newPassword,
+    const userDetail = profile?.email ? profile?.email : profile?.mobile;
+
+    const data = {
+      uemail: userDetail,
+      password: oldPassword,
     };
+    console.log("DATttttttttt", data);
+    const IsExistOldPassword = dispatch(checkOldPassword(data));
+    if (!IsExistOldPassword?.status) {
+      return toast.error(IsExistOldPassword?.message);
+    }
+    const payload = {
+      uemail: userDetail,
+      newPassword,
+      confirmPassword,
+    };
+
+    console.log("DATtttpayloadtttttt", dpayloadta);
     dispatch(updatePassword(payload)).then((res) => {
       if (res?.status) {
+        console.log("sdhliks;dfjoi;fsd");
         toast.success(res?.message);
       } else {
         toast.error(res?.message);
@@ -154,10 +169,9 @@ const Setting = () => {
     });
   };
 
-
-  const onHandleBlockedPage = ()=>{
-         navigate("/blocklist-page");
-  }
+  const onHandleBlockedPage = () => {
+    navigate("/blocklist-page");
+  };
   return (
     <>
       <div className="w-[95%] sm:w-[50%] lg:w-[40%] bg-white border-2 mx-auto rounded-b-xl flex-col flex pb-4">

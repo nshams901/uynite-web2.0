@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import Input from "../../Login/Content/InputBox/Input";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { contactUsPage } from "../../../redux/actionCreators/settingsActionCreator";
+import { toasterFunction } from "../../Utility/utility";
 
 const ContactUs = () => {
   const { profile } = useSelector((state) => state.profileReducer);
   console.log("Profi;e", profile?.id);
-
+  const dispatch = useDispatch();
   const [inputBox, setInputBox] = useState({
     email: profile?.email,
     message: "",
@@ -19,13 +21,20 @@ const ContactUs = () => {
     });
   };
 
-  const onHandleSubmit = () => {
+  const onHandleSubmit = async() => {
     const dataObj = {
-      profileid: profile?.id,
       emailaddress: inputBox.email,
+      profileid: profile?.id,
       message: inputBox.message,
+      replymessage: "",
     };
-    console.log(dataObj);
+    const response =await dispatch(contactUsPage(dataObj));
+    console.log("sdhgklsjdhsdf",response);
+    if (!response?.status) {
+      return toasterFunction(response?.message);
+    }
+    toasterFunction(response?.message);
+    setInputBox({ ...inputBox, message: "" });
   };
   return (
     <div className="w-[95%] sm:w-[50%] lg:w-[40%] bg-[#E4E7EC] h-full mx-auto px-4 py-4 mt-1">

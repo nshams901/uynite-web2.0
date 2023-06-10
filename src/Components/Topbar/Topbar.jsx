@@ -2,7 +2,7 @@ import React from "react";
 import textLogo from "../Login/Content/Login/./textLogo.png";
 const Topbar = () => {
   return (
-    <div className="w-[100vw] sm:w-[50vw] h-[75px] flex flex-col items-center justify-end px-4">
+    <div className="w-[100vw] sm:w-[50vw] h-[90px] flex flex-col items-center justify-end px-4 gap-1">
       <img src={textLogo} alt="" className="w-[40%] sm:w-[20%] mb-2" />
 
       {/* font weight changed into bold to semi-bold & padding added */}

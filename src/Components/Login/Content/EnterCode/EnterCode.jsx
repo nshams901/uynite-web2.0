@@ -55,7 +55,13 @@ const EnterCode = ({ title }) => {
 
   const onConfirmOtp = async () => {
     setIsLoading(true);
-    const result = await dispatch(matchingOtp(emailExist.data.uemail, otp));
+    const EmailOrPhone = emailExist?.data?.uemail
+      ? emailExist?.data?.uemail
+      : emailExist?.data?.umobile;
+      console.log("EmailOrPhone", EmailOrPhone);
+           console.log("sdgfujksdhf", emailExist.data.umobile);
+    const result = await dispatch(matchingOtp(EmailOrPhone, otp));
+    console.log("+++++++++++++",result);
     if (!result.status) {
       dispatch(settingOtp(""));
       setIsLoading(false);

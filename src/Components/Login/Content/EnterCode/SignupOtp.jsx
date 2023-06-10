@@ -5,6 +5,7 @@ import Heading from "../Heading/Heading";
 import Button2 from "../Button/Button2";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
+  isOtpValid,
   matchingOtp,
   saveUserSignupData,
   settingOtp,
@@ -101,17 +102,20 @@ const SignupOtp = ({ title }) => {
           // User couldn't sign in (bad verification code?)
         });
     } else {
-        //  setState({ ...state, showModal: true });
-        //  navigate(`/auth/verification/signup?${signupData?.profileType}`);
+      //  setState({ ...state, showModal: true });
+      //  navigate(`/auth/verification/signup?${signupData?.profileType}`);
       const result = await dispatch(matchingOtp(signupData?.uemail, otp));
-
+      console.log("iuhsduoihsiusijhd", result);
       if (!result?.status) {
         setIsLoading(false);
         toasterFunction(result?.message);
       } else {
-        setState({ ...state, showModal: true });
+        // setState({ ...state, showModal: true });
+        dispatch(isOtpValid({validOtp:true,userInfo:false}));
         navigate(`/auth/verification/signup?${signupData?.profileType}`);
       }
+
+      console.log("state show Modal",state.showModal);
     }
     getFirebaseToken()
       .then(async (res) => {
@@ -123,7 +127,7 @@ const SignupOtp = ({ title }) => {
           uemail: signupData?.uemail,
           //  "umobile": "weware5007@fectode.com"
         };
-        const resp = await dispatch(userRegistration(data));
+         await dispatch(userRegistration(data));
         setIsLoading(false);
       })
       .catch((err) => {
@@ -171,20 +175,20 @@ const SignupOtp = ({ title }) => {
   function Timer() {
     const [seconds, setSeconds] = useState(5 * 60);
 
-   useEffect(() => {
-     const intervalId = setInterval(() => {
-       setSeconds((prevSeconds) => {
-         if (prevSeconds <= 1) {
-           clearInterval(intervalId);
-           setTimer(false);
-           return 0;
-         }
-         return prevSeconds - 1;
-       });
-     }, 1000);
+    useEffect(() => {
+      const intervalId = setInterval(() => {
+        setSeconds((prevSeconds) => {
+          if (prevSeconds <= 1) {
+            clearInterval(intervalId);
+            setTimer(false);
+            return 0;
+          }
+          return prevSeconds - 1;
+        });
+      }, 1000);
 
-     return () => clearInterval(intervalId);
-   }, []);
+      return () => clearInterval(intervalId);
+    }, []);
 
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -262,12 +266,13 @@ const SignupOtp = ({ title }) => {
         />
       </div>
       {showModal && (
-        <Portals>
-          <Modal
-            modalType={signupData?.profileType}
-            handleClose={handleClose}
-          />
-        </Portals>
+        // <Portals>
+        <ProfileType />
+        //   <Modal
+        //     modalType={signupData?.profileType}
+        //     handleClose={handleClose}
+        //   />
+        // </Portals>
       )}
       {loading && <Loader />}
     </>

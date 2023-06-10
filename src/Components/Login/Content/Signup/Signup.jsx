@@ -16,6 +16,7 @@ import {
   saveUserSignupData,
   settingOtp,
   savingPhoneNo,
+  userSingupInformation,
 } from "../../../../redux/actionCreators/authActionCreator";
 import { useDispatch, useSelector } from "react-redux";
 import firebaseApp, { auth } from "../../../../config/firebase";
@@ -65,7 +66,7 @@ const Signup = () => {
       email: signupData?.uemail || "",
       password: signupData?.password || "",
       phone: signupData?.uemail || "",
-      termsAndConditions: false,
+      // termsAndConditions: false,
       profileType: "",
     },
     validationSchema: Yup.object({
@@ -91,10 +92,10 @@ const Signup = () => {
       //   excludeEmptyString: true,
       //   message: "Please enter a valid phone number",
       // }),
-      termsAndConditions: Yup.bool().oneOf(
-        [true],
-        "You need to accept the terms and conditions"
-      ),
+      // termsAndConditions: Yup.bool().oneOf(
+      //   [true],
+      //   "You need to accept the terms and conditions"
+      // ),
     }),
     onSubmit: async (event) => {
       dispatch(settingOtp(""));
@@ -133,12 +134,10 @@ const Signup = () => {
         uemail: formik.values.email ? formik.values.email : formik.values.phone,
         password: formik.values.password,
       };
-
       const response = formik.values.email
         ? await dispatch(saveUserSignupData(dataObj))
         : dispatch(savingPhoneNo(formik.values.phone));
-
-      console.log(" formik?.values.phon", formik.values.phone);
+      dispatch(userSingupInformation(dataObj));
       if (formik.values.phone) {
         setIsLoading(false);
         console.log("After");
@@ -222,7 +221,7 @@ const Signup = () => {
   return (
     <>
       {/* padding increased */}
-      <div className="w-full rounded-[20px] flex flex-col justify-center items-center gap-1 px-4">
+      <div className="w-full rounded-[20px] flex flex-col justify-center items-center gap-1 px-4 h-full">
         <Heading title="Create your profile" />
         <div className="flex w-full justify-center gap-4 mb-2">
           <span>
@@ -271,12 +270,12 @@ const Signup = () => {
         />
         {/* font weight changed */}
         <h1 className="font-semibold text-[black]">Or</h1>
-        <div className="flex w-full justify-center items-center cursor-pointer gap-2 border-[1px] border-[#7E8082] rounded-[5px] relative">
+        <div className="flex w-full justify-center items-center cursor-pointer gap-2 rounded-[5px] relative">
           {/* textcolor, border color, height, bckground-color changed*/}
           <div
             name=""
             id=""
-            className=" bg-white h-7 outline-none text-xs font-semibold py-1.5 w-[45%] text-[#AEB2B1]"
+            className=" bg-white border-[1px] border-[#7E8082] rounded-[5px] h-full outline-none text-xs font-semibold !p-2 w-[45%] text-[#AEB2B1]"
             onClick={() => setCountryCode(true)}
           >
             <div className="pl-4 sm:pl-5 font-bold">
@@ -304,11 +303,8 @@ const Signup = () => {
             name="phone"
             type="number"
             id="phone"
-            value={activeField ? formik.values.phone : ""}
+            value={formik.values.phone}
             onChange={(event) => {
-              //  if (formik.values.phone.length) {
-              //    setActivePhone(true);
-              //  }
               if (event.target.value.length > 10) {
                 formik.handleChange(
                   event.target.value.slice(event.target.value.length - 1)
@@ -324,9 +320,9 @@ const Signup = () => {
             {formik.errors.phone}
           </p>
         ) : null}
-        {/* <p className="text-[12px] font-semibold text-[#7E8082] w-[100%] py-1">
+        <p className="text-[12px] font-semibold text-[#7E8082] w-[100%] py-1">
           Password<span className="text-red-500">*</span>
-        </p> */}
+        </p>
 
         <PasswordInput
           title="Password*"
@@ -349,14 +345,14 @@ const Signup = () => {
               : !validateEmail(formik.values.email)
           }
         />
-        <div className="w-full flex flex-col mb-2">
+        {/* <div className="w-full flex flex-col mb-2">
           <div className="flex w-full gap-2 items-center justify-between relative">
             <input
               type="checkbox"
               name="termsAndConditions"
               value={formik.values.termsAndConditions}
               onChange={formik.handleChange}
-              // touched={formik.values.termsAndConditions}
+              touched={formik.values.termsAndConditions}
               className="transparent"
               disabled={
                 (formik.values.email === ""
@@ -374,13 +370,13 @@ const Signup = () => {
             </p>
             <br />
           </div>
-          {/* {formik.touched.termsAndConditions &&
+          {formik.touched.termsAndConditions &&
           formik.errors.termsAndConditions ? (
             <p className="text-[10px] text-[red] self-start w-[80%] ">
               {formik.errors.termsAndConditions}
             </p>
-          ) : null} */}
-        </div>
+          ) : null}
+        </div> */}
         <div ref={captchaEl} id="sign-in-button"></div>
         <Button2
           id="sign"
@@ -389,7 +385,7 @@ const Signup = () => {
             (formik.values.email === ""
               ? formik.values.phone.toString().length < 10
               : !validateEmail(formik.values.email)) ||
-            !formik.values.termsAndConditions ||
+            // !formik.values.termsAndConditions ||
             formik.values.password.length < 8 ||
             !validatePassword(formik.values.password)
           }

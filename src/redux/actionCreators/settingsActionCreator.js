@@ -55,6 +55,7 @@ export const changeNewPassword = (uemail, password) => async (dispatch) => {
 // GET http://3.233.82.34:8080/friend/api/friend/630dbf9c67ceca0570e4bfc9/Accepted
 
 export const blockedFriendList = (profileId) => async (dispatch) => {
+  console.log("profileId", profileId);
   try {
     const response = await axios.get(
       `https://web.uynite.com/friend/api/friend/${profileId}/Accepted`
@@ -81,6 +82,23 @@ export const searchBlockedFriend =
         payload: response?.data?.data,
       });
       console.log("SEARCH_BLOCK_FRIEND", response);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+//  while click on search in Block list
+export const unBlockFriend =
+  (profileId, blockedprofileid) => async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://web.uynite.com/friend/api/friend/unblock/${profileId}/${blockedprofileid}`
+      );
+      dispatch({
+        type: "UNBLOCK_FRIEND",
+        payload: response?.data?.data,
+      });
+      console.log("UNBLOCK_FRIEND", response);
     } catch (error) {
       throw error;
     }
@@ -132,9 +150,24 @@ export const blockUser = (data) => async (dispatch) => {
       type: "BLOCK",
       payload: response.data,
     });
-    return response.data
+    return response.data;
   } catch (error) {
     throw error;
   }
 };
 
+// Contact Us Form APi
+export const contactUsPage = (data) => async (dispatch) => {
+  try {
+    const response = await axios.post(
+      ` https://web.uynite.com/profile/api/profile/contact/add`,
+      data
+    );
+    dispatch({
+      type: "CONTACT_US",
+    });
+    return response?.data;
+  } catch (error) {
+    throw error;
+  }
+};

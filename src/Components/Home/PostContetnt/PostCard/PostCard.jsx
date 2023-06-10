@@ -303,8 +303,10 @@ const PostCard = ({ userData, item = {} }) => {
                 <span className="text-[11px] ">
                   {item?.updatpostdatetime === null ||
                   item?.updatpostdatetime === ""
-                    ? moment(item?.postdatetime, 'x').format('DD MMM, YYYY')
-                    : moment(item?.updatpostdatetime, 'x').format('DD MMM, YYYY')}
+                    ? moment(item?.postdatetime, "x").format("DD MMM, YYYY")
+                    : moment(item?.updatpostdatetime, "x").format(
+                        "DD MMM, YYYY"
+                      )}
                 </span>
 
                 {/* <img
@@ -370,14 +372,15 @@ const PostCard = ({ userData, item = {} }) => {
               )}
             </p>
           </div>
-          
-          { item?.sharedpostid ? 
-          <div className="w-full">
-          <SharedPost postid={item.sharedpostid} profileid={item?.shareprofileid}/>
-          </div>
-          
-          :
-            item?.image ? (
+
+          {item?.sharedpostid ? (
+            <div className="w-full">
+              <SharedPost
+                postid={item.sharedpostid}
+                profileid={item?.shareprofileid}
+              />
+            </div>
+          ) : item?.image ? (
             item.viptype === 5 ? (
               <>
                 <div
@@ -440,9 +443,7 @@ const PostCard = ({ userData, item = {} }) => {
           >
             {/* <HiUserGroup size={16} /> */}
 
-            <span className=" cursor-pointer ">
-              {item?.likecount} likes
-            </span>
+            <span className=" cursor-pointer ">{item?.likecount} likes</span>
           </div>
 
           <div className="flex  gap-5 items-center">
@@ -462,7 +463,7 @@ const PostCard = ({ userData, item = {} }) => {
 
         <section className="w-full flex flex-col">
           <hr className="w-full mb-2 text-gray-500" />
-          <div className="flex justify-between ">
+          <div className="flex">
             <div className="flex flex-col items-center justify-center cursor-pointer">
               {item?.isliked ? (
                 <img
@@ -484,7 +485,7 @@ const PostCard = ({ userData, item = {} }) => {
               {/* <span className="text-xs font-semibold mt-1">Like</span> */}
             </div>
             {/* Input Box Section */}
-            <div className="relative flex grow overflow-hidden items-center outline-gray-300 py-1 border-[1px] w-[100%] border-gray-500 justify-center gap-2 mx-3 rounded-xl mt-1.5 h-[38px]">
+            <div className="relative flex grow overflow-hidden items-center outline-gray-300 py-1 border-[1px] w-[100%] border-[#C8C8C8] justify-center gap-2 rounded-xl mt-1.5 h-[38px]">
               <input
                 type="text"
                 className="w-full h-full outline-none rounded-xl pl-3"

@@ -228,7 +228,7 @@ const Login = () => {
   return (
     <>
       {/* padding increased */}
-      <div className="lg:w-full h-full rounded-[20px] flex flex-col items-center gap-2 px-7 py-4 sm:py-8">
+      <div className="lg:w-full h-full rounded-[20px] flex flex-col justify-center items-center gap-2 px-7 py-4 sm:py-8">
         {/* <Heading title="Get Started" /> */}
         {/* <img src={textLogo} alt="" className="w-[50%] mb-4" /> */}
         <Input

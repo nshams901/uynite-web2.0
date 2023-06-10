@@ -33,19 +33,36 @@ export const getBlockedUser = (data) => async (dispatch) => {
 };
 
 export const updatePassword = (data) => async (dispatch) => {
-  const { uemail, oldPassword, newPassword } = data;
+  const { uemail, confirmPassword, newPassword } = data;
   try {
     const response = axios.post(
-      `https://web.uynite.com/login/api/user/changepassword/${uemail}/${oldPassword}/${newPassword}`
+      `https://web.uynite.com/login/api/user/changepassword/${uemail}/${newPassword}/${confirmPassword}`
     );
     dispatch({
       type: "",
       payload: "",
     });
+    console.log("sucess______=======",response);
     return response?.data;
   } catch (err) {
     throw err;
   }
 };
 
-// https://web.uynite.com/profile/api/profile/search/63074634dc8af05b8822b62e/duman
+export const checkOldPassword = (data) => async (dispatch) => {
+  try {
+    const response = await axios.post(
+      `http://3.233.82.34:8080/api/user/authenticate`,
+      data
+    );
+    dispatch({
+      type: "",
+      payload: "",
+    });
+    console.log("suhgiuehieur", response);
+    return response?.data;
+  } catch (err) {
+    throw err;
+  }
+};
+

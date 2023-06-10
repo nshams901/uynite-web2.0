@@ -125,7 +125,7 @@ export const matchingOtp = (mailId, otp) => async (dispatch) => {
 
     return result.data;
   } catch (error) {
-    return result.message;
+    return error;
   }
 };
 
@@ -324,7 +324,7 @@ export const getStateList = (data) => async (dispatch) => {
 };
 
 export const getDistrict = (data) => async (dispatch) => {
-  console.log("daaaaaaaaaaaaaaaattttttttta",data);
+  console.log("daaaaaaaaaaaaaaaattttttttta", data);
   try {
     const response = await axios.get(
       `https://web.uynite.com/api/user/country/getcity/${data}`,
@@ -335,7 +335,7 @@ export const getDistrict = (data) => async (dispatch) => {
         },
       }
     );
-    console.log("==========________response",response);
+    console.log("==========________response", response);
 
     dispatch({
       type: "GET_DISTRICT_LIST",
@@ -420,7 +420,7 @@ export const getLocationsList = (data) => async (dispatch) => {
   }
 };
 
-export const otpType = (typeOfOtp) =>  (dispatch) => {
+export const otpType = (typeOfOtp) => (dispatch) => {
   try {
     dispatch({
       type: "OTP_TYPE",
@@ -432,12 +432,38 @@ export const otpType = (typeOfOtp) =>  (dispatch) => {
   }
 };
 
-
-export const savingPhoneNo = (phoneNo) =>  (dispatch) => {
+export const savingPhoneNo = (phoneNo) => (dispatch) => {
   try {
     dispatch({
       type: "PHONE_NO",
       payload: phoneNo,
+    });
+  } catch (err) {
+    console.log(err, "errror login");
+    throw err;
+  }
+};
+
+
+
+export const isOtpValid = (data) => (dispatch) => {
+  try {
+    dispatch({
+      type: "VALID_OTP",
+      payload: data,
+    });
+  } catch (err) {
+    console.log(err, "errror login");
+    throw err;
+  }
+};
+
+
+export const userSingupInformation = (data) => (dispatch) => {
+  try {
+    dispatch({
+      type: "USER_INFORMATION",
+      payload: data,
     });
   } catch (err) {
     console.log(err, "errror login");

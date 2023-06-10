@@ -25,10 +25,9 @@ export default function ProfileMenu({}) {
     <Menu>
       <MenuHandler>
         <Avatar
-          size="sm"
           variant="circular"
           alt=""
-          className="cursor-pointer rounded-full"
+          className="cursor-pointer rounded-full w-[25px] h-[25px] lg:w-[30px] lg:h-[30px] mt-2"
           src={profile?.pimage || user}
         />
       </MenuHandler>
