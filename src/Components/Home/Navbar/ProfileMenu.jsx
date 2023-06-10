@@ -27,11 +27,11 @@ export default function ProfileMenu({}) {
         <Avatar
           variant="circular"
           alt=""
-          className="cursor-pointer rounded-full w-[25px] h-[25px] lg:w-[30px] lg:h-[30px] mt-2"
+          className="cursor-pointer rounded-full w-[28px] h-[28px] lg:w-[30px] lg:h-[30px]"
           src={profile?.pimage || user}
         />
       </MenuHandler>
-      <BsChevronCompactDown className="" size={22} />
+      {/* <BsChevronCompactDown className="" size={22} /> */}
       <MenuList className="w-fit max-w-[300px]">
         <MenuItem
           onClick={() => navigate("/profile")}

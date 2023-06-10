@@ -42,17 +42,17 @@ export const dataList = [
 ];
 export const data = [
   {
-    // name: "Chat",
+    name: "Chat",
     icon: chatIcon,
     url: "/chat-page",
   },
   {
-    // name: "Friends",
+    name: "Friends",
     icon: friendsIcons,
     url: null,
   },
   {
-    // name: "Notifications",
+    name: "Notifications",
     icon: notificationIcons,
     url: null,
   },

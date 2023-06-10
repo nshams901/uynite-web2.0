@@ -7,7 +7,7 @@ import { dataList, data } from "./data";
 import { useSelector, useDispatch } from "react-redux";
 import { isTabSelected } from "../../../redux/actionCreators/userActionCreator";
 import { BsChevronCompactDown } from "react-icons/bs";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../../Assets/Images/Logos.png"
 import User from "../../../Assets/Images/user.png";
 import "./navbar.css";
@@ -53,6 +53,9 @@ const Navbar = () => {
   };
 
   const onHandleClick = (option) => {
+
+
+    console.log("shdoisdjpsd",option);
     if (option.name === "Friends") {
       userFriendsModal();
     } else if (option.name === "Notifications") {
@@ -105,9 +108,13 @@ const Navbar = () => {
       <div className="flex h-[65px] flex-row justify-center items-center w-[28%]">
         {/* Logo Section */}
 
-        <div className="w-[50px] mx-2 sm:mx-[14px] ml-5 lg:ml-0">
-          <img src={Logo} alt="" className="w-[30px] h-[30px] lg:w-[52px] lg:h-[52px] " />
-        </div>
+        <Link to="/root" className="w-[50px] mx-2 sm:mx-[14px] ml-5 lg:ml-0">
+          <img
+            src={Logo}
+            alt=""
+            className="w-[30px] h-[30px] lg:w-[52px] lg:h-[52px] "
+          />
+        </Link>
 
         {/* Search Bar Section */}
         <div className="hidden lg:flex w-[80%] h-[38px] rounded-xl items-center justify-center gap-2 border-[1px] border-[#C8C8C8] ">
@@ -218,7 +225,7 @@ const Navbar = () => {
                           src={elem?.icon}
                           className="ml-2 h-[25px] lg:h-[30px]"
                         />
-                        <div className=" font-bold">{elem?.name}</div>
+                        {/* <div className=" font-bold">{elem?.name}</div> */}
                       </>
                     }
                     options={[
@@ -244,7 +251,7 @@ const Navbar = () => {
 
           {/* User Profile */}
           <div
-            className="flex flex-col max-w-[250px] items-center cursor-pointer relative justify-center mt-2"
+            className="flex flex-col max-w-[250px] items-center cursor-pointer relative justify-center"
             onClick={userProfileModal}
           >
             {/* <img
