@@ -40,7 +40,7 @@ import VerificationRequest from "./Components/Settings/VerificationRequest/Verif
 import ConfirmationRequest from "./Components/Settings/VerificationRequest/ConfirmationRequest";
 import BlockListPage from "./Components/Settings/BlockListPage";
 import Locations from "./Components/googlemap/Locations";
-import Unions from './Components/Home/Unions/Unions';
+import Unions from "./Components/Home/Unions/Unions";
 import UnionsSearchList from "./Components/Home/Unions/UnionsSearchList";
 import SingleUnionPage from "./Components/Home/Unions/SingleUnionPage";
 import CreateUnion from "./Components/Home/Unions/CreateUnion";
@@ -51,24 +51,30 @@ import TermsAndConditions from "./Components/Home/ProfilePage/TermsAndConditionP
 import PrivacyPolicy from "./Components/Home/ProfilePage/PrivacyPolicy/PrivacyPolicy";
 import { getProfileById } from "./redux/actionCreators/profileAction";
 import Reals from "./screens/Reals/Reals";
+import ProfileType from "./Components/Login/Content/Signup/ProfileType";
+import CountrySelection from "./Components/Login/Content/Signup/CountrySelection";
 import UserKicks from "./Components/Home/KicksPage/UserKicks";
 
 const App = () => {
-    const token = localStorage.getItem("token");
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    axios.defaults.headers.common["Content-Type"] = "application-json";
-    axios.defaults.headers.common["Accept-Language"] = "en";
+  const token = localStorage.getItem("token");
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  axios.defaults.headers.common["Content-Type"] = "application-json";
+  axios.defaults.headers.common["Accept-Language"] = "en";
   const dispatch = useDispatch();
+  const { isOtpValid, signupData, userInfo } = useSelector(
+    (state) => state.authReducer
+  );
   let userData = localStorage.getItem("userCredential");
   userData = JSON.parse(userData);
+
   const isUserLoggedIn = () => {
     if (userData === null) {
       dispatch(settingUserLoginData(false, {}));
     } else {
-      const token = localStorage.getItem('token')
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      axios.defaults.headers.common['Content-Type'] = "application-json"
-      axios.defaults.headers.common['Accept-Language'] = "en"
+      const token = localStorage.getItem("token");
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      axios.defaults.headers.common["Content-Type"] = "application-json";
+      axios.defaults.headers.common["Accept-Language"] = "en";
       dispatch(
         settingUserLoginData(userData?.isLoggedIn, {
           email: userData.uemail,
@@ -78,9 +84,9 @@ const App = () => {
   };
 
   useEffect(() => {
-    dispatch(getProfileById(userData?.id))
+    dispatch(getProfileById(userData?.id));
     isUserLoggedIn();
-  }, [ userData]);
+  }, []);
 
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
@@ -99,6 +105,9 @@ const App = () => {
           <Route path="welcome" element={<WelcomePage />} />
           <Route path="reals" element={<Reals />} />
           <Route exact path="login" element={<Login />} />
+          {/* <Route exact path="login" element={<ProfileType />} /> */}
+          {/* <Route exact path="login" element={} /> */}
+
           <Route exact path="forgetpassword" element={<NewPassword />} />
           <Route
             exact
@@ -113,8 +122,20 @@ const App = () => {
           <Route
             exact
             path="verification/signup"
-            element={<SignupOtp title="Email verification" />}
+            element={
+              isOtpValid?.validOtp && !isOtpValid?.userInfo ? (
+                <ProfileType modalType={userInfo?.profileType} />
+              ) : isOtpValid?.validOtp && isOtpValid?.userInfo ? (
+                <CountrySelection modalType={userInfo?.profileType} />
+              ) : (
+                <SignupOtp title="Email verification" />
+              )
+            }
           />
+          {console.log(
+            "dfhhfdijggggggggggggggggggggggggggggggg",
+            userInfo?.profileType
+          )}
           <Route exact path="createUser" element={<UpdateProfile />} />
         </Route>
 

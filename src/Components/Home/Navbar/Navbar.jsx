@@ -7,8 +7,8 @@ import { dataList, data } from "./data";
 import { useSelector, useDispatch } from "react-redux";
 import { isTabSelected } from "../../../redux/actionCreators/userActionCreator";
 import { BsChevronCompactDown } from "react-icons/bs";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
-
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import Logo from "../../../Assets/Images/Logos.png"
 import User from "../../../Assets/Images/user.png";
 import "./navbar.css";
 import { getUsers } from "../../../redux/actionCreators/friendsAction";
@@ -23,8 +23,6 @@ const Navbar = () => {
   const [friendsModal, setFriendsModal] = useState(false);
   const [state, setState] = useState({});
   const { searchInput = "" } = state;
-  const { selectedTab } = useSelector((state) => state.userReducer);
-  const profile = useSelector((state) => state?.profileReducer?.profile);
   const { usersList } = useSelector((state) => state.friendReducer || {});
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,7 +30,8 @@ const Navbar = () => {
   const userFriendsModal = () => {
     setFriendsModal(!friendsModal);
   };
-
+  
+  const profile = useSelector((state) => state?.profileReducer?.profile);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
   useEffect(() => {
     window.addEventListener(
@@ -54,6 +53,9 @@ const Navbar = () => {
   };
 
   const onHandleClick = (option) => {
+
+
+    console.log("shdoisdjpsd",option);
     if (option.name === "Friends") {
       userFriendsModal();
     } else if (option.name === "Notifications") {
@@ -95,39 +97,49 @@ const Navbar = () => {
   };
 
   const handleListItem = (item) => {
-    setState({...state, searchInput: ''})
+    setState({ ...state, searchInput: "" });
     navigate(`/profile/${item?.id}`);
-  }
+  };
 
   return (
     <section className="h-[65px] w-full fixed flex bg-white z-10 responsive_navbar2">
       {/* -------------------------------------------------------------------------------------------------------------------------------------------------- */}
       {/* Left Section */}
-      <div className="md:w-[30%] flex h-[65px] flex-row justify-center items-center">
+      <div className="flex h-[65px] flex-row justify-center items-center w-[28%]">
         {/* Logo Section */}
 
-        <div className="w-[50px] mx-[14px]">
-          <img src="./images/Logo.png" alt="" className=" w-[52px] h-[52px]" />
-        </div>
+        <Link to="/root" className="w-[50px] mx-2 sm:mx-[14px] ml-5 lg:ml-0">
+          <img
+            src={Logo}
+            alt=""
+            className="w-[30px] h-[30px] lg:w-[52px] lg:h-[52px] "
+          />
+        </Link>
 
         {/* Search Bar Section */}
-        <div className=" w-[80%] h-[38px] rounded-md relative bg-[#e4e7ec]  md:mr-5 hide_searchbar">
+        <div className="hidden lg:flex w-[80%] h-[38px] rounded-xl items-center justify-center gap-2 border-[1px] border-[#C8C8C8] ">
           <input
             value={searchInput}
             type="text"
-            className="outline-none rounded-sm h-[38px] bg-[#e4e7ec]"
+            className=" w-[88%] outline-none py-1 pl-3"
             placeholder="Search..."
             onChange={handleChange}
           />
           <img
             src="./images/Search.png"
             alt=""
-            className="w-5 h-5 cursor-pointer absolute top-[30%] right-[6%]"
+            className="w-5 h-5 cursor-pointer"
           />
           {searchInput && (
-            <div className="bg-white  h-[400px] overflow-y-scroll overflow-x-hidden">
+            <div className="bg-white h-[400px] overflow-y-scroll overflow-x-hidden">
               {usersList?.map((item) => {
-                return <ItemList user item={item} handleListItem={() =>handleListItem(item)}   />;
+                return (
+                  <ItemList
+                    user
+                    item={item}
+                    handleListItem={() => handleListItem(item)}
+                  />
+                );
               })}
             </div>
           )}
@@ -135,21 +147,13 @@ const Navbar = () => {
       </div>
 
       {/* --------------------------------------------------------------------------------------- */}
-      <div className="responsive_navbar">
+      <div className="responsive_navbar lg:w-[44%]">
         {/* Root */}
-        <section className="w-full flex h-full items-end bg-[#E4E7EC] rounded-tl-xl rounded-tr-xl relative">
-          <div className=" h-[80%] flex w-full rounded-t-md items-end px-2 pb-1 gap-0 lg:gap-3 md:px-2">
+        <section className="w-full flex h-full items-end rounded-tl-xl rounded-tr-xl relative">
+          <div className=" h-[80%] flex w-full rounded-t-md bg-white items-end px-2 pb-1 gap-0 lg:gap-3 md:px-2">
             {dataList?.map((elem) => (
               <div
-                key={elem?.name}
-                className={`w-[40%] items-center rounded-t-md cursor-pointer gap-2 h-[90%] justify-center ${
-                  isMobile ? "" : "flex"
-                }`}
-                style={{
-                  backgroundColor: location.pathname?.includes(elem?.url)
-                    ? "#6780AF"
-                    : "#D8D8D8",
-                }}
+                className="flex flex-col items-center w-[25%] sm:w-full px-2"
                 onClick={() => onClickSlectedTab(elem)}
               >
                 <div
@@ -168,17 +172,27 @@ const Navbar = () => {
                   />
                 </div>
 
-                <div className="flex flex-col justify-center w-[85px]">
+                <div className="flex flex-col justify-center w-[85px] items-center">
                   <h1
                     className={`text-sm font-bold  ${
                       isMobile ? "text-center" : ""
                     }`}
+                    style={{
+                      color: location.pathname?.includes(elem?.url)
+                        ? elem?.color
+                        : "#6E6E6E",
+                    }}
                   >
                     {elem?.name}
                   </h1>
-                  <span className="text-[9px] font-semibold display_title">
-                    {elem?.title}
-                  </span>
+                  <div
+                    className="w-[80%] h-[2px]"
+                    style={{
+                      backgroundColor: location.pathname?.includes(elem?.url)
+                        ? elem?.color
+                        : "white",
+                    }}
+                  ></div>
                 </div>
               </div>
             ))}
@@ -187,8 +201,8 @@ const Navbar = () => {
       </div>
 
       {/* ---------------------------------------------------------------------------------------------------- */}
-      <div className="responsive_navbar1 mx-6 w-1/4">
-        <div className="w-full flex justify-between items-center h-full">
+      <div className="w-full lg:w-[28%] flex justify-end">
+        <div className="w-[80%] flex justify-between items-center h-full px-4">
           {/* Peoples */}
 
           {/* U-Straem and Interests are removed */}
@@ -196,7 +210,7 @@ const Navbar = () => {
           {data?.map((elem) => (
             <div
               key={elem?.name}
-              className="flex flex-col items-center cursor-pointer relative -mb-[17px] text-[12px]"
+              className="flex flex-col items-center justify-center gap-1 cursor-pointer relative text-[12px]"
               onClick={() => onHandleClick(elem)}
             >
               {elem?.name === "Friends" ? (
@@ -207,8 +221,11 @@ const Navbar = () => {
                     placement={"bottom-start"}
                     button={
                       <>
-                        <img src={elem?.icon} className="ml-2 h-[30px]" />
-                        <div className=" font-bold">{elem?.name}</div>
+                        <img
+                          src={elem?.icon}
+                          className="ml-2 h-[25px] lg:h-[30px]"
+                        />
+                        {/* <div className=" font-bold">{elem?.name}</div> */}
                       </>
                     }
                     options={[
@@ -216,7 +233,7 @@ const Navbar = () => {
                       { name: "Find Friend" },
                       { name: "Friend Request" },
                     ]}
-                    itemClass={'font-bold'}
+                    itemClass={"font-bold"}
                   />
                 </>
               ) : (
@@ -224,9 +241,9 @@ const Navbar = () => {
                   <img
                     src={elem?.icon}
                     alt={elem?.name}
-                    className="h-[30px] profile_img"
+                    className="h-[21px] lg:h-[26px] profile_img"
                   />
-                  <div className=" font-bold">{elem?.name}</div>
+                  {/* <div className=" font-bold">{elem?.name}</div> */}
                 </>
               )}
             </div>
@@ -234,7 +251,7 @@ const Navbar = () => {
 
           {/* User Profile */}
           <div
-            className="flex flex-col max-w-[250px] items-center cursor-pointer relative -mb-[19px]"
+            className="flex flex-col max-w-[250px] items-center cursor-pointer relative justify-center"
             onClick={userProfileModal}
           >
             {/* <img

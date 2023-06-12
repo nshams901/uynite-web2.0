@@ -554,6 +554,7 @@ const Modal = ({ modalType, handleClose }) => {
                             map={false}
                             placeholder={"Living location"}
                             types={"cities"}
+                            
                           />
                           {/* <input id="autocomplete" type="text"/> */}
                         </div>

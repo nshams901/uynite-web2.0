@@ -5,6 +5,7 @@ import Heading from "../Heading/Heading";
 import Button2 from "../Button/Button2";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
+  isOtpValid,
   matchingOtp,
   saveUserSignupData,
   settingOtp,
@@ -41,7 +42,7 @@ const SignupOtp = ({ title }) => {
   const { showModal } = state;
   const dispatch = useDispatch();
   const [loading, setIsLoading] = useState(false);
-  const { otp, signupData, isEmailOtp, isPhoneNo } = useSelector(
+  const { otp, signupData, isEmailOtp, isPhoneNo, userInfo } = useSelector(
     (state) => state.authReducer
   );
   console.log("isEmailOtp-----------", isEmailOtp);
@@ -55,8 +56,6 @@ const SignupOtp = ({ title }) => {
     setIsLoading(true);
     dispatch(settingOtp(""));
 
-    // if (isEmailOtp) {
-    // }
     const resendOtp = await dispatch(saveUserSignupData(dataObj));
     if (resendOtp?.data?.status) {
       setIsLoading(false);
@@ -85,33 +84,44 @@ const SignupOtp = ({ title }) => {
       setIsLoading(false);
       return;
     }
-    if (phoneNumberRules.test(signupData?.uemail)) {
+    if (isPhoneNo) {
       confirmationResult
         .confirm(otp)
         .then((result) => {
+          console.log("================ PHONEEEE");
+
           dispatch(settingOtp(""));
           setState({ ...state, showModal: true });
           // User signed in successfully.
           const user = result.user;
+          console.log("-===-======-=-----=--=", result);
           setIsLoading(false);
+          dispatch(isOtpValid({ validOtp: true, userInfo: false }));
+          console.log("skljhsldijk[]]]]]]]]]", userInfo);
+          navigate(`/auth/verification/signup?${userInfo?.profileType}`);
         })
         .catch((error) => {
           setIsLoading(false);
           console.log(error, "error");
           // User couldn't sign in (bad verification code?)
         });
-    } else {
-        //  setState({ ...state, showModal: true });
-        //  navigate(`/auth/verification/signup?${signupData?.profileType}`);
-      const result = await dispatch(matchingOtp(signupData?.uemail, otp));
+    }
+    console.log("signupData?.uemail>>>>>>>>>>>>>", signupData);
+    if (signupData?.uemail) {
+      console.log("================ Email");
 
+      const result = await dispatch(matchingOtp(signupData?.uemail, otp));
+      console.log("iuhsduoihsiusijhd", result);
       if (!result?.status) {
         setIsLoading(false);
         toasterFunction(result?.message);
       } else {
-        setState({ ...state, showModal: true });
-        navigate(`/auth/verification/signup?${signupData?.profileType}`);
+        // setState({ ...state, showModal: true });
+        dispatch(isOtpValid({ validOtp: true, userInfo: false }));
+        navigate(`/auth/verification/signup?${userInfo?.profileType}`);
       }
+
+      console.log("state show Modal", state.showModal);
     }
     getFirebaseToken()
       .then(async (res) => {
@@ -123,7 +133,7 @@ const SignupOtp = ({ title }) => {
           uemail: signupData?.uemail,
           //  "umobile": "weware5007@fectode.com"
         };
-        const resp = await dispatch(userRegistration(data));
+        await dispatch(userRegistration(data));
         setIsLoading(false);
       })
       .catch((err) => {
@@ -131,7 +141,7 @@ const SignupOtp = ({ title }) => {
       });
     // navigate("/auth/createUser")
     setIsLoading(false);
-    toasterFunction(result?.message);
+    // toasterFunction(result?.message);
   };
 
   function configureRecaptcha(phoneNumber, auth) {
@@ -171,20 +181,20 @@ const SignupOtp = ({ title }) => {
   function Timer() {
     const [seconds, setSeconds] = useState(5 * 60);
 
-   useEffect(() => {
-     const intervalId = setInterval(() => {
-       setSeconds((prevSeconds) => {
-         if (prevSeconds <= 1) {
-           clearInterval(intervalId);
-           setTimer(false);
-           return 0;
-         }
-         return prevSeconds - 1;
-       });
-     }, 1000);
+    useEffect(() => {
+      const intervalId = setInterval(() => {
+        setSeconds((prevSeconds) => {
+          if (prevSeconds <= 1) {
+            clearInterval(intervalId);
+            setTimer(false);
+            return 0;
+          }
+          return prevSeconds - 1;
+        });
+      }, 1000);
 
-     return () => clearInterval(intervalId);
-   }, []);
+      return () => clearInterval(intervalId);
+    }, []);
 
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -261,14 +271,6 @@ const SignupOtp = ({ title }) => {
           onClick={() => navigate("/auth/signup")}
         />
       </div>
-      {showModal && (
-        <Portals>
-          <Modal
-            modalType={signupData?.profileType}
-            handleClose={handleClose}
-          />
-        </Portals>
-      )}
       {loading && <Loader />}
     </>
   );

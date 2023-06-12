@@ -8,7 +8,9 @@ const initialState = {
   mailSended: {},
   countryList: [],
   isEmailOtp: false,
-  isPhoneNo:"",
+  isPhoneNo: "",
+  isOtpValid: {},
+  userInfo:{}
 };
 
 const authReducer = (state = initialState, action) => {
@@ -70,6 +72,14 @@ const authReducer = (state = initialState, action) => {
     case "PHONE_NO":
       console.log("Action.PAylaod PHONE_NO++++", action.payload);
       return { ...state, isPhoneNo: action.payload };
+
+    case "VALID_OTP":
+      console.log("Valid Otp", action.payload);
+      return { ...state, isOtpValid: action.payload };
+
+    case "USER_INFORMATION":
+      console.log("USER_INFORMATION ", action.payload);
+      return { ...state, userInfo: action.payload };
     default:
       return state;
   }

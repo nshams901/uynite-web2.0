@@ -126,7 +126,7 @@ export const getAllEventPost = (eventpostid, profileid) => async (dispatch) => {
         },
       }
     );
-    console.log("allEventResult", allEventResult);
+    console.log("allEventResult", allEventResult?.data);
     dispatch({
       type: "GET_ALL_EVENTS_POST_LIST",
       payload: allEventResult?.data,

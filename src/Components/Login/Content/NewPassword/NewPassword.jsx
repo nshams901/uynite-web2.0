@@ -18,6 +18,7 @@ const NewPassword = () => {
   const navigate = useNavigate();
   const { emailExist } = useSelector((state) => state.authReducer);
   const [loading, setIsLoading] = useState(false);
+  const [showTitle, setShowTitle] = useState(false);
   const dispatch = useDispatch();
   const formik = useFormik({
     validateOnMount: true,
@@ -40,7 +41,9 @@ const NewPassword = () => {
       setIsLoading(true);
       const dataObj = {
         password: formik.values.password,
-        uemail: emailExist.data.uemail,
+        uemail: emailExist.data.uemail
+          ? emailExist.data.uemail
+          : emailExist?.data?.umobile,
       };
       console.log("dataObj", dataObj);
       const newPasswordStatus = await dispatch(savingNewPassword(dataObj));
@@ -65,7 +68,8 @@ const NewPassword = () => {
   const validatePassword = (password) => {
     return passwordRules.test(password);
   };
-  const [showTitle, setShowTitle] = useState(false);
+
+  console.log("emailExist", emailExist?.data?.umobile);
   return (
     <>
       <div className="w-full h-full rounded-[20px] flex flex-col justify-center items-center gap-3 p-5">
@@ -83,11 +87,11 @@ const NewPassword = () => {
               onClick={() => setShowTitle(!showTitle)}
             />
           </span>
-        {showTitle && (
-          <p className="text-[8px] absolute top-[-15px]">
-            Password should be minimum of 8 length, atleast one number.
-          </p>
-        )}
+          {showTitle && (
+            <p className="text-[8px] absolute top-[-15px]">
+              Password should be minimum of 8 length, atleast one number.
+            </p>
+          )}
         </div>
         <PasswordInput
           title="Enter New Password"

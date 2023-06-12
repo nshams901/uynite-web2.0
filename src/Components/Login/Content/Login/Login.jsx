@@ -14,6 +14,7 @@ import {
   checkingIsEmailExist,
   loginUser,
   otpType,
+  savingPhoneNo,
   sendingMailForOtp,
   settingOtp,
 } from "../../../../redux/actionCreators/authActionCreator";
@@ -128,11 +129,14 @@ const Login = () => {
   const onForgetPasswordClick = async () => {
     dispatch(settingOtp(""));
     setIsLoading(true);
+
     let email = formik.values.email;
+    
     if (validateEmail(email)) {
       dispatch(otpType(true));
     } else {
       dispatch(otpType(false));
+      dispatch(savingPhoneNo(email));
     }
     if (email.trim() === "") {
       setIsLoading(false);
@@ -229,9 +233,8 @@ const Login = () => {
     <>
       {/* padding increased */}
       <div className="lg:w-full h-full rounded-[20px] flex flex-col justify-center items-center gap-2 px-7 py-4 sm:py-8">
-        <div id="sign-in"></div>
         {/* <Heading title="Get Started" /> */}
-        <img src={textLogo} alt="" className="w-[50%] mb-4" />
+        {/* <img src={textLogo} alt="" className="w-[50%] mb-4" /> */}
         <Input
           title="Email/Phone number*"
           name="email"
@@ -266,18 +269,14 @@ const Login = () => {
           touched={formik.touched.password}
           className="w-full"
         />
+        <div className="text-xs flex items-center font-semibold gap-1 w-full py-2">
+          <input type="checkbox" name="" id="" />
+          <span className="text-[#AEB2B1]">Keep me logged in</span>
+        </div>
         {/* font wight changed */}
         <div className="w-full">
-          <div className="text-xs font-bold mb-2">
-            <div
-              className="text-xs font-semibold mb-2 py-1 cursor-pointer text-[#7991BD]"
-              onClick={onForgetPasswordClick}
-            >
-              Forgot password ?
-            </div>
-          </div>
           <Button2
-            title="Sign In"
+            title="Log In"
             className="w-full"
             onClick={formik.handleSubmit}
             disabled={
@@ -286,13 +285,21 @@ const Login = () => {
               !validatePassword(formik.values.password)
             }
           />
+          <div className="text-xs font-bold text-center py-2">
+            <div
+              className="text-xs font-semibold cursor-pointer text-[#7991BD]"
+              onClick={onForgetPasswordClick}
+            >
+              Forgot password ?
+            </div>
+          </div>
           {/* color of text changed */}
-          <p className="text-xs font-bold text-gray-500 mt-4 text-center">
-            Don't have an account?
-            <Link to="/auth/signup" className="text-[#7991BD] ml-2">
-              Sign Up
-            </Link>
-          </p>
+
+          <Button2
+            title="Register"
+            className="w-full"
+            onClick={() => navigate("/auth/signup")}
+          />
         </div>
         <div ref={captchaEl} id="sign-in-button"></div>
       </div>

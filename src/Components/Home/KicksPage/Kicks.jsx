@@ -162,7 +162,7 @@ const Kicks = () => {
           isMobile ? "" : "hidden"
         }`}
       >
-        <section className=" w-[95%] sm:w-[50%] lg:w-[40%] p-3 bg-black">
+        <section className=" w-[95%] sm:w-[50%] lg:w-[40%] p-3 bg-[#E4E7EC]">
           <div className="flex justify-evenly sticky top-[10%] p-2">
             {openCat && (
               <div className="mt-1">
@@ -197,7 +197,7 @@ const Kicks = () => {
           </div>
           {/*  */}
           <section
-            className={`video-container mt-[3%] text-white bg-black ${
+            className={`video-container mt-[3%] text-white bg-[#E4E7EC] ${
               isMobile ? "video-container_mobile" : ""
             }`}
             id="video-container"
@@ -235,21 +235,23 @@ const Kicks = () => {
 
       {/* // desktop version// */}
       <div
-        className={`w-full flex h-[90vh] bg-black bg-[url(${events})] z-10 ${
+        className={`w-full flex h-[90vh] bg-[#E4E7EC] bg-[url(${events})] z-10 ${
           isMobile ? "hidden" : ""
         }`}
       >
-        <section className="flex w-[39%] items-center justify-center bg-black">
+        <section className="flex w-[39%] items-center justify-center bg-[#E4E7EC]">
           <div className="w-[80%] flex flex-col items-center">
             <div className="flex flex-col gap-3">
               {data?.map((elem) => (
                 <p
                   key={elem?.title}
-                  className="text-white cursor-pointer flex items-center justify-center rounded-xl font-semibold"
+                  className={`${
+                    kicksType === elem?.title ? "text-white" : "text-black"
+                  } cursor-pointer flex items-center justify-center rounded-xl font-semibold`}
                   style={{
                     padding: kicksType === elem?.title ? "0.5rem 1rem" : "0rem",
                     backgroundColor:
-                      kicksType === elem?.title ? "#DD8E58" : "black",
+                      kicksType === elem?.title ? "#DD8E58" : "#E4E7EC",
                   }}
                   onClick={() => getKicks(elem.title)}
                 >
@@ -278,7 +280,7 @@ const Kicks = () => {
         {/* Reels Section */}
 
         <section
-          className="video-container mt-[3%] flex-1 text-white bg-black"
+          className="video-container mt-[3%] flex-1 text-white bg-[#E4E7EC]"
           id="video-container"
         >
           {isEmpty(videoData?.content) ? (

@@ -7,6 +7,7 @@ import { getBlockedUser } from "../../redux/actionCreators/privacyAction";
 import {
   blockedFriendList,
   searchBlockedFriend,
+  unBlockFriend,
 } from "../../redux/actionCreators/settingsActionCreator";
 import profileReducer from "./../../redux/reducers/profileReducer";
 
@@ -29,7 +30,13 @@ const BlockListPage = () => {
 
     dispatch(blockedFriendList(profile?.id));
   }, []);
-  const onUnblockClick = () => {
+  const onUnblockClick = (userDetails) => {
+    console.log("userDetail[[[[[[[]]]]]]", userDetails);
+    console.log("userDetail[[[[[[[2222222]]]]]]", userDetails?.friendprofileid);
+
+    dispatch(
+      unBlockFriend(userDetails?.friend?.profileid, userDetails?.profile?.id)
+    );
     setUnBlockModal(true);
   };
 
@@ -53,31 +60,35 @@ const BlockListPage = () => {
           inputValue={onInputChange}
         />
 
-        <div className="flex flex-col gap-3 overflow-y-scroll pb-2">
-          {friendBlockList?.map((elem) => (
-            <div className="flex gap-2" key={elem?.friend?.id}>
-              <div className="flex-1 flex items-center gap-2">
-                <img
-                  src={
-                    elem?.profile?.pimage
-                      ? elem?.profile?.pimage
-                      : "./images/events.jpg"
-                  }
-                  alt=""
-                  className="w-[35px] h-[35px] sm:w-[45px] sm:h-[45px] rounded-full"
-                />
-                <span className="text-[10px] sm:text-xs lg:text-sm font-bold">
-                  {elem?.profile?.fname}
-                </span>
+        <div className="flex flex-col gap-3 overflow-y-scroll pb-2 ">
+          {friendBlockList?.length ? (
+            friendBlockList?.map((elem) => (
+              <div className="flex gap-2" key={elem?.friend?.id}>
+                <div className="flex-1 flex items-center gap-2">
+                  <img
+                    src={
+                      elem?.profile?.pimage
+                        ? elem?.profile?.pimage
+                        : "./images/events.jpg"
+                    }
+                    alt=""
+                    className="w-[35px] h-[35px] sm:w-[45px] sm:h-[45px] rounded-full"
+                  />
+                  <span className="text-[10px] sm:text-xs lg:text-sm font-bold">
+                    {elem?.profile?.fname}
+                  </span>
+                </div>
+                <button
+                  className="text-blue-400 text-[8px] sm:text-[10px] lg:text-xs border-2 font-bold py-1 w-[15%] rounded-sm border-blue-400 self-end"
+                  onClick={() => onUnblockClick(elem)}
+                >
+                  Unblock
+                </button>
               </div>
-              <button
-                className="text-blue-400 text-[8px] sm:text-[10px] lg:text-xs border-2 font-bold py-1 w-[15%] rounded-sm border-blue-400 self-end"
-                onClick={onUnblockClick}
-              >
-                Unblock
-              </button>
-            </div>
-          ))}
+            ))
+          ) : (
+            <h1 className="w-full text-center"> There Is No Blocked Friend</h1>
+          )}
         </div>
       </div>
 
