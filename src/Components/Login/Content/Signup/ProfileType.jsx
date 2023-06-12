@@ -30,6 +30,7 @@ import Button2 from "../Button/Button2";
 // import { *asYup } from 'yup';
 
 const ProfileType = ({ modalType }) => {
+  console.log("Modal Type", modalType);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [orgCategory, setOrgCategory] = useState("");

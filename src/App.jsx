@@ -61,7 +61,9 @@ const App = () => {
   axios.defaults.headers.common["Content-Type"] = "application-json";
   axios.defaults.headers.common["Accept-Language"] = "en";
   const dispatch = useDispatch();
-  const { isOtpValid, signupData } = useSelector((state) => state.authReducer);
+  const { isOtpValid, signupData, userInfo } = useSelector(
+    (state) => state.authReducer
+  );
   let userData = localStorage.getItem("userCredential");
   userData = JSON.parse(userData);
 
@@ -122,14 +124,18 @@ const App = () => {
             path="verification/signup"
             element={
               isOtpValid?.validOtp && !isOtpValid?.userInfo ? (
-                <ProfileType modalType={signupData.profileType} />
+                <ProfileType modalType={userInfo?.profileType} />
               ) : isOtpValid?.validOtp && isOtpValid?.userInfo ? (
-                <CountrySelection modalType={signupData.profileType} />
+                <CountrySelection modalType={userInfo?.profileType} />
               ) : (
                 <SignupOtp title="Email verification" />
               )
             }
           />
+          {console.log(
+            "dfhhfdijggggggggggggggggggggggggggggggg",
+            userInfo?.profileType
+          )}
           <Route exact path="createUser" element={<UpdateProfile />} />
         </Route>
 

@@ -60,19 +60,12 @@ const Event = () => {
       </div>
       <div className="slider w-[95%] sm:w-[50%] lg:w-[40%] bg-[#EAE9E7] mt-2">
         <Carousel>
-          {/* {image?.map((img) => (
+          {image?.map((img) => (
             <img
               key={img}
               src={img ? img : "./images/events.jpg"}
               alt=""
               className="w-[100%] h-[70vh] object-cover rounded-[20px]"
-            />
-          ))} */}
-          {[1, 2]?.map((img) => (
-            <img
-              src="./images/events.jpg"
-              alt=""
-              className="w-[100%] h-[32vh] sm:h-[40vh] lg:h-[50vh] object-cover rounded-[20px]"
             />
           ))}
         </Carousel>
@@ -89,17 +82,13 @@ const Event = () => {
       </div>
       <div className="w-[95%] sm:w-[50%] lg:w-[40%] flex flex-col items-center justify-center gap-4 mt-2">
         {eventTabSelected === "Post" &&
-          //  dispatch(getAllEventPost(defaultRootData?.data?.postdata?.id,defaultRootData?.data?.postdata?.profileid)) &&
-          // allEventsPost?.map((post) =>
-          //   Object.values(post?.data)?.map((item, index) => (
-          //     <EventPostCard key={index} item={item} />
-          //   ))
-          allEventsPost?.map((item, index) => (
-            <div className="  w-full flex items-center justify-center flex-col">
-              <PostCard />
-            </div>
-            // <EventPostCard key={index} item={item} />
-          ))}
+          allEventsPost?.map((elem, index) =>
+            elem?.data?.map((item) => (
+              <div className="  w-full flex items-center justify-center flex-col">
+                <PostCard item={item} />
+              </div>
+            ))
+          )}
 
         {eventTabSelected === "Trending" &&
           allTrendingPost !== null &&
@@ -107,12 +96,13 @@ const Event = () => {
           //   Object.values(post?.data)?.map((item, index) => (
           //     <EventPostCard key={index} item={item} />
           //   ))
-          allTrendingPost?.map((item, index) => (
-            <div className=" w-full flex items-center justify-center flex-col">
-              <PostCard />
-              {/* <EventPostCard key={index} item={item} /> */}
-            </div>
-          ))}
+          allTrendingPost?.map((elem, index) =>
+            elem?.data?.map((item) => (
+              <div className=" w-full flex items-center justify-center flex-col">
+                <PostCard item={item} />
+              </div>
+            ))
+          )}
 
         {eventTabSelected === "Participate" && <Participate />}
       </div>

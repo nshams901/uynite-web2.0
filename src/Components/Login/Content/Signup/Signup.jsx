@@ -107,6 +107,7 @@ const Signup = () => {
         dispatch(otpType(true));
       } else {
         dispatch(otpType(false));
+         dispatch(savingPhoneNo(formik.values.email));
       }
       if (!validateEmail(formik.values.email)) {
         setIsLoading(false);

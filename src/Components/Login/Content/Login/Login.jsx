@@ -14,6 +14,7 @@ import {
   checkingIsEmailExist,
   loginUser,
   otpType,
+  savingPhoneNo,
   sendingMailForOtp,
   settingOtp,
 } from "../../../../redux/actionCreators/authActionCreator";
@@ -128,11 +129,14 @@ const Login = () => {
   const onForgetPasswordClick = async () => {
     dispatch(settingOtp(""));
     setIsLoading(true);
+
     let email = formik.values.email;
+    
     if (validateEmail(email)) {
       dispatch(otpType(true));
     } else {
       dispatch(otpType(false));
+      dispatch(savingPhoneNo(email));
     }
     if (email.trim() === "") {
       setIsLoading(false);

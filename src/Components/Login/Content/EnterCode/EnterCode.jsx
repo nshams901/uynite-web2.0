@@ -23,9 +23,11 @@ const EnterCode = ({ title }) => {
   const [timer, setTimer] = useState(true);
   const [loading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-  const { otp, emailExist, isEmailOtp } = useSelector(
+  const { otp, emailExist, isEmailOtp, isPhoneNo } = useSelector(
     (state) => state.authReducer
   );
+ 
+
   const timerFunction = async () => {
     const dataObj = {
       datetime: Date.now().toString(),
@@ -42,8 +44,11 @@ const EnterCode = ({ title }) => {
         toast.success(res.message);
       })
       .catch((err) => {
+        console.log("nOT gONE");
         toast.error(err.message);
       });
+    console.log("eNTERY");
+    // const code = getCodeFromUserInput();
 
     if (timer === false) {
       setTimer(true);
@@ -55,25 +60,48 @@ const EnterCode = ({ title }) => {
 
   const onConfirmOtp = async () => {
     setIsLoading(true);
-    const EmailOrPhone = emailExist?.data?.uemail
-      ? emailExist?.data?.uemail
-      : emailExist?.data?.umobile;
-      console.log("EmailOrPhone", EmailOrPhone);
-           console.log("sdgfujksdhf", emailExist.data.umobile);
-    const result = await dispatch(matchingOtp(EmailOrPhone, otp));
-    console.log("+++++++++++++",result);
-    if (!result.status) {
-      dispatch(settingOtp(""));
-      setIsLoading(false);
-      return toasterFunction(result.message);
+   
+    console.log("emailExist?.data?.umobile.includes('@'')", isPhoneNo);
+    if (isPhoneNo) {
+      console.log("================ PHONEEEE");
+      confirmationResult
+        .confirm(otp)
+        .then((result) => {
+          // User signed in successfully.
+          console.log("FirebAse Otp Verified", result);
+          const user = result.user;
+          setIsLoading(false);
+          navigate("/auth/forgetpassword");
+          console.log("FirebAse Otp user", user);
+          // ...
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          console.log("...........>>>>>>>", error);
+          toasterFunction(error);
+
+          // User couldn't sign in (bad verification code?)
+          // ...
+        });
     }
-    setIsLoading(false);
-    navigate("/auth/forgetpassword");
-    toasterFunction(result.message);
+
+    if (emailExist?.data?.uemail) {
+      console.log("Insideeeee", emailExist?.data?.uemail);
+      const result = await dispatch(matchingOtp(emailExist?.data?.uemail, otp));
+      console.log("+++++++++++++", result);
+      if (!result.status) {
+        dispatch(settingOtp(""));
+        setIsLoading(false);
+        return toast.error(result.message);
+      }
+      setIsLoading(false);
+      navigate("/auth/forgetpassword");
+      toast.success(result.message);
+    }
   };
 
   function Timer() {
-    const [seconds, setSeconds] = useState(5*60);
+    const [seconds, setSeconds] = useState(5 * 60);
 
     useEffect(() => {
       const intervalId = setInterval(() => {

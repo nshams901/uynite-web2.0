@@ -59,7 +59,7 @@ const Home = ({ onShowReportModal, showReportModal }) => {
       <div className="w-full flex py-1 sm:w-[50%] lg:w-[40%] rounded-lg pl-2 mt-2">
         <PostForm rightIcon />
       </div>
-      {/* <HeroSection /> */}
+      <HeroSection />
       <SliderSection />
       <PostContent
         data={postList}

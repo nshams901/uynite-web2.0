@@ -21,6 +21,7 @@ import Input from "../InputBox/Input";
 import { setDataOnStorage, toasterFunction } from "../../../Utility/utility";
 
 const CountrySelection = ({ modalType }) => {
+  console.log("modalll 2222221111111111", modalType);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [orgCategory, setOrgCategory] = useState("");
@@ -36,7 +37,6 @@ const CountrySelection = ({ modalType }) => {
       loksabhaList: state.authReducer.loksabhaList,
       assemblyList: state.authReducer.assemblyList,
       userInfo: state.authReducer.userInfo,
-    
     };
   });
   const {
@@ -177,7 +177,7 @@ const CountrySelection = ({ modalType }) => {
                     return userResponse?.message;
                   }
                   // toast.success(userResponse?.message);
-                   console.log("Exit 1111");
+                  console.log("Exit 1111");
                   await setDataOnStorage(userCredential);
                   navigate("/select");
                   console.log("Exit 222");
@@ -185,7 +185,6 @@ const CountrySelection = ({ modalType }) => {
                   console.log(error);
                 }
               } else toast.error(res.data.message);
-              
             })
             .catch((err) => {
               toast.error(err.message);
@@ -230,21 +229,21 @@ const CountrySelection = ({ modalType }) => {
     // console.log(response);
   };
 
-    const handleChange = (name, value) => {
-      console.log("Value =========", value.statecode);
-      const obj = {
-        selectedState: getDistrict(value.statecode),
-        selectedDistrict: getLoksabha(value.did),
-        selectedLoksabha: getAssenbly(value.lid),
-      };
-      console.log("name", name);
-      obj[name] && dispatch(obj[name]);
-      if (value.length > 32) {
-        setState({ ...states, [name]: value.slice(0, value.length - 1) });
-      } else {
-        setState({ ...states, [name]: value });
-      }
+  const handleChange = (name, value) => {
+    console.log("Value =========", value.statecode);
+    const obj = {
+      selectedState: getDistrict(value.statecode),
+      selectedDistrict: getLoksabha(value.did),
+      selectedLoksabha: getAssenbly(value.lid),
     };
+    console.log("name", name);
+    obj[name] && dispatch(obj[name]);
+    if (value.length > 32) {
+      setState({ ...states, [name]: value.slice(0, value.length - 1) });
+    } else {
+      setState({ ...states, [name]: value });
+    }
+  };
   return (
     <div className="w-full rounded-[20px] flex flex-col h-full justify-center items-center gap-1 px-2">
       {isPersonal ? (
