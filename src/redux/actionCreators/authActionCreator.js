@@ -41,10 +41,10 @@ export const settingOtp = (otp) => (dispatch) => {
   }
 };
 
-export const allSingupDetails = (data) => async (dispatch) => {
+export const accountRegistration = (data) => async (dispatch) => {
   try {
     const result = await axios.post(
-      ` https://web.uynite.com/api/user/registration`,
+      `https://web.uynite.com/api/user/registration`, data,
       {
         headers: {
           "Accept-Language": "en",
@@ -52,8 +52,8 @@ export const allSingupDetails = (data) => async (dispatch) => {
       }
     );
     dispatch({
-      type: "MATCHING_SIGNUP_OTP",
-      // payload:data,
+      type: "ACCOUNT_REGISTRATION",
+      payload: result.data,
     });
 
     
@@ -193,13 +193,10 @@ export const userRegistration = (data) => async (dispatch) => {
         },
       }
     );
-    console.log(">>>>>>>>>>><<<<<<<<<<<<<", response);
-    if (response.status) {
       dispatch({
         type: "SET_USER_DATA",
         payload: response.data,
       });
-    } else throw response;
     return response;
   } catch (err) {
     console.log(err, "errror login");

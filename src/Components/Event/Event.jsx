@@ -82,13 +82,12 @@ const Event = () => {
       </div>
       <div className="w-[95%] sm:w-[50%] lg:w-[40%] flex flex-col items-center justify-center gap-4 mt-2">
         {eventTabSelected === "Post" &&
-          allEventsPost?.map((elem, index) =>
-            elem?.data?.map((item) => (
+          allEventsPost?.map((item) => (
               <div className="  w-full flex items-center justify-center flex-col">
                 <PostCard item={item} />
               </div>
             ))
-          )}
+        }
 
         {eventTabSelected === "Trending" &&
           allTrendingPost !== null &&
@@ -96,13 +95,12 @@ const Event = () => {
           //   Object.values(post?.data)?.map((item, index) => (
           //     <EventPostCard key={index} item={item} />
           //   ))
-          allTrendingPost?.map((elem, index) =>
-            elem?.data?.map((item) => (
+          allTrendingPost?.map((item) => (
               <div className=" w-full flex items-center justify-center flex-col">
                 <PostCard item={item} />
               </div>
             ))
-          )}
+          }
 
         {eventTabSelected === "Participate" && <Participate />}
       </div>
