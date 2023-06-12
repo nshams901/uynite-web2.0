@@ -235,32 +235,45 @@ const SearchFriendsPage = ({ isFriend }) => {
   };
   const handleAcceptRequest = () => {
     const { fname, lname, id } = activeProfile;
-    // const ownPayload  = {
+    const data = relationOptions.flatMap((item) =>
+    item.checked ? item.key : false
+  );
+    const ownPayload  = {
 
-    //   id: ,
-    //   fname: profile?.fname,
-    //   lname: profile?.lname,
-    //   isFriend: true,
-    //   friendprofileid: activeProfile?.profile.id,
-    //   friendtype: "Friend",
-    //   profileid: profile.id,
-    //   requesttype: "Accepted",
-    //   groupsUpdate: [],
-    //   reqdatetime: new Date().getTime(),
-    // }
-    const payload = {
-      id: activeProfile.friend?.id,
-      fname: activeProfile.profile?.fname,
-      lname: activeProfile.profile?.lname,
+      id: activeProfile?.profile.id,
+      fname: profile?.fname,
+      lname: profile?.lname,
       isFriend: true,
       friendprofileid: activeProfile?.profile.id,
       friendtype: "Friend",
       profileid: profile.id,
       requesttype: "Accepted",
       groupsUpdate: [],
+      
+      classment: data.includes("classmate"),
+      collgues: data.includes("officemate"),
+      relative: data.includes("relative"),
+
+      reqdatetime: new Date().getTime(),
+    }
+    const payload = {
+      id: activeProfile.friend?.id,
+      fname: activeProfile.profile?.fname,
+      lname: activeProfile.profile?.lname,
+      isFriend: true,
+      friendprofileid: profile.id,
+      friendtype: "Friend",
+      profileid: activeProfile?.profile.id,
+      requesttype: "Accepted",
+      groupsUpdate: [],
+
+      classment: activeProfile?.friend?.classment,
+      collgues: activeProfile?.friend?.collgues,
+      relative: activeProfile?.friend?.relative ,
+
       reqdatetime: new Date().getTime(),
     };
-    // dispatch(acceptFriendRequest(ownPayload))
+    dispatch(acceptFriendRequest(ownPayload))
     dispatch(acceptFriendRequest(payload)).then((res) => {
       if (res?.status) {
         setState({...state, acceptRequest: false})
