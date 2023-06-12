@@ -177,11 +177,8 @@ const CountrySelection = ({ modalType }) => {
                     toast.error(userResponse.message);
                     return userResponse?.message;
                   }
-                  // toast.success(userResponse?.message);
-                  console.log("Exit 1111");
                   await setDataOnStorage(userCredential);
                   navigate("/select");
-                  console.log("Exit 222");
                 } catch (error) {
                   console.log(error);
                 }
@@ -217,7 +214,6 @@ const CountrySelection = ({ modalType }) => {
                 }
                 toast.success(userResponse?.message);
                 await setDataOnStorage(userCredential);
-                console.log("\\\\\\\\\\\\\\\\\\////////////");
                 navigate("/select");
               } catch (error) {
                 console.log(error);
