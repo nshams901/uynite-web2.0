@@ -10,8 +10,8 @@ import {
   addFriend,
   findFriends,
   getMutualFriends,
-  getRequestList,
   getRequestsList,
+  getSuggestedFriends,
   getUserByMail,
   getUsers,
   removeFriend,
@@ -36,14 +36,43 @@ const SearchFriendsPage = ({ isFriend }) => {
       profile: state.profileReducer.profile,
       requestList: state.friendReducer.requestList,
       unionList: state.unionReducer.myUnionList,
-      mutualFriend: state.friendReducer.mutualFriends,
+      mutualFriend: state.friendReducer.mutualFriends?.content,
     };
   });
   const { userList, profile, requestList, unionList, mutualFriend } =
     reducerData;
     const isPersonal = profile?.profiletype === 'Personal'
+ 
+
+  const [sendRequest, setSendRequest] = useState(false);
+  const [state, setState] = useState({ usersList: userList || []});
+  const [searchQuery, setSearchQuery] = useState();
+  const {
+    acceptRequest,
+    requestModal,
+    activeProfile,
+    loading,
+    relationOptions,
+    cancelModal,
+    usersList,
+    friendRequestList = requestList
+  } = state;
+
+  useEffect(() => {
+    dispatch(getMyUnion(profile?.id));
+    const params = {
+      pageNumber: 0,
+      pageSize: 20
+    }
+    if (isFriend) {
+      dispatch(getRequestsList(profile?.id));
+    } else {
+      dispatch(getSuggestedFriends(profile?.id, params))
+    }
+    setSearchQuery("");
+  }, [isFriend]);
+
   const options = useMemo(async () => {
-    await dispatch(getMyUnion(profile?.id));
     const union = unionList.map((item) => ({
       name: item.groupName,
       key: item.groupId,
@@ -62,36 +91,16 @@ const SearchFriendsPage = ({ isFriend }) => {
       ...union,
     ];
     setState({...state, relationOptions: isPersonal ? forPersonalAcc: forOrgAcc})
-  }, []);
-
-  const [sendRequest, setSendRequest] = useState(false);
-  const [state, setState] = useState({ usersList: userList || []});
-  const [searchQuery, setSearchQuery] = useState();
-  const {
-    acceptRequest,
-    requestModal,
-    activeProfile,
-    loading,
-    relationOptions,
-    cancelModal,
-    usersList 
-  } = state;
-
-  useEffect(() => {
-    if (isFriend) {
-      dispatch(getRequestsList(profile?.id));
-    } else {
-      dispatch(getMutualFriends(profile?.id));
-      setSearchQuery("");
-    }
-  }, [isFriend]);
+  }, [unionList]);
+  
   const onSendRequest = () => {
     setSendRequest(true);
   };
 
+
   const onHandleCloseModal = () => {
     // setSendRequest(false);
-    setState({ ...state, requestModal: false });
+    setState({ ...state, requestModal: false, cancelModal: false});
   };
 
   function showProfileDetail(id) {
@@ -182,7 +191,10 @@ const SearchFriendsPage = ({ isFriend }) => {
   const handleSearch = (e) => {
     const value = e.target.value;
     setSearchQuery(value);
-    processChange(value);
+    if(isFriend){
+      const list = requestList?.filter((item) => `${item.profile?.fname} ${item.profile?.lname}`.toLowerCase().includes(value?.toLowerCase()));
+      setState({...state, friendRequestList: list})
+    }else processChange(value);
   };
 
   const sendFriendRequest = (id) => {
@@ -213,6 +225,7 @@ const SearchFriendsPage = ({ isFriend }) => {
     };
     dispatch(removeFriend(payload)).then((res) => {
       if (res?.status) {
+        dispatch(getRequestsList(profile?.id))
         toast.success(res?.message);
         onHandleCloseModal(false);
       } else {
@@ -220,11 +233,23 @@ const SearchFriendsPage = ({ isFriend }) => {
       }
     });
   };
-
   const handleAcceptRequest = () => {
     const { fname, lname, id } = activeProfile;
+    // const ownPayload  = {
+
+    //   id: ,
+    //   fname: profile?.fname,
+    //   lname: profile?.lname,
+    //   isFriend: true,
+    //   friendprofileid: activeProfile?.profile.id,
+    //   friendtype: "Friend",
+    //   profileid: profile.id,
+    //   requesttype: "Accepted",
+    //   groupsUpdate: [],
+    //   reqdatetime: new Date().getTime(),
+    // }
     const payload = {
-      id: activeProfile.profile?.id,
+      id: activeProfile.friend?.id,
       fname: activeProfile.profile?.fname,
       lname: activeProfile.profile?.lname,
       isFriend: true,
@@ -235,8 +260,10 @@ const SearchFriendsPage = ({ isFriend }) => {
       groupsUpdate: [],
       reqdatetime: new Date().getTime(),
     };
+    // dispatch(acceptFriendRequest(ownPayload))
     dispatch(acceptFriendRequest(payload)).then((res) => {
       if (res?.status) {
+        setState({...state, acceptRequest: false})
         toast.success(res.message);
         dispatch(getRequestsList(profile?.id))
       } else {
@@ -244,11 +271,10 @@ const SearchFriendsPage = ({ isFriend }) => {
       }
     });
   };
-
   return (
     <>
       <div className="w-[100%] mt-2 flex-1 bg-[#E4E7EC] flex justify-center py-2 ">
-        <div className="flex w-[95%] sm:w-[50%] lg:w-[40%] relative bg-white rounded-md flex-col items-center bg-red-400">
+        <div className="flex w-[95%] sm:w-[50%] lg:w-[40%] relative bg-white rounded-md flex-col items-center">
           {/* Search Section */}
           <section className=" w-[95%] flex rounded-md justify-between items-center bg-[#E4E7EC] my-2">
             <input
@@ -279,7 +305,7 @@ const SearchFriendsPage = ({ isFriend }) => {
               ""
             )}
             {(isFriend
-              ? requestList
+              ? friendRequestList
               : !searchQuery
               ? mutualFriend
               : usersList
@@ -291,14 +317,12 @@ const SearchFriendsPage = ({ isFriend }) => {
                 profiletype,
                 pimage,
               } = isFriend ? item?.profile : item || {};
-              {
-                /* console.log(usersList, item, '{{{') */
-              }
+              const { requesttype} = item?.friend || {}
               const isOrganization = profiletype === "Organization";
               return (
                 <>
                   <div
-                    className="cursor-pointer hover:bg-gray-300 flex w-full pb-1 flex-col"
+                    className="cursor-pointer hover:bg-gray-300 flex w-full flex-col"
                     key={id}
                   >
                     <div className="bg-gray-500 w-full h-[1px] mb-1"></div>
@@ -314,12 +338,13 @@ const SearchFriendsPage = ({ isFriend }) => {
                         />
                         <span className="font-semibold text-[14px]">
                           {`${fname} ${lname}`}
+                        { isFriend && <div className="font-normal italic text-xs">friend request {requesttype === 'Send' ? 'sent' : 'received'}</div>}
                         </span>
                       </div>
                       {!isOrganization && (
                         <div className="flex gap-2">
                           <img src="" alt="" />
-                          {isFriend ? (
+                          {isFriend && item?.friend?.requesttype === 'Received' ? (
                             <img
                               src="./images/acceptFriendRequest.png"
                               alt=""
@@ -333,8 +358,9 @@ const SearchFriendsPage = ({ isFriend }) => {
                               }
                               // onClick={onAcceptRequest}
                             />
-                          ) : (
-                            <img
+                          ) :
+                              !isFriend ?
+                          <img
                               src="./images/SendFriendRequest.png"
                               alt=""
                               className="w-[30px] h-[30px] cursor-pointer"
@@ -346,7 +372,8 @@ const SearchFriendsPage = ({ isFriend }) => {
                                 })
                               }
                             />
-                          )}
+                            : ""}
+                          
                           {isFriend && (
                             <img
                               src="./images/cancelRequest.png"
@@ -359,7 +386,7 @@ const SearchFriendsPage = ({ isFriend }) => {
                       )}
                     </div>
                   </div>
-                  <hr className="border border-gray-50" />
+                  {/* <hr className="border border-gray-50" /> */}
                 </>
               );
             })}

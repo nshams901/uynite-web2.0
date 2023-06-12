@@ -292,7 +292,7 @@ const PostCard = ({ userData, item = {} }) => {
                 </span>
               </div>
 
-              <div className="items-center gap-1">
+              <div className=" flex flex-col gap-1">
                 {/* <HiUserGroup size={16} /> */}
                 {item?.viptype === 5 ? (
                   <div className="text-xs">Updated profile picture</div>
@@ -302,7 +302,7 @@ const PostCard = ({ userData, item = {} }) => {
                   ""
                 )}
                 <span><img className="w-5" src={getPrivacy(item?.shareto)}/></span>
-                <span className="text-[11px] ">
+                <span className="text-[11px] text-left">
                   {getTimeDiff( moment(item.createdatetime))} ago
                 </span>
 
@@ -356,7 +356,7 @@ const PostCard = ({ userData, item = {} }) => {
         {/* Content/About And Images Section */}
         <section className="w-full flex flex-col items-center mt-2 px-2">
           <div className=" w-full ">
-            <p className="text-[11px] sm:text-[12px] break-words lg:text-[13px] font-[400] text-gray-500">
+            <p className="text-[11px] text-left sm:text-[12px] break-words lg:text-[13px] font-[400] text-gray-500">
               {showMore ? description : `${shortDescription}`}
 
               {description.length > 150 && (

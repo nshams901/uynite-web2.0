@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getQueryParams } from "../../Components/Utility/utility";
 
 export const requestAction = (data, Action) => async (dispatch) => {
   try {
@@ -130,20 +131,20 @@ export const getFriendsList = (data) => async (dispatch) => {
   }
 };
 
-export const getRequestList = (data) => async (dispatch) => {
-  try {
-    const response = await axios.get(
-      `https://web.uynite.com/friend/api/friend/getfriendrequest/${data}/Send`
-    );
-    dispatch({
-      type: "GET_REQUEST_LIST",
-      payload: response.data,
-    });
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+// export const getRequestList = (data) => async (dispatch) => {
+//   try {
+//     const response = await axios.get(
+//       `https://web.uynite.com/friend/api/friend/getfriendrequest/${data}/Send`
+//     );
+//     dispatch({
+//       type: "GET_REQUEST_LIST",
+//       payload: response.data,
+//     });
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
 export const getRequestsList = (data) => async (dispatch) => {
   try {
@@ -192,6 +193,24 @@ export const getMutualFriends = (data) => async (dispatch) => {
     throw err;
   }
 };
+
+
+
+export const getSuggestedFriends = (data, params) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `https://web.uynite.com/friend/api/friend/test/getfriendfriends/${data}?${getQueryParams(params)}`,
+      data
+    );
+    dispatch({
+      type: "GET_MUTUAL_FRIEND",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
 export const removeFriend = (data) => async (dispatch) => {
   const { profileid, friendprofileid } = data;
   try {
@@ -200,7 +219,7 @@ export const removeFriend = (data) => async (dispatch) => {
       data
     );
     dispatch({
-      type: "ADD_FRIEND",
+      type: "REMOVE_FRIEND_REQUEST",
       payload: response.data, 
     });
     return response.data;

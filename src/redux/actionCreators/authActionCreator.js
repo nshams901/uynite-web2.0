@@ -152,6 +152,7 @@ export const savingNewPassword = (data) => async (dispatch) => {
 
 export const loginUser = (data) => async (dispatch) => {
   // const { email, password } = data;
+
   try {
     const response = await axios.post(
       `https://web.uynite.com/api/user/authenticate`,
@@ -162,6 +163,10 @@ export const loginUser = (data) => async (dispatch) => {
         },
       }
     );
+    const token = response.data?.data?.loginToken
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axios.defaults.headers.common['Content-Type'] = "application-json"
+    axios.defaults.headers.common['Accept-Language'] = "en"
     dispatch({
       type: "SET_USER_DATA",
       payload: response.data,

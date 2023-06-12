@@ -34,7 +34,7 @@ const MyFriendsPage = () => {
   });
   const { following, followers, friends, profile, unionList } = reducerData;
   const [state, setState] = useState({});
-  const { relation = { name: "Friends", key: "friends" }, friendList = friends} = state;
+  const { relation = { name: "All", key: "all" }, friendList = friends} = state;
   const isPersonal = profile.profiletype === 'Personal'
   useEffect(() => {
     const profileid = JSON.parse(localStorage.getItem("profile"))?.id;
@@ -80,8 +80,8 @@ const MyFriendsPage = () => {
   }
   const handleFilter = (value) => {
     const key = value.key === 'relatives' ? 'relative' : value.key === "classmates" ?
-    'classment' : value.key === 'officemates' ? 'collgues' : "id"
-    const filteredList = friends.filter((item) => {
+    'classment' : value.key === 'officemates' ? 'collgues' : value.key === 'friends' ? 'isFriend'  : "id"
+    const filteredList = friends?.filter((item) => {
       return item.friend[key]
     });
     setState(prev => ({...prev, friendList: filteredList, relation: value}))
@@ -118,7 +118,7 @@ const MyFriendsPage = () => {
           {isEmpty(friendList) ? (
             <EmptyComponent
               message={`No ${
-                relation?.name === "Friends" ? "Friends" : relation?.name
+                relation?.name === "Friends" || relation?.name === 'All' ? "Friends" : relation?.name
               }`}
             />
           ) : (

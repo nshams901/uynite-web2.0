@@ -36,6 +36,7 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
   ];
   const friend = data?.friend;
   const relations = [
+    friend?.isFriend && "friend",
     friend?.classment && "classmate",
     friend?.collgues && "colleague",
     friend?.relative && "relative",
@@ -136,6 +137,7 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
   };
 
   const handleUpdateRelation = () => {
+    const userid = JSON.parse(localStorage.getItem('userCredential')).id
     const relations = relationOption.flatMap(
       (item) => item.checked && item?.name
     );
@@ -143,18 +145,20 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
     const payloads = {
       classment: relations.includes("Classmate"),
       collgues: relations.includes("Officemate"),
-      fname: selectedItem?.fname,
+      fname: profile?.fname,
       friendprofileid: selectedItem?.id,
       friendtype: "Friend",
       org: false,
       isFriend: true,
       party: true,
-      lname: selectedItem?.lname,
+      lname: profile?.lname,
       profileid: profile?.id,
       relative: relations.includes("Relative"),
       reqdatetime: new Date().valueOf(),
-      requesttype: "Change",
-      userid: "63a67001a01d8442b1348496",
+      requesttype: "Accepted",
+      "groupsUpdate":[],
+      id: data.friend?.id,
+      userid: userid,
     };
 
     const relation = relationOption?.find(
@@ -167,6 +171,8 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
     };
     dispatch(updateRelation(payloads)).then((res) => {
       if (res?.status) {
+        setModalType({...modalType, changeRelationship: false});
+        dispatch(getFriendsList(profile?.id))
         toast.success(res?.message);
       } else {
         toast.error(res?.message);
@@ -190,7 +196,6 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
     });
   };
 
-  console.log(relations, "?????");
   return (
     <>
       <div className="flex hover:bg-gray-300 h-[50px] px-4 items-center py-2 relative">
@@ -224,7 +229,7 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
               button={
                 <div
                   onClick={() =>
-                    setState({ ...state, selectedItem: data?.profile })
+                    setState({ ...state, selectedItem: data?.profile, friendid: data?.friend?.id })
                   }
                   className="flex gap-2 items-center cursor-pointer"
                 >

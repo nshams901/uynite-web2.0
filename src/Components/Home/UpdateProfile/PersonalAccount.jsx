@@ -36,7 +36,7 @@ const PersonalAccount = ({
     PGdegree,
     PGyear,
     schoolYear,
-  } = education;
+  } = education || {};
   const reducerData = useSelector((state) => {
     return {
       countryList: state.authReducer.countryList,

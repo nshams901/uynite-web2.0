@@ -78,7 +78,7 @@ const Kicks = () => {
     setState({...state, videoData: {...data, content: dataList}})
 
   }, [kicksType, followingsContent, trendingContents, latestContents, getData]);
-console.log(videoData, "JJJJJJJJJ");
+
   useEffect(() => {
     getKicks("Following");
     window.addEventListener(
