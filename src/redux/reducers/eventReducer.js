@@ -29,13 +29,42 @@ export const eventReducer = (state = initialState, action) => {
     case "GET_ALL_EVENTS_POST_LIST":
       return {
         ...state,
-        allEventsPost: [...state.allEventsPost, action.payload],
+        allEventsPost:  action.payload.data ,
       };
     case "TRENDING_EVENTS_POST_LIST":
       return {
         ...state,
-        allTrendingPost: [...state.allTrendingPost, action.payload],
+        allTrendingPost:  action.payload.data ,
       };
+    case "INCREASE_LIKE_COUNT":
+      const data = state.allEventsPost?.map((item) => {
+        return item?.id === action.payload ? {...item, likecount: item?.likecount + 1, isliked: true} : item
+      })
+
+      const trending = state.allTrendingPost?.map((item) => {
+        return item?.id === action.payload ? {...item, likecount: item?.likecount + 1, isliked: true} : item
+      })
+      
+      return { ...state, allEventsPost: data, allTrendingPost: trending}
+    case "DECREASE_LIKE_COUNT":
+        const eventData = state.allEventsPost?.map((item) => {
+          return item?.id === action.payload ? {...item, likecount: item?.likecount - 1, isliked: false} : item
+        })
+
+        const trendingData = state.allTrendingPost?.map((item) => {
+          return item?.id === action.payload ? {...item, likecount: item?.likecount - 1, isliked: false} : item
+        })
+
+        return { ...state, allEventsPost: eventData, allTrendingPost: trendingData}
+    case "INCREASE_COMMENT_COUNT": 
+        const commentData = state.allEventsPost?.map((item) => {
+          return item?.id === action.payload ? { ...item, commentcount: item?.commentcount + 1} : item
+        });
+
+        const trendingCommentData = state.allTrendingPost?.map((item) => {
+          return item?.id === action.payload ? { ...item, commentcount: item?.commentcount + 1} : item
+        });
+        return { ...state, allEventsPost: commentData, allTrendingPost: trendingCommentData}
     default:
       return state;
   }
