@@ -45,7 +45,7 @@ const SignupOtp = ({ title }) => {
   const { otp, signupData, isEmailOtp, isPhoneNo, userInfo } = useSelector(
     (state) => state.authReducer
   );
-  console.log("isEmailOtp-----------", isEmailOtp);
+
   const timerFunction = async () => {
     const dataObj = {
       datetime: Date.now().toString(),
