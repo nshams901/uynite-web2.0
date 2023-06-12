@@ -53,11 +53,17 @@ const SignupOtp = ({ title }) => {
       uemail: signupData.uemail,
       // password: formik.values.password,
     };
+    const payload = {
+      password: signupData.password,
+      datetime: Date.now().toString(),
+      uemail: signupData.uemail
+    }
     setIsLoading(true);
     dispatch(settingOtp(""));
 
     const resendOtp = await dispatch(saveUserSignupData(dataObj));
     if (resendOtp?.data?.status) {
+      dispatch(userRegistration(payload))
       setIsLoading(false);
       toast.success(resendOtp?.data?.message);
     } else {

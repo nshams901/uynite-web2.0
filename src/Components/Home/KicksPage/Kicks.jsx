@@ -191,7 +191,9 @@ const Kicks = () => {
             ))}
             <section className=" mt-1">
               <Link to="/veiwallkicks">
+                <div>
                 <HiSearch className="w-8 p-0.5 h-8 cursor-pointer bg-[#6e6f6f] text-white rounded-full" />
+                </div>
               </Link>
             </section>
           </div>
