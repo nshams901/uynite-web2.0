@@ -45,7 +45,7 @@ const SignupOtp = ({ title }) => {
   const { otp, signupData, isEmailOtp, isPhoneNo, userInfo } = useSelector(
     (state) => state.authReducer
   );
-  console.log("isEmailOtp-----------", isEmailOtp);
+
   const timerFunction = async () => {
     const dataObj = {
       datetime: Date.now().toString(),
@@ -53,17 +53,12 @@ const SignupOtp = ({ title }) => {
       uemail: signupData.uemail,
       // password: formik.values.password,
     };
-    const payload = {
-      password: signupData.password,
-      datetime: Date.now().toString(),
-      uemail: signupData.uemail
-    }
+
     setIsLoading(true);
     dispatch(settingOtp(""));
 
     const resendOtp = await dispatch(saveUserSignupData(dataObj));
     if (resendOtp?.data?.status) {
-      dispatch(userRegistration(payload))
       setIsLoading(false);
       toast.success(resendOtp?.data?.message);
     } else {
@@ -94,40 +89,35 @@ const SignupOtp = ({ title }) => {
       confirmationResult
         .confirm(otp)
         .then((result) => {
-          console.log("================ PHONEEEE");
-
           dispatch(settingOtp(""));
           setState({ ...state, showModal: true });
           // User signed in successfully.
           const user = result.user;
-          console.log("-===-======-=-----=--=", result);
           setIsLoading(false);
           dispatch(isOtpValid({ validOtp: true, userInfo: false }));
-          console.log("skljhsldijk[]]]]]]]]]", userInfo);
           navigate(`/auth/verification/signup?${userInfo?.profileType}`);
         })
         .catch((error) => {
           setIsLoading(false);
-          console.log(error, "error");
           // User couldn't sign in (bad verification code?)
         });
     }
-    console.log("signupData?.uemail>>>>>>>>>>>>>", signupData);
     if (signupData?.uemail) {
-      console.log("================ Email");
-
       const result = await dispatch(matchingOtp(signupData?.uemail, otp));
-      console.log("iuhsduoihsiusijhd", result);
       if (!result?.status) {
         setIsLoading(false);
         toasterFunction(result?.message);
       } else {
+        const payload = {
+          password: signupData.password,
+          datetime: Date.now().toString(),
+          uemail: signupData.uemail
+        }
+        dispatch(userRegistration(payload))
         // setState({ ...state, showModal: true });
         dispatch(isOtpValid({ validOtp: true, userInfo: false }));
         navigate(`/auth/verification/signup?${userInfo?.profileType}`);
       }
-
-      console.log("state show Modal", state.showModal);
     }
     getFirebaseToken()
       .then(async (res) => {
@@ -178,7 +168,6 @@ const SignupOtp = ({ title }) => {
     signInWithPhoneNumber(auth, phoneNumber, appVerifier)
       .then((confirmation) => {
         window.confirmation = confirmation;
-        console.log("otp send");
         navigate(`/auth/verification/signup?${profileType}`);
       })
       .catch((err) => {

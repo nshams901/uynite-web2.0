@@ -104,7 +104,8 @@ const CountrySelection = ({ modalType }) => {
 
   const isPersonal = modalType === "Personal";
   const handleCreateProfile = async () => {
-    console.log("ENteryy");
+    const userid = localStorage.getItem("userid")
+    
     const payload = {
       celibrity: false, //default value.
       countrycode: "+91", //default selected in signup screen..
@@ -119,7 +120,7 @@ const CountrySelection = ({ modalType }) => {
       personalname: userInfo?.fname, //from user input – profilefnamein SLIDE 4
       profiletype: isPersonal ? "Personal" : "Organization", //profile type, while we passing in signup screen
       updatedate: userData.datetime, //Current UTC time in milliseconds
-      userid: userData.userId, // stored User ID from (Slide 3)
+      userid: userid // stored User ID from (Slide 3)
     };
 
     console.log("sdhkjlsdhfljksdhlsdhjljkdfsjklhsdfkjhdfkjg>>>>>>>>>", userData);
@@ -139,7 +140,7 @@ const CountrySelection = ({ modalType }) => {
       personalname: userInfo?.fname, //from user input – profilefnamein SLIDE 4
       profiletype: isPersonal ? "Personal" : "Organization", //profile type, while we passing in signup screen
       updatedate: userInfo.datetime, //Current UTC time in milliseconds
-      userid: userData.userId, // stored User ID from (Slide 3)
+      userid: userid, // stored User ID from (Slide 3)
     };
 
     console.log("Payyyyyyyyyaloads",payloads);
@@ -180,11 +181,8 @@ const CountrySelection = ({ modalType }) => {
                     toast.error(userResponse.message);
                     return userResponse?.message;
                   }
-                  // toast.success(userResponse?.message);
-                  console.log("Exit 1111");
                   await setDataOnStorage(userCredential);
                   navigate("/select");
-                  console.log("Exit 222");
                 } catch (error) {
                   console.log(error);
                 }
@@ -220,7 +218,6 @@ const CountrySelection = ({ modalType }) => {
                 }
                 toast.success(userResponse?.message);
                 await setDataOnStorage(userCredential);
-                console.log("\\\\\\\\\\\\\\\\\\////////////");
                 navigate("/select");
               } catch (error) {
                 console.log(error);
