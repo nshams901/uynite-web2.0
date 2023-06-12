@@ -5,12 +5,13 @@ import CreatePostModal from "../Modal/CreatePostModal/CreatePostModal";
 import { Avatar } from "@material-tailwind/react";
 import { useSelector } from "react-redux";
 import userIcon from "../../../Assets/Images/user.png";
-import gallaryIcon from "../../../Assets/Images/gallaryIcon.png"
-
+import gallaryIcon from "../../../Assets/Images/gallaryIcon.png";
+import { useNavigate } from "react-router-dom";
 
 const PostForm = ({ width, bgColor, rightIcon }) => {
   // const [showCreatePostModal, setShowCreatePostModal] = useState(false);
   const [state, setState] = useState({});
+  const navigate = useNavigate();
   const { showModal } = state;
   const createPostModal = () => {
     setState({ ...state, showModal: !showModal });
@@ -23,6 +24,7 @@ const PostForm = ({ width, bgColor, rightIcon }) => {
         alt="Avatar"
         variant="circular"
         className="rounded-full w-[30px] h-[30px]"
+        onClick={() => navigate("/profile")}
       />
       <div
         className="flex justify-between items-center w-full bg-white rounded-lg mx-1"

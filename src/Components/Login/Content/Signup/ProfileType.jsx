@@ -263,9 +263,8 @@ const ProfileType = ({ modalType }) => {
   const validateName = (name) => {
     return nameRules.test(name);
   };
-
   const onNextClick = () => {
-    const singupInfo = {
+    const signupInfo = {
       imgFile,
       fname,
       lname,
@@ -274,7 +273,9 @@ const ProfileType = ({ modalType }) => {
       orgName,
       checkBox,
     };
-    dispatch(userSingupInformation({ ...userData, ...singupInfo }));
+console.log("USERRRRRRRRRRRRRRRR", userData);
+
+    dispatch(userSingupInformation({ ...userData, ...signupInfo }));
     dispatch(isOtpValid({ validOtp: true, userInfo: true }));
   };
   return (

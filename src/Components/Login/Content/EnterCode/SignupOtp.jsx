@@ -128,11 +128,14 @@ const SignupOtp = ({ title }) => {
         const data = {
           datetime: Date.now(),
           deviceid: uuid(),
-          password: signupData?.password,
+          password: userInfo?.password,
           token: res,
-          uemail: signupData?.uemail,
+          uemail: userInfo?.uemail,
           //  "umobile": "weware5007@fectode.com"
         };
+
+        console.log("getFirebaseToken", data);
+            console.log("Singu[pppppppppppppp", userInfo);
         await dispatch(userRegistration(data));
         setIsLoading(false);
       })

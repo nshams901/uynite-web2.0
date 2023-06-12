@@ -121,6 +121,8 @@ const CountrySelection = ({ modalType }) => {
       updatedate: userData.datetime, //Current UTC time in milliseconds
       userid: userData.userId, // stored User ID from (Slide 3)
     };
+
+    console.log("sdhkjlsdhfljksdhlsdhjljkdfsjklhsdfkjhdfkjg>>>>>>>>>", userData);
     const payloads = {
       assembly: assembly?.assembly, //default value.
       celibrity: false,
@@ -139,6 +141,8 @@ const CountrySelection = ({ modalType }) => {
       updatedate: userInfo.datetime, //Current UTC time in milliseconds
       userid: userData.userId, // stored User ID from (Slide 3)
     };
+
+    console.log("Payyyyyyyyyaloads",payloads);
     const file = new FormData();
     file.append("file", imgFile);
     const data = isPersonal ? payloads : payload;

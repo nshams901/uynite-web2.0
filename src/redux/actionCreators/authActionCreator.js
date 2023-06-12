@@ -55,6 +55,8 @@ export const allSingupDetails = (data) => async (dispatch) => {
       type: "MATCHING_SIGNUP_OTP",
       // payload:data,
     });
+
+    
     return result.data.status;
   } catch (error) {
     console.log(error.message);
@@ -191,7 +193,7 @@ export const userRegistration = (data) => async (dispatch) => {
         },
       }
     );
-    console.log(response);
+    console.log(">>>>>>>>>>><<<<<<<<<<<<<", response);
     if (response.status) {
       dispatch({
         type: "SET_USER_DATA",
