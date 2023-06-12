@@ -58,7 +58,7 @@ const PoliticalGuestAddModal = ({ onClose, whichType }) => {
   };
 
   useEffect(() => {
-    dispatch(getCountryList())
+    //dispatch(getCountryList())
     if(country){
       dispatch(getStatesByCountry(countryId))
     }

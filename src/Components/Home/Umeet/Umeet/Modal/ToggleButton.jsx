@@ -4,7 +4,7 @@ function ToggleButton({ handleFoodCreate, feedbackVal }) {
   const [isOn, setIsOn] = useState(true);
 
   const handleClick = () => {
-    setIsOn(prevState => !prevState);
+    setIsOn(prevState => !prevState)
     if(!feedbackVal) handleFoodCreate(!isOn)
   };
 
