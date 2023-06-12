@@ -132,10 +132,6 @@ const App = () => {
               )
             }
           />
-          {console.log(
-            "dfhhfdijggggggggggggggggggggggggggggggg",
-            userInfo?.profileType
-          )}
           <Route exact path="createUser" element={<UpdateProfile />} />
         </Route>
 

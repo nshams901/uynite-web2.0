@@ -267,12 +267,12 @@ const VideoComponent = ({ dataList, data }) => {
 
   // console.log(isFollow());
   return (
-    <div key={profile?.id} className="snap-y w-3/4 md:w-1/2 snap-mandatory">
+    <div key={profile?.id} className="snap-y mb-6 w-3/4 md:w-1/2 snap-mandatory">
       <div className="h-full">
-        <section className="relative h-full snap-y snap-mandatory justify-center flex items-center bg-black hideScroll right-0  left-0 w-full z-0">
+        <section className="relative h-full snap-y snap-mandatory justify-center flex items-center  hideScroll right-0  left-0 w-full z-0">
           <div className="video-cards w-full h-full">
             <video
-              className={`video-player w-full cursor-pointer ${
+              className={`video-player bg-black rounded-3xl mb-5 w-full cursor-pointer ${
                 isMobile ? "w-full h-[386px]" : ""
               }`}
               loop={true}
@@ -299,7 +299,7 @@ const VideoComponent = ({ dataList, data }) => {
               <div className="cursor-pointer ml-3 mb-3 gap- font-semibold">
                 <BsThreeDotsVertical
                   onClick={() => handleIsMyVideo(data)}
-                  className="w-[27px] h-[27px] text-white"
+                  className="w-[27px] h-[27px] text-gray-500"
                 />
               </div>
               {dataList?.map((elem, index) =>
@@ -310,7 +310,7 @@ const VideoComponent = ({ dataList, data }) => {
                   <div
                     key={elem?.title}
                     onClick={() => handleIconClick(elem?.title)}
-                    className="flex ml-3 mb-3 font-semibold flex-col"
+                    className="flex ml-3 mb-3 text-black font-semibold flex-col"
                   >
                     <img
                       src={
@@ -348,7 +348,7 @@ const VideoComponent = ({ dataList, data }) => {
             isMobile ? "bottom-[100px]" : "bottom-[85px]"
           }`}
         >
-          <div className=" cursor-pointer">
+          <div className=" cursor-pointer px-6">
             <div className="flex gap-2 items-center mb-3">
               <img src={eye} alt="" className="w-[25px] h-[15px] ml-2" />
               <p className="text-[10px]">{viewcount} Views </p>

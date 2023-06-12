@@ -16,7 +16,7 @@
   position: relative;
   height: 80vh;
   width: 70%;
-  border-radius: 20px;
+  /* border-radius: 20px; */
   background-color: white;
   overflow: scroll;
   scroll-snap-type: y mandatory;

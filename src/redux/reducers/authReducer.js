@@ -45,7 +45,7 @@ const authReducer = (state = initialState, action) => {
     case "SENDING_MAIL_FOR_OTP":
       return { ...state, mailSended: action.payload };
     case "SET_USER_DATA":
-      console.log("set user id", action.payload);
+      console.log(action.payload.data, "OOOOOOOO TTTTTTTTTTT");
       return {
         ...state,
         signupData: {
