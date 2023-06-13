@@ -272,10 +272,17 @@ const ProfileType = ({ modalType }) => {
       dob,
       orgName,
       checkBox,
+      profiletype: modalType,
     };
 console.log("USERRRRRRRRRRRRRRRR", userData);
 
-    dispatch(userSingupInformation({ ...userData, ...signupInfo }));
+    dispatch(
+      userSingupInformation({
+        ...userData,
+        ...signupInfo,
+        profileType: modalType,
+      })
+    );
     dispatch(isOtpValid({ validOtp: true, userInfo: true }));
   };
   return (
