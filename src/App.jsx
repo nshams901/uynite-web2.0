@@ -152,7 +152,7 @@ const App = () => {
               element={<FindFriendsPage isFriend={false} />}
             />
             <Route exact path="profile" element={<UserProfilePage />} />
-            <Route path="profile/:id" element={<UserProfilePage isOther />} />
+            <Route path="profile/:id" element={<UserProfilePage isOthers= {true} />} />
             <Route
               path="friend-request"
               element={<FriendRequestPage isFriend={true} />}
