@@ -213,7 +213,7 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
           className=" flex flex-1 flex-col justify-center ml-4"
         >
           <span className="font-medium ">
-            {name ? `${fname} ${lname}` : "User"}
+            {name ? `${fname} ${lname || ""}` : "User"}
           </span>
           {
             <p className="text-[12px] font-bold text-gray-500">
