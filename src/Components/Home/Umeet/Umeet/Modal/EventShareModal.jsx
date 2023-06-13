@@ -30,13 +30,13 @@ const EventShareModal = ({ onClose }) => {
     onClose()          
   }
 
-  useEffect(()=>{    
-    if(umeetReducer.emailSendSuccess){      
-      toast.success('Emails sended success!')
-    }       
+  // useEffect(()=>{    
+  //   if(umeetReducer.emailSendSuccess){      
+  //     toast.success('Emails sended success!')
+  //   }       
 
-    return ()=>umeetReducer.emailSendSuccess = false 
-  }, [umeetReducer.emailSendSuccess])
+  //   return ()=>umeetReducer.emailSendSuccess = false 
+  // }, [umeetReducer.emailSendSuccess])
 
   return (
   <section className='absolut fixed z-20 justify-center items-center top-0 left-0 h-full w-full flex' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>

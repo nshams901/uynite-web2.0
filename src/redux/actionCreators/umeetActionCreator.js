@@ -507,15 +507,15 @@ export const handleCreateQuestionUI = (data) => async (dispatch) => {
   }
 };
 
-export const getStatesByCountry = (data) => async (dispatch) => {
+export const getStatesByCountry = (countryCode) => async (dispatch) => {
   try {
     const response = await axios.get(
-       `https://web.uynite.com/api/user/country/getstate/2`
+       `https://web.uynite.com/api/user/country/getstate/${countryCode}`
     );
     console.log(response.data, "states dude");
     dispatch({
       type: "GET_STATES_BY_COUNTRY",
-      payload: response.data,
+      payload: response?.data?.data,
     });
   } catch (error) {
     throw error;
