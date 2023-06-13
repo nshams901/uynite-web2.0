@@ -104,6 +104,10 @@ const PostCard = ({ userData, item = {} }) => {
   });
 
   const onHandleShareModal = () => {
+    dispatch({
+      type: "ACTIVE_POST",
+      payload: item,
+    });
     setShowShareModal({
       ...showShareModal,
       shareModal: false,
@@ -111,6 +115,10 @@ const PostCard = ({ userData, item = {} }) => {
     });
   };
   const onHandleOpenLikeModal = () => {
+    dispatch({
+      type: "ACTIVE_POST",
+      payload: item,
+    });
     let payload = {
       pageNumber: 0,
       pageSize: 10,
