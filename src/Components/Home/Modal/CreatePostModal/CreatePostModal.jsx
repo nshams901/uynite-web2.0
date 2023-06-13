@@ -30,6 +30,7 @@ import friends from '../../../../Assets/Images/friendsIcon.png';
 import home from '../../../../Assets/Images/home.png';
 import books from '../../../../Assets/Images/books.png';
 import person from '../../../../Assets/Images/personIcon.png';
+import union from '../../../../Assets/Images/unionIcon.png'
 
 export let privacyList = [
   { name: "Public", icon: globe },
@@ -126,7 +127,7 @@ const CreatePostModal = ({
   }
 
   const unions = myUnionList.map((item) => {
-    return { name: item?.groupName, icon: home };
+    return { name: item?.groupName, icon: union };
   });
   const postPrivacyList = isPersonal
     ? [...privacyList, ...unions]

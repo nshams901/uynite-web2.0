@@ -43,7 +43,6 @@ import { BsThreeDots } from "react-icons/bs";
 import { getPrivacy, getTimeDiff } from "../../../Utility/utility";
 
 const PostCard = ({ userData, item = {} }) => {
-  console.log(">>>>>>>>>>>>>>", item);
   const navigate = useNavigate();
   const ispenComment = true;
   const [showMore, setShowMore] = useState(false);
