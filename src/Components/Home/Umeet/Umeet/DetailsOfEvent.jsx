@@ -38,6 +38,10 @@ export default function DetailsOfEvent({ myEvent, handleDeleteEvent,
          if(eventDetail.event_category.toLowerCase().includes('feedback') || eventDetail.eventType.toLowerCase().includes('feedback')){
             setPoliticalPartyFeedback(true)
          }
+
+         if(eventDetail?.eventmode == 'online'){
+            setOnline(true)
+         }
       }
     }, [])
 
@@ -155,7 +159,7 @@ export default function DetailsOfEvent({ myEvent, handleDeleteEvent,
         myEvent && (
         <>
          <button onClick={handleEditEvent} className='py-1 w-40 my-1.5 px-4 rounded text-[#649B8E] border border-[#649B8E]'>Edit Details</button>
-         <button onClick={handleDeleteEvent} className='py-1 w-40 my-1.5 px-4 rounded text-[#649B8E] border border-[#649B8E]'>Delete Event</button>
+         <button onClick={handleDeleteEvent} className='py-1 w-40 my-1.5 px-4 rounded text-[#649B8E] border border-[#649B8E]'>Cancel Event</button>
         </>
         )
       }

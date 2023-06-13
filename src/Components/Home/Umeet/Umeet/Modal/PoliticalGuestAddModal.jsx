@@ -20,11 +20,12 @@ const PublicDataList = ["State", "District"]
 const PoliticalGuestAddModal = ({ onClose, whichType }) => {
   const [showAddPeopleModal, setShowAddPeopleModal] = useState(false);
   const [selectCountry, setSelectCountry] = useState(false);
-  const [country, setCountry] = useState("");
+  const [country, setCountry] = useState(null);
   const [whichBy, setWhichBy] = useState("");
   const [selectBy, setSelectBy] = useState([]);
   const [isSelectedBy, setIsSelectedBy] = useState(false);
   const [byOption, setByOption] = useState('')
+  const [countryId, setCountryId] = useState(null)
 
   const dispatch = useDispatch();
   const { countryList } = useSelector((state) => state.authReducer);
@@ -40,38 +41,42 @@ const PoliticalGuestAddModal = ({ onClose, whichType }) => {
   };
 
   const handleAddBy = (data) => {
-    setIsSelectedBy(true);    if (data.toLowerCase() == "state") {
-      setWhichBy("State");
-      setSelectBy(guestByStateList?.data);
+    setIsSelectedBy(true);    
+    if (data.toLowerCase() == "state") {
+      setWhichBy("State")
+      setSelectBy(guestByStateList)
     } else if (data.toLowerCase() == "loksabha") {
-      setWhichBy("Loksabha");
-      setSelectBy(LoksabhaList);
+      setWhichBy("Loksabha")
+      setSelectBy(LoksabhaList)
     } else if (data.toLowerCase() == "assembly") {
-      setWhichBy("Assembly");
-      setSelectBy(AssemblyList);
+      setWhichBy("Assembly")
+      setSelectBy(AssemblyList)
     } else if (data.toLowerCase() == "district") {
-      setWhichBy("District");
-      //setSelectBy(AssemblyList);
+      setWhichBy("District")
+      //setSelectBy(AssemblyList)
     }
   };
 
   useEffect(() => {
-    dispatch(getCountryList())
-    dispatch(getStatesByCountry())
-  }, [])
-
-  const onHandleCountrySelection = async () => {
-    const countryList = await dispatch(searchByCountryInUmeet(country));
-    console.log("countryList", countryList);
-    if (countryList?.status) {
-      console.log("countryList.data.code", countryList?.data);
-
-      for (let index = 0; index < countryList?.data?.length; index++) {
-        dispatch(searchByStateInUmeet(countryList?.data[index]?.code));
-        setSelectCountry(true);
-      }
+    //dispatch(getCountryList())
+    if(country){
+      dispatch(getStatesByCountry(countryId))
     }
-  };
+  }, [country])
+
+  const onHandleCountrySelection = () => {
+    // const countryList = await dispatch(searchByCountryInUmeet(country));
+    // console.log(countryList);
+    // if (countryList?.status) {
+    //   console.log(countryList?.data);
+
+    //   for (let index = 0; index < countryList?.data?.length; index++) {
+    //     dispatch(searchByStateInUmeet(countryList?.data[index]?.code));
+    //     setSelectCountry(true);
+    //   }
+    // }
+    setSelectCountry(true)
+  }
 
   return (
     <div
@@ -111,7 +116,7 @@ const PoliticalGuestAddModal = ({ onClose, whichType }) => {
                 {countryList?.map((data, i) => (
                   <div key={i} className="flex items-center my-2.5">
                     <input
-                      onChange={handleOptionChange}
+                      onChange={(e)=>{handleOptionChange(e);setCountryId(data?.code)}}
                       checked={country === data?.country}
                       value={data?.country}
                       type="radio"

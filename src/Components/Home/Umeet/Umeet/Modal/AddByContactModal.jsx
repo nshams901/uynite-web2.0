@@ -69,7 +69,7 @@ const AddByContactModal = ({ onClose }) => {
   }, [])
 
   return (
-    <div className='absolut fixed top-0 w-full z-20 h-full flex justify-center items-center' style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
+    <div className='fixed top-0 left-0 w-full z-20 h-full flex justify-center items-center' style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
 
      <div className='w-[86%] md:w-[50%] lg:w-[39%] xl:w-[30%] 2xl:w-[25%] h-[87%] flex flex-col bg-white justify-between rounded-xl p-5'>
       <div className=''>

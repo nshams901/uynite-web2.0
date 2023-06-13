@@ -29,11 +29,9 @@ const umeetReducer = (state = initialState, action) => {
         return { ...state, allMyEvents: action.payload.data };
       case "SINGLE_EVEVT_DETAIL":
         return { ...state, eventDetail: action.payload.data };
-      case "ADD_GUEST_BY_STATE":
-        console.log("aactooionnn", action.payload);
-        return { ...state, guestByStateList: action.payload };
+      case "GET_STATES_BY_COUNTRY":
+        return { ...state, guestByStateList: action.payload};
       case "ADD_EMAIL_TO_LIST":
-        console.log("emailList", action.payload);
         return { ...state, emailList: [...state.emailList,action.payload] };
       case "EVEVT_CHAT_DETAIL":
         return { ...state, eventChatMessages: action.payload.data }
