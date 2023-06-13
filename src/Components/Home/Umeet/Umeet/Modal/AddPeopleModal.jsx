@@ -35,7 +35,7 @@ handleAddByContactModal, showAddByContactModal }) => {
   }, [])
 
   return (
-    <div className='absolut fixed top-0 z-20 w-full h-full flex justify-center items-center' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
+    <div className='fixed top-0 left-0 z-20 w-full h-full flex justify-center items-center' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
 
      <div className={`w-[96%] md:w-[70%] lg:w-[45%] 2xl:w-[50%] md:h-[87%] flex flex-col justify-between bg-white rounded-xl p-3 lg:p-5 ${showAddByContactModal ? '-z-10' : ''}`}>
       <div className=''>

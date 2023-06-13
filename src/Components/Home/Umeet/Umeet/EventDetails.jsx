@@ -71,11 +71,11 @@ const EventDetails = ({
   };
 
   const showChat = eventDetail?.event_category?.toLowerCase().includes('feedback') || 
-  eventDetail?.eventType?.toLowerCase().includes('party meeting') || 
-  eventDetail?.event_category?.toLowerCase().includes('party meeting') || 
-  eventDetail?.eventType?.toLowerCase().includes('feedback')
+  eventDetail?.eventType?.toLowerCase().includes('partymeeting') || 
+  eventDetail?.event_category?.toLowerCase().includes('partymeeting') || 
+  eventDetail?.eventType?.toLowerCase().includes('feedback') || 
+  !eventDetail?.chat
 
-  //console.log(showChat, 'showChat')
   function RenderStatus() {
     if (details){
       return (

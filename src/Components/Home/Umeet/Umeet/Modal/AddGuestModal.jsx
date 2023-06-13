@@ -58,7 +58,7 @@ const AddGuestModal = ({ onClose, handleEducation, education,
   }, [education])
 
   return (
-    <div className='absolut fixed top-0 left-0 h-full w-full flex justify-center items-center' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
+    <div className='fixed top-0 left-0 z-20 h-full w-full flex justify-center items-center' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
      <div className='w-[78%] md:w-[41%] lg:w-[37%] xl:w-[29%] bg-white rounded-xl p-3'>
       <div className='flex justify-between py-1 text-gray-600'>
         <span className='text-[18px] text-gray-700'>Select a Group</span>
