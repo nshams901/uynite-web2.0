@@ -144,7 +144,7 @@ export const checkFriend = (data) => async (dispatch) => {
     const response = await axios.get(
       `https://web.uynite.com/friend/api/friend/chkfriends/${ownProfileId}/${othersProfileId}`
     );
-    console.log(response);
+    console.log(response, "CHKKKKKKKKKKKK");
     dispatch({
       type: "CHECK_FRIENDS",
       payload: response.data,

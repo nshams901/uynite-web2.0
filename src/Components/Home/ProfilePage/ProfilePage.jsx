@@ -54,16 +54,16 @@ const ProfilePage = ({ isOthers }) => {
 
     dispatch(checkingIsEmailExist())
      isOther ? dispatch(getFriendProfile(user?.id)).then((res) => {
+       const payload ={
+         ownProfileId: profile?.id,
+         othersProfileId: user?.id,
+       }
+       dispatch(checkFriend(payload))
       if (!res.status) {
         toasterFunction(res.message);
         // toast.error(res.message)
       }
       else{
-        const payload ={
-          ownProfileId: profile?.id,
-          othersProfileId: user?.id,
-        }
-        dispatch(checkFriend(payload))
       }
     }): "";
     dispatch(getFollowing(user?.id));

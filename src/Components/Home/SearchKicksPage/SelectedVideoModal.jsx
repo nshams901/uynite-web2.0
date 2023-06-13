@@ -35,7 +35,7 @@ export default function SelectedVideoModal({ onClose, selectedVideo }) {
   const name = profile?.fname + profile?.lname;
 
   const [state, setState] = useState({});
-  const { videoFile, postContent, categoryList, category } = state;
+  const { videoFile, postContent, categoryList, category = { name: 'Adventures'} } = state;
 
   useEffect(() => {
     dispatch(getCategoryList(profile?.id)).then((res) => {
@@ -62,7 +62,7 @@ export default function SelectedVideoModal({ onClose, selectedVideo }) {
       delete: false,
       close: "close",
       profileid: profile?.id,
-      utcategory: category.name,
+      utcategory: category?.name,
       utcategoryid: "2",
       postdatetime: new Date().getTime(),
     };
