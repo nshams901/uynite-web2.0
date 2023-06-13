@@ -1,32 +1,44 @@
-importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js');
-
+importScripts("https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js");
+importScripts(
+  "https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"
+);
 
 const firebaseConfig = {
+  apiKey: "AIzaSyAcJzppx6PHvFiGQlP3HXcC21cgDATqAoE",
 
-  apiKey: "AIzaSyDbynJX-7_WEXTV27eH12PMoHuNoquzAtk",
+  authDomain: "uynite-inc.firebaseapp.com",
 
-  authDomain: "uynite-58644.firebaseapp.com",
+  projectId: "uynite-inc",
 
-  projectId: "uynite-58644",
+  storageBucket: "uynite-inc.appspot.com",
 
-  storageBucket: "uynite-58644.appspot.com",
+  messagingSenderId: "48084742080",
 
-  messagingSenderId: "653379364316",
+  appId: "1:48084742080:web:499527de558e0e3e08e225",
 
-  appId: "1:653379364316:web:a28c0091f9eec7dea91b19",
-
-  measurementId: "G-KYT183BCCB"
-
+  measurementId: "G-2WD1HF0SLM",
 };
+
+// const firebaseConfig = {​​
+//   apiKey: "AIzaSyAcJzppx6PHvFiGQlP3HXcC21cgDATqAoE",
+//   authDomain: "uynite-inc.firebaseapp.com",
+//   databaseURL: "https://uynite-inc-default-rtdb.firebaseio.com",
+//   projectId: "uynite-inc",
+//   storageBucket: "uynite-inc.appspot.com",
+//   messagingSenderId: "48084742080",
+//   appId: "1:48084742080:web:499527de558e0e3e08e225",
+//   measurementId: "G-2WD1HF0SLM"
+// }​​;
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
 firebase.initializeApp(firebaseConfig);
 
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  console.log(
-    "[firebase-messaging-sw.js] Received background message "
-  );
+  console.log("[firebase-messaging-sw.js] Received background message ");
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
