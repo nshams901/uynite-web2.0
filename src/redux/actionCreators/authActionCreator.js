@@ -55,6 +55,8 @@ export const accountRegistration = (data) => async (dispatch) => {
       type: "ACCOUNT_REGISTRATION",
       payload: result.data,
     });
+
+    
     return result.data.status;
   } catch (error) {
     console.log(error.message);

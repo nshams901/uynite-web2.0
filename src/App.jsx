@@ -96,6 +96,8 @@ const App = () => {
       })
       .catch((err) => console.log("service worker registration failed", err));
   }
+
+  console.log("sdbjnnnnnnnnnnnnnnnnUser Info >>>>>>>",userInfo);
   return (
     <>
       <Routes>

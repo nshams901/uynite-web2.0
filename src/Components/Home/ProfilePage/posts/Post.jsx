@@ -28,8 +28,8 @@ const Post = () => {
     <div className="flex flex-col justify-center items-center ">
     {
       !isOther &&
-      <div className="bg-white rounded-md w-full flex py-2">
-        <PostForm />
+      <div className="w-full flex py-1 sm:w-[50%] lg:w-[100%] rounded-lg pl-2 mt-2">
+        <PostForm rightIcon />
       </div>
     }
       {
