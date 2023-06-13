@@ -146,7 +146,7 @@ export const checkFriend = (data) => async (dispatch) => {
     );
     console.log(response);
     dispatch({
-      type: "",
+      type: "CHECK_FRIENDS",
       payload: response.data,
     });
   } catch (error) {

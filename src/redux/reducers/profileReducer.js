@@ -19,6 +19,9 @@ const profileReducer = (state = initialState, action) => {
         // localStorage.setItem("profileid", action.payload?.data?.id);
        
         return { ...state, profileDetail: action.payload, profile: action.payload.data};
+      case "CHECK_FRIENDS":
+        console.log(action.payload.data, "CHLKKKKKKKKKKK");
+        return {...state, friendDetail: {...state.friendDetail, isFriend: ''}}
       case "GET_SCHOOL_DETAIL":
         return { ...state, educationDetails: action.payload };
       case "GET_UG_DEGREE":

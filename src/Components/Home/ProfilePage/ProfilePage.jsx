@@ -9,7 +9,7 @@ import GridBoxes from "../GridBoxes/GridBoxes";
 import SearchComponent from "../SearchComponent/SearchComponent";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getEducationDetail, getFollower, getFollowing, getFriendProfile, getProfileById, updateProfile } from "../../../redux/actionCreators/profileAction";
+import { checkFriend, getEducationDetail, getFollower, getFollowing, getFriendProfile, getProfileById, updateProfile } from "../../../redux/actionCreators/profileAction";
 import { getUserDataFromLocalStorage, toasterFunction } from "../../Utility/utility";
 import { useMemo } from "react";
 import { checkingIsEmailExist } from "../../../redux/actionCreators/authActionCreator";
@@ -23,10 +23,11 @@ import { createPost } from "../../../redux/actionCreators/postActionCreator";
 import moment from "moment";
 import { getUserPostList, imageUploadApi } from "../../../redux/actionCreators/rootsActionCreator";
 
-const ProfilePage = ({ isOther }) => {
+const ProfilePage = ({ isOthers }) => {
   const [selectedOption, setSelectedOption] = useState("Posts");
   const dispatch = useDispatch();
-  const params = useParams()
+  const params = useParams();
+
   
   const reducerData = useSelector((state) => {
     return {
@@ -39,6 +40,7 @@ const ProfilePage = ({ isOther }) => {
     }
   });
   const { following, followers, friends, friendDetail, profile} = reducerData;
+  const isOther = isOthers && params?.id !== profile?.id
 
     const user = useMemo(() => {
     return  isOther ? { id: params?.id} : profile;
@@ -55,6 +57,13 @@ const ProfilePage = ({ isOther }) => {
       if (!res.status) {
         toasterFunction(res.message);
         // toast.error(res.message)
+      }
+      else{
+        const payload ={
+          ownProfileId: profile?.id,
+          othersProfileId: user?.id,
+        }
+        dispatch(checkFriend(payload))
       }
     }): "";
     dispatch(getFollowing(user?.id));

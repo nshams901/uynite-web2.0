@@ -3,6 +3,8 @@ import globe from '../../Assets/Images/globe.png';
 import home from '../../Assets/Images/home.png';
 import friend from '../../Assets/Images/friendsIcon.png';
 import union from '../../Assets/Images/unionIcon.png';
+import books from '../../Assets/Images/books.png';
+import person from '../../Assets/Images/personIcon.png'
 // import relative from '../'
 import moment from "moment";
 
@@ -75,6 +77,8 @@ export const getPrivacy = (relation) => {
     Public: globe,
     Relatives: home,
     Friends: friend,
+    Classmates: books,
+    Officemates: person,
   }
   return obj[relation] || union
 }

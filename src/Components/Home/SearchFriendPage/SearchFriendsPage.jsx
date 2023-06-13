@@ -194,7 +194,9 @@ const SearchFriendsPage = ({ isFriend }) => {
     if(isFriend){
       const list = requestList?.filter((item) => `${item.profile?.fname} ${item.profile?.lname}`.toLowerCase().includes(value?.toLowerCase()));
       setState({...state, friendRequestList: list})
-    }else processChange(value);
+    }else {
+      value?.length > 2 && processChange(value);
+    }
   };
 
   const sendFriendRequest = (id) => {

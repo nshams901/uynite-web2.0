@@ -198,7 +198,10 @@ const ProfileImageSection = ({
           </label>
 
           {/* Follower Following and Friends Section */}
-          <section
+          { isOther ? 
+          "" 
+          :
+            <section
             className=" flex flex-col w-[40%] sm:w-[45%] items-center cursor-pointer"
             onClick={() => handleModal("Friends")}
           >
@@ -210,7 +213,7 @@ const ProfileImageSection = ({
             <span className="w-[90%] text-center sm:w-[97%] font-bold text-[7px] sm:text-[9px] xl:text-[11px] my-1 py-[1px] bg-gray-300 px-4  rounded-md">
               {friendsCount}
             </span>
-          </section>
+          </section>}
 
           <section
             className=" flex flex-col w-[40%] sm:w-[45%] items-center cursor-pointer"
