@@ -15,7 +15,7 @@ const PostVideo = ({ data }) => {
 
           <div className="w-full grid sm:grid-cols-3 lg:grid-cols-4 gap-3 text-center rounded-xl p-2 h-[400px] bg-white">
             {
-              video?.map((item) => (
+              data?.map((item) => (
                 <video>
                   <source src={item?.video}></source>
                 </video>

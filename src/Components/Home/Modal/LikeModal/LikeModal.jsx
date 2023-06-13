@@ -27,7 +27,6 @@ const LikeModal = ({ closeLikeModal }) => {
       }
     });
   }, []);
-
   return (
     <div
       className="w-[95%] sm:w-[50%] lg:w-[30%] h-[74%] bg-white rounded-3xl px-4 flex flex-col gap-2 pt-2 fixed top-[50%] left-[50%]
