@@ -138,7 +138,7 @@ const App = () => {
         </Route>
 
         {/* Private Routes */}
-        <Route element={<PrivateRoute />}>
+        {/*<Route element={<PrivateRoute />}>*/}
           <Route path="select" element={<Select />} />
           <Route path="/" element={<MainView />}>
             <Route path="/root" element={<Home />} />
@@ -193,7 +193,7 @@ const App = () => {
             {/* <Route path="user" element={<User />} /> */}
             {/* <Route path="friends" element={<Friends />} /> */}
           </Route>
-        </Route>
+        {/*</Route>*/}
       </Routes>
     </>
   );

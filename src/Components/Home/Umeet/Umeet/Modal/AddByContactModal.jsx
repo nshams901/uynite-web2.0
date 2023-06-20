@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getProfileByEmail, handleInviteEmailUI } from "../../../../../redux/actionCreators/umeetActionCreator";
 import { toast } from 'react-toastify';
 
-const AddByContactModal = ({ onClose }) => {
+const AddByContactModal = ({ onClose, invitesEmail,
+setInvitesEmail,  }) => {
 	const [email, setEmail] = useState({
     mail: null,
     extension : null
@@ -24,7 +25,7 @@ const AddByContactModal = ({ onClose }) => {
   const emailData = `${email.mail}@${email.extension}`
 
   const handleEmailAdd = async ()=>{
-    umeetReducer.isEmailFound = false
+    //umeetReducer.isEmailFound = false
 
     if(!email.mail || !email.extension){
       toast.error('Enter valid email')
@@ -41,7 +42,7 @@ const AddByContactModal = ({ onClose }) => {
 
     } 
 
-    umeetReducer.isEmailFound = false         
+    //umeetReducer.isEmailFound = false         
   }
 
   const handleElementClick = (element) => {
@@ -52,24 +53,29 @@ const AddByContactModal = ({ onClose }) => {
   } 
 
   const handleSave = async()=>{
-    //await dispatch(handleInviteEmailUI(dataList))
+
+    await setInvitesEmail(dataList)
     onClose()
   }
 
   useEffect(()=>{   
-    if(umeetReducer?.inviteEmailsUI){
-      setDataList(umeetReducer?.inviteEmailsUI)
+    // if(umeetReducer?.inviteEmailsUI){
+    //   setDataList(umeetReducer?.inviteEmailsUI)
+    // }
+
+    if(invitesEmail){
+      setDataList(invitesEmail)
     }
 
-    if(umeetReducer.isEmailFound == true){
-      toast.success('User Email Found')
-    }
+    // if(umeetReducer.isEmailFound == true){
+    //   toast.success('User Email Found')
+    // }
   
-    umeetReducer.isEmailFound = false
+    // umeetReducer.isEmailFound = false
   }, [])
 
   return (
-    <div className='fixed top-0 left-0 w-full z-20 h-full flex justify-center items-center' style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
+    <div className='fixed top-0 left-0 w-full z-30 h-full flex justify-center items-center' style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
 
      <div className='w-[86%] md:w-[50%] lg:w-[39%] xl:w-[30%] 2xl:w-[25%] h-[87%] flex flex-col bg-white justify-between rounded-xl p-5'>
       <div className=''>
