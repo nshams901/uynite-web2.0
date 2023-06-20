@@ -61,7 +61,10 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   const [reunionModal, setReunionModal] = useState(true)
   const [showAddGroupPersonalOthers, setShowAddGroupPersonalOthers] = useState(false)
   const [showPoliticalAddGroup, setShowPoliticalAddGroup] = useState(false)
-console.log(showPoliticalAddGroup)
+
+  const [invitesEmail, setInvitesEmail] = useState(null)
+  const [invitesPlace, setInvitesPlace] = useState(null)
+  console.log(invitesPlace)
   // re-union related
   const [education, setEducation] = useState('')
 
@@ -224,7 +227,7 @@ console.log(showPoliticalAddGroup)
   }
 
   const handleEditAdd = async()=>{
-    await dispatch(handleCreateDataUI({...postData, eventMode}))
+    //await dispatch(handleCreateDataUI({...postData, eventMode}))
     handleShowAddPeopleModal()
   }
 
@@ -460,10 +463,10 @@ console.log(showPoliticalAddGroup)
           <div className='flex justify-between items-center my-2'>
            <div className='flex items-center'>
             <img src={guest} />
-            <label onClick={handleGroupAndCreate} className={`${umeetReducer.inviteEmailsUI ? 'hidden' : ''} pl-5 cursor-pointer text-[#649B8E]`}>Add Guests</label>
-            <label onClick={handleEditAdd} className={`${umeetReducer.inviteEmailsUI ? '' : 'hidden'} pl-5 cursor-pointer text-[#649B8E]`}>{umeetReducer?.inviteEmailsUI?.length} Guests Added</label>
+            <label onClick={handleGroupAndCreate} className={`${invitesEmail ? 'hidden' : ''} pl-5 cursor-pointer text-[#649B8E]`}>Add Guests</label>
+            <label onClick={handleEditAdd} className={`${invitesEmail ? '' : 'hidden'} pl-5 cursor-pointer text-[#649B8E]`}>{invitesEmail?.length} Guests Added</label>
            </div>
-           <span onClick={handleEditAdd} className={`${umeetReducer.inviteEmailsUI ? '' : 'hidden'} cursor-pointer text-[#649B8E] border border-[#649B8E] px-2 py-0.5 rounded-md`}>Edit List</span>
+           <span onClick={handleEditAdd} className={`${invitesEmail ? '' : 'hidden'} cursor-pointer text-[#649B8E] border border-[#649B8E] px-2 py-0.5 rounded-md`}>Edit List</span>
           </div>
 
           <div className={`${(politicalPartyFeedback || politicalPartyMeeting) ? 'hidden' : ''} border-b my-3 mb-6`}>
@@ -582,7 +585,9 @@ console.log(showPoliticalAddGroup)
        handlePeopleModalClose={()=>setShowAddPeopleModal(false)} />}       
      {showAddByContactModal && 
       <AddByContactModal 
-        onClose={()=>setShowAddByContactModal(false)} />}       
+        onClose={()=>setShowAddByContactModal(false)} 
+        invitesEmail={invitesEmail} 
+        setInvitesEmail={setInvitesEmail} />}       
      {showAddGroupPersonalOthers && 
       <PersonalOtherGuest 
        handleAddByContactModal={handleAddByContactModal}
