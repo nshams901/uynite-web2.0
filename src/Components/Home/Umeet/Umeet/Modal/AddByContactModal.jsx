@@ -35,9 +35,9 @@ const AddByContactModal = ({ onClose }) => {
         setDataList(prev => [...prev, newElement]);
       }
 
-      await dispatch(getProfileByEmail(emailData)).catch(err=>{
-        toast.error(err.message)
-      })
+      // await dispatch(getProfileByEmail(emailData)).catch(err=>{
+      //   toast.error(err.message)
+      // })
 
     } 
 
@@ -52,7 +52,7 @@ const AddByContactModal = ({ onClose }) => {
   } 
 
   const handleSave = async()=>{
-    await dispatch(handleInviteEmailUI(dataList))
+    //await dispatch(handleInviteEmailUI(dataList))
     onClose()
   }
 

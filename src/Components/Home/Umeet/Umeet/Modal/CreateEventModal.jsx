@@ -50,6 +50,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   const [feedbackVal, setFeedbackVal] = useState(false)
   const [noGuest, setNoGuest] = useState(null)
   const [startDate, setStartDate] = useState(null)
+  const [eventId, setEventId] = useState(null)
 
   const [showTemplate, setShowTemplate] = useState(false)  
   const [templateSelected, setTemplateSelected] = useState('')
@@ -61,11 +62,12 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   const [reunionModal, setReunionModal] = useState(true)
   const [showAddGroupPersonalOthers, setShowAddGroupPersonalOthers] = useState(false)
   const [showPoliticalAddGroup, setShowPoliticalAddGroup] = useState(false)
-console.log(showPoliticalAddGroup)
+
   // re-union related
   const [education, setEducation] = useState('')
 
   const dispatch = useDispatch()
+
   const phoneNumberRules = /[0-9]{10}$/;
 
   const handleToggle = () => {
@@ -170,7 +172,7 @@ console.log(showPoliticalAddGroup)
     "eventFrndId": "need",
     "eventType": selectedSpecificEvent,
     "hostmailid": formState?.hostmailid,
-    "id": uuidv4(),
+    "id": eventId,
     "aboutevent": inputValue,
     "eventmode": eventMode,
     "eventTemplate": selectedImage,
@@ -184,7 +186,7 @@ console.log(showPoliticalAddGroup)
     "food": isVeg,
     "chat": showChat ? false : true,
   }
-
+console.log(selectedImage)
   const handleCreateEvent = () => {
     // if(noGuest == null){
     //   return ToastWarning('Please select invities')
@@ -224,7 +226,7 @@ console.log(showPoliticalAddGroup)
   }
 
   const handleEditAdd = async()=>{
-    await dispatch(handleCreateDataUI({...postData, eventMode}))
+    //await dispatch(handleCreateDataUI({...postData, eventMode}))
     handleShowAddPeopleModal()
   }
 
@@ -234,8 +236,8 @@ console.log(showPoliticalAddGroup)
   }
 
   const handleEventCreate = async()=>{
-    await dispatch(handleCreateDataUI({...postData, eventMode, foodType}))
-    handleCreateEvent()
+    //await dispatch(handleCreateDataUI({...postData, eventMode, foodType}))
+    handleCreateEvent().then(res=>toast.success(res))
   }
 
   const handleInputChange = (event) => {
@@ -258,14 +260,16 @@ console.log(showPoliticalAddGroup)
   }
 
   useEffect(()=>{
-    // if(selectedImgFile){
+    // if(selectedImgFile){      
     //   (async()=>{
+    //     console.log(selectedImgFile)     
     //     const { data } = await 
     //     axios.post(`https://web.uynite.com/fileservice/s3/upload`, 
-    //       selectedImgFile)
+    //       selectedImgFile).catch(err=>toast.error(err.message))
     //     console.log(data)
     //   })()
     // }
+    setEventId(uuidv4())
     if(editMyEvent){
       setSelectedImage(umeetReducer?.eventDetail?.eventTemplate)
     }
@@ -316,7 +320,7 @@ console.log(showPoliticalAddGroup)
       }))       
     }    
 
-  }, [])
+  }, [selectedImgFile])
 
 //umeetReducer?.createData, showAddGroup, dispatch
   return (
@@ -562,6 +566,8 @@ console.log(showPoliticalAddGroup)
        onClose={()=>setShowTemplate(false)} 
        //saveTemplate={handleTemplateImage} 
        //handleImageChange={handleImageChange}
+       eventId={eventId}
+       selectedImage={selectedImage}
        selectedSpecificEvent={selectedSpecificEvent}
        setTemplateSelected={(urlid)=>setSelectedImage(urlid)} 
        handleSelectedImgFile={(file)=>setSelectedImgFile(file)}
