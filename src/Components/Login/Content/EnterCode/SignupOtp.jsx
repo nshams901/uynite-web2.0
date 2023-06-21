@@ -90,9 +90,9 @@ const SignupOtp = ({ title }) => {
         .confirm(otp)
         .then((result) => {
           const payload = {
-            password: signupData.password,
+            password: userInfo.password,
             datetime: Date.now().toString(),
-            uemail: signupData.uemail
+            uemail: userInfo.uemail
           }
           dispatch(settingOtp(""));
           setState({ ...state, showModal: true });

@@ -53,7 +53,8 @@ const SingleUnionPage = () => {
     }
     dispatch(removeUserFromUnion(payload)).then((res) => {
       if(res?.status){
-        dispatch(getInviteeList(activeUnion?.groupId))
+        dispatch(getInviteeList(activeUnion?.groupId));
+        dispatch(getUnionMembers(activeUnion?.groupId))
         toast.success(res.message)
       }else {
         toast.error(res.message)
