@@ -147,7 +147,6 @@ const Signup = () => {
 
       if (formik.values.phone) {
         setIsLoading(false);
-        console.log("After");
         signIn(
           `${formik?.values.phone}`?.startsWith("91") ||
             `${formik?.values.phone}`?.startsWith("+91")

@@ -84,9 +84,9 @@ console.log("userInfo,userInfo", userInfo);
         .confirm(otp)
         .then((result) => {
           const payload = {
-            password: signupData.password,
+            password: userInfo.password,
             datetime: Date.now().toString(),
-            uemail: signupData.uemail
+            uemail: userInfo.uemail
           }
           dispatch(settingOtp(""));
           setState({ ...state, showModal: true });
@@ -113,7 +113,7 @@ console.log("userInfo,userInfo", userInfo);
           datetime: Date.now().toString(),
           uemail: signupData.uemail
         }
-        dispatch(userRegistration(payload))
+        // dispatch(userRegistration(payload))
         // setState({ ...state, showModal: true });
         dispatch(isOtpValid({ validOtp: true, userInfo: false }));
         navigate(`/auth/verification/signup?${userInfo?.profileType}`);
