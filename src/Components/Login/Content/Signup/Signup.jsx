@@ -107,7 +107,7 @@ const Signup = () => {
         dispatch(otpType(true));
       } else {
         dispatch(otpType(false));
-         dispatch(savingPhoneNo(formik.values.email));
+        dispatch(savingPhoneNo(formik.values.email));
       }
       if (!validateEmail(formik.values.email)) {
         setIsLoading(false);
@@ -135,10 +135,16 @@ const Signup = () => {
         uemail: formik.values.email ? formik.values.email : formik.values.phone,
         password: formik.values.password,
       };
-      const response = formik.values.email
-        ? await dispatch(saveUserSignupData(dataObj))
-        : dispatch(savingPhoneNo(formik.values.phone));
+      console.log("Dta Objec>>>>>>>", dataObj);
+      const response =
+        dataObj.uemail && (await dispatch(saveUserSignupData(dataObj)));
+
+      console.log("Response........", response);
       dispatch(userSingupInformation(dataObj));
+      const result =
+        formik.values.phone && dispatch(savingPhoneNo(formik.values.phone));
+      console.log("result>>>>>>>>>", result);
+
       if (formik.values.phone) {
         setIsLoading(false);
         console.log("After");
