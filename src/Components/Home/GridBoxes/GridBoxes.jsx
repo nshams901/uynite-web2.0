@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { useMemo } from 'react';
 
 
-const GridBoxes = ({selectedOption}) => {
+const GridBoxes = ({selectedOption, isOther}) => {
 
   const { userPostList } = useSelector((state) => state.profileReducer);
 
@@ -30,7 +30,7 @@ const GridBoxes = ({selectedOption}) => {
           {selectedOption === "Posts" && <Post />}
           {selectedOption === "Photos" && <PostPhotos data={data?.photo} />}
           {selectedOption === "Videos" && <PostVideo data={data?.video} />}
-          {selectedOption === "Kicks" && <PostKicks />}
+          {selectedOption === "Kicks" && <PostKicks isOther={isOther}/>}
         </div>
       }
     </div>

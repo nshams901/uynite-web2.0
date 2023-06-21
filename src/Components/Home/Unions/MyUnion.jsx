@@ -10,6 +10,7 @@ import { addUnion, deleteUnion, getMyUnion, getUnionList } from "../../../redux/
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { data } from "autoprefixer";
 import { toast } from "react-toastify";
+import unionIcon from '../../../Assets/Images/unionIcon.png'
 
 const MyUnion = ({
   isValid,
@@ -101,7 +102,7 @@ const MyUnion = ({
   return (
     <>
       <div
-        className="w-full  h-[100%] overflow-y-scroll flex flex-col gap-2 xl:px-2"
+        className="w-full h-[100%] overflow-y-scroll flex flex-col gap-2 "
         // onClick={onSingleUnionPage}
       >
         {myUnionList?.map((elem) => {
@@ -109,10 +110,10 @@ const MyUnion = ({
           return (
             <div
               key={groupId}
-              className="flex gap-2 w-full py-2 mb-2 cursor-pointer"
+              className="flex gap-2 w-full py-2 mb-2 hover:bg-gray-300 cursor-pointer"
             >
               <img
-                src="./images/events.jpg"
+                src={unionIcon}
                 alt=""
                 className="w-[30px] h-[30px]"
                 onClick={() => onSingleUnionPage(elem)}

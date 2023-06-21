@@ -6,13 +6,15 @@ import AddPeopleModal from "./AddPeopleModal";
 import { BiRightArrowAlt } from "react-icons/bi";
 import PoliticalAddBy from "./PoliticalAddBy";
 import { useSelector } from "react-redux";
-import { getCountryList } from "../../../../../redux/actionCreators/authActionCreator";
+//import { getCountryList } from "../../../../../redux/actionCreators/authActionCreator";
 import { useDispatch } from "react-redux";
 import {
   searchByCountryInUmeet,
   searchByStateInUmeet,
   getStatesByCountry
 } from "../../../../../redux/actionCreators/umeetActionCreator";
+import axios from 'axios'
+import ToastWarning from '../../../../common/ToastWarning'
 
 const AddDataList = ["State", "Loksabha", "Assembly"];
 const PublicDataList = ["State", "District"]
@@ -22,13 +24,14 @@ const PoliticalGuestAddModal = ({ onClose, whichType }) => {
   const [selectCountry, setSelectCountry] = useState(false);
   const [country, setCountry] = useState(null);
   const [whichBy, setWhichBy] = useState("");
-  const [selectBy, setSelectBy] = useState([]);
+  //const [selectBy, setSelectBy] = useState([]);
   const [isSelectedBy, setIsSelectedBy] = useState(false);
   const [byOption, setByOption] = useState('')
   const [countryId, setCountryId] = useState(null)
+  const [countryList, setCountryList] = useState([])
 
   const dispatch = useDispatch();
-  const { countryList } = useSelector((state) => state.authReducer);
+  //const { countryList } = useSelector((state) => state.authReducer);
   const { guestByStateList } = useSelector((state) => state.umeetReducer);
 
   const handleShowAddPeopleModal = () => {
@@ -44,25 +47,31 @@ const PoliticalGuestAddModal = ({ onClose, whichType }) => {
     setIsSelectedBy(true);    
     if (data.toLowerCase() == "state") {
       setWhichBy("State")
-      setSelectBy(guestByStateList)
     } else if (data.toLowerCase() == "loksabha") {
       setWhichBy("Loksabha")
-      setSelectBy(LoksabhaList)
     } else if (data.toLowerCase() == "assembly") {
       setWhichBy("Assembly")
-      setSelectBy(AssemblyList)
     } else if (data.toLowerCase() == "district") {
       setWhichBy("District")
-      //setSelectBy(AssemblyList)
     }
   };
 
   useEffect(() => {
     //dispatch(getCountryList())
-    if(country){
-      dispatch(getStatesByCountry(countryId))
-    }
-  }, [country])
+    (async()=>{
+      const { data } = await axios.get(
+        `https://web.uynite.com/api/user/country/countrylist`,
+        {headers: {
+          "Accept-Language": "us",
+          "Content-Type": "application/json",
+        }
+      })
+      console.log(data)      
+      setCountryList(data?.data)
+    })()
+
+    setCountry('india')
+  }, [])
 
   const onHandleCountrySelection = () => {
     // const countryList = await dispatch(searchByCountryInUmeet(country));
@@ -75,6 +84,10 @@ const PoliticalGuestAddModal = ({ onClose, whichType }) => {
     //     setSelectCountry(true);
     //   }
     // }
+    if(!country){
+      return ToastWarning('Please select a country!')
+    }
+    
     setSelectCountry(true)
   }
 
@@ -83,7 +96,7 @@ const PoliticalGuestAddModal = ({ onClose, whichType }) => {
       className="fixed top-0 z-20 left-0 h-full w-full flex justify-center items-center"
       style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
     >
-      <div className="w-[96%] md:w-[60%] lg:w-[40%] xl:w-[30%] h-[80%] bg-white rounded-xl p-3">
+      <div className="w-[96%] md:w-[52%] lg:w-[43%] xl:w-[35%] h-[96%] md:h-[90%] bg-white rounded-xl p-3">
         <div className="flex justify-between py-1 text-gray-600">
           {selectCountry && <GrPrevious onClick={()=>setSelectCountry(false)} className={`${isSelectedBy ? 'hidden' : ''} w-6 h-6 cursor-pointer`}/>}
           <div className="text-[18px] flex justify-center font-bold text-gray-700 text-gray-800 w-11/12">
@@ -112,7 +125,7 @@ const PoliticalGuestAddModal = ({ onClose, whichType }) => {
                 className="outline-none border-b border-[#519d8b] text-[#519d8b] w-full my-2"
                 placeholder="Search Country.."
               />
-              <div className="h-[63%] lg:h-[68%] overflow-y-scroll">
+              <div className="h-[63%] md:h-[68%] overflow-y-scroll">
                 {countryList?.map((data, i) => (
                   <div key={i} className="flex items-center my-2.5">
                     <input
@@ -148,16 +161,18 @@ const PoliticalGuestAddModal = ({ onClose, whichType }) => {
           {/* select by loksabha, state, Assembly */}
           {isSelectedBy ? (
             <PoliticalAddBy
-              selectBy={selectBy}
+              //selectBy={selectBy}
               whichBy={whichBy}
-              onClose={() => setIsSelectedBy(false)}
+              countryId={countryId}
+              country={country}
+              onClose={()=>setIsSelectedBy(false)}
             />
           ) : (
             <>
               {selectCountry ? (
-                country.toLowerCase() == "india" ? (
+                country?.toLowerCase() == "india" ? (
                   <section className={`flex flex-col justify-center w-full`}>
-                    {(whichType !== 'public') && AddDataList.map((data) => (
+                    {(whichType !== 'public') && AddDataList?.map((data) => (
                       <div
                         key={data}
                         onClick={() => handleAddBy(data)}
@@ -168,7 +183,7 @@ const PoliticalGuestAddModal = ({ onClose, whichType }) => {
                       </div>
                     ))}
 
-                    {(whichType == 'public') && PublicDataList.map((data) => (
+                    {(whichType == 'public') && PublicDataList?.map((data) => (
                       <div
                         key={data}
                         onClick={() => handleAddBy(data)}
@@ -194,7 +209,7 @@ const PoliticalGuestAddModal = ({ onClose, whichType }) => {
         </section>
       </div>
       {showAddPeopleModal && (
-        <AddPeopleModal onClose={() => setShowAddPeopleModal(false)} />
+        <AddPeopleModal onClose={()=>setShowAddPeopleModal(false)} />
       )}
     </div>
   );
