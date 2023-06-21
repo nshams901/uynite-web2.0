@@ -38,7 +38,7 @@ const UnionHomePage = () => {
     dispatch(unionTabSelection(option));
   };
   return (
-    <div className="w-[95%] sm:w-[50%] lg:w-[40%] mx-auto flex flex-col items-center gap-5 px-4 h-[88%] mt-1 pt-4 bg-white">
+    <div className="w-[95%] sm:w-[50%] lg:w-[40%] mx-auto flex flex-col items-center gap-5 px-3 h-[88%] mt-1 pt-4 bg-white">
       <h1 className="text-xs sm:text-sm text-center">
         Create and Join Private unions to Create post's Events and Polls.
       </h1>

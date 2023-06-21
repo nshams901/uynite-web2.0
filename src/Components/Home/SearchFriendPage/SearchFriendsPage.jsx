@@ -26,7 +26,7 @@ import { getMyUnion } from "../../../redux/actionCreators/unionActionCreator";
 import { startFollowing } from "../../../redux/actionCreators/profileAction";
 
 const SearchFriendsPage = ({ isFriend }) => {
- 
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -41,11 +41,11 @@ const SearchFriendsPage = ({ isFriend }) => {
   });
   const { userList, profile, requestList, unionList, mutualFriend } =
     reducerData;
-    const isPersonal = profile?.profiletype === 'Personal'
- 
+  const isPersonal = profile?.profiletype === 'Personal'
+
 
   const [sendRequest, setSendRequest] = useState(false);
-  const [state, setState] = useState({ usersList: userList || []});
+  const [state, setState] = useState({ usersList: userList || [] });
   const [searchQuery, setSearchQuery] = useState();
   const {
     acceptRequest,
@@ -90,9 +90,9 @@ const SearchFriendsPage = ({ isFriend }) => {
       { name: "Friend", key: "friend", checked: true, disable: true },
       ...union,
     ];
-    setState({...state, relationOptions: isPersonal ? forPersonalAcc: forOrgAcc})
+    setState({ ...state, relationOptions: isPersonal ? forPersonalAcc : forOrgAcc })
   }, [unionList]);
-  
+
   const onSendRequest = () => {
     setSendRequest(true);
   };
@@ -100,14 +100,14 @@ const SearchFriendsPage = ({ isFriend }) => {
 
   const onHandleCloseModal = () => {
     // setSendRequest(false);
-    setState({ ...state, requestModal: false, cancelModal: false});
+    setState({ ...state, requestModal: false, cancelModal: false });
   };
 
   function showProfileDetail(id) {
     navigate(`/profile/${id}`);
   }
   const handleSendRequest = () => {
-  const payloads = {
+    const payloads = {
       myprofileid: profile?.id,
       followerprofileid: activeProfile?.id,
       datetimes: moment().format("YYYY-MM-DDTHH:mm:ss"),
@@ -130,7 +130,7 @@ const SearchFriendsPage = ({ isFriend }) => {
       profileid: id,
       requesttype: "Send",
       isFriend: "true",
-      
+
       classment: data.includes("classmate"),
       collgues: data.includes("officemate"),
       relative: data.includes("relative"),
@@ -170,7 +170,7 @@ const SearchFriendsPage = ({ isFriend }) => {
       });
     } else {
       dispatch(findFriends(value, profile.id)).then((res) => {
-        if(true){
+        if (true) {
           setState({ ...state, usersList: res.data, loading: false });
         }
       });
@@ -180,10 +180,10 @@ const SearchFriendsPage = ({ isFriend }) => {
   const handleSearch = (e) => {
     const value = e.target.value;
     setSearchQuery(value);
-    if(isFriend){
+    if (isFriend) {
       const list = requestList?.filter((item) => `${item.profile?.fname} ${item.profile?.lname}`.toLowerCase().includes(value?.toLowerCase()));
-      setState({...state, friendRequestList: list})
-    }else {
+      setState({ ...state, friendRequestList: list })
+    } else {
       value?.length > 2 && processChange(value);
     }
   };
@@ -227,9 +227,11 @@ const SearchFriendsPage = ({ isFriend }) => {
   const handleAcceptRequest = () => {
     const { fname, lname, id } = activeProfile;
     const data = relationOptions.flatMap((item) =>
-    item.checked ? item.key : false
-  );
-    const ownPayload  = {
+      item.checked ? item.key : false
+    );
+    const group = relationOptions?.filter((item) => item.union);
+    console.log(group, data, 'GROUPPPPPPPPPPP');
+    const ownPayload = {
 
       id: activeProfile?.profile.id,
       fname: profile?.fname,
@@ -239,8 +241,16 @@ const SearchFriendsPage = ({ isFriend }) => {
       friendtype: "Friend",
       profileid: profile.id,
       requesttype: "Accepted",
-      groupsUpdate: [],
-      
+      groupsUpdate: group?.map((item) => (
+        {
+          groupId: item.key,
+          groupName: item.name,
+          isAdd: !!item.checked,
+          isRemove: false,
+          profileid: activeProfile.id
+        }
+      )),
+
       classment: data.includes("classmate"),
       collgues: data.includes("officemate"),
       relative: data.includes("relative"),
@@ -256,18 +266,18 @@ const SearchFriendsPage = ({ isFriend }) => {
       friendtype: "Friend",
       profileid: activeProfile?.profile.id,
       requesttype: "Accepted",
-      groupsUpdate: [],
+      groupsUpdate: activeProfile.friend?.groupsUpdate,
 
       classment: activeProfile?.friend?.classment,
       collgues: activeProfile?.friend?.collgues,
-      relative: activeProfile?.friend?.relative ,
+      relative: activeProfile?.friend?.relative,
 
       reqdatetime: new Date().getTime(),
     };
     dispatch(acceptFriendRequest(ownPayload))
     dispatch(acceptFriendRequest(payload)).then((res) => {
       if (res?.status) {
-        setState({...state, acceptRequest: false})
+        setState({ ...state, acceptRequest: false })
         toast.success(res.message);
         dispatch(getRequestsList(profile?.id))
       } else {
@@ -311,8 +321,8 @@ const SearchFriendsPage = ({ isFriend }) => {
             {(isFriend
               ? friendRequestList
               : !searchQuery
-              ? mutualFriend
-              : usersList
+                ? mutualFriend
+                : usersList
             )?.map((item) => {
               const {
                 fname = "",
@@ -321,7 +331,7 @@ const SearchFriendsPage = ({ isFriend }) => {
                 profiletype,
                 pimage,
               } = isFriend ? item?.profile : item || {};
-              const { requesttype} = item?.friend || {}
+              const { requesttype } = item?.friend || {}
               const isOrganization = profiletype === "Organization";
               return (
                 <>
@@ -342,7 +352,7 @@ const SearchFriendsPage = ({ isFriend }) => {
                         />
                         <span className="font-semibold text-[14px]">
                           {`${fname} ${lname}`}
-                        { isFriend && <div className="font-normal italic text-xs">friend request {requesttype === 'Send' ? 'sent' : 'received'}</div>}
+                          {isFriend && <div className="font-normal italic text-xs">friend request {requesttype === 'Send' ? 'sent' : 'received'}</div>}
                         </span>
                       </div>
                       {!isOrganization && (
@@ -360,24 +370,24 @@ const SearchFriendsPage = ({ isFriend }) => {
                                   activeProfile: item,
                                 })
                               }
-                              // onClick={onAcceptRequest}
+                            // onClick={onAcceptRequest}
                             />
                           ) :
-                              !isFriend ?
-                          <img
-                              src="./images/SendFriendRequest.png"
-                              alt=""
-                              className="w-[30px] h-[30px] cursor-pointer"
-                              onClick={() =>
-                                setState({
-                                  ...state,
-                                  requestModal: true,
-                                  activeProfile: item,
-                                })
-                              }
-                            />
-                            : ""}
-                          
+                            !isFriend ?
+                              <img
+                                src="./images/SendFriendRequest.png"
+                                alt=""
+                                className="w-[30px] h-[30px] cursor-pointer"
+                                onClick={() =>
+                                  setState({
+                                    ...state,
+                                    requestModal: true,
+                                    activeProfile: item,
+                                  })
+                                }
+                              />
+                              : ""}
+
                           {isFriend && (
                             <img
                               src="./images/cancelRequest.png"

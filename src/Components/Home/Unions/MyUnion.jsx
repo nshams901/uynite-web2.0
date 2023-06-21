@@ -110,7 +110,7 @@ const MyUnion = ({
           return (
             <div
               key={groupId}
-              className="flex gap-2 w-full py-2 mb-2 hover:bg-gray-300 cursor-pointer"
+              className="flex gap-2 w-full py-2 mb-2 hover:bg-gray-300 px-3 rounded-md cursor-pointer"
             >
               <img
                 src={unionIcon}
