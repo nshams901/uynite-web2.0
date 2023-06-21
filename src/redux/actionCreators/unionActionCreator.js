@@ -138,3 +138,18 @@ export const cancelInvitation = (data) => async (dispatch) => {
     throw error;
   }
 };
+
+
+export const getPartOfUnions = (data) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `http://3.233.82.34:8080/friend/api/group/partOfGroup/${data}`
+    );
+    dispatch({
+      type: "GET_PART_OF_UNIONS",
+      payload: response.data,
+    });
+  } catch (error) {
+    throw error;
+  }
+};

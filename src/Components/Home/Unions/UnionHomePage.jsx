@@ -15,6 +15,7 @@ const UnionHomePage = () => {
     partOfUnion: false,
   });
   const { unionTab } = useSelector((state) => state.userReducer);
+  const { myUnionList, partOfUnions } = useSelector((state) => state.unionReducer )
   const onHandleModal = () => {
     setShowModal({ ...showModal, partOfUnion: true });
   };
@@ -70,6 +71,7 @@ const UnionHomePage = () => {
           showModal={showModal}
           onHandleModal={onHandleModal2}
           onCloseModal={onCloseModal}
+          unionList={myUnionList}
         />
       )}
       {unionTab === "Part of Unions" && (
@@ -78,6 +80,7 @@ const UnionHomePage = () => {
           showModal={showModal}
           onHandleModal={onHandleModal}
           onCloseModal={onCloseModal}
+          unionList={partOfUnions}
         />
       )}
     </div>

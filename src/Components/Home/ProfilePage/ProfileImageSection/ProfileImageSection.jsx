@@ -5,14 +5,17 @@ import { FaWalking } from "react-icons/fa";
 import { IoIosPeople } from "react-icons/io";
 import FollowersModal from "../../Modal/FollowersModal/FollowersModal";
 import Portals from "../../../Portals/Portals";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getFollower,
   getFollowing,
   getProfileById,
+  startFollowing,
   updateProfile,
 } from "../../../../redux/actionCreators/profileAction";
 import {
+  addFriend,
+  checkFriends,
   getFriendsList,
   removeFollowers,
   removeFriend,
@@ -25,6 +28,9 @@ import ImageModal from "../../../common/ImageModal";
 import { useNavigate } from "react-router-dom";
 import { imageUploadApi } from "../../../../redux/actionCreators/rootsActionCreator";
 import { createPost } from "../../../../redux/actionCreators/postActionCreator";
+import alreadyFrnd from '../../../../Assets/Images/acceptFriendRequest.png';
+import addFrnd from '../../../../Assets/Images/SendFriendRequest.png'
+import moment from "moment";
 
 const ProfileImageSection = ({
   isOther,
@@ -39,11 +45,12 @@ const ProfileImageSection = ({
   const friendsCount = friends?.length || 0;
   const followingCount = following?.length || 0;
   const followersCount = followers?.length || 0;
+  const { profile }  = useSelector((state) => state.profileReducer );
 
   const userName = data?.fname + data?.lname;
 
   const [state, setState] = useState({});
-  const { showModal, modalName, modalData, coverImgModal, profileImgModal, profileImg, coverImg } = state;
+  const { showModal, modalName, modalData, coverImgModal, profileImgModal, profileImg, coverImg, isFriends } = state;
   const dispatch = useDispatch();
 
   const handleModal = async (name) => {
@@ -101,7 +108,6 @@ const ProfileImageSection = ({
       }
     });
   };
-
 
   const handleImage = async (profile, value) => {
     if (value === 'delete') {
@@ -169,6 +175,43 @@ const ProfileImageSection = ({
     dispatch(createPost(payload))
   }
 
+  const handleAddFriend = () => {
+    const { fname, lname } = profile;
+    const userCredential = JSON.parse(localStorage.getItem('userCredential'));
+
+    const payloads = {
+      myprofileid: profile?.id,
+      followerprofileid: id,
+      datetimes: moment().format("YYYY-MM-DDTHH:mm:ss"),
+    };
+    dispatch(startFollowing(payloads));
+
+    let payload = {
+      id: profile?.id,
+      fname: fname,
+      lname: lname,
+      friendprofileid: id,
+      friendtype: "Friend",
+      profileid: id,
+      requesttype: "Send",
+      isFriend: "true",
+
+      isFriend: true,
+      party: "",
+      groupsUpdate: [],
+      userid: userCredential.id,
+      reqdatetime: new Date().getTime(),
+    };
+    dispatch(addFriend(payload)).then((res) => {
+      if (res.status) {
+        toast.success(res?.message);
+        // setState({ ...state, requestModal: false });
+      } else {
+        toast.error(res?.message);
+      }
+    });
+  }
+
   return (
     <div className="w-[95%] lg:w-[80%] xl:w-[70%] bg-white rounded-xl flex flex-col items-center mb-3">
       {/*Cover Image Section */}
@@ -203,7 +246,22 @@ const ProfileImageSection = ({
 
           {/* Follower Following and Friends Section */}
           {isOther ?
-            ""
+
+            <section
+              className=" flex flex-col w-[40%] sm:w-[45%] items-center cursor-pointer"
+              // onClick}
+            >
+            {
+              data?.isFriend ? 
+              <img className="w-6 h-6" src={ alreadyFrnd }/>
+              : <img onClick={() => handleAddFriend()} className="w-6 h-6" src={ addFrnd }/>
+            }
+              <Typography variant='small' >Friends</Typography>
+              <span className="w-[90%] text-center sm:w-[97%] font-bold text-[7px] sm:text-[9px] xl:text-[11px] my-1 py-[1px] bg-gray-300 px-4  rounded-md">
+                {friendsCount}
+              </span>
+            </section>
+            
             :
             <section
               className=" flex flex-col w-[40%] sm:w-[45%] items-center cursor-pointer"
@@ -264,6 +322,7 @@ const ProfileImageSection = ({
       {showModal && (
         <Portals closeModal={() => setState({ ...state, showModal: false })}>
           <FollowersModal
+            isOther={isOther}
             handleClick={handleRemove}
             modalName={modalName}
             emptyMessage={`No ${modalName}`}

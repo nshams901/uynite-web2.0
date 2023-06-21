@@ -21,7 +21,7 @@ const profileReducer = (state = initialState, action) => {
         return { ...state, profileDetail: action.payload, profile: action.payload.data};
       case "CHECK_FRIENDS":
         console.log(action.payload.data, "CHLKKKKKKKKKKK");
-        return {...state, friendDetail: {...state.friendDetail, isFriend: ''}}
+        return {...state, friendDetail: {...state.friendDetail, isFriend: action.payload?.data?.isFriend}}
       case "GET_SCHOOL_DETAIL":
         return { ...state, educationDetails: action.payload };
       case "GET_UG_DEGREE":
