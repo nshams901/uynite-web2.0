@@ -3,7 +3,7 @@ import Button1 from "../Button/Button1";
 import Input from "../InputBox/Input";
 import Heading from "../Heading/Heading";
 import Button2 from "../Button/Button2";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {
   isOtpValid,
   matchingOtp,
@@ -14,16 +14,13 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuid } from "uuid";
 import { toasterFunction } from "../../../Utility/utility";
-import firebaseApp, { getFirebaseToken } from "../../../../config/firebase";
-import { createPortal } from "react-dom";
-import Modal from "../Modal/Modal";
+import  { getFirebaseToken } from "../../../../config/firebase";
 
 import {
   RecaptchaVerifier,
   getAuth,
   signInWithPhoneNumber,
 } from "firebase/auth";
-import Portals from "../../../Portals/Portals";
 import { toast } from "react-toastify";
 import Loader from "../../../common/Loader";
 // import { requestNotificationPermission } from "../../../../config/firebase";
@@ -36,15 +33,13 @@ const SignupOtp = ({ title }) => {
   const phoneNumberRules = /[0-9]{10}$/;
   const navigate = useNavigate();
   const [timer, setTimer] = useState(true);
-  const params = useParams();
-  const location = useLocation();
   const [state, setState] = useState({});
-  const { showModal } = state;
   const dispatch = useDispatch();
   const [loading, setIsLoading] = useState(false);
   const { otp, signupData, isEmailOtp, isPhoneNo, userInfo } = useSelector(
     (state) => state.authReducer
   );
+console.log("singup Data", signupData);
 
   const timerFunction = async () => {
     const dataObj = {
@@ -77,8 +72,7 @@ const SignupOtp = ({ title }) => {
       }, 5 * 60 * 1000);
     }
   };
-  const handleClose = () => setState({ ...state, showModal: false });
-
+console.log("userInfo,userInfo", userInfo);
   const onConfirmOtp = async () => {
     setIsLoading(true);
     if (otp?.length < 4) {
@@ -122,25 +116,24 @@ const SignupOtp = ({ title }) => {
     getFirebaseToken()
       .then(async (res) => {
         const data = {
-          datetime: Date.now(),
+          datetime: Date.now().toString(),
           deviceid: uuid(),
           password: userInfo?.password,
           token: res,
           uemail: userInfo?.uemail,
+          // user
           //  "umobile": "weware5007@fectode.com"
         };
 
         console.log("getFirebaseToken", data);
-            console.log("Singu[pppppppppppppp", userInfo);
+            console.log("[userInfo", userInfo);
         await dispatch(userRegistration(data));
         setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
-    // navigate("/auth/createUser")
     setIsLoading(false);
-    // toasterFunction(result?.message);
   };
 
   function configureRecaptcha(phoneNumber, auth) {

@@ -249,23 +249,14 @@ const Signup = () => {
           name="email"
           inputValue={activeField ? "" : formik.values.email}
           errorMessage={formik.errors.email}
-          // touched={
-          //   formik.touched.email &&
-          //   formik.errors.email &&
-          //   toasterFunction(formik.errors.email)
-          // }
           id="email"
           onHandleChange={(e) => {
-            //  if (formik.values.email.length) {
-            //   setActiveEmail(false);
-            //  }
             if (e.target.value.length > 32) {
               formik.handleChange(
                 e.target.value.slice(0, e.target.value.length - 1)
               );
             } else {
               formik.handleChange(e);
-              // onHandleReset();
             }
           }}
         />
@@ -346,38 +337,6 @@ const Signup = () => {
               : !validateEmail(formik.values.email)
           }
         />
-        {/* <div className="w-full flex flex-col mb-2">
-          <div className="flex w-full gap-2 items-center justify-between relative">
-            <input
-              type="checkbox"
-              name="termsAndConditions"
-              value={formik.values.termsAndConditions}
-              onChange={formik.handleChange}
-              touched={formik.values.termsAndConditions}
-              className="transparent"
-              disabled={
-                (formik.values.email === ""
-                  ? formik.values.phone.toString().length < 10
-                  : !validateEmail(formik.values.email)) ||
-                !validatePassword(formik.values.password) ||
-                formik.values.password.length < 8
-              }
-            />
-            <p className="text-[10px] font-semibold text-[#7E8082] w-full">
-              I agree to all
-              <Link to="/auth/reals" className="text-[#05B7FD]">
-                &nbsp; Terms, Data, Cookies & Privacy.
-              </Link>
-            </p>
-            <br />
-          </div>
-          {formik.touched.termsAndConditions &&
-          formik.errors.termsAndConditions ? (
-            <p className="text-[10px] text-[red] self-start w-[80%] ">
-              {formik.errors.termsAndConditions}
-            </p>
-          ) : null}
-        </div> */}
         <div ref={captchaEl} id="sign-in-button"></div>
         <Button2
           id="sign"
@@ -386,7 +345,6 @@ const Signup = () => {
             (formik.values.email === ""
               ? formik.values.phone.toString().length < 10
               : !validateEmail(formik.values.email)) ||
-            // !formik.values.termsAndConditions ||
             formik.values.password.length < 8 ||
             !validatePassword(formik.values.password)
           }
