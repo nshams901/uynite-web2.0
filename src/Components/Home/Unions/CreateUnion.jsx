@@ -52,9 +52,9 @@ const CreateUnion = () => {
           className="w-[35%] bg-gray-800 text-white font-bold py-1 text-xs rounded-lg"
           onClick={onCreateUnion}
           style={{
-            backgroundColor: createUnion?.length ? "#7991BD" : "#707070",
+            backgroundColor: createUnion?.length > 2 ? "#7991BD" : "#707070",
           }}
-          disabled={!createUnion?.length}
+          disabled={createUnion?.length < 3}
         >
           Create
         </button>

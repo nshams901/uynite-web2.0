@@ -111,6 +111,10 @@ const PostCard = ({ userData, item = {} }) => {
     });
   };
   const onHandleOpenLikeModal = () => {
+    dispatch({
+      type: "ACTIVE_POST",
+      payload: item,
+    });
     let payload = {
       pageNumber: 0,
       pageSize: 10,
@@ -177,17 +181,17 @@ const PostCard = ({ userData, item = {} }) => {
         setLikeButton(false);
       }
     } else {
-      const postDeatils = {
+      const postDetils = {
         datetime: Date.now().toString(),
         postid: item?.id,
-        profileid: item?.profileid,
+        profileid: profile?.id,
         type: "p",
       };
       dispatch({
         type: "INCREASE_LIKE_COUNT",
         payload: item?.id,
       });
-      const response = await dispatch(getLikesById(postDeatils));
+      const response = await dispatch(getLikesById(postDetils));
       if (response?.status) {
         setLikeButton(true);
       }
@@ -195,7 +199,7 @@ const PostCard = ({ userData, item = {} }) => {
   };
 
   const onCommetIncrease = () => {
-        dispatch({
+    dispatch({
       type: "ACTIVE_POST",
       payload: item,
     });
@@ -283,9 +287,8 @@ const PostCard = ({ userData, item = {} }) => {
               <div className="flex items-center">
                 {/*font weight removed*/}
                 <span className="ml-1 font-bold">
-                  {`${item?.profile?.fname || "User"} ${
-                    item?.profile?.lname || ""
-                  }`}
+                  {`${item?.profile?.fname || "User"} ${item?.profile?.lname || ""
+                    }`}
                 </span>
                 <span className="text-xs ml-2 font-semibold mt-0.5">
                   {item?.profile?.job}
@@ -301,9 +304,9 @@ const PostCard = ({ userData, item = {} }) => {
                 ) : (
                   ""
                 )}
-                <span><img className="w-5" src={getPrivacy(item?.shareto)}/></span>
+                <span><img className="w-5" src={getPrivacy(item?.shareto)} /></span>
                 <span className="text-[11px] text-left">
-                  {getTimeDiff( moment(item.createdatetime))} ago
+                  {getTimeDiff(moment(item.createdatetime))} ago
                 </span>
 
                 {/* <img
@@ -336,7 +339,7 @@ const PostCard = ({ userData, item = {} }) => {
                 <BsThreeDots
                   size={28}
                   className="cursor-pointer m-0 text-gray-800 font-bold !p-0"
-                  // onClick={showMenuListModal}
+                // onClick={showMenuListModal}
                 />
               }
               options={postOption}
@@ -403,11 +406,16 @@ const PostCard = ({ userData, item = {} }) => {
                   return (
                     <div className="flex justify-center ">
                       <div className="w-[300px] sm:w-full max-w-[500px] h-[260px] border border-gray-400">
-                        <img
-                          src={item}
-                          alt="image"
-                          className="mb-3 w-full h-full object-cover"
-                        />
+                        {
+                          item.includes('mp4') ?
+                            <video src={item} > </video>
+                            :
+                            <img
+                              src={item}
+                              alt="image"
+                              className="mb-3 w-full h-full object-cover"
+                            />
+                        }
                       </div>
                     </div>
                   );
@@ -419,11 +427,18 @@ const PostCard = ({ userData, item = {} }) => {
                   className="m-3 mb-0 w-[300px] sm:w-full max-w-[500px] h-[260px] rounded-full"
                   onClick={() => handleModal(item)}
                 >
+                {
+                  item.image.includes('mp4')
+                  ? <video src={item?.image}
+                   className="w-full h-full object-cover border border-gray-500"
+                    controls></video>
+                  : 
                   <img
                     src={item?.image}
                     alt=""
                     className="w-full h-full object-cover border border-gray-500"
                   />
+                }
                 </div>
               </>
             )

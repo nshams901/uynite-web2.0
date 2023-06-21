@@ -46,13 +46,12 @@ const ProfilePage = ({ isOthers }) => {
     return  isOther ? { id: params?.id} : profile;
   }, [isOther, params.id])
 
-  const isPersonal = isOther ? friendDetail?.profiletype === 'personal' : profile?.profiletype === "Personal";
+  const isPersonal = isOther ? friendDetail?.profiletype === 'Personal' : profile?.profiletype === "Personal";
   const [state, setState ] = useState({})
   const { coverImg, profileImg, showEditModal} = state
   useEffect(() => {
      isPersonal ? getEducation(): '';
 
-    dispatch(checkingIsEmailExist())
      isOther ? dispatch(getFriendProfile(user?.id)).then((res) => {
       if (!res.status) {
         toasterFunction(res.message);
@@ -72,7 +71,7 @@ const ProfilePage = ({ isOthers }) => {
     // dispatch
     dispatch(getUserPostList(user?.id));
 
-  }, [params?.id]);
+  }, [params?.id, isOther]);
 
 
   function getEducation (){
@@ -105,7 +104,7 @@ const ProfilePage = ({ isOthers }) => {
         </section>
 
         <section className="w-full mt-3 rounded-xl flex justify-center sm:w-[92%] lg:w-full xl:w-[93%]">
-          <GridBoxes selectedOption={selectedOption} />
+          <GridBoxes selectedOption={selectedOption} isOther={isOther} />
         </section>
       </section>
     </div>

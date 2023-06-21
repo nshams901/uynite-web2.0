@@ -46,6 +46,7 @@ export const getMyUnion = (data) => async (dispatch) => {
 };
 
 export const getUnionMembers = (data) => async (dispatch) => {
+  // GET http://3.233.82.34:8080/friend/api/group/getFriends/6491c1f30e83591195655221
   try {
     const response = await axios.get(
       `https://web.uynite.com/friend/api/group/getFriends/${data}`
@@ -64,7 +65,7 @@ export const inviteMember = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
       `https://web.uynite.com/friend/api/group/addInGroup`,
-      { data }
+      data 
     );
     console.log(response);
     dispatch({

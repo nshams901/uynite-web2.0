@@ -119,20 +119,9 @@ const SearchFriendsPage = ({ isFriend }) => {
     );
     const userCredential = JSON.parse(localStorage.getItem('userCredential'));
     console.log(data.some((item) => item?.key === 'classmate'), data);
-    const group = data?.filter((item) => item.union)
+    const group = relationOptions?.filter((item) => item.union);
+    console.log(group, data, 'GROUPPPPPPPPPPP');
     let payload = {
-      // private String friendtype;
-      // private Boolean classment;
-      // private Boolean relative;
-      // private Boolean collgues;
-      // private Boolean isFriend;
-      // private Boolean party;
-      // private Boolean org;
-      // private String profileid;
-      // private String userid;
-      // private String requesttype;
-      // private String reqdatetime;
-
       id: profile?.id,
       fname: fname,
       lname: lname,
@@ -152,7 +141,7 @@ const SearchFriendsPage = ({ isFriend }) => {
         {
           groupId: item.key,
           groupName: item.name,
-          isAdd: false,
+          isAdd: !!item.checked,
           isRemove: false,
           profileid: activeProfile.id
         }

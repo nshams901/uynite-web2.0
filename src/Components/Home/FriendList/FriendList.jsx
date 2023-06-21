@@ -201,7 +201,7 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
       <div className="flex hover:bg-gray-300 h-[50px] px-4 items-center py-2 relative">
         {/* {openMenuModal && <CommentMenuModal data={data} leftPosition={50} topPosition={34}/>} */}
 
-        <Link to={`/profile/${userid}`} className="">
+        <Link to={`/profile/${id}`} className="">
           <img
             src={pimage || User}
             alt=""
@@ -209,7 +209,7 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
           />
         </Link>
         <Link
-          to={`/profile/${userid}`}
+          to={`/profile/${id}`}
           className=" flex flex-1 flex-col justify-center ml-4"
         >
           <span className="font-medium ">
