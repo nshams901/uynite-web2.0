@@ -79,7 +79,7 @@ const authReducer = (state = initialState, action) => {
 
     case "USER_INFORMATION":
       console.log("USER_INFORMATION ", action.payload);
-      return { ...state, userInfo: action.payload };
+      return { ...state, userInfo: action.payload, signupData: action.payload };
     default:
       return state;
   }
