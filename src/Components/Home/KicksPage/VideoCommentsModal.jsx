@@ -132,7 +132,13 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
         //   payload: activePost.id,
         // });
         const res = await dispatch(addCommentOnPost(commentData));
-        if (res?.status) dispatch(getCommentByPostid(activePost?.id, params));
+        if (res?.status) {
+          dispatch(getCommentByPostid(activePost?.id, params))
+          dispatch({
+            type: "INCREASE_COMMENT_COUNT",
+            payload: activePost.id,
+          });
+        };
       } else {
         dispatch(addCommentOnKicks(commentData))
           .then((res) => {

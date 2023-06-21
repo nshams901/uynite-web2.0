@@ -10,20 +10,29 @@ import axios from 'axios'
 const ChooseTemplate = ({ onClose, saveTemplate, 
   selectedSpecificEvent, setTemplateSelected, handleTemplateSelected,
   handleSelectedImgFile }) => {  
-  const [state, setState] = useState({})
-  const { templatesImage = [], templates = []} = state
-  const [ tempImages, setTempImages] = useState([])
-  const [selectedImage, setSelectedImage] = useState(null)
+  //const [state, setState] = useState({})
+  //const { templatesImage = [], templates = []} = state
+  const [tempImages, setTempImages] = useState([])
+  const [selectedImage1, setSelectedImage1] = useState(null)
   const [imgData, setImgData] = useState(null)
 
   const dispatch = useDispatch()
   //const { personalReUnionTemplates } = useSelector(state=>state.umeetReducer)
 
+  const handleImageChange = () => {
+    if (event.target.files && event.target.files[0]) {
+      const image = event.target.files[0];
+      handleSelectedImgFile(image)
+      setSelectedImage1(URL.createObjectURL(image));
+    }    
+  }
+
   const handleUpload = (file) => {
+    console.log('jd')
     const payload = {
       eventid: "12",
       textcolor: "0",
-      bgimage: selectedImage,
+      bgimage: selectedImage1,
       textstyle: "bold",
       category: selectedSpecificEvent,
     };
@@ -31,14 +40,6 @@ const ChooseTemplate = ({ onClose, saveTemplate,
     dispatch(createEventTemplate(payload)) 
     handleImageChange()
   }
-
-  const handleImageChange = (data) => {
-    if (event.target.files && event.target.files[0]) {
-      const image = event.target.files[0];
-      handleSelectedImgFile(image)
-      setSelectedImage(URL.createObjectURL(image));
-    }    
-  };
 
   const callTemp = (temps)=>{  
    const tempData = temps?.data?.map((data)=>{
@@ -52,10 +53,10 @@ const ChooseTemplate = ({ onClose, saveTemplate,
 
   const handleTemp = async()=>{
     handleUpload()
-    if(selectedImage){
-      setTemplateSelected(selectedImage);
+    if(selectedImage1){
+      setTemplateSelected(selectedImage1);
     }else{          
-      //handleImageChange(imgData);
+      handleImageChange(imgData);
       setTemplateSelected(imgData)
     }
 
@@ -98,7 +99,7 @@ const ChooseTemplate = ({ onClose, saveTemplate,
   }, [])
 
   return (
-    <div className="fixed z-20 top-0 w-full h-full flex justify-center items-center" style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}>
+    <div className="fixed z-20 top-0 left-0 w-full h-full flex justify-center items-center" style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}>
       <section className="w-[97%] md:w-[70%] lg:w-[41%] flex flex-col justify-betwee h-[94%] md:h-[87%] bg-white rounded-xl p-3">
         <div className="h-[85%]">
           <div className="flex justify-between items-center border-b pb-2 text-gray-600">
@@ -107,7 +108,7 @@ const ChooseTemplate = ({ onClose, saveTemplate,
               htmlFor="templateInput"
               className="px-5 py-1 flex font-medium items-center cursor-pointer rounded-md text-white border bg-[#649B8E]"
             >
-              <input onChange={(e) => handleUpload(e.target.files[0])}
+              <input onChange={handleUpload}
                 type="file"
                 accept="image/*"
                 className="hidden"
@@ -118,8 +119,8 @@ const ChooseTemplate = ({ onClose, saveTemplate,
             </label>
           </div>
 
-          <div className={`h-[88%] ${selectedImage ? '' : 'overflow-y-scroll'} `}>
-           <section className={`${selectedImage ? 'hidden' : ''} grid grid-cols-2 md:grid-cols-4 2xl:grid-cols-5`}>
+          <div className={`h-[88%] ${selectedImage1 ? '' : 'overflow-y-scroll'} `}>
+           <section className={`${selectedImage1 ? 'hidden' : ''} grid grid-cols-2 md:grid-cols-4 2xl:grid-cols-5`}>
             {tempImages?.map((data, i) => (
               <div
                 key={i}
@@ -133,9 +134,9 @@ const ChooseTemplate = ({ onClose, saveTemplate,
               </div>
             ))}
            </section>
-           {selectedImage && (
+           {selectedImage1 && (
             <section className='h-full mt-1'>
-             <img src={selectedImage} className='h-full object-cover rounded-xl w-full' />
+             <img src={selectedImage1} className='h-full object-cover rounded-xl w-full' />
             </section>
            )}
           </div>

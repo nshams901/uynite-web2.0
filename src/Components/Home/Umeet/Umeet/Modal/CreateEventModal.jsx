@@ -12,15 +12,18 @@ import { toast } from 'react-toastify';
 import { AiOutlineEye } from 'react-icons/ai'
 import PreviewEvent from './PreviewEvent'
 import axios from 'axios'
+import AddPeopleModal from './AddPeopleModal'
+import AddByContactModal from './AddByContactModal'
+import ChooseTemplate from './ChooseTemplate'
+import AddGuestModal from './AddGuestModal'
+import PoliticalGuestAddModal from './PoliticalGuestAddModal'
+import PersonalOtherGuest from './PersonalOtherGuest'
 
 const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
-  handleCreatedEvent, handleShowTemplate, handleShowAddGroup,
-  handleShowAddPoliticalGroup, whichType, politicalPartyFeedback,
+  handleCreatedEvent, whichType, politicalPartyFeedback,
   politicalPartyMeeting, handlePoliticalFeedbackQuestion,
-  publicShopOpening, handlePersonalOtherModal, handleShowAddPeopleModal,
-  showAddGroup, reunionModal, handleReuinion, selectedImage,
-  setSelectedImage, selectedImgFile, setSelectedImgFile,
-  handleSelectedImgFile }) => {
+  publicShopOpening,
+   }) => {
 
   const { profileReducer, umeetReducer } = useSelector(state => state)
 
@@ -48,6 +51,23 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   const [noGuest, setNoGuest] = useState(null)
   const [startDate, setStartDate] = useState(null)
 
+  const [showTemplate, setShowTemplate] = useState(false)  
+  const [templateSelected, setTemplateSelected] = useState('')
+  const [selectedImage, setSelectedImage] = useState(null)
+  const [selectedImgFile, setSelectedImgFile] = useState(null)
+  const [showAddPeopleModal, setShowAddPeopleModal] = useState(false)
+  const [showAddGroup, setShowAddGroup] = useState(false)
+  const [showAddByContactModal, setShowAddByContactModal] = useState(false)
+  const [reunionModal, setReunionModal] = useState(true)
+  const [showAddGroupPersonalOthers, setShowAddGroupPersonalOthers] = useState(false)
+  const [showPoliticalAddGroup, setShowPoliticalAddGroup] = useState(false)
+
+  const [invitesEmail, setInvitesEmail] = useState(null)
+  const [invitesPlace, setInvitesPlace] = useState(null)
+  console.log(invitesPlace)
+  // re-union related
+  const [education, setEducation] = useState('')
+
   const dispatch = useDispatch()
   const phoneNumberRules = /[0-9]{10}$/;
 
@@ -59,9 +79,33 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     setEventMode(e.target.value);
   }
 
+  // const handleShowTemplate = ()=>{
+  //   setShowTemplate(true)
+  // }
+
+  const handleShowAddGroup = ()=>{
+    setShowAddGroup(true)
+  }
+
+  const handleShowAddPeopleModal = ()=>{
+    setShowAddPeopleModal(true)
+  }
+
+  const handleAddByContactModal = ()=>{
+   setShowAddByContactModal(true)
+  }  
+
+  const handlePersonalOtherModal = ()=>{
+    setShowAddGroupPersonalOthers(true)
+  }
+
+  const handleShowAddPoliticalGroup = ()=>{
+    setShowPoliticalAddGroup(true)
+  }
+
   const options = { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true}
 
-  const handleImageChange = (event) => {
+  const handleImageChange = () => {
     if (event.target.files && event.target.files[0]) {
       const image = event.target.files[0];
       setSelectedImgFile(image)
@@ -74,15 +118,15 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   }
 
   const handleShowGroup = () => {
-    if (whichType == 'personal') {      
+    if(whichType == 'personal'){      
       if(selectedSpecificEvent == 'Re-Union'){
         handleShowAddPeopleModal()
       }else{
         handlePersonalOtherModal()
       }
     }
-    else if (whichType == 'political') handleShowAddPoliticalGroup()
-    else if (whichType == 'public') handleShowAddPoliticalGroup()
+    else if(whichType == 'political') handleShowAddPoliticalGroup()
+    else if(whichType == 'public') handleShowAddPoliticalGroup()
   }
 
   const handleChange = (event) => {
@@ -95,14 +139,22 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
 
   const handleLocation = (location) => {
     console.log(location)
-    setFormState({...formState, location})
+    setFormState({...formState, eventAddress:location})
   }
 
   const handleBlur = () => {
     const phoneRegex = /^\d{10}$/; 
     const isValidNumber = phoneRegex.test(formState.eventHostPhnNumber);
-    setIsValid(isValidNumber);
+    setIsValid(isValidNumber)
   }
+
+  const showChat = selectedSpecificEvent?.toLowerCase().includes('feedback') || 
+  selectedSpecificEvent?.toLowerCase().includes('party meeting') || 
+  selectedSpecificEvent?.toLowerCase().includes('party meeting') || 
+  selectedSpecificEvent?.toLowerCase().includes('feedback') || 
+  (whichType == 'political') 
+
+  const isFeedbackEvent = selectedSpecificEvent?.toLowerCase().includes('feedback')
 
   const startingDate = new Date(formState.eventdateAndTime)
   const endingDate = new Date(formState.eventEndDate)
@@ -132,31 +184,38 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     "eventquestionopt2": umeetReducer?.question?.option2 ? umeetReducer?.question?.option2 : null,
     "eventquestionopt3": umeetReducer?.question?.option3 ? umeetReducer?.question?.option3 : null,
     "eventquestionopt4": umeetReducer?.question?.option4 ? umeetReducer?.question?.option4 : null,
+    "food": isVeg,
+    "chat": showChat ? false : true,
   }
 
   const handleCreateEvent = () => {
-    if(noGuest == null){
-      return ToastWarning('Please select invities')
+    // if(noGuest == null){
+    //   return ToastWarning('Please select invities')
+    // }
+
+    if(!umeetReducer?.question?.question && isFeedbackEvent){
+      return ToastWarning('Please craete a question')
     }
     
     if(!postData?.eventName) {
       return ToastWarning('Event name is required')
     }
 
-    if(whichType === 'personal'){
-      if (!formState?.eventdateAndTime) {
-         return ToastWarning("Start date and time is required");
-      }else if(!formState?.eventEndDate){
-        return ToastWarning("End date and time is required")
-      }else if(!formState.eventAddress){
+    if(!formState?.eventdateAndTime){
+      return ToastWarning("Start date and time is required");
+    }else if(!formState?.eventEndDate){
+      return ToastWarning("End date and time is required")
+    }else if(!formState.eventAddress){
+      if(!isFeedbackEvent){
         return ToastWarning("please enter the location/url")
       }
-      else if (!phoneNumberRules.test(formState?.eventHostPhnNumber)) {
-        return ToastWarning("Add valid mobile number")
-      }else if(!formState.hostmailid.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)){
-        return ToastWarning("Add valid host mail id")
-      }
     }
+    // else if (!phoneNumberRules.test(formState?.eventHostPhnNumber)) {
+    //   return toast.error("Add valid mobile number")
+    // }else if(!formState.hostmailid.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)){
+    //   return toast.error("Add valid host mail id")
+    // }
+    
     dispatch(createEvent(postData)).then((res) => {
        if(res?.status){
         toast.success(res?.message)
@@ -168,12 +227,12 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   }
 
   const handleEditAdd = async()=>{
-    await dispatch(handleCreateDataUI({...postData, eventMode}))
+    //await dispatch(handleCreateDataUI({...postData, eventMode}))
     handleShowAddPeopleModal()
   }
 
   const handleGroupAndCreate = async()=>{    
-    await dispatch(handleCreateDataUI({...postData, eventMode, startDate}))
+    //await dispatch(handleCreateDataUI({...postData, eventMode, startDate}))
     handleShowGroup()
   }
 
@@ -195,9 +254,9 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
 
   const handleTemplateType = (e)=>{
     if(whichType == 'personal'){
-      handleShowTemplate()
+      setShowTemplate(true)
     }else{
-      (e)=>handleImageChange(e)      
+      handleImageChange(e)    
     }
   }
 
@@ -210,6 +269,10 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     //     console.log(data)
     //   })()
     // }
+    if(editMyEvent){
+      setSelectedImage(umeetReducer?.eventDetail?.eventTemplate)
+    }
+
     if(umeetReducer?.inviteEmailsUI){
       setNoGuest(umeetReducer?.inviteEmailsUI)
     }
@@ -301,8 +364,8 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
              onChange={handleImageChange} 
              className='hidden' />          
             <label 
-             htmlFor="myfile" 
-             onClick={(e)=>handleTemplateType(e)} 
+             htmlFor={(whichType == 'personal') ? null : "myfile" }
+             onClick={handleTemplateType} 
              className='flex cursor-pointer justify-center py-2 mt-3 font-medium text-[#649B8E]'>
              {(whichType == 'personal') ?  `${selectedImage ? 'Change Template' : 'Select Template'}` : `${selectedImage ? 'Change Template' : 'Upload Template'}` }
             </label>
@@ -400,10 +463,10 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
           <div className='flex justify-between items-center my-2'>
            <div className='flex items-center'>
             <img src={guest} />
-            <label onClick={handleGroupAndCreate} className={`${umeetReducer.inviteEmailsUI ? 'hidden' : ''} pl-5 cursor-pointer text-[#649B8E]`}>Add Guests</label>
-            <label onClick={handleEditAdd} className={`${umeetReducer.inviteEmailsUI ? '' : 'hidden'} pl-5 cursor-pointer text-[#649B8E]`}>{umeetReducer?.inviteEmailsUI?.length} Guests Added</label>
+            <label onClick={handleGroupAndCreate} className={`${invitesEmail ? 'hidden' : ''} pl-5 cursor-pointer text-[#649B8E]`}>Add Guests</label>
+            <label onClick={handleEditAdd} className={`${invitesEmail ? '' : 'hidden'} pl-5 cursor-pointer text-[#649B8E]`}>{invitesEmail?.length} Guests Added</label>
            </div>
-           <span onClick={handleEditAdd} className={`${umeetReducer.inviteEmailsUI ? '' : 'hidden'} cursor-pointer text-[#649B8E] border border-[#649B8E] px-2 py-0.5 rounded-md`}>Edit List</span>
+           <span onClick={handleEditAdd} className={`${invitesEmail ? '' : 'hidden'} cursor-pointer text-[#649B8E] border border-[#649B8E] px-2 py-0.5 rounded-md`}>Edit List</span>
           </div>
 
           <div className={`${(politicalPartyFeedback || politicalPartyMeeting) ? 'hidden' : ''} border-b my-3 mb-6`}>
@@ -422,13 +485,15 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
             <span className='text-gray-700'>Food Availability</span>
             <div className="">
               <ToggleButton 
-               handleFoodCreate={(value)=>setIsveg(value)}
-               foodType={foodType} />
+               handleFoodCreate={(value)=>setIsveg(value)} />
             </div>
           </div>
           {isVeg && (
             <div className={`${((eventMode == 'online') || politicalPartyFeedback) ? 'hidden' : ''} mb-3 w-full`}>
-              <select value={foodType} onChange={(e)=>setFoodType(e.target.value)} className='w-full h-10 bg-white outline-none text-gray-500 rounded-md border'>
+              <select 
+               value={foodType} 
+               onChange={(e)=>setFoodType(e.target.value)} 
+               className='w-full h-10 bg-white outline-none text-gray-500 rounded-md border'>
                 <option >Select Food Preference</option>
                 <option value='veg'>Veg</option>
                 <option value='non-veg'>Non-Veg</option>
@@ -495,6 +560,42 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
        profileReducer={profileReducer}
        eventMode={eventMode}
        />}
+     {showTemplate && 
+      <ChooseTemplate 
+       onClose={()=>setShowTemplate(false)} 
+       //saveTemplate={handleTemplateImage} 
+       //handleImageChange={handleImageChange}
+       selectedSpecificEvent={selectedSpecificEvent}
+       setTemplateSelected={(urlid)=>setSelectedImage(urlid)} 
+       handleSelectedImgFile={(file)=>setSelectedImgFile(file)}
+      />}       
+     {showAddGroup && 
+      <AddGuestModal 
+       education={education} 
+       handleEducation={(eduData)=>setEducation(eduData)} 
+       onClose={()=>{setShowAddGroup(false); setReunionModal(false)} }
+       handleShowAddPeopleModal={handleShowAddPeopleModal}
+       showAddPeopleModal={showAddPeopleModal}
+       handlePeopleModalClose={()=>setShowAddPeopleModal(false)} />}
+     {showAddPeopleModal && 
+      <AddPeopleModal 
+       education={education} 
+       handleAddByContactModal={handleAddByContactModal}
+       showAddByContactModal={showAddByContactModal}
+       handlePeopleModalClose={()=>setShowAddPeopleModal(false)} />}       
+     {showAddByContactModal && 
+      <AddByContactModal 
+        onClose={()=>setShowAddByContactModal(false)} 
+        invitesEmail={invitesEmail} 
+        setInvitesEmail={setInvitesEmail} />}       
+     {showAddGroupPersonalOthers && 
+      <PersonalOtherGuest 
+       handleAddByContactModal={handleAddByContactModal}
+       onClose={()=>setShowAddGroupPersonalOthers(false)} />}
+     {showPoliticalAddGroup && 
+      <PoliticalGuestAddModal 
+       onClose={()=>setShowPoliticalAddGroup(false)}
+       whichType={whichType} />}        
     </div>
   )
 }

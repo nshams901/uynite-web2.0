@@ -99,7 +99,7 @@ const EventPostCard = (props) => {
             </span>
             <div className="flex gap-1 mt-1">
               <AccessTimeIcon style={{ height: "15px", width: "15px" }} />
-              <span className="text-xs text-gray-500">hgvjh</span>
+              {/* <span className="text-xs text-gray-500">hgvjh</span> */}
             </div>
           </div>
         </div>

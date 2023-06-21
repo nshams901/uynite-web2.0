@@ -1,33 +1,175 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addEmailToList, allEmailInvites } from "../../../../../redux/actionCreators/umeetActionCreator";
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
-export default function PoliticalAddBy({ onClose, whichBy, selectBy }) {
-  const dispatch = useDispatch();
-  const [addByMail, setAddByMail] = useState(false);
+export default function PoliticalAddBy({ onClose, whichBy, 
+   countryId, country, setInvitesPlace }) {
 
-  const [addEmail, setAddEmail] = useState("");
+  const [addByMail, setAddByMail] = useState(false)
+  const [addEmail, setAddEmail] = useState("") 
+  const [data, setData] = useState([])
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState([])
+  const [selectAll, setSelectAll] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')   
+  const [filteredStateList, setFilteredStateList] = useState(null)
+  const [filteredDistrictList, setFilteredDistrictList] = useState(null)
+  const [filteredLoksabhaList, setFilteredLoksabhaList] = useState(null)
+  const [filteredAssemblyList, setFilteredAssemblyList] = useState(null)
 
-  const { emailList } = useSelector((state) => state.umeetReducer);
+  const dispatch = useDispatch()
+  const { emailList } = useSelector((state) => state.umeetReducer)
+
   const onHandleEmailChange = (event) => {
     setAddEmail(event.target.value);
-  };
+  }
 
   const onHandleAddEmail = () => {
     const emailData = {
       umail: addEmail,
       eventname: "event",
-    };
+    }
     dispatch(addEmailToList(emailData));
     setAddEmail("")
     console.log("emailData", emailData);
-  };
+  }
 
-  const onAddInvitesClick = () => {
-    if (addByMail) {
-      dispatch(allEmailInvites(emailData));
+  const onAddInvitesClick = async()=>{
+    await setInvitesPlace(selectedCheckboxes)
+    
+    onClose()
+  }
+
+  const handleCheckboxChange = (event) => {
+    const value = event.target.value;
+
+    if (event.target.checked) {
+      setSelectedCheckboxes([...selectedCheckboxes, value]);
+    } else {
+      setSelectedCheckboxes(selectedCheckboxes.filter(item => item !== value));
     }
-  };
+  }
+
+  const handleSelectAllChange = (event) => {
+    const checked = event.target.checked;
+
+    setSelectAll(checked);
+
+    if (checked) {
+      if(whichBy == 'State'){
+        const allOptions = data?.map(option => option.state);
+        setSelectedCheckboxes(allOptions);
+      }else if(whichBy == 'District'){
+        const allOptions = data?.map(option => option.distric);
+        setSelectedCheckboxes(allOptions);
+      }else if(whichBy == 'Loksabha'){
+        const allOptions = data?.map(option => option.loksabha);
+        setSelectedCheckboxes(allOptions);
+      }else if(whichBy == 'Assembly'){
+        const allOptions = data?.map(option => option.assembly);
+        setSelectedCheckboxes(allOptions);
+      }
+    } else {
+      setSelectedCheckboxes([]);
+    }
+  }
+
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    // Filter the data based on the search query
+    if(whichBy == 'State'){
+      const filtered = data?.filter(item =>
+       item?.state?.toLowerCase().includes(query.toLowerCase())
+      );
+
+      setFilteredStateList(filtered)
+    }else if(whichBy == 'District'){
+      const filtered = data?.filter(item =>
+       item?.distric?.toLowerCase().includes(query.toLowerCase())
+      );
+
+      setFilteredDistrictList(filtered)
+    }else if(whichBy == 'Loksabha'){
+      const filtered = data?.filter(item =>
+       item?.loksabha?.toLowerCase().includes(query.toLowerCase())
+      );
+
+      setFilteredLoksabhaList(filtered)
+    }else if(whichBy == 'Assembly'){
+      const filtered = data?.filter(item =>
+       item?.assembly?.toLowerCase().includes(query.toLowerCase())
+      );
+
+      setFilteredAssemblyList(filtered)
+    }
+  }  
+
+  useEffect(() => {
+    if(country && whichBy == 'State'){
+      (async()=>{
+        const { data } = await axios.get(
+        `https://web.uynite.com/api/user/country/getstate/${countryId}`)
+
+        console.log(data)
+        setData(data?.data)
+      })().catch(err=>toast.error(err.message))
+    }
+    
+    if(country && whichBy == 'District'){
+      (async()=>{
+        const postData = {
+          "citytype":"DISTRICT",
+          "countrycode": countryId
+        }
+        const { data } = await axios.post(
+        `https://web.uynite.com/profile/api/country/citytype`,
+        postData)
+
+        console.log(data)
+        setData(data?.data)
+      })().catch(err=>toast.error(err.message))
+    }    
+
+    if(country && whichBy == 'Loksabha'){
+      (async()=>{
+        const postData = {
+          "citytype":"LOCKSABHA",
+          "countrycode": countryId
+        }
+        const { data } = await axios.post(
+        `https://web.uynite.com/profile/api/country/citytype`,
+        postData).catch(err=>toast.error(err.message))
+
+        console.log(data)
+        setData(data?.data)
+      })()
+    }    
+
+    if(country && whichBy == 'Assembly'){
+      (async()=>{
+        const postData = {
+          "citytype":"ASSEMBLY",
+          "countrycode": countryId
+        }
+        const { data } = await axios.post(
+        `https://web.uynite.com/profile/api/country/citytype`,
+        postData)
+
+        console.log(data)
+        setData(data?.data)
+      })().catch(err=>toast.error(err.message))
+    }
+
+    // if(whichBy == 'Assembly'){
+    //   setAll(data?.data)
+    // }   
+    setData([{"state":'tamilnadu'}, {"state":'kerla'}, {"state":'odisa'}, {"state":'pune'}]) 
+    setFilteredStateList([{"state":'tamilnadu'}, {"state":'kerla'}, {"state":'odisa'}, {"state":'pune'}])
+  }, [country])
+
   return (
     <section className="h-full">
       <div className="flex justify-between font-semibold my-1">
@@ -83,44 +225,113 @@ export default function PoliticalAddBy({ onClose, whichBy, selectBy }) {
       ) : (
         <>
           <input
-            type="search"
-            className="outline-none border-b border-[#519d8b] text-[#519d8b] w-full my-2"
-            placeholder="Search.."
+            type="text"
+            placeholder="Search"
+            value={searchQuery}
+            onChange={handleSearch}
+            className='w-full h-9 outline-none border border-gray-300 rounded-lg my-1.5 pl-2 bg-gray-50'
           />
 
-          <div className="flex items-center">
-            <input type="checkbox" id="selectAll" className="w-5 h-5" />
+          <div className="flex pb-1.5 border-b items-center">
+            <input 
+             type="checkbox"
+             //id="selectAll" 
+             className="w-5 h-5"
+             checked={selectAll}
+             onChange={handleSelectAllChange}
+           />
             <label
               htmlFor="selectAll"
-              className="ml-5 text-[17px] text-gray-700"
+              className="ml-5 flex items-center text-[17px] text-gray-700"
             >
               Select All
             </label>
           </div>
 
-          <div className="h-[41%] lg:h-[49%] 2xl:h-[53%] overflow-y-scroll">
-            {selectBy?.map((data, i) => (
+          <div className="h-[41%] md:h-[46%] lg:h-[47%] xl:h-[50%] 2xl:h-[53%] overflow-y-scroll">
+            {filteredStateList && filteredStateList?.map((data, i) => (
               <div key={i} className="flex items-center my-2.5">
                 <input
                   value={data?.state}
                   type="checkbox"
                   id={data?.state}
                   className="w-5 h-5"
+                  checked={selectedCheckboxes.includes(data?.state)}
+                  onChange={handleCheckboxChange}                                    
                 />
                 <label
-                  htmlFor={data}
+                  htmlFor={data?.state}
                   className="ml-5 text-[17px] text-gray-700"
                 >
                   {data?.state}
                 </label>
               </div>
             ))}
+            
+            {filteredDistrictList && filteredDistrictList?.map((data, i) => (
+              <div key={i} className="flex items-center my-2.5">
+                <input
+                  value={data?.distric}
+                  type="checkbox"
+                  id={data?.distric}
+                  className="w-5 h-5"
+                  checked={selectedCheckboxes.includes(data?.distric)}
+                  onChange={handleCheckboxChange}
+                />
+                <label
+                  htmlFor={data?.distric}
+                  className="ml-5 text-[17px] text-gray-700"
+                >
+                  {data?.distric}
+                </label>
+              </div>
+            ))}    
+             
+            {filteredLoksabhaList && filteredLoksabhaList?.map((data, i) => (
+              <div key={i} className="flex items-center my-2.5">
+                <input
+                  value={data?.loksabha}
+                  type="checkbox"
+                  id={data?.loksabha}
+                  className="w-5 h-5"
+                  checked={selectedCheckboxes.includes(data?.loksabha)}
+                  onChange={handleCheckboxChange}
+                />
+                <label
+                  htmlFor={data?.loksabha}
+                  className="ml-5 text-[17px] text-gray-700"
+                >
+                  {data?.loksabha}
+                </label>
+              </div>
+            ))}    
+              
+            {filteredAssemblyList && filteredAssemblyList?.map((data, i) => (
+              <div key={i} className="flex items-center my-2.5">
+                <input
+                  value={data?.assembly}
+                  type="checkbox"
+                  id={data?.assembly}
+                  className="w-5 h-5"
+                  checked={selectedCheckboxes.includes(data?.assembly)}
+                  onChange={handleCheckboxChange}
+                />
+                <label
+                  htmlFor={data?.assembly}
+                  className="ml-5 text-[17px] text-gray-700"
+                >
+                  {data?.assembly}
+                </label>
+              </div>
+            ))}                         
           </div>
         </>
       )}
       <div className="flex mx-6 my-2">
-        <button className="py-2 bg-[#649b8e] m-1 font-semibold text-white rounded-lg w-full" onClick={onAddInvitesClick}>
-          Add Invities
+        <button  
+         className="py-2 bg-[#649b8e] m-1 font-semibold text-white rounded-lg w-full" 
+         onClick={onAddInvitesClick}>
+        Add Invities
         </button>
         <button
           onClick={onClose}
