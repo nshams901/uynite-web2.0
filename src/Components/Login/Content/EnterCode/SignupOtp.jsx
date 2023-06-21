@@ -119,7 +119,7 @@ const SignupOtp = ({ title }) => {
           datetime: Date.now().toString(),
           uemail: signupData.uemail
         }
-        dispatch(userRegistration(payload))
+        // dispatch(userRegistration(payload))
         // setState({ ...state, showModal: true });
         dispatch(isOtpValid({ validOtp: true, userInfo: false }));
         navigate(`/auth/verification/signup?${userInfo?.profileType}`);
