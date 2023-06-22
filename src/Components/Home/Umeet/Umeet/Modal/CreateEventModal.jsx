@@ -17,13 +17,18 @@ import AddPeopleModal from './AddPeopleModal'
 import AddByContactModal from './AddByContactModal'
 import ChooseTemplate from './ChooseTemplate'
 import AddGuestModal from './AddGuestModal'
+import EventShareModal from './EventShareModal'
 import PoliticalGuestAddModal from './PoliticalGuestAddModal'
 import PersonalOtherGuest from './PersonalOtherGuest'
+import CountryCodeModal from '../../../../Login/Content/Signup/CountryCodeModal'
+import { createPortal } from "react-dom";
+import Modal from "../../../../Login/Content/Modal/Modal";
+import Portals from "../../../../Portals/Portals";
+import PoliticalFeedbackQuestion from './PoliticalFeedbackQuestion'
 
 const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   handleCreatedEvent, whichType, politicalPartyFeedback,
-  politicalPartyMeeting, handlePoliticalFeedbackQuestion,
-  publicShopOpening,
+  politicalPartyMeeting, publicShopOpening,
    }) => {
 
   const { profileReducer, umeetReducer } = useSelector(state => state)
@@ -62,10 +67,23 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   const [showAddByContactModal, setShowAddByContactModal] = useState(false)
   const [reunionModal, setReunionModal] = useState(true)
   const [showAddGroupPersonalOthers, setShowAddGroupPersonalOthers] = useState(false)
+  const [showPoliticalFeedbackQuestionModal, setShowPoliticalFeedbackQuestionModal] = useState(false)
+  const [showShareMyEvent, setShowShareMyEvent] = useState(false)
   const [showPoliticalAddGroup, setShowPoliticalAddGroup] = useState(false)
   const [selectedQualification, setSelectedQualification] = useState('')
   const [invitesEmail, setInvitesEmail] = useState(null)
   const [invitesPlace, setInvitesPlace] = useState(null)
+  const [shareEvent, setShareEvent] = useState(null)
+  const [question, setQuestion] = useState(null)
+  const [guestType, setGuestType] = useState(null)
+
+console.log(guestType)
+  //country code states
+  const [dataList, setDataList] = useState([])
+  const [countryCode, setCountryCode] = useState(false);
+  const [countryData, setCountryData] = useState(null);
+  const [countryList, setCountryList] = useState(null)
+  const [code, setCode] = useState(null)
 
   // re-union related
   const [education, setEducation] = useState('')
@@ -78,13 +96,13 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     setInputType('datetime-local');
   }
 
+  const closeCountryModal = () => {
+    setCountryCode(false);
+  };
+
   const handleEventMode = (e) => {
     setEventMode(e.target.value);
   }
-
-  // const handleShowTemplate = ()=>{
-  //   setShowTemplate(true)
-  // }
 
   const handleShowAddGroup = ()=>{
     setShowAddGroup(true)
@@ -106,6 +124,9 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     setShowPoliticalAddGroup(true)
   }
 
+  const handlePoliticalFeedbackQuestion = ()=>{
+    setShowPoliticalFeedbackQuestionModal(true)
+  }
   const handleSelectedQualification = (data)=>{
     console.log(data, 'jd')
     setSelectedQualification(data)
@@ -175,7 +196,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     "profileid": profileReducer?.profile?.id,
     "eventdateAndTime": new Date(formState?.eventdateAndTime).toLocaleString('en-US', options),
     "eventAddress": formState?.eventAddress,
-    "eventHostPhnNumber": formState?.eventHostPhnNumber,
+    "eventHostPhnNumber": code + formState?.eventHostPhnNumber,
     "eventfrndEducationType": "need",
     "eventPrivacyType": "need",
     "eventFrndId": "need",
@@ -187,21 +208,34 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     "eventTemplate": selectedImage,
     "startdate": startingDate?.getTime(),
     "enddate": endingDate?.getTime(),
-    "eventQuestion": umeetReducer?.question?.question ? umeetReducer?.question?.question : null,
-    "eventquestionopt1": umeetReducer?.question?.option1 ? umeetReducer?.question?.option1 : null,
-    "eventquestionopt2": umeetReducer?.question?.option2 ? umeetReducer?.question?.option2 : null,
-    "eventquestionopt3": umeetReducer?.question?.option3 ? umeetReducer?.question?.option3 : null,
-    "eventquestionopt4": umeetReducer?.question?.option4 ? umeetReducer?.question?.option4 : null,
+    "eventQuestion": question ? umeetReducer?.question?.question : null,
+    "eventquestionopt1": question?.option1 ? question?.option1 : null,
+    "eventquestionopt2": question?.option2 ? question?.option2 : null,
+    "eventquestionopt3": question?.option3 ? question?.option3 : null,
+    "eventquestionopt4": question?.option4 ? question?.option4 : null,
     "food": isVeg,
     "chat": showChat ? false : true,
+    "feedbackAvailability": isFeedbackEvent,
+    "edittemplate": {
+      "category": selectedSpecificEvent,
+      "enddateforevent": endingDate?.getTime(),
+      "eventid": eventId,
+      "id": eventId,
+      "isAllshowtoEveryone": true,
+      "isfromserver": true,
+      "isselected": true,
+      "isshareenabled": shareEvent,
+      "mCreatedUserid": profileReducer?.profile?.id,
+      "rootsIdforPost": profileReducer?.profile?.id
+    }
   }
 
-  const handleCreateEvent = () => {
+  const handleCreateEvent = async() => {
     // if(noGuest == null){
     //   return ToastWarning('Please select invities')
     // }
 
-    if(!umeetReducer?.question?.question && isFeedbackEvent){
+    if(!question?.question && isFeedbackEvent){
       return ToastWarning('Please craete a question')
     }
     
@@ -223,20 +257,25 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     // }else if(!formState.hostmailid.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)){
     //   return toast.error("Add valid host mail id")
     // }
-    
-    dispatch(createEvent(postData)).then((res) => {
-       if(res?.status){
-        toast.success(res?.message)
-        handleCreatedEvent()
-      }else{
-        toast.error(res?.message)
-      }
-    })
+    setShowShareMyEvent(true)
+    console.log(shareEvent)
+    // if(showShareMyEvent == false && shareEvent!= null){
+    //  await dispatch(createEvent(postData)).then((res) => {
+    //     if(res?.status){
+    //       toast.success(res?.message)
+    //       dispatch(handleCreateDataUI({...postData, eventMode, foodType}))
+    //       handleCreatedEvent()
+    //     }else{
+    //      toast.error(res?.message)
+    //     }
+    //  })
+    // }
   }
 
   const handleEditAdd = async()=>{
     //await dispatch(handleCreateDataUI({...postData, eventMode}))
-    handleShowAddPeopleModal()
+    //handleShowAddPeopleModal()
+    handleShowGroup()
   }
 
   const handleGroupAndCreate = async()=>{    
@@ -246,7 +285,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
 
   const handleEventCreate = async()=>{
     //await dispatch(handleCreateDataUI({...postData, eventMode, foodType}))
-    handleCreateEvent().then(res=>toast.success(res))
+    handleCreateEvent()
   }
 
   const handleInputChange = (event) => {
@@ -268,6 +307,20 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     }
   }
 
+  const GuestType = ()=>{
+    if(guestType == 'State'){
+      return invitesPlace?.length + ' ' + 'States Added'
+    }else if(guestType == 'District'){
+      return invitesPlace?.length + ' ' + 'District Added'
+    }else if(guestType == 'Loksabha'){
+      return invitesPlace?.length + ' ' + 'Loksabha Added'
+    }else if(guestType == 'Assembly'){
+      return invitesPlace?.length + ' ' + 'Assembly Added'
+    }else {
+      return 'Guests Added'
+    }
+  }
+
   useEffect(()=>{
     // if(selectedImgFile){      
     //   (async()=>{
@@ -277,8 +330,23 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     //       selectedImgFile).catch(err=>toast.error(err.message))
     //     console.log(data)
     //   })()
-    // }
-    setEventId(uuidv4())    
+    // }  
+
+    (async()=>{
+      const { data } = await axios.get(
+      `https://web.uynite.com/api/user/country/countrylist`,
+      {headers: {"Accept-Language": "us","Content-Type": "application/json"}})
+
+      //console.log(data?.data, 'countrylist')
+      setCountryList(data?.data)
+    })()
+
+    if(countryData){
+      setCode(countryData?.inisititete + ` +` + countryData?.code)
+    }
+
+    setEventId(uuidv4())
+
     if(editMyEvent){
       setSelectedImage(umeetReducer?.eventDetail?.eventTemplate)
     }
@@ -295,26 +363,17 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
       setFeedbackVal(true)
     }
 
-    if(umeetReducer?.createData){
-      const d = (umeetReducer?.createData?.eventdateAndTime == undefined) ? null : umeetReducer?.createData?.eventdateAndTime.toString()
-      const dateObj = new Date(d);
-      const formattedDate = `${dateObj.getFullYear()}-${(dateObj.getMonth() + 1).toString().padStart(2, "0")}-${dateObj.getDate().toString().padStart(2, "0")}T${dateObj.getHours().toString().padStart(2, "0")}:${dateObj.getMinutes().toString().padStart(2, "0")}`;
-      if(umeetReducer?.createData?.eventdateAndTime != undefined){
-       setStartDate(formattedDate)
-      }
-      setInputType('datetime-local')
-      setInputValue(umeetReducer?.createData?.aboutevent)
-      setEventMode(umeetReducer?.createData?.eventMode)
-      setFoodType(umeetReducer?.createData?.foodType)
-      setFormState((prev) => ({
-       ...prev,
-       eventName: umeetReducer?.createData?.eventName,
-       eventAddress: umeetReducer?.createData?.eventAddress,
-       eventHostPhnNumber: umeetReducer?.createData?.eventHostPhnNumber,
-       hostmailid: umeetReducer?.createData?.hostmailid,       
-       eventdateAndTime: formattedDate
-      }))       
-    }
+    if(showShareMyEvent == false && shareEvent!= null){
+     dispatch(createEvent(postData)).then((res) => {
+        if(res?.status){
+          toast.success(res?.message)
+          dispatch(handleCreateDataUI({...postData, eventMode, foodType}))
+          handleCreatedEvent()
+        }else{
+         toast.error(res?.message)
+        }
+     })
+    }    
 
     if(editMyEvent){
       if(detail?.eventAddress) setEventMode('location')      
@@ -329,7 +388,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
       }))       
     }    
 
-  }, [selectedImgFile, selectedQualification])
+  }, [selectedImgFile, selectedQualification, countryData, shareEvent])
 
 //umeetReducer?.createData, showAddGroup, dispatch
   return (
@@ -446,10 +505,9 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
           )}          
           <div className={`${(politicalPartyFeedback || publicShopOpening || politicalPartyMeeting) ? 'hidden' : ''} flex items-center`}>
             <div>
-              <select className='h-10 outline-none border-b bg-white pr-6 text-gray-500'>
-                <option>+91</option>
-                <option>USA</option>
-              </select>
+             <span onClick={() => setCountryCode(true)} className={`${code ? 'text-[13px]' : ''} bg-gray-200 min-w-[80px] flex justify-center text-gray-600 cursor-pointer mr-2 outline-none h-10 flex items-center rounded-lg px-2 border border-gray-200`}>          
+              {code ? code : 'select'}
+            </span>
             </div>
             <input name='eventHostPhnNumber' 
              className='border-b ml-3 border-gray-300 outline-none pl-2 h-10 my-2 w-full' 
@@ -473,10 +531,10 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
           <div className='flex justify-between items-center my-2'>
            <div className='flex items-center'>
             <img src={guest} />
-            <label onClick={handleGroupAndCreate} className={`${invitesEmail ? 'hidden' : ''} pl-5 cursor-pointer text-[#649B8E]`}>Add Guests</label>
-            <label onClick={handleEditAdd} className={`${invitesEmail ? '' : 'hidden'} pl-5 cursor-pointer text-[#649B8E]`}>{invitesEmail?.length} Guests Added</label>
+            <label onClick={handleGroupAndCreate} className={`${(invitesEmail || invitesPlace) ? 'hidden' : ''} pl-5 cursor-pointer text-[#649B8E]`}>Add Guests</label>
+            <label onClick={handleEditAdd} className={`${(invitesEmail || invitesPlace) ? '' : 'hidden'} pl-5 cursor-pointer text-[#649B8E]`}>{invitesEmail?.length} <GuestType /></label>
            </div>
-           <span onClick={handleEditAdd} className={`${invitesEmail ? '' : 'hidden'} cursor-pointer text-[#649B8E] border border-[#649B8E] px-2 py-0.5 rounded-md`}>Edit List</span>
+           <span onClick={handleEditAdd} className={`${(invitesEmail || invitesPlace) ? '' : 'hidden'} cursor-pointer text-[#649B8E] border border-[#649B8E] px-2 py-0.5 rounded-md`}>Edit List</span>
           </div>
 
           <div className={`${(politicalPartyFeedback || politicalPartyMeeting) ? 'hidden' : ''} border-b my-3 mb-6`}>
@@ -537,7 +595,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
             <textarea 
              placeholder='What about it?' 
              rows='3' 
-             value={umeetReducer?.question ? umeetReducer?.question?.question : ''}
+             value={question ? question?.question : ''}
              onChange={()=>{}}
              className='w-full outline-none my-2 rounded-xl relative border p-2' />
           </div>
@@ -566,6 +624,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
        selectedSpecificEvent={selectedSpecificEvent}
        selectedImage={selectedImage}
        formState={formState}
+       code={code}
        inputValue={inputValue}
        profileReducer={profileReducer}
        eventMode={eventMode}
@@ -607,9 +666,29 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
        handleAddByContactModal={handleAddByContactModal}
        onClose={()=>setShowAddGroupPersonalOthers(false)} />}
      {showPoliticalAddGroup && 
-      <PoliticalGuestAddModal 
+      <PoliticalGuestAddModal
+       setInvitesPlace={setInvitesPlace}
+       setGuestType={setGuestType}
        onClose={()=>setShowPoliticalAddGroup(false)}
-       whichType={whichType} />}        
+       whichType={whichType} />}
+     {showShareMyEvent && 
+      <EventShareModal 
+       onClose={()=>setShowShareMyEvent(false)} 
+       handleShareEvent={(share)=>{console.log(share);setShareEvent(share)}}/>}
+     {showPoliticalFeedbackQuestionModal && 
+      <PoliticalFeedbackQuestion
+       question={question}
+       setQuestion={setQuestion}
+       onClose={()=>setShowPoliticalFeedbackQuestionModal(false)} />}
+      {countryCode && (
+        <Portals closeModal={closeCountryModal}>
+          <CountryCodeModal
+            countryList={countryList}
+            setCountryData={setCountryData}
+            closeCountryModal={closeCountryModal}
+          />
+        </Portals>
+      )}              
     </div>
   )
 }

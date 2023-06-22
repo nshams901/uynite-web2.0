@@ -81,10 +81,11 @@ export default function PoliticalAddBy({ onClose, whichBy,
 
     // Filter the data based on the search query
     if(whichBy == 'State'){
+      console.log('jk')
       const filtered = data?.filter(item =>
        item?.state?.toLowerCase().includes(query.toLowerCase())
       );
-
+      console.log(filtered)
       setFilteredStateList(filtered)
     }else if(whichBy == 'District'){
       const filtered = data?.filter(item =>
@@ -115,6 +116,7 @@ export default function PoliticalAddBy({ onClose, whichBy,
 
         console.log(data)
         setData(data?.data)
+        setFilteredStateList(data?.data)
       })().catch(err=>toast.error(err.message))
     }
     
@@ -130,6 +132,7 @@ export default function PoliticalAddBy({ onClose, whichBy,
 
         console.log(data)
         setData(data?.data)
+        setFilteredDistrictList(data?.data)
       })().catch(err=>toast.error(err.message))
     }    
 
@@ -145,6 +148,7 @@ export default function PoliticalAddBy({ onClose, whichBy,
 
         console.log(data)
         setData(data?.data)
+        setFilteredLoksabhaList(data?.data)
       })()
     }    
 
@@ -160,14 +164,13 @@ export default function PoliticalAddBy({ onClose, whichBy,
 
         console.log(data)
         setData(data?.data)
+        setFilteredAssemblyList(data?.data)
       })().catch(err=>toast.error(err.message))
     }
 
     // if(whichBy == 'Assembly'){
     //   setAll(data?.data)
     // }   
-    setData([{"state":'tamilnadu'}, {"state":'kerla'}, {"state":'odisa'}, {"state":'pune'}]) 
-    setFilteredStateList([{"state":'tamilnadu'}, {"state":'kerla'}, {"state":'odisa'}, {"state":'pune'}])
   }, [country])
 
   return (
