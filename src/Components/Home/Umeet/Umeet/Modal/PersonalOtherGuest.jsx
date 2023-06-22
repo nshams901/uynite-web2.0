@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { MdKeyboardArrowRight } from 'react-icons/md'
 import wishes from '../../../../../Assets/Images/Umeet/wishesTemplate.webp'
@@ -7,41 +7,28 @@ import person from '../../../../../Assets/Images/Person.jpg'
 import '../../Umeet.css'
 import AddByContactModal from './AddByContactModal'
 import group from '../../../../../Assets/Images/Umeet/Umeet-Main/Group 1054.png'
+import axios from 'axios'
+import { useSelector } from 'react-redux'
 
-const friendDataList = [
-  {id: 1,name: "Smith",img: person,checked: false},{name: "jd",img: person,checked: false},{name: "Ak",img: person,checked: false},
-]
-
-const classmatesDataList = [
-  {name: "Smith1",img: person,checked: false},{name: "jd1",img: person,checked: false},{name: "Ak1",img: person,checked: false},
-]
-
-
-const relativesDataList = [
-  {name: "Smith2",img: person,checked: false},{name: "jd2",img: person,checked: false},{name: "Ak1",img: person,checked: false},
-]
-
-const officematesDataList = [
-  {name: "Smith3",img: person,checked: false},{name: "jd3",img: person,checked: false},{name: "Ak1",img: person,checked: false},
-]
-
-const unionsDataList = [
-  {name: "Smith4",img: person,checked: false},{name: "jd4",img: person,checked: false},{name: "Ak1",img: person,checked: false},
-]
+// const unionsDataList = [
+//   {name: "Smith4",img: person,checked: false},{name: "jd4",img: person,checked: false},{name: "Ak1",img: person,checked: false},
+// ]
 
 const PersonalOtherGuest = ({ onClose, handleAddByContactModal }) => {
   const [selectAll, setSelectAll] = useState(false);
   const [showAddByContactModal, setShowAddByContactModal] = useState(false)
   const [selectedBy, setSelectedBy] = useState('Friends')
   const [dataList, setDataList] = useState([])
+  const [friendDataList, setFriendDataList] = useState([])
+  const [classmatesDataList, setClassmatesDataList] = useState([])
+  const [relativesDataList, setRelativesDataList] = useState([])
+  const [officematesDataList, setOfficematesDataList] = useState([])
 
   const handleSelected = (select)=>{
     setSelectedBy(select)
   }
 
-  // const handleAddByContactModal = ()=>{
-  //  setShowAddByContactModal(true)
-  // }
+  const { profileReducer } = useSelector(state=>state)
 
   // Function to handle checkbox change
   const handleCheckboxChange = (index) => {
@@ -61,12 +48,44 @@ const PersonalOtherGuest = ({ onClose, handleAddByContactModal }) => {
     }));
     setDataList(updatedCheckboxes);
     setSelectAll(!selectAll);
-  };
+  }
 
+  const filterType = (data)=>{
+    const friends = data?.filter((item)=>
+      item?.friend?.isFriend == true
+    ).map(obj=> obj)
+    setFriendDataList(friends)
+
+    const collgues = data?.filter((item)=>
+      item?.friend?.collgues == true
+    ).map(obj=> obj)
+    setClassmatesDataList(friends)
+    
+    const relative = data?.filter((item)=>
+      item?.friend?.relative == true
+    ).map(obj=> obj)
+    setRelativesDataList(relative)
+
+    const classment = data?.filter((item)=>
+      item?.friend?.classment == true
+    ).map(obj=> obj)
+    setOfficematesDataList(classment)  
+  }
+
+
+  useEffect(()=>{
+    (async()=>{
+     const { data } = await axios.get(
+      `https://web.uynite.com/friend/api/friend/${profileReducer?.profile?.id}/Accepted`)    
+       console.log(data?.data)
+       setDataList(data?.data)
+      filterType(data?.data)
+    })()
+
+  }, [])
   return (
-    <div className='fixed top-0 left-0 w-full z-20 h-full flex justify-center items-center' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
-
-     <div className={`w-[96%] md:w-[70%] lg:w-[50%] 2xl:w-[50%] md:h-[87%] flex flex-col justify-between bg-white rounded-xl p-3 lg:p-5 ${showAddByContactModal ? '-z-10' : ''}`}>
+    <div className='fixed top-0 left-0 w-full z-10 h-full flex justify-center items-center' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
+     <div className={`w-[96%] md:w-[70%] lg:w-[50%] 2xl:w-[50%] h-[95%] md:h-[93%] flex flex-col justify-between bg-white rounded-xl p-3 lg:p-5 ${showAddByContactModal ? '-z-10' : ''}`}>
       <div className=''>
        <div className='flex font-medium border-b justify-start items-center flex-wrap text-[14px] lg:text-[16px] pb-1 mb-1 text-gray-600'>
          <button 
@@ -86,7 +105,7 @@ const PersonalOtherGuest = ({ onClose, handleAddByContactModal }) => {
          className={`${selectedBy == 'Officemates' ? 'bg-[#649B8E] text-white' : ''} px-1 py-1 rounded-md ml-1 border boredr-[#649B8E] text-[#649B8E]`}>
          Officemates</button>
          <button 
-         onClick={()=>{ handleSelected('Unions'); setDataList(unionsDataList) }}  
+         onClick={()=>{ handleSelected('Unions'); setDataList([]) }}  
          className={`${selectedBy == 'Unions' ? 'bg-[#649B8E] text-white' : ''} px-1 py-1 rounded-md ml-1 border boredr-[#649B8E] text-[#649B8E]`}>
          Unions</button>
          <button 
@@ -107,14 +126,14 @@ const PersonalOtherGuest = ({ onClose, handleAddByContactModal }) => {
           className='w-5 h-5 mr-2'
           />Select All</label>
     	</div>
-    	<div className='h-[190px] md:h-[205px] lg:h-[288px] 2xl:h-[320px] hideScrol overflow-y-scroll pr-2'>
+    	<div className='h-[250px] md:h-[350px] 2xl:h-[320px] hideScrol overflow-y-scroll pr-2'>
     	{
     	 dataList?.map((data, i)=>(
     	  <div key={i} className='flex items-center mb-2 lg:mb-3'>    	   
     	   <div className='w-1/6'>
-    	    <img src={data?.img} className='w-10 h-10 rounded-full object-cover' />
+    	    <img src={data?.profile?.pimage} className='w-10 h-10 rounded-full object-cover' />
     	   </div>
-    	   <span className='w-4/6 font-medium text-[15px]'>{data.name}</span>
+    	   <span className='w-4/6 font-medium text-[15px]'>{data?.friend?.fname + ' ' + data?.friend?.lname}</span>
     	   <div className='w-1/6 flex justify-end'>
     	     <input 
             type="checkbox"

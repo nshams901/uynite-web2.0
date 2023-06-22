@@ -39,7 +39,7 @@ const EventDetails = ({
   const [chat, setChat] = useState(false);
 
   const dispatch = useDispatch();
-  const { umeetReducer } = useSelector(state=>state)
+  const { umeetReducer, profileReducer } = useSelector(state=>state)
   const [guestsList, setGuestsList] = useState([])
 
   useEffect(()=>{
@@ -99,7 +99,7 @@ const EventDetails = ({
     <section
       className={`w-full mr-1 flex items-center ${chat ? "mb-3" : "mb-12"} `}
     >
-      <div className="w-[96%] lg:w-[60%] flex flex-col items-center">
+      <div className="w-[96%] lg:w-[70%] xl:w-[60%] flex flex-col items-center">
         <div className="p-3 w-full bg-white rounded-xl">
           <h3 className="py-2 text-xl font-medium flex justify-center">
             {(eventDetail && eventDetail.eventName) ? eventDetail.eventName : (
@@ -113,17 +113,19 @@ const EventDetails = ({
             {eventDetail ? 
              <img
               src={eventDetail ? eventDetail.eventTemplate : wishes}
-              className="w-full h-[300px] object-cover rounded-xl"
+              className="w-full h-[300px] lg:h-[400px] object-cover rounded-xl"
             /> : <div className='skeleton w-full h-[300px] rounded-xl object-cover'></div>
             }
             
           </div>
-          <div className="flex justify-center my-4">
+          <div className={`${(profileReducer?.profile?.id == umeetReducer?.eventDetail?.profile?.id) ? 'hidden' : ''} flex justify-center my-4`}>
             <button
               onClick={handleRvspModal}
-              className="bg-[#649B8E] rounded-xl text-white font-semibold py-1.5 px-10"
-            >
+              className={`${umeetReducer?.eventDetail?.eventstatus == 'Completed' ? 'bg-gray-100 text-gray-400' : 'text-white'} bg-[#649B8E] rounded-xl font-semibold py-1.5 px-10`}
+              disabled={umeetReducer?.eventDetail?.eventstatus == 'Completed'}
+            >{console.log(umeetReducer?.eventDetail?.eventstatus == 'Completed')}
               send RVSP
+            
             </button>
           </div>
         </div>

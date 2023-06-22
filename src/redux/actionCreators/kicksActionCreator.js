@@ -335,3 +335,19 @@ export const commentPostLiked = (data) => async (dispatch) => {
     throw error;
   }
 };
+
+
+export const commentDisliked = (data) => async (dispatch) => {
+  try {
+    const response = await axios.delete(
+      `https://web.uynite.com/post/api/like/dislike`, data
+    );
+    dispatch({
+      type: "COMMENT_DISLIKED",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

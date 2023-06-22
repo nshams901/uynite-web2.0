@@ -7,7 +7,7 @@ import {useNavigate} from "react-router-dom";
 import {
   isOtpValid,
   matchingOtp,
-  saveUserSignupData,
+  sendOtpToUser,
   settingOtp,
   userRegistration,
 } from "../../../../redux/actionCreators/authActionCreator";
@@ -46,13 +46,13 @@ console.log("singup Data", signupData);
       datetime: Date.now().toString(),
       profileType: signupData.profileType,
       uemail: signupData.uemail,
-      // password: formik.values.password,
+      password: signupData.password,
     };
 
     setIsLoading(true);
     dispatch(settingOtp(""));
 
-    const resendOtp = await dispatch(saveUserSignupData(dataObj));
+    const resendOtp = await dispatch(sendOtpToUser(dataObj));
     if (resendOtp?.data?.status) {
       setIsLoading(false);
       toast.success(resendOtp?.data?.message);

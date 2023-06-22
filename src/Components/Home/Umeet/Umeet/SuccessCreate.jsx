@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 export default function SuccessCreate({ handleBothDetails }){
  const { umeetReducer } = useSelector(state=>state)
-console.log(umeetReducer.createData.id)
+console.log(umeetReducer?.createData?.id)
  return (
   <div className='w-full lg:w-[64%] xl:w-[60%] h-max lg:h-[70%] bg-white rounded-xl p-5'>
    <p className='font-bold text-xl flex justify-center py-2'>Success</p>

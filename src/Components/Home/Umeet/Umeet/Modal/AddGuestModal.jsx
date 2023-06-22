@@ -4,57 +4,50 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllUgFriends, getAllPgFriends } from '../../../../../redux/actionCreators/umeetActionCreator'
 
-const dataList = [
-  {
-    qualification: "School",
-    address: "St, John's E.M. school, Tirunelvelli, TN, 765888"
-  },
-  {
-    qualification: "Graduation",
-    address: "St, John's E.M. school, Tirunelvelli, TN, 765888"
-  },
-  {
-    qualification: "Post Graduation",
-    address: "St, John's E.M. school, Tirunelvelli, TN, 765888"
-  },
-]
-
 const AddGuestModal = ({ onClose, handleEducation, education,
-  handleShowAddPeopleModal, showAddPeopleModal, handlePeopleModalClose }) => {  
+  handleShowAddPeopleModal, showAddPeopleModal, handlePeopleModalClose,
+  handleSelectedQualification }) => {  
   const dispatch = useDispatch()
-  const { umeetReducer } = useSelector(state=>state)
+  const { umeetReducer, profileReducer } = useSelector(state=>state)
 
-  const ugPostData = {
-   "ugaddress": null,
-   "ugdegree": null,
-   "ugbranch": null,
-   "ugpassyear": null,
-  }
-
-  const pgPostData = {
-   "pgaddress": null,
-   "pgdegree": null,
-   "pgbranch": null,
-   "pgpassyear": null,
-  }  
+  const dataList = [
+    {
+      qualification: "SSC",
+      address: profileReducer?.educationDetails?.schooladdress
+    },
+    {
+      qualification: "Graduation",
+      address: profileReducer?.educationDetails?.ugaddress
+    },
+    {
+      qualification: "Post Graduation",
+      address: profileReducer?.educationDetails?.pgaddress
+    },
+  ]
 
   const handleAddPeople = (qualification)=>{
     handleShowAddPeopleModal()
     if(qualification?.toLowerCase() == 'graduation'){      
       handleEducation('ug')
+      handleSelectedQualification(profileReducer?.educationDetails?.ugaddress)
+      onClose()
     }else if(qualification?.toLowerCase().includes('post')){      
       handleEducation('pg')
-    }else if(qualification?.toLowerCase().includes('school')){
+      handleSelectedQualification(profileReducer?.educationDetails?.pgaddress)
+      onClose()
+    }else if(qualification?.toLowerCase().includes('ssc')){
       handleEducation('school')
+      handleSelectedQualification(profileReducer?.educationDetails?.schooladdress)
+      onClose()
     }
   }
 
   useEffect(()=>{
-    if(education == 'ug'){
-      dispatch(getAllUgFriends(ugPostData))
-    }else if(education == 'pg'){
-      dispatch(getAllPgFriends(pgPostData))
-    }
+    // if(education == 'ug'){
+    //   dispatch(getAllUgFriends(ugPostData))
+    // }else if(education == 'pg'){
+    //   dispatch(getAllPgFriends(pgPostData))
+    // }
   }, [education])
 
   return (

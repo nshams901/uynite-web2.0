@@ -19,7 +19,8 @@ import ToastWarning from '../../../../common/ToastWarning'
 const AddDataList = ["State", "Loksabha", "Assembly"];
 const PublicDataList = ["State", "District"]
 
-const PoliticalGuestAddModal = ({ onClose, whichType }) => {
+const PoliticalGuestAddModal = ({ onClose, whichType, setInvitesPlace,
+  setGuestType }) => {
   const [showAddPeopleModal, setShowAddPeopleModal] = useState(false);
   const [selectCountry, setSelectCountry] = useState(false);
   const [country, setCountry] = useState(null);
@@ -32,7 +33,7 @@ const PoliticalGuestAddModal = ({ onClose, whichType }) => {
 
   const dispatch = useDispatch();
   //const { countryList } = useSelector((state) => state.authReducer);
-  const { guestByStateList } = useSelector((state) => state.umeetReducer);
+  //const { guestByStateList } = useSelector((state) => state.umeetReducer);
 
   const handleShowAddPeopleModal = () => {
     setShowAddPeopleModal(true);
@@ -47,12 +48,16 @@ const PoliticalGuestAddModal = ({ onClose, whichType }) => {
     setIsSelectedBy(true);    
     if (data.toLowerCase() == "state") {
       setWhichBy("State")
+      setGuestType("State")
     } else if (data.toLowerCase() == "loksabha") {
       setWhichBy("Loksabha")
+      setGuestType("Loksabha")
     } else if (data.toLowerCase() == "assembly") {
       setWhichBy("Assembly")
+      setGuestType("Loksabha")
     } else if (data.toLowerCase() == "district") {
       setWhichBy("District")
+      setGuestType("Loksabha")
     }
   };
 
@@ -165,6 +170,7 @@ const PoliticalGuestAddModal = ({ onClose, whichType }) => {
               whichBy={whichBy}
               countryId={countryId}
               country={country}
+              setInvitesPlace={setInvitesPlace}
               onClose={()=>setIsSelectedBy(false)}
             />
           ) : (

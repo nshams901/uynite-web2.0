@@ -2,7 +2,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import navigation from '../../../../../Assets/Images/Umeet/Umeet-Main/Umeet navigation.png'
 
 export default function PreviewEvent({ onClose, selectedSpecificEvent,
- selectedImage, formState, profileReducer, eventMode, inputValue}){
+ selectedImage, formState, profileReducer, eventMode, inputValue, code}){
  return (
   <section className='absolut z-20 fixed top-0 left-0 h-full w-full flex justify-center items-center' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
     <div className="w-[96%] md:w-[55%] lg:w-[40%] xl:w-[37%] h-[96%] bg-white rounded-xl p-3">
@@ -24,7 +24,7 @@ export default function PreviewEvent({ onClose, selectedSpecificEvent,
 	      </div>
 	      <div className={`flex mb-3`}>
 	        <span className='w-1/3'>Mobile No</span>
-	        <span className='w-2/3'>:<span className='ml-3 font-bold'>{formState.eventHostPhnNumber}</span></span>
+	        <span className='w-2/3'>:<span className='ml-3 font-bold'>{code+' '}{formState.eventHostPhnNumber}</span></span>
 	      </div>
 
 	       {(eventMode == 'online') && (
