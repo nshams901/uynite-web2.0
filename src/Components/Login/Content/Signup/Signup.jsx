@@ -124,20 +124,21 @@ const Signup = () => {
         uemail: formik.values.email ? formik.values.email : formik.values.phone,
         password: formik.values.password,
       };
-      console.log("Dta Objec>>>>>>>", dataObj);
-      let response;
-      console.log(">>>>>>>>>>>>>>", formik.values.phone);
-      if (formik.values.email || formik.values.phone) {
-        response = await dispatch(saveUserSignupData(dataObj));
-      }
-      console.log("Response........", response);
-      dispatch(userSingupInformation(dataObj));
-      let result;
-      if (formik.values.phone) {
-        result = dispatch(savingPhoneNo(formik.values.phone));
-      }
-      console.log("result>>>>>>>>>", result);
-
+      // console.log("Dta Objec>>>>>>>", dataObj);
+      // let response;
+      // if (formik.values.email) {
+      //   response = await dispatch(saveUserSignupData(dataObj));
+      // }
+      // console.log("Response........", response);
+      // dispatch(userSingupInformation(dataObj));
+      // let result;
+      // if (formik.values.phone) {
+      //   result = dispatch(savingPhoneNo(formik.values.phone));
+      // }
+      // console.log("result>>>>>>>>>", result);
+      const response = formik.values.email
+        ? await dispatch(saveUserSignupData(dataObj))
+        : dispatch(savingPhoneNo(formik.values.phone));
       if (formik.values.phone) {
         setIsLoading(false);
         signIn(
@@ -213,7 +214,7 @@ const Signup = () => {
   const closeCountryModal = () => {
     setCountryCode(false);
   };
-console.log("countryData", countryData);
+  console.log("countryData", countryData);
   return (
     <>
       {/* padding increased */}
@@ -267,7 +268,7 @@ console.log("countryData", countryData);
           >
             <div className=" font-bold flex items-center w-[80%] justify-center">
               <ReactCountryFlag
-                svg              
+                svg
                 countryCode={countryData.iso2}
                 style={{
                   width: "1.2em",
