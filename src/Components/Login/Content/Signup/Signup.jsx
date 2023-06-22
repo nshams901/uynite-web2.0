@@ -171,7 +171,6 @@ const Signup = () => {
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
         captchaEl.current.innerHTML = "";
-
         navigate(`/auth/verification/signup?${profileType}`);
       })
       .catch((err) => {

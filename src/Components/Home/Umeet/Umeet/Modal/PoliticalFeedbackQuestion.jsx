@@ -1,10 +1,10 @@
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { MdKeyboardArrowRight } from 'react-icons/md'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { handleCreateQuestionUI } from "../../../../../redux/actionCreators/umeetActionCreator";
 import { useDispatch } from 'react-redux'
 
-const PoliticalFeedbackQuestion = ({ onClose }) => {
+const PoliticalFeedbackQuestion = ({ onClose, question, setQuestion }) => {
   const [inputValue, setInputValue] = useState('')
   const [inputValue1, setInputValue1] = useState('')
   const [inputValue2, setInputValue2] = useState('')
@@ -82,9 +82,19 @@ const PoliticalFeedbackQuestion = ({ onClose }) => {
   };
 
   const handleQuestion = ()=>{
-    dispatch(handleCreateQuestionUI(ques))
+    setQuestion(ques)
     onClose()
   }
+
+  useEffect(()=>{
+    if(question){
+      setInputValue(question?.question)
+      setInputValue1(question?.option1)
+      setInputValue2(question?.option2)
+      setInputValue3(question?.option3)
+      setInputValue4(question?.option4)
+    }
+  }, [])
 
   return (
     <div className='absolut fixed top-0 left-0 h-full w-full flex justify-center items-center' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>

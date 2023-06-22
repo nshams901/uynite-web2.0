@@ -249,7 +249,7 @@ const SearchFriendsPage = ({ isFriend }) => {
           isRemove: false,
           profileid: activeProfile.id
         }
-      )),
+      )).filter((item) => item.isAdd),
 
       classment: data.includes("classmate"),
       collgues: data.includes("officemate"),

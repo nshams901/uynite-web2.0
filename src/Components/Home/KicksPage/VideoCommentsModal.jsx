@@ -11,6 +11,7 @@ import TypeMessage from "../../chat/TypeMessage";
 import {
   addCommentOnKicks,
   addCommentReplyOnKicks,
+  commentDisliked,
   commentLiked,
   commentPostLiked,
   getCommentsByPostid,
@@ -38,10 +39,11 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
       activePost: state?.rootsReducer?.activePost, //active post --- that post which is currently click by user
       profile: state?.profileReducer?.profile,
       replyList: state?.kicksReducer?.reply,
+      userprofileid: state.profileReducer.profile?.id
     };
   });
 
-  const { commentsList = [], activePost, profile } = reducerData;
+  const { commentsList = [], activePost, profile, userprofileid } = reducerData;
   const [state, setState] = useState({
     msgText: "",
   });
@@ -168,9 +170,13 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
       pageSize: 10
     }
     if(roots){
-       dispatch(commentPostLiked(payload)).then(res => {
-        dispatch(getCommentByPostid(activePost?.id, params))
-       })
+      if(dislike){
+        
+      } else {
+        dispatch(commentPostLiked(payload)).then(res => {
+         dispatch(getCommentByPostid(activePost?.id, params))
+        })
+      }
       return;
     }
     if(dislike) {
@@ -199,6 +205,36 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
     const data = likes?.find(item => item?.profileid === profile?.id);
     if(data) return true;
     else return false;
+  }
+  const handleReplyLike = (id, dislike) => {
+    if(dislike) {
+      const payload = {
+        datetime: new Date().getTime(),
+        postid: id,
+        profileid: profile.id,
+        type: "c"
+      }
+      dispatch(commentDisliked(payload)).then((res) => {
+        dispatch(getCommentByPostid(activePost?.id));
+      })
+    }else{
+      const payload = {
+        datetime: new Date().getTime(),
+        postid: id,
+        profileid: profile.id,
+        type: "c"
+      }
+      let params ={
+        pageNumber: 0,
+        pageSize: 10
+      }
+      dispatch(commentPostLiked(payload)).then(res => {
+        dispatch(getCommentByPostid(activePost.id, params))
+        if(res?.status){
+        }
+      })
+
+    }
   }
 
   return (
@@ -292,10 +328,12 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                       emoji,
                       commentid,
                       profile,
+                      id,
                       likecount,
                       datetime,
                     } = item;
                     const name = profile?.fname + profile?.lname;
+                    const isLiked = likecount?.find(item => item.profileid === userprofileid)
                     return (
                       <div
                         key={i}
@@ -339,10 +377,18 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                         </div>
 
                         <button
-                          onClick={() => handleLike(id)}
+                          onClick={(e) => {
+                            e.preventDefault()
+                            handleReplyLike(id)}}
                           className="w-1/6 pl-2 text-[#666666]"
                         >
+                        { 
+                          isLiked ?
+                          <img className="w-6 cursor-pointer" src={liked} onClick={() => handleReplyLike(id, "dislike")} /> 
+                          :
                           <AiFillHeart className="text-2xl" />
+
+                        }
                         </button>
                       </div>
                     );
