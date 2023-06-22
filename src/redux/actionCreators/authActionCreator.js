@@ -3,7 +3,7 @@ import { setDataOnStorage } from "../../Components/Utility/utility";
 
 // CHECKING USER pr Email EXIST OR NOT
 
-export const saveUserSignupData = (data) => async (dispatch) => {
+export const sendOtpToUser = (data) => async (dispatch) => {
   const datalist = {
     datetime: data.datetime,
     profileType: data.profileType,
@@ -20,7 +20,7 @@ export const saveUserSignupData = (data) => async (dispatch) => {
       }
     );
     dispatch({
-      type: "SET_BASIC_SIGNUP_DETAILS",
+      type: "SET_USER_CREDENTIAL",
       payload: data,
     });
     return result;

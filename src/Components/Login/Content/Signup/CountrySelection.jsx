@@ -19,6 +19,7 @@ import AutocompletePlace from "../../../googlemap/AutocompletePlace";
 import Button2 from "./../Button/Button2";
 import Input from "../InputBox/Input";
 import { setDataOnStorage, toasterFunction } from "../../../Utility/utility";
+import axios from "axios";
 
 const CountrySelection = ({ modalType }) => {
   console.log("modalll 2222221111111111", modalType);
@@ -30,7 +31,7 @@ const CountrySelection = ({ modalType }) => {
   const reducerData = useSelector((state) => {
     return {
       organizationCategory: state.userReducer.orgCategory,
-      userData: state.authReducer.signupData,
+      userCredential: state.authReducer.userCredential,
       countryList: state.authReducer.countryList,
       stateList: state.authReducer.stateList,
       districtList: state.authReducer.districtList,
@@ -41,7 +42,7 @@ const CountrySelection = ({ modalType }) => {
   });
   const {
     organizationCategory,
-    userData,
+    userCredential,
     userInfo,
     countryList,
     stateList,
@@ -110,7 +111,7 @@ const CountrySelection = ({ modalType }) => {
       celibrity: false, //default value.
       countrycode: "+91", //default selected in signup screen..
       dob: moment(dob).format("YYYY-MM-DD"), //from user input
-      email: userData.uemail, //from signup screen.
+      email: userCredential.uemail, //from signup screen.
       fname: userInfo?.fname, //from user input BUSINESS NAME
       gender: userInfo?.gender,
       pimage: "", //if profile image is there, add the URL here.
@@ -119,11 +120,11 @@ const CountrySelection = ({ modalType }) => {
       personalLastName: userInfo?.lname, //from user input – profile lnamein SLIDE 4
       personalname: userInfo?.fname, //from user input – profilefnamein SLIDE 4
       profiletype: isPersonal ? "Personal" : "Organization", //profile type, while we passing in signup screen
-      updatedate: userData.datetime, //Current UTC time in milliseconds
+      updatedate: userCredential.datetime, //Current UTC time in milliseconds
       userid: userid // stored User ID from (Slide 3)
     };
 
-    console.log("sdhkjlsdhfljksdhlsdhjljkdfsjklhsdfkjhdfkjg>>>>>>>>>", userData);
+    console.log("sdhkjlsdhfljksdhlsdhjljkdfsjklhsdfkjhdfkjg>>>>>>>>>", userCredential);
     const payloads = {
       assembly: assembly?.assembly, //default value.
       celibrity: false,
@@ -165,8 +166,8 @@ const CountrySelection = ({ modalType }) => {
                   // dispatch(checkingIsEmailExist(email))
                   const userResponse = await dispatch(
                     loginUser({
-                      uemail: userData.uemail,
-                      password: userData.password,
+                      uemail: userCredential.uemail,
+                      password: userCredential.password,
                     })
                   );
                   console.log("userResponse", userResponse);
@@ -201,8 +202,8 @@ const CountrySelection = ({ modalType }) => {
                 // dispatch(checkingIsEmailExist(email))
                 const userResponse = await dispatch(
                   loginUser({
-                    uemail: userData.uemail,
-                    password: userData.password,
+                    uemail: userCredential.uemail,
+                    password: userCredential.password,
                   })
                 );
                 console.log("userResponse", userResponse);
@@ -218,6 +219,10 @@ const CountrySelection = ({ modalType }) => {
                 }
                 toast.success(userResponse?.message);
                 await setDataOnStorage(userCredential);
+                const token = userResponse?.data?.loginToken;
+                axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+                axios.defaults.headers.common["Content-Type"] = "application-json";
+                axios.defaults.headers.common["Accept-Language"] = "en";
                 navigate("/select");
               } catch (error) {
                 console.log(error);

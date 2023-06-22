@@ -10,7 +10,7 @@ import {
   checkingIsEmailExist,
   getCountryList,
   otpType,
-  saveUserSignupData,
+  sendOtpToUser,
   settingOtp,
   savingPhoneNo,
   userSingupInformation,
@@ -37,7 +37,7 @@ const Signup = () => {
   const passwordRules = /^(?=.*\d)(?=.*[a-z]).{5,}$/;
   const navigate = useNavigate();
   const [loading, setIsLoading] = useState(false);
-  const { countryList, signupData } = useSelector((state) => state.authReducer);
+  const { countryList } = useSelector((state) => state.authReducer);
 
   const validateEmail = (email) => {
     return Yup.string().email().isValidSync(email);
@@ -49,9 +49,13 @@ const Signup = () => {
   const formik = useFormik({
     validateOnMount: true,
     initialValues: {
-      email: signupData?.uemail || "",
-      password: signupData?.password || "",
-      phone: signupData?.uemail || "",
+      email:  "",
+      password:  "",
+      phone: "",
+
+      // email: signupData?.uemail || "",
+      // password: signupData?.password || "",
+      // phone: signupData?.uemail || "",
       // termsAndConditions: false,
       profileType: "",
     },
@@ -128,7 +132,7 @@ const Signup = () => {
       let response;
       console.log(">>>>>>>>>>>>>>", formik.values.phone);
       if (formik.values.email || formik.values.phone) {
-        response = await dispatch(saveUserSignupData(dataObj));
+        response = await dispatch(sendOtpToUser(dataObj));
       }
       console.log("Response........", response);
       dispatch(userSingupInformation(dataObj));
@@ -144,14 +148,14 @@ const Signup = () => {
           `${formik?.values.phone}`?.startsWith("91") ||
             `${formik?.values.phone}`?.startsWith("+91")
             ? formik.values.phone
-            : `  ${formik.values.phone}`
+            : `+91${formik.values.phone}`
         );
       } else if (response.status === 200) {
         setIsLoading(false);
         toast.success(
           "Successfully sent code to email address-" + `${formik.values.email}`
         );
-        navigate(`/auth/verification/signup?${profileType}`);
+        navigate(`/auth/verification/signup`);
       }
     },
   });
