@@ -6,7 +6,7 @@ import Button2 from "../Button/Button2";
 import { useNavigate } from "react-router-dom";
 import {
   matchingOtp,
-  saveUserSignupData,
+  sendOtpToUser,
   sendingMailForOtp,
   settingOtp,
 } from "../../../../redux/actionCreators/authActionCreator";

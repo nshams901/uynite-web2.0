@@ -10,7 +10,7 @@ import {
   checkingIsEmailExist,
   getCountryList,
   otpType,
-  saveUserSignupData,
+  sendOtpToUser,
   settingOtp,
   savingPhoneNo,
   userSingupInformation,
@@ -37,7 +37,7 @@ const Signup = () => {
   const passwordRules = /^(?=.*\d)(?=.*[a-z]).{5,}$/;
   const navigate = useNavigate();
   const [loading, setIsLoading] = useState(false);
-  const { countryList, signupData } = useSelector((state) => state.authReducer);
+  const { countryList } = useSelector((state) => state.authReducer);
 
   const validateEmail = (email) => {
     return Yup.string().email().isValidSync(email);
@@ -49,10 +49,9 @@ const Signup = () => {
   const formik = useFormik({
     validateOnMount: true,
     initialValues: {
-      email: signupData?.uemail || "",
-      password: signupData?.password || "",
-      phone: signupData?.uemail || "",
-      // termsAndConditions: false,
+      email: "",
+      password: "",
+      phone: "",
       profileType: "",
     },
     validationSchema: Yup.object({
@@ -74,14 +73,6 @@ const Signup = () => {
           message:
             "Password should be minimum of 8 length characters with one numerical value",
         }),
-      // phone: Yup.string().matches(phoneNumberRules, {
-      //   excludeEmptyString: true,
-      //   message: "Please enter a valid phone number",
-      // }),
-      // termsAndConditions: Yup.bool().oneOf(
-      //   [true],
-      //   "You need to accept the terms and conditions"
-      // ),
     }),
     onSubmit: async (event) => {
       dispatch(settingOtp(""));
@@ -124,28 +115,27 @@ const Signup = () => {
         uemail: formik.values.email ? formik.values.email : formik.values.phone,
         password: formik.values.password,
       };
-      // console.log("Dta Objec>>>>>>>", dataObj);
-      // let response;
-      // if (formik.values.email) {
-      //   response = await dispatch(saveUserSignupData(dataObj));
-      // }
-      // console.log("Response........", response);
-      // dispatch(userSingupInformation(dataObj));
-      // let result;
-      // if (formik.values.phone) {
-      //   result = dispatch(savingPhoneNo(formik.values.phone));
-      // }
-      // console.log("result>>>>>>>>>", result);
-      const response = formik.values.email
-        ? await dispatch(saveUserSignupData(dataObj))
-        : dispatch(savingPhoneNo(formik.values.phone));
+      console.log("Dta Objec>>>>>>>", dataObj);
+      let response;
+      console.log(">>>>>>>>>>>>>>", formik.values.phone);
+      if (formik.values.email || formik.values.phone) {
+        response = await dispatch(sendOtpToUser(dataObj));
+      }
+      console.log("Response........", response);
+      dispatch(userSingupInformation(dataObj));
+      let result;
+      if (formik.values.phone) {
+        result = dispatch(savingPhoneNo(formik.values.phone));
+      }
+      console.log("result>>>>>>>>>", result);
+
       if (formik.values.phone) {
         setIsLoading(false);
         signIn(
           `${formik?.values.phone}`?.startsWith("91") ||
             `${formik?.values.phone}`?.startsWith("+91")
             ? formik.values.phone
-            : `  ${formik.values.phone}`
+            : `+91${formik.values.phone}`
         );
       } else if (response.status === 200) {
         setIsLoading(false);

@@ -27,19 +27,9 @@ const ProfileType = ({ modalType }) => {
       assemblyList: state.authReducer.assemblyList,
     };
   });
-  const {
-    userData,
-  } = reducerData;
+  const { userData } = reducerData;
   const [states, setState] = useState({});
-  const {
-    imgFile,
-    fname,
-    lname,
-    gender,
-    dob,
-    orgName,
-    checkBox,
-  } = states;
+  const { imgFile, fname, lname, gender, dob, orgName, checkBox } = states;
 
   const isPersonal = modalType === "Personal";
 
@@ -65,7 +55,7 @@ const ProfileType = ({ modalType }) => {
       checkBox,
       profiletype: modalType,
     };
-console.log("USERRRRRRRRRRRRRRRR", userData);
+    console.log("USERRRRRRRRRRRRRRRR", userData);
 
     dispatch(
       userSingupInformation({
@@ -165,7 +155,7 @@ console.log("USERRRRRRRRRRRRRRRR", userData);
               onChange={handleDate}
               className="w-full h-9 border-[1px] my-1 !p-2 text-[#AEB2B1] font-bold outline-none border-[#7E8082] rounded-[5px] text-xs"
               placeholder="Date of Birth*"
-              max="2010-05-31"
+              max="2010-06-13"
               onFocus={() => (ref.current.type = "date")}
               onBlur={() => (ref.current.type = "text")}
               disabled={states?.fname === "" || states?.lname === ""}
@@ -235,7 +225,7 @@ console.log("USERRRRRRRRRRRRRRRR", userData);
               onChange={handleDate}
               className="w-full h-9 border-[1px] my-1 !p-2 text-[#AEB2B1] outline-none border-[#7E8082] rounded-[5px] text-xs font-bold"
               placeholder="Date of Birth*"
-              max="2010-05-31"
+              max="2010-06-13"
             />
 
             <div className="flex justify-between items-center">
@@ -313,12 +303,13 @@ console.log("USERRRRRRRRRRRRRRRR", userData);
               states?.lname === "" ||
               states?.dob === undefined ||
               states?.gender === undefined ||
-              states?.checkBox === false
+              states?.checkBox === undefined
             }
             onClick={onNextClick}
           />
         </div>
       </div>
+      {console.log("Staaaaaaaaaaaeeeee", states)}
     </div>
   );
 };

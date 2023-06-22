@@ -61,7 +61,7 @@ const App = () => {
   axios.defaults.headers.common["Content-Type"] = "application-json";
   axios.defaults.headers.common["Accept-Language"] = "en";
   const dispatch = useDispatch();
-  const { isOtpValid, signupData, userInfo } = useSelector(
+  const { isOtpValid, userInfo } = useSelector(
     (state) => state.authReducer
   );
   let userData = localStorage.getItem("userCredential");
