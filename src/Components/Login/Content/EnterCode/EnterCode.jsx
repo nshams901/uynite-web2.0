@@ -60,8 +60,6 @@ const EnterCode = ({ title }) => {
 
   const onConfirmOtp = async () => {
     setIsLoading(true);
-   
-    console.log("emailExist?.data?.umobile.includes('@'')", isPhoneNo);
     if (isPhoneNo) {
       console.log("================ PHONEEEE");
       confirmationResult
