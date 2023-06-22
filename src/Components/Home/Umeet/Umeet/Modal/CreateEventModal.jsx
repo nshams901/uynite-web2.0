@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import ToggleButton from './ToggleButton';
 import { createEvent, updateEvent, handleCreateDataUI,
 getReunionTemplates, createEventTemplate } from "../../../../../redux/actionCreators/umeetActionCreator";
+import { getEducationDetail } from "../../../../../redux/actionCreators/profileAction"
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
 import AutocompletePlace from '../../../../googlemap/AutocompletePlace';
@@ -62,7 +63,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   const [reunionModal, setReunionModal] = useState(true)
   const [showAddGroupPersonalOthers, setShowAddGroupPersonalOthers] = useState(false)
   const [showPoliticalAddGroup, setShowPoliticalAddGroup] = useState(false)
-
+  const [selectedQualification, setSelectedQualification] = useState('')
   const [invitesEmail, setInvitesEmail] = useState(null)
   const [invitesPlace, setInvitesPlace] = useState(null)
 
@@ -105,6 +106,11 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     setShowPoliticalAddGroup(true)
   }
 
+  const handleSelectedQualification = (data)=>{
+    console.log(data, 'jd')
+    setSelectedQualification(data)
+  }
+
   const options = { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true}
 
   const handleImageChange = () => {
@@ -120,7 +126,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   }
 
   const handleShowGroup = () => {
-    if(whichType == 'personal'){      
+    if(whichType == 'personal'){
       if(selectedSpecificEvent == 'Re-Union'){
         handleShowAddPeopleModal()
       }else{
@@ -189,7 +195,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     "food": isVeg,
     "chat": showChat ? false : true,
   }
-console.log(selectedImage)
+
   const handleCreateEvent = () => {
     // if(noGuest == null){
     //   return ToastWarning('Please select invities')
@@ -272,7 +278,7 @@ console.log(selectedImage)
     //     console.log(data)
     //   })()
     // }
-    setEventId(uuidv4())
+    setEventId(uuidv4())    
     if(editMyEvent){
       setSelectedImage(umeetReducer?.eventDetail?.eventTemplate)
     }
@@ -281,7 +287,7 @@ console.log(selectedImage)
       setNoGuest(umeetReducer?.inviteEmailsUI)
     }
 
-    if(selectedSpecificEvent == 'Re-Union' && reunionModal) {
+    if(selectedSpecificEvent == 'Re-Union' && reunionModal) {   
       handleShowAddGroup()      
     }
 
@@ -323,7 +329,7 @@ console.log(selectedImage)
       }))       
     }    
 
-  }, [selectedImgFile])
+  }, [selectedImgFile, selectedQualification])
 
 //umeetReducer?.createData, showAddGroup, dispatch
   return (
@@ -578,6 +584,7 @@ console.log(selectedImage)
      {showAddGroup && 
       <AddGuestModal 
        education={education} 
+       handleSelectedQualification={handleSelectedQualification}
        handleEducation={(eduData)=>setEducation(eduData)} 
        onClose={()=>{setShowAddGroup(false); setReunionModal(false)} }
        handleShowAddPeopleModal={handleShowAddPeopleModal}
@@ -585,7 +592,8 @@ console.log(selectedImage)
        handlePeopleModalClose={()=>setShowAddPeopleModal(false)} />}
      {showAddPeopleModal && 
       <AddPeopleModal 
-       education={education} 
+       education={education}
+       selectedQualification={selectedQualification} 
        handleAddByContactModal={handleAddByContactModal}
        showAddByContactModal={showAddByContactModal}
        handlePeopleModalClose={()=>setShowAddPeopleModal(false)} />}       

@@ -10,14 +10,20 @@ const RvspModal = ({ onClose }) => {
   const [count, setCount] = useState(1);
   const [eventType, setEventType] = useState('')
   const [selectedValue, setSelectedValue] = useState('veg');
+  const [selectedOption, setSelectedOption] = useState('')
 
   const dispatch = useDispatch()
   const { eventDetail } = useSelector(state=>state.umeetReducer)
-  const { umeetReducer } = useSelector(state=>state)
+  const { umeetReducer, profileReducer } = useSelector(state=>state)
 
   const handleIncrement = () => {
     setCount(count + 1);
   };
+
+  const handleOptionChange = (option)=>{
+    setSelectedOption(option);
+  }
+
 
   const handleDecrement = () => {
     setCount(count - 1);
@@ -42,29 +48,30 @@ const RvspModal = ({ onClose }) => {
     umeetReducer.invitiesAdded = false
   }, [umeetReducer.invitiesAdded])  
 
-  const postData = [
-   {
-    "attend":"Send",
-    "eventid": eventDetail.id,
-    "eventtype": eventType,
-    "invitesasa": "sumanreddy38@gmail.com",
-    "nonveg": (selectedValue == 'nonveg') ? true : false,
-    "profileid":"62f62e8627c88e645560577a"
-   },
-   { 
-    "attend":"Send",
-    "eventid": eventDetail.id,
-    "eventtype": eventType,
-    "invitesasa":"vasarisuman@gmail.com",
-    "nonveg":false,
-    "profileid":"630dcba967ceca0570e4bfcf"
-   }
-  ]
+  const array = [];
+
+  for (let i = 0; i < count; i++) {
+    array.push({
+      "attend": "Maybe",
+      "eventid": eventDetail.id,
+      "eventtype": eventType,
+      "invitesasa": "sumanreddy38@gmail.com",
+      "nonveg": (selectedValue === 'nonveg'),
+      "profileid": eventDetail?.profile?.id
+    });
+  }
+
+console.log(array);
+
 
   const handleInvitees = ()=>{ 
     umeetReducer.invitiesAdded = false   
-    dispatch(addInvitees(postData))  
+    dispatch(addInvitees(array))  
   }
+
+  useEffect(()=>{
+    if(selectedOption == 'no') setCount(0)
+  }, [selectedOption])
 
   return (
   <section className='z-20 fixed top-0 h-full w-full flex justify-center items-center' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
@@ -75,21 +82,63 @@ const RvspModal = ({ onClose }) => {
 	  <div>Will you attend?</div>
 	  <div className='flex justify-between py-3'>
 	   <div className='flex items-center'>
-	   	<img src={Attend} className='h-7 flex mr-1' />
-	   	<span>Yes</span>
+	   	<span className='flex'>
+      {(selectedOption=='yes') ? (
+        <img src={Attend} alt="Selected Option" className='h-7 flex mr-1'/>
+      ) : (
+        <input
+          type="radio"
+          value="yes"
+          id='yes'
+          checked={selectedOption === 'yes'}
+          onChange={() => handleOptionChange('yes')}
+          className='w-5 mr-2'
+        />)}
+      <label htmlFor='yes'>
+        Yes
+      </label>
+      </span>
 	   </div>
 	   <div className='flex items-center'>
-	   	<img src={notAttend} className='h-7 flex mr-1' />
-	   	<span>No</span>
+	   	<span className='flex'>
+      {(selectedOption=='no') ? (
+        <img src={notAttend} alt="Selected Option" className='h-7 flex mr-1'/>
+      ) : (
+        <input
+          type="radio"
+          value="no"
+          id='no'
+          checked={selectedOption === 'no'}
+          onChange={() => handleOptionChange('no')}
+          className='w-5 mr-2'
+        />)}
+      <label htmlFor='no'>
+        No
+      </label>
+      </span>
 	   </div>
 	   <div className='flex items-center'>
-	   	<img src={maybe} className='h-7 flex mr-1' />
-	   	<span>Maybe</span>
+	   	<span className='flex'>
+      {(selectedOption=='maybe') ? (
+        <img src={maybe} alt="Selected Option" className='h-7 flex mr-1'/>
+      ) : (
+        <input
+          type="radio"
+          value="maybe"
+          id='maybe'
+          checked={selectedOption === 'maybe'}
+          onChange={() => handleOptionChange('maybe')}
+          className='w-5 mr-2'
+        />)}
+      <label htmlFor='maybe'>
+        Maybe
+      </label>
+      </span>
 	   </div>
 	  </div>	  
 	 </div>
 
-	 <div className="relative">
+	 <div className={`${selectedOption=='no' ? 'hidden' : ''} relative`}>
       <select value={selectedValue} onChange={(e) => setSelectedValue(e.target.value)} className="border bg-white border-gray-300 w-full py-2 pl-3 pr-10 text-gray-700 focus:outline-none focus:border-blue-500">
         <option value="veg">Veg</option>
         <option value="nonveg">Non-Veg</option>
@@ -97,7 +146,7 @@ const RvspModal = ({ onClose }) => {
       <label className="absolute -top-1 left-2 -mt-px px-1 bg-white text-gray-600 text-xs">Food Preference</label>
     </div>
 
-    <div className='flex lg:py-2 flex-col justify-center items-center'>
+    <div className={`${selectedOption=='no' ? 'hidden' : ''} flex lg:py-2 flex-col justify-center items-center`}>
      <p className='py-1 text-gray-600'>No of guests ( Incliding you )</p>
      <div className='py-1 border px-2 border border-gray-300 lg:my-2'>      
       <button className='font-bold text-xl'  onClick={handleDecrement}>-</button>
@@ -108,7 +157,7 @@ const RvspModal = ({ onClose }) => {
 
     <div className='flex py-1 lg:py-2 flex-col'>
      <label htmlFor='message' className="block text-gray-700 mb-2">Send a message</label>
-     <textarea rows='3' id='message' name='message' className="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
+     <textarea rows={selectedOption=='no' ? '6' : '3'} id='message' name='message' className="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
     </div>
    </section>
    <section>

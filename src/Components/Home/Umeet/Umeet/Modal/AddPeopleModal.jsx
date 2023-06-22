@@ -8,31 +8,64 @@ import '../../Umeet.css'
 // import AddByContactModal from './AddByContactModal'
 import group from '../../../../../Assets/Images/Umeet/Umeet-Main/Group 1054.png'
 import { useSelector } from 'react-redux'
+import axios from 'axios'
+
+const token = localStorage.getItem("userCredential")
+  ? JSON.parse(localStorage.getItem("userCredential")).token
+  : "";
 
 const AddPeopleModal = ({ onClose, education, handlePeopleModalClose,
-handleAddByContactModal, showAddByContactModal }) => {
+handleAddByContactModal, showAddByContactModal, selectedQualification }) => {
   const [selectAll, setSelectAll] = useState(false);
-  // const [showAddByContactModal, setShowAddByContactModal] = useState(false)
+  const [eduData, setEduData] = useState([])
 
-  const { umeetReducer } = useSelector(state=>state)
-
+  const { umeetReducer, profileReducer } = useSelector(state=>state)
+console.log(eduData)
   const handleSelectAllChange = () => {
     setSelectAll(!selectAll);
   }
 
-  // const handleAddByContactModal = ()=>{
-  //  setShowAddByContactModal(true)
-  // }
-
   let dataList = [];
+
+  for (let i = 0; i < eduData.length; i++) {
+    dataList.push({
+      "attend": "Maybe",
+      "eventid": eventDetail.id,
+      "eventtype": eventType,
+      "invitesasa": "sumanreddy38@gmail.com",
+      "nonveg": (selectedValue === 'nonveg'),
+      "profileid": eventDetail?.profile?.id
+    });
+  }
+
+  const ugPostData = {
+   "ugaddress": profileReducer?.educationDetails?.ugaddress,
+   "ugdegree": profileReducer?.educationDetails?.ugdegree,
+   "ugbranch": profileReducer?.educationDetails?.ugbranch,
+   "ugpassyear": profileReducer?.educationDetails?.ugpassyear,
+  }
+
+  const pgPostData = {
+   "pgaddress": profileReducer?.educationDetails?.pgaddress,
+   "pgdegree": profileReducer?.educationDetails?.pgdegree,
+   "pgbranch": profileReducer?.educationDetails?.pgbranch,
+   "pgpassyear": profileReducer?.educationDetails?.pgpassyear,
+  }
 
   useEffect(()=>{
     if(education == 'ug'){
-      dataList = umeetReducer.ugFriends
+      //dataList = umeetReducer.ugFriends
     }else if(education == 'pg'){
-      dataList = umeetReducer.pgFriends
+      (async()=>{
+        const  { data } = await axios.post(
+        `https://web.uynite.com/profile/api/education/getpgfriends`,
+        pgPostData, {headers: { Authorization: `Bearer ${token}` }})
+        console.log(data?.data, "getAllPgFriends")
+        setEduData(data?.data)
+      })()    
+      //dataList = umeetReducer.pgFriends
     }
-  }, [])
+  }, [selectedQualification])
 
   return (
     <div className='fixed top-0 left-0 z-20 w-full h-full flex justify-center items-center' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
@@ -44,7 +77,7 @@ handleAddByContactModal, showAddByContactModal }) => {
          <button onClick={handleAddByContactModal} className='px-5 py-1 rounded-md ml-5 border boredr-[#649B8E] text-[#649B8E]'>Add by Email/Phone</button>
        </div>
        <div className=''>
-        <p className='py-2'>Graduation - QIS college of Engg & Tech, Tamilnadu</p>  
+        <p className='py-2'>{selectedQualification}</p>  
         <input type='search' className='h-7 p-2 h-8 outline-none border border-gray-300 w-full bg-gray-100 rounded-md' placeholder='Search....' />
         <div className='my-3 flex items-center'>
       	 <label className='text-[17px] text-gray-700 flex items-center'>
