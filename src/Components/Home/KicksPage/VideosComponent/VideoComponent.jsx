@@ -144,7 +144,7 @@ const VideoComponent = ({ dataList, data }) => {
         const payload = {
           postid: id,
           profileid: profileid,
-          type: "P",
+          type: "p",
           datetime: new Date().getTime(),
         };
         dispatch(deletePostLike(id)).then((res) => {
@@ -158,8 +158,8 @@ const VideoComponent = ({ dataList, data }) => {
         dispatch({ type: "INCREASE_LIKE", payload: id });
         const payload = {
           postid: id,
-          profileid: profileid,
-          type: "P",
+          profileid: profileDetail.id,
+          type: "p",
           datetime: new Date().getTime(),
         };
         // console.log("add like payload", payload)
@@ -178,6 +178,7 @@ const VideoComponent = ({ dataList, data }) => {
         dispatch({ type: "UNFOLLOW", payload: id});
       }else {
         const payload = {
+          id: 
           myprofileid: profileDetail?.id,
           followerprofileid: profileid,
           datetimes: moment().format("YYYY-MM-DD"),
