@@ -10,14 +10,14 @@ import { RxChevronLeft } from 'react-icons/rx'
 import CreateEventModal from './Modal/CreateEventModal'
 import EventDetails from './EventDetails'
 import EventDeleteModal from './Modal/EventDeleteModal'
-import EventShareModal from './Modal/EventShareModal'
+//import EventShareModal from './Modal/EventShareModal'
 import CreatedEvent from './CreatedEvent'
 import RvspModal from './Modal/RvspModal'
 // import ChooseTemplate from './Modal/ChooseTemplate'
 import AddGuestModal from './Modal/AddGuestModal'
 import SuccessCreate from './SuccessCreate'
 // import PoliticalGuestAddModal from './Modal/PoliticalGuestAddModal'
-import PoliticalFeedbackQuestion from './Modal/PoliticalFeedbackQuestion'
+//import PoliticalFeedbackQuestion from './Modal/PoliticalFeedbackQuestion'
 // import PersonalOtherGuest from './Modal/PersonalOtherGuest'
 import ViewFeedbacks from './Modal/ViewFeedbacks'
 import { getEventByProfileid, getAllInvitedEvents, 
@@ -38,7 +38,7 @@ export default function Umeet(){
   const [selectedSpecificEvent, setSelectedSpecificEvent] = useState(null)
   const [myEvent, setMyEvent] = useState(false)
   const [showDeleteMyEvent, setShowDeleteMyEvent] = useState(false)
-  const [showShareMyEvent, setShowShareMyEvent] = useState(false)
+  // const [showShareMyEvent, setShowShareMyEvent] = useState(false)
   const [eventCreated, setEventCreated] = useState(false)
   const [eventSuccess, setEventSuccess] = useState(false)
   const [selectEventType, setSelectEventType] = useState([])
@@ -53,7 +53,7 @@ export default function Umeet(){
   // const [showAddGroup, setShowAddGroup] = useState(false)
   // const [showAddGroupPersonalOthers, setShowAddGroupPersonalOthers] = useState(false)
   // const [showPoliticalAddGroup, setShowPoliticalAddGroup] = useState(false)
-  const [showPoliticalFeedbackQuestionModal, setShowPoliticalFeedbackQuestionModal] = useState(false)
+  //const [showPoliticalFeedbackQuestionModal, setShowPoliticalFeedbackQuestionModal] = useState(false)
   const [showFeedbackModule, setShowFeedbackModule] = useState(false)
   // const [showAddPeopleModal, setShowAddPeopleModal] = useState(false)
   // const [showAddByContactModal, setShowAddByContactModal] = useState(false)
@@ -93,7 +93,7 @@ export default function Umeet(){
               //handleShowAddGroup={()=>setShowAddGroup(true)}
               //handleShowAddPoliticalGroup={()=>setShowPoliticalAddGroup(true)}
               politicalPartyFeedback={politicalPartyFeedback}
-              handlePoliticalFeedbackQuestion={()=>setShowPoliticalFeedbackQuestionModal(true)}
+              //handlePoliticalFeedbackQuestion={()=>setShowPoliticalFeedbackQuestionModal(true)}
               politicalPartyMeeting={politicalPartyMeeting}
               publicShopOpening={publicShopOpening}
               //handlePersonalOtherModal={()=>setShowAddGroupPersonalOthers(true)}
@@ -122,10 +122,6 @@ export default function Umeet(){
     }
   }
 
-  // const handleAddByContactModal = ()=>{
-  //  setShowAddByContactModal(true)
-  // }  
-
   const handleEditEvent = ()=>{
     setEventDetails(false)
     setEditMyEvent(true); 
@@ -137,8 +133,7 @@ export default function Umeet(){
     setEventCreated(true)
     setNoMyEvent(false)    
     setCreateEvent(false)
-    setSelectedSpecificEvent(null)
-    setShowShareMyEvent(true)
+    setSelectedSpecificEvent(null)    
   }
 
   const handleMyEvent = ()=>{
@@ -388,13 +383,13 @@ export default function Umeet(){
      {showDeleteMyEvent && 
       <EventDeleteModal 
        onClose={()=>setShowDeleteMyEvent(false)} />}
-     {showShareMyEvent && 
-      <EventShareModal 
-       onClose={()=>setShowShareMyEvent(false)} />}
      {showRvspModal && 
       <RvspModal 
        onClose={()=>setShowRvspModal(false)} />}
-{/*     {showTemplate && 
+{/*   {showShareMyEvent && 
+      <EventShareModal 
+       onClose={()=>setShowShareMyEvent(false)} />}
+      {showTemplate && 
       <ChooseTemplate 
        onClose={()=>setShowTemplate(false)} 
        saveTemplate={handleTemplateImage} 
@@ -419,13 +414,13 @@ export default function Umeet(){
       <PoliticalGuestAddModal 
        onClose={()=>setShowPoliticalAddGroup(false)}
        whichType={whichType} />}*/}  
-     {showPoliticalFeedbackQuestionModal && 
-      <PoliticalFeedbackQuestion 
-       onClose={()=>setShowPoliticalFeedbackQuestionModal(false)} />}
      {showFeedbackModule && 
       <ViewFeedbacks 
        onClose={()=>setShowFeedbackModule(false)} />}
-{/*     {showAddPeopleModal && 
+{/*   {showPoliticalFeedbackQuestionModal && 
+      <PoliticalFeedbackQuestion 
+       onClose={()=>setShowPoliticalFeedbackQuestionModal(false)} />} 
+      {showAddPeopleModal && 
       <AddPeopleModal 
        education={education} 
        handleAddByContactModal={handleAddByContactModal}

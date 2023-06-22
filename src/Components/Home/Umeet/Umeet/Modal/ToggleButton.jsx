@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
 
-function ToggleButton({ handleFoodCreate, feedbackVal }) {
+function ToggleButton({ handleFoodCreate, feedbackVal, share, setShareEnabled }) {
   const [isOn, setIsOn] = useState(true);
 
   const handleClick = () => {
     setIsOn(prevState => !prevState)
+    if(share){
+      console.log('aama pa', isOn)
+      setShareEnabled(!isOn)      
+    }
     if(!feedbackVal) handleFoodCreate(!isOn)
   };
 

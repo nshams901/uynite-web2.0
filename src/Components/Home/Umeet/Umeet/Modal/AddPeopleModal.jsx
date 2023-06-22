@@ -20,7 +20,7 @@ handleAddByContactModal, showAddByContactModal, selectedQualification }) => {
   const [eduData, setEduData] = useState([])
 
   const { umeetReducer, profileReducer } = useSelector(state=>state)
-console.log(eduData)
+console.log(education)
   const handleSelectAllChange = () => {
     setSelectAll(!selectAll);
   }
@@ -28,16 +28,15 @@ console.log(eduData)
   let dataList = [];
 
   for (let i = 0; i < eduData.length; i++) {
-    dataList.push({
-      "attend": "Maybe",
-      "eventid": eventDetail.id,
-      "eventtype": eventType,
-      "invitesasa": "sumanreddy38@gmail.com",
-      "nonveg": (selectedValue === 'nonveg'),
-      "profileid": eventDetail?.profile?.id
-    });
+    eduData?.map(inviteData=>(
+      dataList.push({
+        "name": inviteData?.fname + ' ' + inviteData?.lname,
+        "email": inviteData?.email,
+        "img": inviteData?.pimage
+      })
+    ))
   }
-
+//console.log(dataList, 'dataList')
   const ugPostData = {
    "ugaddress": profileReducer?.educationDetails?.ugaddress,
    "ugdegree": profileReducer?.educationDetails?.ugdegree,
@@ -51,7 +50,10 @@ console.log(eduData)
    "pgbranch": profileReducer?.educationDetails?.pgbranch,
    "pgpassyear": profileReducer?.educationDetails?.pgpassyear,
   }
-
+  const schoolPostData = {
+   "schooladdress": profileReducer?.educationDetails?.pgaddress,
+   "schoolpass": profileReducer?.educationDetails?.pgpassyear,
+  }
   useEffect(()=>{
     if(education == 'ug'){
       //dataList = umeetReducer.ugFriends
@@ -64,6 +66,14 @@ console.log(eduData)
         setEduData(data?.data)
       })()    
       //dataList = umeetReducer.pgFriends
+    }else if(education == 'school'){
+      // (async()=>{
+      //   const  { data } = await axios.post(
+      //   `https://web.uynite.com/profile/api/education/getschoolfriends`,
+      //   schoolPostData, {headers: { Authorization: `Bearer ${token}` }})
+      //   console.log(data?.data, "schoolFriends")
+      //   setEduData(data?.data)
+      // })()      
     }
   }, [selectedQualification])
 
