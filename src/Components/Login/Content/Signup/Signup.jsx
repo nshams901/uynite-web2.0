@@ -155,7 +155,7 @@ const Signup = () => {
         toast.success(
           "Successfully sent code to email address-" + `${formik.values.email}`
         );
-        navigate(`/auth/verification/signup`);
+        navigate(`/auth/verification/signup?${profileType}`);
       }
     },
   });

@@ -31,7 +31,7 @@ const CountrySelection = ({ modalType }) => {
   const reducerData = useSelector((state) => {
     return {
       organizationCategory: state.userReducer.orgCategory,
-      userCredential: state.authReducer.userCredential,
+      signupData: state.authReducer.signupData,
       countryList: state.authReducer.countryList,
       stateList: state.authReducer.stateList,
       districtList: state.authReducer.districtList,
@@ -42,7 +42,7 @@ const CountrySelection = ({ modalType }) => {
   });
   const {
     organizationCategory,
-    userCredential,
+    signupData,
     userInfo,
     countryList,
     stateList,
@@ -111,7 +111,7 @@ const CountrySelection = ({ modalType }) => {
       celibrity: false, //default value.
       countrycode: "+91", //default selected in signup screen..
       dob: moment(dob).format("YYYY-MM-DD"), //from user input
-      email: userCredential.uemail, //from signup screen.
+      email: userInfo.uemail, //from signup screen.
       fname: userInfo?.fname, //from user input BUSINESS NAME
       gender: userInfo?.gender,
       pimage: "", //if profile image is there, add the URL here.
@@ -120,11 +120,11 @@ const CountrySelection = ({ modalType }) => {
       personalLastName: userInfo?.lname, //from user input – profile lnamein SLIDE 4
       personalname: userInfo?.fname, //from user input – profilefnamein SLIDE 4
       profiletype: isPersonal ? "Personal" : "Organization", //profile type, while we passing in signup screen
-      updatedate: userCredential.datetime, //Current UTC time in milliseconds
+      updatedate: userInfo.datetime, //Current UTC time in milliseconds
       userid: userid // stored User ID from (Slide 3)
     };
 
-    console.log("sdhkjlsdhfljksdhlsdhjljkdfsjklhsdfkjhdfkjg>>>>>>>>>", userCredential);
+    console.log("sdhkjlsdhfljksdhlsdhjljkdfsjklhsdfkjhdfkjg>>>>>>>>>", userInfo);
     const payloads = {
       assembly: assembly?.assembly, //default value.
       celibrity: false,
@@ -202,8 +202,8 @@ const CountrySelection = ({ modalType }) => {
                 // dispatch(checkingIsEmailExist(email))
                 const userResponse = await dispatch(
                   loginUser({
-                    uemail: userCredential.uemail,
-                    password: userCredential.password,
+                    uemail: signupData.uemail,
+                    password: signupData.password,
                   })
                 );
                 console.log("userResponse", userResponse);
