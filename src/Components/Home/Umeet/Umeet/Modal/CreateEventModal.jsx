@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import ToggleButton from './ToggleButton';
 import { createEvent, updateEvent, handleCreateDataUI,
 getReunionTemplates, createEventTemplate } from "../../../../../redux/actionCreators/umeetActionCreator";
+import { getEducationDetail } from "../../../../../redux/actionCreators/profileAction"
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
 import AutocompletePlace from '../../../../googlemap/AutocompletePlace';
@@ -50,6 +51,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   const [feedbackVal, setFeedbackVal] = useState(false)
   const [noGuest, setNoGuest] = useState(null)
   const [startDate, setStartDate] = useState(null)
+  const [eventId, setEventId] = useState(null)
 
   const [showTemplate, setShowTemplate] = useState(false)  
   const [templateSelected, setTemplateSelected] = useState('')
@@ -61,14 +63,15 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   const [reunionModal, setReunionModal] = useState(true)
   const [showAddGroupPersonalOthers, setShowAddGroupPersonalOthers] = useState(false)
   const [showPoliticalAddGroup, setShowPoliticalAddGroup] = useState(false)
-
+  const [selectedQualification, setSelectedQualification] = useState('')
   const [invitesEmail, setInvitesEmail] = useState(null)
   const [invitesPlace, setInvitesPlace] = useState(null)
-  console.log(invitesPlace)
+
   // re-union related
   const [education, setEducation] = useState('')
 
   const dispatch = useDispatch()
+
   const phoneNumberRules = /[0-9]{10}$/;
 
   const handleToggle = () => {
@@ -103,6 +106,11 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     setShowPoliticalAddGroup(true)
   }
 
+  const handleSelectedQualification = (data)=>{
+    console.log(data, 'jd')
+    setSelectedQualification(data)
+  }
+
   const options = { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true}
 
   const handleImageChange = () => {
@@ -118,7 +126,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   }
 
   const handleShowGroup = () => {
-    if(whichType == 'personal'){      
+    if(whichType == 'personal'){
       if(selectedSpecificEvent == 'Re-Union'){
         handleShowAddPeopleModal()
       }else{
@@ -173,7 +181,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     "eventFrndId": "need",
     "eventType": selectedSpecificEvent,
     "hostmailid": formState?.hostmailid,
-    "id": uuidv4(),
+    "id": eventId,
     "aboutevent": inputValue,
     "eventmode": eventMode,
     "eventTemplate": selectedImage,
@@ -237,8 +245,8 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   }
 
   const handleEventCreate = async()=>{
-    await dispatch(handleCreateDataUI({...postData, eventMode, foodType}))
-    handleCreateEvent()
+    //await dispatch(handleCreateDataUI({...postData, eventMode, foodType}))
+    handleCreateEvent().then(res=>toast.success(res))
   }
 
   const handleInputChange = (event) => {
@@ -261,14 +269,16 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   }
 
   useEffect(()=>{
-    // if(selectedImgFile){
+    // if(selectedImgFile){      
     //   (async()=>{
+    //     console.log(selectedImgFile)     
     //     const { data } = await 
     //     axios.post(`https://web.uynite.com/fileservice/s3/upload`, 
-    //       selectedImgFile)
+    //       selectedImgFile).catch(err=>toast.error(err.message))
     //     console.log(data)
     //   })()
     // }
+    setEventId(uuidv4())    
     if(editMyEvent){
       setSelectedImage(umeetReducer?.eventDetail?.eventTemplate)
     }
@@ -277,7 +287,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
       setNoGuest(umeetReducer?.inviteEmailsUI)
     }
 
-    if(selectedSpecificEvent == 'Re-Union' && reunionModal) {
+    if(selectedSpecificEvent == 'Re-Union' && reunionModal) {   
       handleShowAddGroup()      
     }
 
@@ -319,7 +329,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
       }))       
     }    
 
-  }, [])
+  }, [selectedImgFile, selectedQualification])
 
 //umeetReducer?.createData, showAddGroup, dispatch
   return (
@@ -565,6 +575,8 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
        onClose={()=>setShowTemplate(false)} 
        //saveTemplate={handleTemplateImage} 
        //handleImageChange={handleImageChange}
+       eventId={eventId}
+       selectedImage={selectedImage}
        selectedSpecificEvent={selectedSpecificEvent}
        setTemplateSelected={(urlid)=>setSelectedImage(urlid)} 
        handleSelectedImgFile={(file)=>setSelectedImgFile(file)}
@@ -572,6 +584,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
      {showAddGroup && 
       <AddGuestModal 
        education={education} 
+       handleSelectedQualification={handleSelectedQualification}
        handleEducation={(eduData)=>setEducation(eduData)} 
        onClose={()=>{setShowAddGroup(false); setReunionModal(false)} }
        handleShowAddPeopleModal={handleShowAddPeopleModal}
@@ -579,7 +592,8 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
        handlePeopleModalClose={()=>setShowAddPeopleModal(false)} />}
      {showAddPeopleModal && 
       <AddPeopleModal 
-       education={education} 
+       education={education}
+       selectedQualification={selectedQualification} 
        handleAddByContactModal={handleAddByContactModal}
        showAddByContactModal={showAddByContactModal}
        handlePeopleModalClose={()=>setShowAddPeopleModal(false)} />}       

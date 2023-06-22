@@ -9,13 +9,13 @@ import axios from 'axios'
 
 const ChooseTemplate = ({ onClose, saveTemplate, 
   selectedSpecificEvent, setTemplateSelected, handleTemplateSelected,
-  handleSelectedImgFile }) => {  
+  handleSelectedImgFile, eventId, selectedImage }) => {  
   //const [state, setState] = useState({})
   //const { templatesImage = [], templates = []} = state
   const [tempImages, setTempImages] = useState([])
   const [selectedImage1, setSelectedImage1] = useState(null)
   const [imgData, setImgData] = useState(null)
-
+console.log(selectedImage)
   const dispatch = useDispatch()
   //const { personalReUnionTemplates } = useSelector(state=>state.umeetReducer)
 
@@ -27,18 +27,8 @@ const ChooseTemplate = ({ onClose, saveTemplate,
     }    
   }
 
-  const handleUpload = (file) => {
-    console.log('jd')
-    const payload = {
-      eventid: "12",
-      textcolor: "0",
-      bgimage: selectedImage1,
-      textstyle: "bold",
-      category: selectedSpecificEvent,
-    };
-    handleSelectedImgFile(file)
-    dispatch(createEventTemplate(payload)) 
-    handleImageChange()
+  const handleUpload = () => {
+    handleImageChange()   
   }
 
   const callTemp = (temps)=>{  
@@ -52,12 +42,36 @@ const ChooseTemplate = ({ onClose, saveTemplate,
   }   
 
   const handleTemp = async()=>{
-    handleUpload()
+    handleUpload()    
     if(selectedImage1){
       setTemplateSelected(selectedImage1);
     }else{          
-      handleImageChange(imgData);
+      //handleImageChange(imgData);
       setTemplateSelected(imgData)
+      const payload = {
+      eventid:  eventId,
+      textcolor: "0",
+      bgimage: selectedImage,
+      textstyle: "bold",
+      category: selectedSpecificEvent,
+      tempdetail: {
+            "bgimage": selectedImage,
+            "dateheadingcolor": "",
+            "dateheadingstyle": "",
+            "eventheadingcolor": "",
+            "eventheadingstyle": "",
+            "head1": "",
+            "hosttextcolor": "",
+            "hosttextstye": "",
+            "locationtextcolor": "",
+            "locationtextstyle": "",
+            "textcolor": "#000000",
+            "textstyle": "",
+            "textstyles": ""
+        },
+    };
+    //handleSelectedImgFile(file)
+    dispatch(createEventTemplate(payload))
     }
 
     onClose()  
@@ -100,7 +114,7 @@ const ChooseTemplate = ({ onClose, saveTemplate,
 
   return (
     <div className="fixed z-20 top-0 left-0 w-full h-full flex justify-center items-center" style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}>
-      <section className="w-[97%] md:w-[70%] lg:w-[41%] flex flex-col justify-betwee h-[94%] md:h-[87%] bg-white rounded-xl p-3">
+      <section className="w-[97%] md:w-[70%] lg:w-[46%] flex flex-col justify-betwee h-[94%] md:h-[87%] bg-white rounded-xl p-3">
         <div className="h-[85%]">
           <div className="flex justify-between items-center border-b pb-2 text-gray-600">
             <span className="text-[18px] text-gray-700">Choose Template</span>

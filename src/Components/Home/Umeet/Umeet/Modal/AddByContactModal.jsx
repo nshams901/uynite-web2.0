@@ -53,8 +53,8 @@ setInvitesEmail,  }) => {
   } 
 
   const handleSave = async()=>{
+
     await setInvitesEmail(dataList)
-    //await dispatch(handleInviteEmailUI(dataList))
     onClose()
   }
 

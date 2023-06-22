@@ -233,7 +233,7 @@ const SearchFriendsPage = ({ isFriend }) => {
     console.log(group, data, 'GROUPPPPPPPPPPP');
     const ownPayload = {
 
-      id: activeProfile?.profile.id,
+      // id: activeProfile?.profile.id,
       fname: profile?.fname,
       lname: profile?.lname,
       isFriend: true,

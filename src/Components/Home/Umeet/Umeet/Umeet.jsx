@@ -2,7 +2,8 @@ import BlankEvents from './BlankEvents'
 import { HiPlus } from 'react-icons/hi'
 import { BsCalendarEvent, BsInfoCircleFill } from 'react-icons/bs'
 import { useState, useEffect } from 'react'
-import { dataList, myEventDataList, selectEventList, selectPersonalEventType, selectPublicEventType, selectPoliticalEventType } from '../data'
+import { dataList, myEventDataList, selectEventList, selectPersonalEventType,
+ selectPublicEventType, selectPoliticalEventType } from '../data'
 import SingleEvent from './SingleEvent'
 import '../Umeet.css'
 import { RxChevronLeft } from 'react-icons/rx'
@@ -22,6 +23,7 @@ import ViewFeedbacks from './Modal/ViewFeedbacks'
 import { getEventByProfileid, getAllInvitedEvents, 
 getEventDetails } from "../../../../redux/actionCreators/umeetActionCreator"
 import { useDispatch, useSelector } from 'react-redux'
+import { getEducationDetail } from "../../../../redux/actionCreators/profileAction"
 // import AddPeopleModal from './Modal/AddPeopleModal'
 // import AddByContactModal from './Modal/AddByContactModal'
 
@@ -208,6 +210,7 @@ export default function Umeet(){
   useEffect(() => {    
     dispatch(getEventByProfileid(profileReducer?.profile?.id))
     dispatch(getAllInvitedEvents(profileReducer?.profile?.id))
+    dispatch(getEducationDetail(profileReducer?.profile?.id))
   }, [])  
 
   // useEffect(()=>{
@@ -215,7 +218,7 @@ export default function Umeet(){
   //     setSelectedImage(umeetReducer?.eventDetail?.eventTemplate)
   //   }
   // },[])
-  console.log(('yes re-render'))
+  console.log('yes re-render')
   const handleCreateEventForm = (data)=>{
     umeetReducer.inviteEmailsUI = null
     umeetReducer.createData = null
