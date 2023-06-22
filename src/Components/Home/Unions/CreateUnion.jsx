@@ -40,7 +40,7 @@ const CreateUnion = () => {
     setCreateUnion(event.target.value);
   };
   return (
-    <div className="w-[95%] sm:w-[50%] lg:w-[40%] bg-[#E4E7EC] mx-auto flex flex-col items-center gap-2 px-1 lg:px-4 h-[89%] mt-1 pt-3">
+    <div className="w-[95%] sm:w-[50%] lg:w-[40%] bg-white mx-auto flex flex-col items-center gap-2 px-1 lg:px-4 h-[89%] mt-1 pt-3">
       <div className="w-full flex flex-col items-center gap-5 px-4">
         <h1 className="font-bold">Create Union</h1>
         <Input

@@ -9,7 +9,8 @@ const FollowersModal = ({
   data,
   emptyMessage = "",
   handleClick,
-  closeModal
+  closeModal,
+  isOther
 }) => {
   return (
     <div
@@ -44,15 +45,23 @@ const FollowersModal = ({
                       }`}</span> 
                     </Link>
                     <div className="flex gap-3">
-                    <span>{celibrity ? 
+                    <span>
+                    {
+                      celibrity ? 
                       <img className="w-5" src={Logo}/>: ""
-                      }</span>
+                      }
+                    </span>
+                      {
+                        isOther ? ""
+                        :
                       <button
                         onClick={() => handleClick(friend)}
                         className="font-bold text-[#05b7fd] text-[10px] border-[1px] border-[#05b7fd] px-3 py-0.5 rounded-sm"
                       >
                         {modalName === "Following" ? "Unfollow" : "Remove"}
                       </button>
+
+                      }
                     </div>
                   </div>
                 </div>

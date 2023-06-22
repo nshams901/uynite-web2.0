@@ -6,7 +6,7 @@ import UnionUpdateModal from "./UnionUpdateModal";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MenuDropdown from '../../../../src/Components/common/MenuDropdown'
-import { addUnion, deleteUnion, getMyUnion, getUnionList } from "../../../redux/actionCreators/unionActionCreator";
+import { addUnion, deleteUnion, getMyUnion, getPartOfUnions, getUnionList } from "../../../redux/actionCreators/unionActionCreator";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { data } from "autoprefixer";
 import { toast } from "react-toastify";
@@ -18,17 +18,18 @@ const MyUnion = ({
   showModal,
   onHandleModal,
   onCloseModal,
+  unionList
 }) => {
   const dispatch = useDispatch();
   const reducerDate = useSelector((state) => {
     return {
       profile: state.profileReducer.profile,
-      unionList: state.unionReducer.unionList,
+      // unionList: state.unionReducer.unionList,
       myUnionList: state.unionReducer.myUnionList
     }
   })
 
-  const { profile, unionList, myUnionList} = reducerDate;
+  const { profile, myUnionList} = reducerDate;
   // const data = [{ name: "Edit Union" }, { name: "Delete Union" }];
   const [modalType, setModalType] = useState({
     editPost: false,
@@ -40,6 +41,8 @@ const MyUnion = ({
 
   useEffect(() => {
     dispatch(getMyUnion(profile?.id));
+    dispatch(getPartOfUnions(profile?.id))
+    
   }, [])
   const openModalOption = (optionName, data) => {
     if (optionName === "Edit Union") {
@@ -88,7 +91,7 @@ const MyUnion = ({
     })
 
   }
-  const exitUnion = () => {
+  const handleDeleteUnion = () => {
     dispatch(deleteUnion(modalType?.activeUnion?.groupId)).then((res) => {
       if(res?.status){
         toast.success("Group deleted")
@@ -99,13 +102,16 @@ const MyUnion = ({
       }
     })
   }
+  const handleExit = () => {
+    
+  }
   return (
     <>
       <div
         className="w-full h-[100%] overflow-y-scroll flex flex-col gap-2 "
         // onClick={onSingleUnionPage}
       >
-        {myUnionList?.map((elem) => {
+        {unionList?.map((elem) => {
           const { groupId, groupName, count } = elem;
           return (
             <div
@@ -151,7 +157,7 @@ const MyUnion = ({
       </div>
       {showModal?.partOfUnion && (
         <Portals closeModal={onCloseModal}>
-          <ExitUnionModal onCloseModal={onCloseModal} />
+          <ExitUnionModal exitUnion={handleExit} onCloseModal={onCloseModal} />
         </Portals>
       )}
 
@@ -169,7 +175,7 @@ const MyUnion = ({
       {modalType?.deletePost && (
         <Portals closeModal={closeModalOption}>
           <ExitUnionModal
-            exitUnion={exitUnion}
+            exitUnion={ handleDeleteUnion }
             onCloseModal={closeModalOption}
           />
         </Portals>

@@ -3,6 +3,7 @@ const initialState = {
   myUnionList: [],
   unionMemberList: [],
   unionInviteeList: [],
+  partOfUnions: []
 };
 
 const unionReducer = (state = initialState, action) => {
@@ -14,7 +15,9 @@ const unionReducer = (state = initialState, action) => {
         case "GET_UNION_MEMBER":
             return { ...state, unionMemberList: action.payload.data};
         case "GET_INVITEE_LIST":
-            return { ...state, unionInviteeList: action.payload.data }
+            return { ...state, unionInviteeList: action.payload.data };
+        case "GET_PART_OF_UNIONS":
+            return { ...state, partOfUnions: action.payload.data}
         default:
             return state;
     }
