@@ -3,12 +3,9 @@ import Input from "../InputBox/Input";
 import PasswordInput from "../InputBox/PasswordInput";
 import Button2 from "../Button/Button2";
 import Heading from "../Heading/Heading";
-import { BsFillQuestionCircleFill } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { createPortal } from "react-dom";
-import Modal from "../Modal/Modal";
 import {
   checkingIsEmailExist,
   getCountryList,
@@ -19,38 +16,28 @@ import {
   userSingupInformation,
 } from "../../../../redux/actionCreators/authActionCreator";
 import { useDispatch, useSelector } from "react-redux";
-import firebaseApp, { auth } from "../../../../config/firebase";
 import {
   RecaptchaVerifier,
   getAuth,
   signInWithPhoneNumber,
 } from "firebase/auth";
-
 import dropdownIcon from "../../../../../public/images/dropdownIcon.png";
-
-import { initializeApp } from "firebase/app";
-import firebase from "firebase/compat/app";
 import "firebase/auth";
-import { document } from "postcss";
 import { isEmpty, toasterFunction } from "../../../Utility/utility";
 import { toast } from "react-toastify";
 import CountryCodeModal from "./CountryCodeModal";
 import Portals from "../../../Portals/Portals";
 import Loader from "../../../common/Loader";
+import ReactCountryFlag from "react-country-flag";
 
 const Signup = () => {
   const captchaEl = useRef();
-  const [state, setState] = useState({});
   const [profileType, setProfileType] = useState("");
-  const { showModal, modalType } = state;
   const dispatch = useDispatch();
   const passwordRules = /^(?=.*\d)(?=.*[a-z]).{5,}$/;
-  const phoneNumberRules = /[0-9]{10}$/;
   const navigate = useNavigate();
   const [loading, setIsLoading] = useState(false);
-  const { countryList, signupData, isPhoneNo } = useSelector(
-    (state) => state.authReducer
-  );
+  const { countryList, signupData } = useSelector((state) => state.authReducer);
 
   const validateEmail = (email) => {
     return Yup.string().email().isValidSync(email);
@@ -59,7 +46,6 @@ const Signup = () => {
   const validatePassword = (password) => {
     return passwordRules.test(password);
   };
-  // const isValidEmail = validateEmail(formik.values.email);
   const formik = useFormik({
     validateOnMount: true,
     initialValues: {
@@ -100,34 +86,37 @@ const Signup = () => {
     onSubmit: async (event) => {
       dispatch(settingOtp(""));
       setIsLoading(true);
-      const isExist = await checkUserExist(
-        formik.values.email || formik.values.phone
-      );
+      const isValueExist = formik.values.email || formik.values.phone;
+      const isExist = await checkUserExist(isValueExist);
       if (formik.values.email) {
         dispatch(otpType(true));
       } else {
         dispatch(otpType(false));
-        dispatch(savingPhoneNo(formik.values.email));
+        // dispatch(savingPhoneNo(formik.values.email));
       }
       if (!validateEmail(formik.values.email)) {
         setIsLoading(false);
-        return toast.error("Enter valid email address");
+        toast.error("Enter valid email address");
+        return;
       }
       if (isExist && formik.values.email) {
         setIsLoading(false);
-        return toast.error(
+        toast.error(
           "Your email already registered with us, please try to login"
         );
+        return;
       } else if (isExist && formik.values.phone) {
         setIsLoading(false);
-        return toast.error(
+        toast.error(
           "Your phone number already registered with us, please try to login"
         );
+        return;
       }
       captchaEl.current.innerHTML = "";
       if (!profileType) {
         setIsLoading(false);
-        return toasterFunction("Please select profile type");
+        toasterFunction("Please select profile type");
+        return;
       }
       const dataObj = {
         datetime: Date.now().toString(),
@@ -136,13 +125,17 @@ const Signup = () => {
         password: formik.values.password,
       };
       console.log("Dta Objec>>>>>>>", dataObj);
-      const response =
-        dataObj.uemail && (await dispatch(saveUserSignupData(dataObj)));
-
+      let response;
+      console.log(">>>>>>>>>>>>>>", formik.values.phone);
+      if (formik.values.email || formik.values.phone) {
+        response = await dispatch(saveUserSignupData(dataObj));
+      }
       console.log("Response........", response);
       dispatch(userSingupInformation(dataObj));
-      const result =
-        formik.values.phone && dispatch(savingPhoneNo(formik.values.phone));
+      let result;
+      if (formik.values.phone) {
+        result = dispatch(savingPhoneNo(formik.values.phone));
+      }
       console.log("result>>>>>>>>>", result);
 
       if (formik.values.phone) {
@@ -151,7 +144,7 @@ const Signup = () => {
           `${formik?.values.phone}`?.startsWith("91") ||
             `${formik?.values.phone}`?.startsWith("+91")
             ? formik.values.phone
-            : `+91${formik.values.phone}`
+            : `  ${formik.values.phone}`
         );
       } else if (response.status === 200) {
         setIsLoading(false);
@@ -212,9 +205,6 @@ const Signup = () => {
       });
     }
   }
-  useEffect(() => {
-    dispatch(getCountryList());
-  }, []);
 
   const [countryCode, setCountryCode] = useState(false);
   const [countryData, setCountryData] = useState({});
@@ -223,7 +213,7 @@ const Signup = () => {
   const closeCountryModal = () => {
     setCountryCode(false);
   };
-
+console.log("countryData", countryData);
   return (
     <>
       {/* padding increased */}
@@ -272,13 +262,21 @@ const Signup = () => {
           <div
             name=""
             id=""
-            className=" bg-white border-[1px] border-[#7E8082] rounded-[5px] h-full outline-none text-xs font-semibold !p-2 w-[45%] text-[#AEB2B1]"
+            className=" bg-white border-[1px] border-[#7E8082] rounded-[5px] h-full outline-none text-xs font-semibold !p-2 w-[60%] text-[#AEB2B1]"
             onClick={() => setCountryCode(true)}
           >
-            <div className="pl-4 sm:pl-5 font-bold">
+            <div className=" font-bold flex items-center w-[80%] justify-center">
+              <ReactCountryFlag
+                svg              
+                countryCode={countryData.iso2}
+                style={{
+                  width: "1.2em",
+                  height: "1.2em",
+                }}
+              />
               {` ${
-                countryData?.inisititete
-                  ? `${countryData?.inisititete} + ${countryData?.code}`
+                countryData?.iso2
+                  ? `${countryData?.iso2} + ${countryData?.code}`
                   : "IN +91"
               } `}
             </div>
@@ -291,7 +289,7 @@ const Signup = () => {
           <img
             src={dropdownIcon}
             alt=""
-            className="w-[10px] absolute left-[26%] sm:left-[26%] xl:left-[25%]"
+            className="w-[10px] absolute left-[31%] sm:left-[26%] xl:left-[30%]"
           />
 
           <input
