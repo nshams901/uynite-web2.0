@@ -3,54 +3,41 @@ import Input from "../InputBox/Input";
 import PasswordInput from "../InputBox/PasswordInput";
 import Button2 from "../Button/Button2";
 import Heading from "../Heading/Heading";
-import { BsFillQuestionCircleFill } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { createPortal } from "react-dom";
-import Modal from "../Modal/Modal";
 import {
   checkingIsEmailExist,
   getCountryList,
   otpType,
-  saveUserSignupData,
+  sendOtpToUser,
   settingOtp,
   savingPhoneNo,
   userSingupInformation,
 } from "../../../../redux/actionCreators/authActionCreator";
 import { useDispatch, useSelector } from "react-redux";
-import firebaseApp, { auth } from "../../../../config/firebase";
 import {
   RecaptchaVerifier,
   getAuth,
   signInWithPhoneNumber,
 } from "firebase/auth";
-
 import dropdownIcon from "../../../../../public/images/dropdownIcon.png";
-
-import { initializeApp } from "firebase/app";
-import firebase from "firebase/compat/app";
 import "firebase/auth";
-import { document } from "postcss";
 import { isEmpty, toasterFunction } from "../../../Utility/utility";
 import { toast } from "react-toastify";
 import CountryCodeModal from "./CountryCodeModal";
 import Portals from "../../../Portals/Portals";
 import Loader from "../../../common/Loader";
+import ReactCountryFlag from "react-country-flag";
 
 const Signup = () => {
   const captchaEl = useRef();
-  const [state, setState] = useState({});
   const [profileType, setProfileType] = useState("");
-  const { showModal, modalType } = state;
   const dispatch = useDispatch();
   const passwordRules = /^(?=.*\d)(?=.*[a-z]).{5,}$/;
-  const phoneNumberRules = /[0-9]{10}$/;
   const navigate = useNavigate();
   const [loading, setIsLoading] = useState(false);
-  const { countryList, signupData, isPhoneNo } = useSelector(
-    (state) => state.authReducer
-  );
+  const { countryList } = useSelector((state) => state.authReducer);
 
   const validateEmail = (email) => {
     return Yup.string().email().isValidSync(email);
@@ -59,13 +46,16 @@ const Signup = () => {
   const validatePassword = (password) => {
     return passwordRules.test(password);
   };
-  // const isValidEmail = validateEmail(formik.values.email);
   const formik = useFormik({
     validateOnMount: true,
     initialValues: {
-      email: signupData?.uemail || "",
-      password: signupData?.password || "",
-      phone: signupData?.uemail || "",
+      email:  "",
+      password:  "",
+      phone: "",
+
+      // email: signupData?.uemail || "",
+      // password: signupData?.password || "",
+      // phone: signupData?.uemail || "",
       // termsAndConditions: false,
       profileType: "",
     },
@@ -100,34 +90,37 @@ const Signup = () => {
     onSubmit: async (event) => {
       dispatch(settingOtp(""));
       setIsLoading(true);
-      const isExist = await checkUserExist(
-        formik.values.email || formik.values.phone
-      );
+      const isValueExist = formik.values.email || formik.values.phone;
+      const isExist = await checkUserExist(isValueExist);
       if (formik.values.email) {
         dispatch(otpType(true));
       } else {
         dispatch(otpType(false));
-         dispatch(savingPhoneNo(formik.values.email));
+        // dispatch(savingPhoneNo(formik.values.email));
       }
       if (!validateEmail(formik.values.email)) {
         setIsLoading(false);
-        return toast.error("Enter valid email address");
+        toast.error("Enter valid email address");
+        return;
       }
       if (isExist && formik.values.email) {
         setIsLoading(false);
-        return toast.error(
+        toast.error(
           "Your email already registered with us, please try to login"
         );
+        return;
       } else if (isExist && formik.values.phone) {
         setIsLoading(false);
-        return toast.error(
+        toast.error(
           "Your phone number already registered with us, please try to login"
         );
+        return;
       }
       captchaEl.current.innerHTML = "";
       if (!profileType) {
         setIsLoading(false);
-        return toasterFunction("Please select profile type");
+        toasterFunction("Please select profile type");
+        return;
       }
       const dataObj = {
         datetime: Date.now().toString(),
@@ -135,10 +128,20 @@ const Signup = () => {
         uemail: formik.values.email ? formik.values.email : formik.values.phone,
         password: formik.values.password,
       };
-      const response = formik.values.email
-        ? await dispatch(saveUserSignupData(dataObj))
-        : dispatch(savingPhoneNo(formik.values.phone));
+      console.log("Dta Objec>>>>>>>", dataObj);
+      let response;
+      console.log(">>>>>>>>>>>>>>", formik.values.phone);
+      if (formik.values.email || formik.values.phone) {
+        response = await dispatch(sendOtpToUser(dataObj));
+      }
+      console.log("Response........", response);
       dispatch(userSingupInformation(dataObj));
+      let result;
+      if (formik.values.phone) {
+        result = dispatch(savingPhoneNo(formik.values.phone));
+      }
+      console.log("result>>>>>>>>>", result);
+
       if (formik.values.phone) {
         setIsLoading(false);
         signIn(
@@ -206,9 +209,6 @@ const Signup = () => {
       });
     }
   }
-  useEffect(() => {
-    dispatch(getCountryList());
-  }, []);
 
   const [countryCode, setCountryCode] = useState(false);
   const [countryData, setCountryData] = useState({});
@@ -217,7 +217,7 @@ const Signup = () => {
   const closeCountryModal = () => {
     setCountryCode(false);
   };
-
+console.log("countryData", countryData);
   return (
     <>
       {/* padding increased */}
@@ -248,23 +248,14 @@ const Signup = () => {
           name="email"
           inputValue={activeField ? "" : formik.values.email}
           errorMessage={formik.errors.email}
-          // touched={
-          //   formik.touched.email &&
-          //   formik.errors.email &&
-          //   toasterFunction(formik.errors.email)
-          // }
           id="email"
           onHandleChange={(e) => {
-            //  if (formik.values.email.length) {
-            //   setActiveEmail(false);
-            //  }
             if (e.target.value.length > 32) {
               formik.handleChange(
                 e.target.value.slice(0, e.target.value.length - 1)
               );
             } else {
               formik.handleChange(e);
-              // onHandleReset();
             }
           }}
         />
@@ -275,13 +266,21 @@ const Signup = () => {
           <div
             name=""
             id=""
-            className=" bg-white border-[1px] border-[#7E8082] rounded-[5px] h-full outline-none text-xs font-semibold !p-2 w-[45%] text-[#AEB2B1]"
+            className=" bg-white border-[1px] border-[#7E8082] rounded-[5px] h-full outline-none text-xs font-semibold !p-2 w-[60%] text-[#AEB2B1]"
             onClick={() => setCountryCode(true)}
           >
-            <div className="pl-4 sm:pl-5 font-bold">
+            <div className=" font-bold flex items-center w-[80%] justify-center">
+              <ReactCountryFlag
+                svg              
+                countryCode={countryData.iso2}
+                style={{
+                  width: "1.2em",
+                  height: "1.2em",
+                }}
+              />
               {` ${
-                countryData?.inisititete
-                  ? `${countryData?.inisititete} + ${countryData?.code}`
+                countryData?.iso2
+                  ? `${countryData?.iso2} + ${countryData?.code}`
                   : "IN +91"
               } `}
             </div>
@@ -294,7 +293,7 @@ const Signup = () => {
           <img
             src={dropdownIcon}
             alt=""
-            className="w-[10px] absolute left-[26%] sm:left-[26%] xl:left-[25%]"
+            className="w-[10px] absolute left-[31%] sm:left-[26%] xl:left-[30%]"
           />
 
           <input
@@ -345,38 +344,6 @@ const Signup = () => {
               : !validateEmail(formik.values.email)
           }
         />
-        {/* <div className="w-full flex flex-col mb-2">
-          <div className="flex w-full gap-2 items-center justify-between relative">
-            <input
-              type="checkbox"
-              name="termsAndConditions"
-              value={formik.values.termsAndConditions}
-              onChange={formik.handleChange}
-              touched={formik.values.termsAndConditions}
-              className="transparent"
-              disabled={
-                (formik.values.email === ""
-                  ? formik.values.phone.toString().length < 10
-                  : !validateEmail(formik.values.email)) ||
-                !validatePassword(formik.values.password) ||
-                formik.values.password.length < 8
-              }
-            />
-            <p className="text-[10px] font-semibold text-[#7E8082] w-full">
-              I agree to all
-              <Link to="/auth/reals" className="text-[#05B7FD]">
-                &nbsp; Terms, Data, Cookies & Privacy.
-              </Link>
-            </p>
-            <br />
-          </div>
-          {formik.touched.termsAndConditions &&
-          formik.errors.termsAndConditions ? (
-            <p className="text-[10px] text-[red] self-start w-[80%] ">
-              {formik.errors.termsAndConditions}
-            </p>
-          ) : null}
-        </div> */}
         <div ref={captchaEl} id="sign-in-button"></div>
         <Button2
           id="sign"
@@ -385,7 +352,6 @@ const Signup = () => {
             (formik.values.email === ""
               ? formik.values.phone.toString().length < 10
               : !validateEmail(formik.values.email)) ||
-            // !formik.values.termsAndConditions ||
             formik.values.password.length < 8 ||
             !validatePassword(formik.values.password)
           }

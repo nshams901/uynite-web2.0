@@ -1,5 +1,5 @@
 const initialState = {
-  signupData: {},
+  userCredential: {},
   isLoggedIn: false,
   loginData: {},
   signupDataList: [],
@@ -16,7 +16,7 @@ const initialState = {
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     // STORING DATA WHILE SIGNUP
-    case "SET_BASIC_SIGNUP_DETAILS":
+    case "SET_USER_CREDENTIAL":
       return {
         ...state,
         signupData: action.payload,
@@ -45,14 +45,10 @@ const authReducer = (state = initialState, action) => {
     case "SENDING_MAIL_FOR_OTP":
       return { ...state, mailSended: action.payload };
     case "SET_USER_DATA":
-      console.log(action.payload.data, "OOOOOOOO TTTTTTTTTTT");
       return {
         ...state,
-        signupData: {
-          ...state.signupData,
           userId: action.payload?.data?.id,
           googleid: action.payload?.data?.googleid,
-        },
       };
 
     case "GET_COUNTRY_LIST":

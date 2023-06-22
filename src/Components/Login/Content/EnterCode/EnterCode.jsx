@@ -6,7 +6,7 @@ import Button2 from "../Button/Button2";
 import { useNavigate } from "react-router-dom";
 import {
   matchingOtp,
-  saveUserSignupData,
+  sendOtpToUser,
   sendingMailForOtp,
   settingOtp,
 } from "../../../../redux/actionCreators/authActionCreator";
@@ -60,8 +60,6 @@ const EnterCode = ({ title }) => {
 
   const onConfirmOtp = async () => {
     setIsLoading(true);
-   
-    console.log("emailExist?.data?.umobile.includes('@'')", isPhoneNo);
     if (isPhoneNo) {
       console.log("================ PHONEEEE");
       confirmationResult

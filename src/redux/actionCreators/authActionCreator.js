@@ -3,7 +3,7 @@ import { setDataOnStorage } from "../../Components/Utility/utility";
 
 // CHECKING USER pr Email EXIST OR NOT
 
-export const saveUserSignupData = (data) => async (dispatch) => {
+export const sendOtpToUser = (data) => async (dispatch) => {
   const datalist = {
     datetime: data.datetime,
     profileType: data.profileType,
@@ -20,11 +20,12 @@ export const saveUserSignupData = (data) => async (dispatch) => {
       }
     );
     dispatch({
-      type: "SET_BASIC_SIGNUP_DETAILS",
+      type: "SET_USER_CREDENTIAL",
       payload: data,
     });
     return result;
   } catch (error) {
+    console.log("errororrrrr", error.message);
     return result.message;
   }
 };
@@ -44,7 +45,8 @@ export const settingOtp = (otp) => (dispatch) => {
 export const accountRegistration = (data) => async (dispatch) => {
   try {
     const result = await axios.post(
-      `https://web.uynite.com/api/user/registration`, data,
+      `https://web.uynite.com/api/user/registration`,
+      data,
       {
         headers: {
           "Accept-Language": "en",
@@ -56,7 +58,6 @@ export const accountRegistration = (data) => async (dispatch) => {
       payload: result.data,
     });
 
-    
     return result.data.status;
   } catch (error) {
     console.log(error.message);
@@ -165,10 +166,10 @@ export const loginUser = (data) => async (dispatch) => {
         },
       }
     );
-    const token = response.data?.data?.loginToken
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    axios.defaults.headers.common['Content-Type'] = "application-json"
-    axios.defaults.headers.common['Accept-Language'] = "en"
+    const token = response.data?.data?.loginToken;
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    axios.defaults.headers.common["Content-Type"] = "application-json";
+    axios.defaults.headers.common["Accept-Language"] = "en";
     dispatch({
       type: "SET_USER_DATA",
       payload: response.data,
@@ -193,11 +194,12 @@ export const userRegistration = (data) => async (dispatch) => {
         },
       }
     );
-    localStorage.setItem('userid', response.data?.data.id)
-      dispatch({
-        type: "SET_USER_DATA",
-        payload: response.data,
-      });
+    console.log("<>>>>>>>>>>>>>>>>,<<<<<<<", response);
+    localStorage.setItem("userid", response.data?.data.id);
+    dispatch({
+      type: "SET_USER_DATA",
+      payload: response.data,
+    });
     return response;
   } catch (err) {
     console.log(err, "errror login");
@@ -449,8 +451,6 @@ export const savingPhoneNo = (phoneNo) => (dispatch) => {
   }
 };
 
-
-
 export const isOtpValid = (data) => (dispatch) => {
   try {
     dispatch({
@@ -462,7 +462,6 @@ export const isOtpValid = (data) => (dispatch) => {
     throw err;
   }
 };
-
 
 export const userSingupInformation = (data) => (dispatch) => {
   try {
