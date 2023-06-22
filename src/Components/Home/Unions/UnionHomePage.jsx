@@ -15,6 +15,7 @@ const UnionHomePage = () => {
     partOfUnion: false,
   });
   const { unionTab } = useSelector((state) => state.userReducer);
+  const { myUnionList, partOfUnions } = useSelector((state) => state.unionReducer )
   const onHandleModal = () => {
     setShowModal({ ...showModal, partOfUnion: true });
   };
@@ -38,7 +39,7 @@ const UnionHomePage = () => {
     dispatch(unionTabSelection(option));
   };
   return (
-    <div className="w-[95%] sm:w-[50%] lg:w-[40%] mx-auto flex flex-col items-center gap-5 px-4 h-[88%] mt-1 pt-4 bg-[#E4E7EC] ">
+    <div className="w-[95%] sm:w-[50%] lg:w-[40%] mx-auto flex flex-col items-center gap-5 px-3 h-[88%] mt-1 pt-4 bg-white">
       <h1 className="text-xs sm:text-sm text-center">
         Create and Join Private unions to Create post's Events and Polls.
       </h1>
@@ -46,9 +47,9 @@ const UnionHomePage = () => {
         {unionData?.map((elem) => (
           <button
             key={elem}
-            className={`w-[30%] text-white font-bold py-1 text-[9px] sm:text-xs rounded-lg`}
+            className={`w-[30%] text-white font-bold text-[9px] sm:text-xs py-2 rounded-lg`}
             style={{
-              backgroundColor: unionTab === elem ? "#7991BD" : "#666567",
+              backgroundColor: unionTab === elem ? "#3b82f6" : "#6f6f6f",
             }}
             onClick={() => onUnionTabSelected(elem)}
           >
@@ -70,6 +71,7 @@ const UnionHomePage = () => {
           showModal={showModal}
           onHandleModal={onHandleModal2}
           onCloseModal={onCloseModal}
+          unionList={myUnionList}
         />
       )}
       {unionTab === "Part of Unions" && (
@@ -78,6 +80,7 @@ const UnionHomePage = () => {
           showModal={showModal}
           onHandleModal={onHandleModal}
           onCloseModal={onCloseModal}
+          unionList={partOfUnions}
         />
       )}
     </div>

@@ -1,34 +1,37 @@
 import React, { useState } from "react";
 import Portals from "../../Portals/Portals";
+import { Link } from "react-router-dom";
+import user from '../../../Assets/Images/user.png'
 
-const UnionMembers = ({ button, handleRemove }) => {
+const UnionMembers = ({ button, handleRemove, data }) => {
+  const { pimage, fname, profileId, lname } = data
   const [state, setState] = useState({});
   const { modalOpen } = state;
   return (
-    <>
-      <div className="flex h-[50px] items-center w-full">
+    <div className="flex hover:bg-gray-300 rounded-md px-3 py-1">
+      <Link to={`/profile/${profileId}`} className="flex h-[50px] items-center w-full ">
         <div className="">
           <img
-            src="./images/events.jpg"
+            src={pimage || user}
             alt=""
             className="w-[35px] h-[35px] sm:w-[45px] sm:h-[45px] rounded-full"
           />
         </div>
         <div className=" flex flex-1 flex-col justify-center ml-2">
-          <span className="font-bold  text-xs sm:text-sm">Elisa K</span>
+          <span className="font-bold  text-xs sm:text-sm">{fname} {lname || ""}</span>
         </div>
 
-        <div className="flex gap-2 items-center cursor-pointer">
-          <button
-            className="px-5 bg-blue-400 text-white font-bold py-1 text-[10px] rounded-lg"
-            onClick={() => setState({ ...state, modalOpen: true })}
-          >
-            {button}
-          </button>
-        </div>
+      </Link>
+      <div className="flex gap-2 items-center cursor-pointer">
+        <button
+          className="px-5 bg-blue-500 text-white font-bold py-2 text-[10px] rounded-lg"
+          onClick={handleRemove}
+        >
+          {button}
+        </button>
       </div>
 
-      {modalOpen && (
+      {/* {modalOpen && (
         <Portals>
           <div className=" w-[80%] sm:w-[40%] lg:w-[30%] xl:w-[25%] bg-white flex flex-col rounded-lg">
             <h1 className="text-center my-2 font-bold text-sm">Do you want to remove this user?</h1>
@@ -48,8 +51,8 @@ const UnionMembers = ({ button, handleRemove }) => {
             </div>
           </div>
         </Portals>
-      )}
-    </>
+      )} */}
+    </div>
   );
 };
 

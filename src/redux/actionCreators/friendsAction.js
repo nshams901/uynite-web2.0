@@ -300,7 +300,7 @@ export const checkFriends = (userprofile, friendprofile) => async (dispatch) => 
       `https://web.uynite.com/friend/api/friend/chkfriends/${userprofile}/${friendprofile}`,
     );
     dispatch({
-      type: "KICKS_SEARCH_BY_TEXT",
+      type: "",
       payload: response.data,
     });
     return response.data;

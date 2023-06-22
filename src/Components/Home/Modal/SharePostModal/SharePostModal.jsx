@@ -15,6 +15,7 @@ import { getAllPostWithLimit } from "../../../../redux/actionCreators/rootsActio
 import DropdownComp from "../../../common/DropdownComp";
 import { useNavigate } from "react-router-dom";
 import { Typography } from "@material-tailwind/react";
+import unionIcon from '../../../../../src/Assets/Images/unionIcon.png'
 
 const SharePostModal = ({ handleClose }) => {
   const responsive = {
@@ -51,7 +52,7 @@ const SharePostModal = ({ handleClose }) => {
   const isPersonal = profile?.profiletype === "Personal";
 
   const unions = myUnionList.map((item) => {
-    return { name: item?.groupName };
+    return { name: item?.groupName, icon : unionIcon };
   });
   const postPrivacyList = isPersonal
     ? [...privacyList, ...unions]

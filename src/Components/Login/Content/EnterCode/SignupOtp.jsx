@@ -89,12 +89,18 @@ const SignupOtp = ({ title }) => {
       confirmationResult
         .confirm(otp)
         .then((result) => {
+          const payload = {
+            password: userInfo.password,
+            datetime: Date.now().toString(),
+            uemail: userInfo.uemail
+          }
           dispatch(settingOtp(""));
           setState({ ...state, showModal: true });
           // User signed in successfully.
           const user = result.user;
           setIsLoading(false);
           dispatch(isOtpValid({ validOtp: true, userInfo: false }));
+          dispatch(userRegistration(payload))
           navigate(`/auth/verification/signup?${userInfo?.profileType}`);
         })
         .catch((error) => {
@@ -113,7 +119,7 @@ const SignupOtp = ({ title }) => {
           datetime: Date.now().toString(),
           uemail: signupData.uemail
         }
-        dispatch(userRegistration(payload))
+        // dispatch(userRegistration(payload))
         // setState({ ...state, showModal: true });
         dispatch(isOtpValid({ validOtp: true, userInfo: false }));
         navigate(`/auth/verification/signup?${userInfo?.profileType}`);

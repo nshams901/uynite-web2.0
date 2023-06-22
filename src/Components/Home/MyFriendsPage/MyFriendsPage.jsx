@@ -38,9 +38,7 @@ const MyFriendsPage = () => {
   const isPersonal = profile.profiletype === 'Personal'
   useEffect(() => {
     const profileid = JSON.parse(localStorage.getItem("profile"))?.id;
-    if (isEmpty(friendList)) {
-      dispatch(getFriendsList(profileid));
-    }
+    dispatch(getFriendsList(profileid));
     dispatch(getMyUnion(profileid))
     dispatch(getTypeOfFriends(profileid));
   }, []);

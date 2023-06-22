@@ -4,7 +4,7 @@ const initialState = {
     friends: [],
     profileDetail: {},
     educationDetails: {},
-    profile: JSON.parse(localStorage.getItem('profile')),
+    profile: JSON.parse(localStorage.getItem('profile')) || {},
     userPostList: []
 };
 
@@ -21,7 +21,7 @@ const profileReducer = (state = initialState, action) => {
         return { ...state, profileDetail: action.payload, profile: action.payload.data};
       case "CHECK_FRIENDS":
         console.log(action.payload.data, "CHLKKKKKKKKKKK");
-        return {...state, friendDetail: {...state.friendDetail, isFriend: ''}}
+        return {...state, friendDetail: {...state.friendDetail, isFriend: action.payload?.data?.isFriend}}
       case "GET_SCHOOL_DETAIL":
         return { ...state, educationDetails: action.payload };
       case "GET_UG_DEGREE":
@@ -43,7 +43,7 @@ const profileReducer = (state = initialState, action) => {
           
           case "INCREASE_LIKE_COUNT":
             const { userPostList: allPost } = state;
-            const newPostList = allPost.map((item) => {
+            const newPostList = allPost?.map((item) => {
               return item?.id === action.payload
                 ? { ...item, likecount: item.likecount + 1, isliked: true }
                 : item;

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import Portals from "../../Portals/Portals";
+import user from '../../../Assets/Images/user.png'
 import ChangeRelationshipModal from "../Modal/ChangeRelationshipModal/ChangeRelationshipModal";
+import { Link } from "react-router-dom";
 
-const UnionFindFriends = ({ item = {}, handleSendRequest, relationOption, handleRelation}) => {
-  const {fname, lname, id} = item;
+const UnionFindFriends = ({ data = {}, handleSendRequest, relationOption, handleRelation}) => {
+  const {fname, lname, id, pimage} = data;
   const [openModal, setOpenModal] = useState(false);
 
   const onHandleCloseModal = () => {
@@ -16,18 +18,18 @@ const UnionFindFriends = ({ item = {}, handleSendRequest, relationOption, handle
 
   return (
     <>
-      <div key={id} className="flex h-[60px] items-center w-full justify-center flex-col">
+      <div key={id} className="flex h-[60px] hover:bg-gray-300 px-3 py-2 rounded-md items-center w-full justify-center flex-col">
         <div className="w-full flex items-center">
-          <div className="">
+          <Link className="">
             <img
-              src="./images/events.jpg"
+              src={ pimage || user }
               alt=""
               className="w-[45px] h-[45px] rounded-full"
             />
-          </div>
-          <div className=" flex flex-1 flex-col justify-center ml-4">
-            <span className="font-bold text-sm">{fname} {lname}</span>
-          </div>
+          </Link>
+          <Link className=" flex flex-1 flex-col justify-center ml-4">
+            <span className="font-bold text-sm">{fname || ""} {lname || ""}</span>
+          </Link>
           <img
             src="./images/SendFriendRequest.png"
             alt=""
