@@ -178,7 +178,7 @@ const VideoComponent = ({ dataList, data }) => {
         dispatch({ type: "UNFOLLOW", payload: id});
       }else {
         const payload = {
-          id: 
+          // id: 
           myprofileid: profileDetail?.id,
           followerprofileid: profileid,
           datetimes: moment().format("YYYY-MM-DD"),
