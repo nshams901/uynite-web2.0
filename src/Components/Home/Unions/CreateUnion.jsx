@@ -27,7 +27,7 @@ const CreateUnion = () => {
       };
       dispatch(addUnion(payload)).then((res) => {
         if(res?.status){
-          navigate("/unions-searchlist");
+          navigate("/unions");
           toast.success("Group Added")
         }else{
           toast.error(res.message)
