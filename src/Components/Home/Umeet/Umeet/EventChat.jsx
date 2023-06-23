@@ -63,7 +63,7 @@ console.log(profileReducer?.profile?.id)
         message: '',
         name: '',
         timestamp: formatChatTime(data.createlocaltime),
-        sender: (profileReducer?.profile?.profileid == data?.profile?.id) ? 'me' : 'them'
+        sender: (profileReducer?.profile?.id == data?.profile?.id) ? 'me' : 'them'
       };
       msgData.message = data?.eventMessage?.message
       msgData.name = data?.profile?.fname + " " + data?.profile?.lname
