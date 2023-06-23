@@ -52,14 +52,12 @@ const CountrySelection = ({ modalType }) => {
   } = reducerData;
   const [states, setState] = useState({});
   const [country, setCountry] = useState("");
+
+  console.log("Countryyyyyyyyyyyy", country);
   console.log("reducerData", reducerData);
   const {
     imgFile,
-    selectedValue,
-    fname,
-    lname,
     orgName,
-    gender,
     dob,
     state,
     district,
@@ -105,8 +103,8 @@ const CountrySelection = ({ modalType }) => {
 
   const isPersonal = modalType === "Personal";
   const handleCreateProfile = async () => {
-    const userid = localStorage.getItem("userid")
-    
+    const userid = localStorage.getItem("userid");
+
     const payload = {
       celibrity: false, //default value.
       countrycode: "+91", //default selected in signup screen..
@@ -114,29 +112,10 @@ const CountrySelection = ({ modalType }) => {
       email: userInfo.uemail, //from signup screen.
       fname: userInfo?.fname, //from user input BUSINESS NAME
       gender: userInfo?.gender,
-      pimage: "", //if profile image is there, add the URL here.
-      businesscategory: category?.category, //from user input selection.
+      lname: userInfo?.lname,
+      pimage: userInfo?.imgFile, //if profile image is there, add the URL here.
+      businesscategory: states?.organizationCategory?.category, //from user input selection.
       orgname: orgName,
-      personalLastName: userInfo?.lname, //from user input – profile lnamein SLIDE 4
-      personalname: userInfo?.fname, //from user input – profilefnamein SLIDE 4
-      profiletype: isPersonal ? "Personal" : "Organization", //profile type, while we passing in signup screen
-      updatedate: userInfo.datetime, //Current UTC time in milliseconds
-      userid: userid // stored User ID from (Slide 3)
-    };
-
-    console.log("sdhkjlsdhfljksdhlsdhjljkdfsjklhsdfkjhdfkjg>>>>>>>>>", userInfo);
-    const payloads = {
-      assembly: assembly?.assembly, //default value.
-      celibrity: false,
-      countrycode: "+91", //default selected in signup screen..
-      country: country?.country,
-      dob: moment(dob).format("YYYY-MM-DD"), //from user input
-      email: userInfo.uemail, //from signup screen.
-      fname: userInfo?.fname, //from user input BUSINESS NAME
-      gender: userInfo?.gender,
-      city: city,
-      pimage: "", //if profile image is there, add the URL here.
-      loksabha: loksabha?.loksabha,
       personalLastName: userInfo?.lname, //from user input – profile lnamein SLIDE 4
       personalname: userInfo?.fname, //from user input – profilefnamein SLIDE 4
       profiletype: isPersonal ? "Personal" : "Organization", //profile type, while we passing in signup screen
@@ -144,7 +123,40 @@ const CountrySelection = ({ modalType }) => {
       userid: userid, // stored User ID from (Slide 3)
     };
 
-    console.log("Payyyyyyyyyaloads",payloads);
+    console.log(
+      "sdhkjlsdhfljksdhlsdhjljkdfsjklhsdfkjhdfkjg>>>>>>>>>",
+      userInfo
+    );
+
+    console.log("IssssssssPersonal", isPersonal);
+    const payloads = {
+      assembly: states?.selectedAssembly?.assembly
+        ? states.selectedAssembly.assembly
+        : null, //default value.
+      celibrity: false,
+      countrycode: "+91", //default selected in signup screen..
+      country: states?.selectedCountry?.country,
+      dob: moment(dob).format("YYYY-MM-DD"), //from user input
+      email: userInfo?.uemail.toString().includes("@") ? userInfo?.uemail : "", //from signup screen.
+      fname: userInfo?.fname, //from user input BUSINESS NAME
+      gender: userInfo?.gender,
+      city: city,
+      mobile: !userInfo?.uemail.toString().includes("@")
+        ? userInfo?.uemail
+        : "",
+      lname: userInfo?.lname,
+      state: states?.selectedState?.state,
+      district: states?.selectedDistrict?.distric,
+      pimage: "", //if profile image is there, add the URL here.
+      loksabha: states?.selectedLoksabha?.loksabha,
+      personalLastName: userInfo?.lname, //from user input – profile lnamein SLIDE 4
+      personalname: userInfo?.fname, //from user input – profilefnamein SLIDE 4
+      profiletype: isPersonal ? "Personal" : "Organization", //profile type, while we passing in signup screen
+      updatedate: userInfo.datetime, //Current UTC time in milliseconds
+      userid: userid, // stored User ID from (Slide 3)
+    };
+
+    console.log("Payyyyyyyyyaloads", payload);
     const file = new FormData();
     file.append("file", imgFile);
     const data = isPersonal ? payloads : payload;
@@ -220,8 +232,11 @@ const CountrySelection = ({ modalType }) => {
                 toast.success(userResponse?.message);
                 await setDataOnStorage(userCredential);
                 const token = userResponse?.data?.loginToken;
-                axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-                axios.defaults.headers.common["Content-Type"] = "application-json";
+                axios.defaults.headers.common[
+                  "Authorization"
+                ] = `Bearer ${token}`;
+                axios.defaults.headers.common["Content-Type"] =
+                  "application-json";
                 axios.defaults.headers.common["Accept-Language"] = "en";
                 navigate("/select");
               } catch (error) {

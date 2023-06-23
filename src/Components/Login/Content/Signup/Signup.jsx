@@ -49,14 +49,9 @@ const Signup = () => {
   const formik = useFormik({
     validateOnMount: true,
     initialValues: {
-      email:  "",
-      password:  "",
+      email: "",
+      password: "",
       phone: "",
-
-      // email: signupData?.uemail || "",
-      // password: signupData?.password || "",
-      // phone: signupData?.uemail || "",
-      // termsAndConditions: false,
       profileType: "",
     },
     validationSchema: Yup.object({
@@ -78,14 +73,6 @@ const Signup = () => {
           message:
             "Password should be minimum of 8 length characters with one numerical value",
         }),
-      // phone: Yup.string().matches(phoneNumberRules, {
-      //   excludeEmptyString: true,
-      //   message: "Please enter a valid phone number",
-      // }),
-      // termsAndConditions: Yup.bool().oneOf(
-      //   [true],
-      //   "You need to accept the terms and conditions"
-      // ),
     }),
     onSubmit: async (event) => {
       dispatch(settingOtp(""));

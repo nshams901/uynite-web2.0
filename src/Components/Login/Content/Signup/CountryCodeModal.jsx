@@ -9,15 +9,14 @@ const CountryCodeModal = ({
 }) => {
 
   const [searchCountry,setSearchCountry] = useState("")
-  const [countryDataList, setCountryDataList] = useState([]);
-  const countryData = Object.values(countryLists);
-  const resultCCountList = Object.values(countryData);
-  console.log("countryData", countryData);
+  // const countryData = Object.values(countryLists);
+  // // const resultCCountList = Object.values(countryData);
+  // // console.log("countryData", countryData);
 
-  console.log("resultCCountList", resultCCountList);
-  const filterCountry = (event)=>{
+  // // console.log("resultCCountList", resultCCountList);
+  // // const filterCountry = (event)=>{
 
-  }
+  // // }
   return (
     <div
       className="w-[95%] sm:w-[50%] lg:w-[30%] h-[74%] bg-white rounded-lg px-4 flex flex-col gap-2 pt-2 fixed top-[50%] left-[50%]

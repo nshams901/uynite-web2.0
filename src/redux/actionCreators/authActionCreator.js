@@ -195,11 +195,13 @@ export const userRegistration = (data) => async (dispatch) => {
       }
     );
     console.log("<>>>>>>>>>>>>>>>>,<<<<<<<", response);
-    localStorage.setItem("userid", response.data?.data.id);
+    // localStorage.setItem("userid", response.data?.data.id);
     dispatch({
       type: "SET_USER_DATA",
       payload: response.data,
     });
+    console.log(">>>>>>>>>>",response);
+    localStorage.setItem("userid", response.data.data.id);
     return response;
   } catch (err) {
     console.log(err, "errror login");
