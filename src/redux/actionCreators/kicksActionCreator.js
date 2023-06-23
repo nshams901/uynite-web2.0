@@ -3,6 +3,7 @@ import {
   getQueryParams,
   getUserDataFromLocalStorage,
 } from "../../Components/Utility/utility";
+import { Data } from "@react-google-maps/api";
 
 export const selectKicksType = (kicksType) => (dispatch) => {
   if (kicksType === "Latest") {
@@ -338,12 +339,30 @@ export const commentPostLiked = (data) => async (dispatch) => {
 
 
 export const commentDisliked = (data) => async (dispatch) => {
+  // http://3.233.82.34:8080/post/api/like/dislike/profileid/likeid
+  const { profileid, likeid} = data
   try {
     const response = await axios.delete(
-      `https://web.uynite.com/post/api/like/dislike`, data
+      `https://web.uynite.com/post/api/like/dislike/${profileid}/${likeid}`
     );
     dispatch({
       type: "COMMENT_DISLIKED",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const addViews = (data) => async (dispatch) => {
+  try {
+    const response = await axios.post(
+      `https://web.uynite.com/instance/api/instview/add`, data
+    );
+    dispatch({
+      type: "ADD_VIEWS",
       payload: response.data,
     });
     return response.data;

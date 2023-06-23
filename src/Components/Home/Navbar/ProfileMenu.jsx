@@ -32,7 +32,7 @@ export default function ProfileMenu({}) {
         />
       </MenuHandler>
       {/* <BsChevronCompactDown className="" size={22} /> */}
-      <MenuList className="w-fit max-w-[300px]">
+      <MenuList className="w-fit max-w-[300px] z-50">
         <MenuItem
           onClick={() => navigate("/profile")}
           className="flex items-center mb-1"

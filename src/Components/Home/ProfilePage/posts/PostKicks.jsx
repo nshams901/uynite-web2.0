@@ -2,10 +2,11 @@ import React from 'react'
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserKickList } from '../../../../redux/actionCreators/kicksActionCreator';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const PostKicks = ({ isOther }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const {profile} = useSelector((state) => state.profileReducer);
   const { userKickList } = useSelector((state) => state.kicksReducer);
   const params = useParams()
@@ -25,7 +26,7 @@ const PostKicks = ({ isOther }) => {
             className="w-[250px] cursor-pointer h-[300px] rounded-lg object-cover"
           />
           :
-          <video src={item.video}></video>
+          <video src={item.video} className='hover:cursor-pointer' onClick={() => navigate(`/user/videos/${params.id}`)}></video>
         }
       </>
         )

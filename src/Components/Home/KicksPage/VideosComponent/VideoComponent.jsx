@@ -12,6 +12,7 @@ import VideoCommentsModal from "../VideoCommentsModal";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addLikes,
+  addViews,
   deletePostLike,
   getCommentsByPostid,
   getUserKickList,
@@ -25,7 +26,7 @@ import shortVideo from "../../../../Assets/Videos/v1.mp4";
 import user from "../../../../Assets/Images/user.png";
 import "../kicks.css";
 import { useEffect } from "react";
-import { debounce, getTimeDiff } from "../../../Utility/utility";
+import { debounce, getCategory, getTimeDiff } from "../../../Utility/utility";
 import { GrWaypoint } from "react-icons/gr";
 import { unfollow } from "../../../../redux/actionCreators/friendsAction";
 import { select } from "@material-tailwind/react";
@@ -33,7 +34,7 @@ import { blockUser } from "../../../../redux/actionCreators/settingsActionCreato
 import kicksLiked from '../../../../Assets/Images/kicksLike.png'
 import { useNavigate } from "react-router-dom";
 import follow from '../../../../Assets/Images/Kicks Follow.png'
-const VideoComponent = ({ dataList, data }) => {
+const VideoComponent = ({ dataList, data, handleMute, isMute }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
   const reducerData = useSelector((state) => {
@@ -49,7 +50,7 @@ const VideoComponent = ({ dataList, data }) => {
   const [editVideo, setEditVideo] = useState(false);
   const [commentVideo, setCommentVideo] = useState(false);
   const [showCollection, setShowCollection] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
+  // const [isMuted, setIsMuted] = useState(false);
   const [selectVideo, setSelectVideo] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [isVideoPlaying, setIsvideoPlaying] = useState(false);
@@ -75,7 +76,7 @@ const VideoComponent = ({ dataList, data }) => {
     }
   };
   const [state, setState] = useState({});
-  const { isMute = true, createKickPost } = state;
+  const { createKickPost } = state;
   const {
     id,
     commentcount = "",
@@ -94,6 +95,7 @@ const VideoComponent = ({ dataList, data }) => {
     viptype,
     profileid,
     utcategory,
+    utcategoryid,
     isFollow,
     postdatetime
   } = data;
@@ -136,7 +138,7 @@ const VideoComponent = ({ dataList, data }) => {
       setCommentVideo(true);
       dispatch({ type: 'INCREASE_COMMENT', payload: id})
     } else if (title === "mute") {
-      setState({ ...state, isMute: !isMute });
+      handleMute()
     } else if (title === "likes") {
       // console.log("isliked", likecount)
       if (isliked) {
@@ -266,17 +268,57 @@ const VideoComponent = ({ dataList, data }) => {
     setState({...state, createKickPost: true})
   }
 
+  const callback = (entries) => {
+    entries.forEach((entry) => {
+      let video = entry.target.childNodes[0];
+      let viewAdded = false;
+      if( entry.isIntersecting && id === video.id && !viewAdded){
+        const payload = {
+          postid: video.id,
+          profileid: profileDetail.id
+        }
+        dispatch(addViews(payload))
+        viewAdded = true
+      }
+        video.play().then((res) => {
+          if( !video.paused && !entry.isIntersecting){
+            video.pause()
+          }
+          
+        })
+    })
+  }
+
+  let observer = new IntersectionObserver( callback, { threshold: 0.5 })
+  useEffect(() => {
+    let elem = document.querySelectorAll('.video-containers');
+    elem.forEach((element) => {
+      observer.observe(element)
+    })
+  }, [])
+
+  // const handlePlay = (res) => {
+  //   // console.log(res, data, 'LLLLLLLLLL');
+  //   const payload = {
+  //     profileid: profileDetail.id,
+  //     postid: id,
+  //     datetime: new Date().getTime()
+  //   }
+  //   dispatch(addViews(payload))
+  // }
+
   // console.log(isFollow());
   return (
-    <div key={profile?.id} className="snap-y mb-6 w-3/4 md:w-1/2 snap-mandatory">
+    <div key={profile?.id}  className="snap-y h-full snap-mandatory ">
       <div className="h-full">
         <section className="relative h-full snap-y snap-mandatory justify-center flex items-center  hideScroll right-0  left-0 w-full z-0">
-          <div className="video-cards w-full h-full">
+          <div className="video-cards w-full h-full video-containers">
             <video
               className={`video-player bg-black rounded-3xl mb-5 w-full cursor-pointer ${
                 isMobile ? "w-full h-[386px]" : ""
               }`}
               loop={true}
+              id={id}
               autoPlay="autoplay"
               muted={isMute}
               ref={vidRef}
@@ -366,7 +408,7 @@ const VideoComponent = ({ dataList, data }) => {
             </div>
             <div className="ml-[53px] mt-[-22px]">
               <span className="px-3 py-[2px] border-white p-1 text-[10px] rounded-lg bg-white text-slate-400 mr-4">
-                {utcategory}
+                {utcategory || getCategory(utcategoryid)?.name}
               </span>
               <span className="text-[10px] font-medium">{getTimeDiff(moment(postdatetime, 'x'))} ago</span>
             </div>

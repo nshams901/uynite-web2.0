@@ -6,7 +6,7 @@ import UnionUpdateModal from "./UnionUpdateModal";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MenuDropdown from '../../../../src/Components/common/MenuDropdown'
-import { addUnion, deleteUnion, getMyUnion, getPartOfUnions, getUnionList } from "../../../redux/actionCreators/unionActionCreator";
+import { addUnion, deleteUnion, exitFromUnion, getMyUnion, getPartOfUnions, getUnionList } from "../../../redux/actionCreators/unionActionCreator";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { data } from "autoprefixer";
 import { toast } from "react-toastify";
@@ -103,7 +103,15 @@ const MyUnion = ({
     })
   }
   const handleExit = () => {
-    
+    const payload = {
+      groupId: showModal.partOfUnion,
+      profileId: profile.id
+    }
+    console.log(payload, "___________");
+    dispatch( exitFromUnion(payload)).then((res) => {
+    dispatch(getPartOfUnions(profile?.id))
+    onCloseModal()
+    })
   }
   return (
     <>
@@ -146,7 +154,7 @@ const MyUnion = ({
               ) : (
                 <button
                   className={`w-[15%] sm:w-[12%] border-2   border-[#979797] text-[#7991BD] font-bold text-xs rounded-lg`}
-                  onClick={onHandleModal}
+                  onClick={() => onHandleModal(groupId)}
                 >
                   Exit
                 </button>

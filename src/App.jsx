@@ -54,6 +54,7 @@ import Reals from "./screens/Reals/Reals";
 import ProfileType from "./Components/Login/Content/Signup/ProfileType";
 import CountrySelection from "./Components/Login/Content/Signup/CountrySelection";
 import UserKicks from "./Components/Home/KicksPage/UserKicks";
+import UserVideos from "./Components/Home/KicksPage/UserVideos";
 
 const App = () => {
   const token = localStorage.getItem("token");
@@ -189,6 +190,7 @@ const App = () => {
             />
             <Route path="privacy-policy" element={<PrivacyPolicy />} />
             <Route path="reals" element={<Reals />} />
+            <Route path="user/videos/:userid" element={<UserVideos />} />
 
             {/* <Route path="user" element={<User />} /> */}
             {/* <Route path="friends" element={<Friends />} /> */}
