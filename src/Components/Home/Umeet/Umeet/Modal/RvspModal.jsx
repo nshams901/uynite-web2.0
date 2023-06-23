@@ -10,7 +10,7 @@ const RvspModal = ({ onClose }) => {
   const [count, setCount] = useState(1);
   const [eventType, setEventType] = useState('')
   const [selectedValue, setSelectedValue] = useState('veg');
-  const [selectedOption, setSelectedOption] = useState('')
+  const [selectedOption, setSelectedOption] = useState(null)
 
   const dispatch = useDispatch()
   const { eventDetail } = useSelector(state=>state.umeetReducer)
@@ -23,7 +23,6 @@ const RvspModal = ({ onClose }) => {
   const handleOptionChange = (option)=>{
     setSelectedOption(option);
   }
-
 
   const handleDecrement = () => {
     setCount(count - 1);
@@ -48,25 +47,22 @@ const RvspModal = ({ onClose }) => {
     umeetReducer.invitiesAdded = false
   }, [umeetReducer.invitiesAdded])  
 
-  const array = [];
-
-  for (let i = 0; i < count; i++) {
-    array.push({
-      "attend": "Maybe",
-      "eventid": eventDetail.id,
+  const rsvpData = [{
+      "attend": selectedOption == 'yes' ? '1' : selectedOption == 'no' ? '2' : selectedOption == 'maybe' ? '3' : 'Send',
+      "eventid": eventDetail?.id,
       "eventtype": eventType,
-      "invitesasa": "sumanreddy38@gmail.com",
+      "invitesasa": profileReducer?.profile?.email,
       "nonveg": (selectedValue === 'nonveg'),
-      "profileid": eventDetail?.profile?.id
-    });
-  }
-
-console.log(array);
-
+      "profileid": profileReducer?.profile?.id,
+      "extraguest": count == 0 ? null : {
+        "noofAttendees": count
+      },
+      "id": profileReducer?.profile?.id ? profileReducer?.profile?.id : null,
+    }]
 
   const handleInvitees = ()=>{ 
     umeetReducer.invitiesAdded = false   
-    dispatch(addInvitees(array))  
+    dispatch(addInvitees(rsvpData))  
   }
 
   useEffect(()=>{

@@ -41,7 +41,12 @@ const EventDetails = ({
   const dispatch = useDispatch();
   const { umeetReducer, profileReducer } = useSelector(state=>state)
   const [guestsList, setGuestsList] = useState([])
-
+  const numberOfYes = guestsList?.filter(item=>item?.invities?.attend == '1').length
+  const numberOfNo = guestsList?.filter(item=>item?.invities?.attend == '2').length
+  const numberOfMaybe = guestsList?.filter(item=>item?.invities?.attend == '3').length
+  const NoOfGuests = { numberOfYes, numberOfNo, numberOfMaybe }
+  const NoOfResponed = numberOfYes + numberOfNo + numberOfMaybe
+  console.log(NoOfGuests, NoOfResponed)
   useEffect(()=>{
     (async function getData(){
       const response = await axios.get(`https://web.uynite.com/event/api/invities/getinvitietslist/${umeetReducer?.eventDetail?.id}`)
@@ -81,6 +86,8 @@ const EventDetails = ({
       return (
         <DetailsOfEvent
           myEvent={myEvent}
+          NoOfGuests={NoOfGuests}
+          NoOfResponed={NoOfResponed}
           handleDeleteEvent={handleDeleteEvent}
           handleEditEvent={handleEditEvent}
           handleShareEvent={handleShareEvent}
@@ -89,7 +96,7 @@ const EventDetails = ({
           guestsList={guestsList}
         />)
     }else if(guests){
-     return <EventGuests guestsList={guestsList} />;
+     return <EventGuests guestsList={guestsList} NoOfGuests={NoOfGuests} NoOfResponed={NoOfResponed} />;
     }else if(chat){
      return <EventChat />;
     }     
@@ -101,7 +108,8 @@ const EventDetails = ({
     >
       <div className="w-[96%] lg:w-[70%] xl:w-[60%] flex flex-col items-center">
         <div className="p-3 w-full bg-white rounded-xl">
-          <h3 className="py-2 text-xl font-medium flex justify-center">
+          {eventDetail?.eventType ? <div className='flex rounded-xl justify-center text-[#649B8E] font-semibold text-xl pb-1'>{eventDetail?.eventType} Event</div> : null}         
+          <h3 className="py-1 text-xl font-medium flex justify-center">
             {(eventDetail && eventDetail.eventName) ? eventDetail.eventName : (
               <div className='flex flex-col'>
                <p className='skeleton-text skeleton'></p>
@@ -109,6 +117,8 @@ const EventDetails = ({
               </div>)
             }
           </h3>
+          {eventDetail?.event_category ? <div className='text-[15px] py-1'>{eventDetail?.event_category}</div> : null}
+          {eventDetail?.eventfrndEducationType ? <div className='text-[14px]'>{eventDetail?.eventfrndEducationType}</div> : null}
           <div className="w-full overflow-hidden">
             {eventDetail ? 
              <img
@@ -124,7 +134,7 @@ const EventDetails = ({
               className={`${umeetReducer?.eventDetail?.eventstatus == 'Completed' ? 'bg-gray-100 text-gray-400' : 'text-white'} bg-[#649B8E] rounded-xl font-semibold py-1.5 px-10`}
               disabled={umeetReducer?.eventDetail?.eventstatus == 'Completed'}
             >{console.log(umeetReducer?.eventDetail?.eventstatus == 'Completed')}
-              send RVSP
+              Send RSVP
             
             </button>
           </div>
@@ -141,14 +151,14 @@ const EventDetails = ({
           <div
             onClick={handleGuests}
             className={`${guests ? "bg-[#649B8E] text-white" : "bg-[#E4E4E4]"
-              } rounded-lg flex justify-center py-1 px-4 w-1/3 mx-2 cursor-pointer`}
+              } ${umeetReducer?.eventDetail?.eventType == 'Public' ? 'hidden' : ''} rounded-lg flex justify-center py-1 px-4 w-1/3 mx-2 cursor-pointer`}
           >
             Guests
           </div>
           <div
             onClick={handleChat}
             className={`${chat ? "bg-[#649B8E] text-white" : "bg-[#E4E4E4]"
-              } ${showChat ? 'hidden' : ''} rounded-lg flex justify-center py-1 px-4 w-1/3 cursor-pointer`}
+              } ${showChat ? 'hidden' : ''} ${umeetReducer?.eventDetail?.eventType == 'Public' ? 'mx-2' : ''} rounded-lg flex justify-center py-1 px-4 w-1/3 cursor-pointer`}
           >
             Chat
           </div>

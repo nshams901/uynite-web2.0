@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux'
 import axios from 'axios'
 
 export default function DetailsOfEvent({ myEvent, handleDeleteEvent,
- handleEditEvent, handleShareEvent, handleFeedbacks, eventDetail, guestsList }){
+ handleEditEvent, handleShareEvent, handleFeedbacks, eventDetail, 
+ guestsList, NoOfGuests, NoOfResponed }){
 
     const [personal, setPersonal] = useState(true)
     const [publics, setPublics] = useState(false)
@@ -51,15 +52,15 @@ export default function DetailsOfEvent({ myEvent, handleDeleteEvent,
      <div className='p-4 bg-white rounded-xl w-full'>
       <div className={`${politicalPartyFeedback ? 'hidden' : ''} mb-1`}>
        <span className='font-bold'>Responses</span>
-       <span className='ml-3'>0 of {guestsList ? guestsList?.length : 0} responded</span>
+       <span className='ml-3'>{NoOfResponed} of {guestsList ? guestsList?.length : 0} responded</span>
       </div>
       <div className={`${(political || publics) ? '' : 'hidden'} ${politicalPartyFeedback ? 'hidden' : ''}`}>
        <span className='font-bold'>Guests Attending: 0</span>
       </div>
       <div className={`${politicalPartyFeedback ? 'hidden' : ''} flex py-3 my-2 border-b-2 border-gray-300`}>
-       <div className='w-1/3 border-r-2 border-gray-300 py-3 flex justify-center items-center'><span className='p-2 bg-green-600 w-10 flex justify-center mr-2 items-center h-10 rounded-full text-white'>0</span>Yes</div>
-       <div className='w-1/3 border-r-2 border-gray-300 py-3 flex justify-center items-center'><span className='p-2 bg-red-600 w-10 flex justify-center mr-2 items-center h-10 rounded-full text-white'>0</span>Yes</div>
-       <div className='w-1/3  flex justify-center items-center'><span className='p-2 bg-yellow-600 w-10 flex justify-center mr-2 items-center h-10 rounded-full text-white'>0</span>Yes</div>
+       <div className='w-1/3 border-r-2 border-gray-300 py-3 flex justify-center items-center'><span className='p-2 bg-[#118409] w-10 flex justify-center mr-2 items-center h-10 rounded-full text-white'>{NoOfGuests?.numberOfYes}</span>Yes</div>
+       <div className='w-1/3 border-r-2 border-gray-300 py-3 flex justify-center items-center'><span className='p-2 bg-[#C40505] w-10 flex justify-center mr-2 items-center h-10 rounded-full text-white'>{NoOfGuests?.numberOfNo}</span>No</div>
+       <div className='w-1/3  flex justify-center items-center'><span className='p-2 bg-[#E4891A] w-10 flex justify-center mr-2 items-center h-10 rounded-full text-white'>{NoOfGuests?.numberOfMaybe}</span>Maybe</div>
       </div>
 
       <div className=''>

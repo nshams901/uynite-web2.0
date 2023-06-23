@@ -62,7 +62,7 @@ function EventStatus({ data }){
 }
 
 
-export default function EventGuests({ guestsList }){
+export default function EventGuests({ guestsList, NoOfGuests, NoOfResponed }){
 
     const dispatch = useDispatch()
     const { profile } = useSelector(state=>state.profileReducer)
@@ -73,12 +73,12 @@ export default function EventGuests({ guestsList }){
     <div className='p-4 bg-white rounded-xl w-full'>
       <div className='mb-1'>
        <span className='font-bold'>Responses</span>
-       <span className='ml-3'>0 of {guestsList ? guestsList?.length : 0} responded</span>
+       <span className='ml-3'>{NoOfResponed} of {guestsList ? guestsList?.length : 0} responded</span>
       </div>
       <div className='flex py-3 my-1 border-b-2 border-gray-300'>
-       <div className='w-1/3 border-r-2 border-gray-300 py-3 flex justify-center items-center'><span className='p-2 bg-green-600 w-10 flex justify-center mr-2 items-center h-10 rounded-full text-white'>0</span>Yes</div>
-       <div className='w-1/3 border-r-2 border-gray-300 py-3 flex justify-center items-center'><span className='p-2 bg-red-600 w-10 flex justify-center mr-2 items-center h-10 rounded-full text-white'>0</span>Yes</div>
-       <div className='w-1/3  flex justify-center items-center'><span className='p-2 bg-yellow-600 w-10 flex justify-center mr-2 items-center h-10 rounded-full text-white'>0</span>Yes</div>
+       <div className='w-1/3 border-r-2 border-gray-300 py-3 flex justify-center items-center'><span className='p-2 bg-[#118409] w-10 flex justify-center mr-2 items-center h-10 rounded-full text-white'>0</span>Yes</div>
+       <div className='w-1/3 border-r-2 border-gray-300 py-3 flex justify-center items-center'><span className='p-2 bg-[#C40505] w-10 flex justify-center mr-2 items-center h-10 rounded-full text-white'>{NoOfGuests?.numberOfNo}</span>Yes</div>
+       <div className='w-1/3  flex justify-center items-center'><span className='p-2 bg-[#E4891A] w-10 flex justify-center mr-2 items-center h-10 rounded-full text-white'>{NoOfGuests?.numberOfMaybe}</span>Maybe</div>
       </div>
 
       <div className='flex justify-between items-center border-b border-gray-300 py-4'>

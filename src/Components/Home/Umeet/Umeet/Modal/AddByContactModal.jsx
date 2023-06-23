@@ -77,7 +77,7 @@ setInvitesEmail,  }) => {
     })()
 
     if(countryData){
-      setCode(countryData?.inisititete + ` +` + countryData?.code)
+      setCode(`+` + countryData?.code)
     }
   }, [countryData])
 
@@ -98,7 +98,7 @@ setInvitesEmail,  }) => {
          <button onClick={handleEmailAdd} className='px-4 py-1.5 text-sm rounded-md text-white ml-1 border bg-[#649B8E]'>Add</button>
         </div>
         <div className='flex items-center pb-3 border-b border-gray-300'>  
-         <span onClick={() => setCountryCode(true)} className={`${code ? 'text-[13px]' : ''} bg-gray-200 min-w-[80px] flex justify-center text-gray-600 cursor-pointer mr-2 outline-none h-9 flex items-center rounded-lg px-2 border border-gray-200`}>          
+         <span onClick={() => setCountryCode(true)} className={`bg-gray-200 min-w-[80px] flex justify-center text-gray-600 cursor-pointer mr-2 outline-none h-9 flex items-center rounded-lg px-2 border border-gray-200`}>          
           {code ? code : 'select'}
         </span>      
          <input className='w-full outline-none bg-gray-200 border border-gray-200 rounded-lg h-9 pl-1' placeholder='9879867543' />

@@ -28,7 +28,7 @@ import PoliticalFeedbackQuestion from './PoliticalFeedbackQuestion'
 
 const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   handleCreatedEvent, whichType, politicalPartyFeedback,
-  politicalPartyMeeting, publicShopOpening,
+  politicalPartyMeeting, publicShopOpening, setNoMyEvent, setNoCreateEvent, setCreateEvent
    }) => {
 
   const { profileReducer, umeetReducer } = useSelector(state => state)
@@ -70,14 +70,15 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   const [showPoliticalFeedbackQuestionModal, setShowPoliticalFeedbackQuestionModal] = useState(false)
   const [showShareMyEvent, setShowShareMyEvent] = useState(false)
   const [showPoliticalAddGroup, setShowPoliticalAddGroup] = useState(false)
-  const [selectedQualification, setSelectedQualification] = useState('')
+  const [selectedQualification, setSelectedQualification] = useState(null)
   const [invitesEmail, setInvitesEmail] = useState(null)
   const [invitesPlace, setInvitesPlace] = useState(null)
   const [shareEvent, setShareEvent] = useState(null)
   const [question, setQuestion] = useState(null)
   const [guestType, setGuestType] = useState(null)
+  const [locatioCountry, setLocationCountry] = useState(null)
+  const [invitePlaceData, setInvitePlaceData] = useState(null)
 
-console.log(guestType)
   //country code states
   const [dataList, setDataList] = useState([])
   const [countryCode, setCountryCode] = useState(false);
@@ -132,6 +133,40 @@ console.log(guestType)
     setSelectedQualification(data)
   }
 
+  useEffect(()=>{
+    if(invitesPlace && guestType){
+      if(guestType == 'State'){
+        const placeDataList = invitesPlace?.map((place) => ({
+          country: locatioCountry,
+          isPreselected: false,
+          state: place,
+        }))
+        setInvitePlaceData(placeDataList)
+      }else if(guestType == 'District'){
+        const placeDataList = invitesPlace?.map((place) => ({
+          country: locatioCountry,
+          isPreselected: false,
+          city: place,
+        }))
+        setInvitePlaceData(placeDataList)
+      }else if(guestType == 'Loksabha'){
+        const placeDataList = invitesPlace?.map((place) => ({
+          country: locatioCountry,
+          isPreselected: false,
+          loksabha: place,
+        }))
+        setInvitePlaceData(placeDataList)
+      }else if(guestType == 'Assembly'){
+        const placeDataList = invitesPlace?.map((place) => ({
+          country: locatioCountry,
+          isPreselected: false,
+          assembly: place,
+        }))
+        setInvitePlaceData(placeDataList)
+      }
+    }
+  }, [invitesPlace, guestType])
+
   const options = { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true}
 
   const handleImageChange = () => {
@@ -166,6 +201,33 @@ console.log(guestType)
     }))
   }
 
+  const handleDateChange = (event) => {
+    const { name, value} = event.target
+    const currentDate = new Date().toISOString().slice(0, 10); // Get current date in "YYYY-MM-DD" format
+
+    if(value >= currentDate) {
+      setFormState(prevState => ({
+        ...prevState,
+        [name]: value
+      }))
+    } else {
+      toast.error('past date selected!');
+    }
+  };
+
+  const handleEndDateChange = (event) => {
+    const { name, value} = event.target
+    const currentDate = new Date().toISOString().slice(0, 10); // Get current date in "YYYY-MM-DD" format
+    if(!formState?.eventdateAndTime) return toast.error('pls select start date!');
+    if(value >= currentDate && value > formState?.eventdateAndTime) {
+      setFormState(prevState => ({
+        ...prevState,
+        [name]: value
+      }))
+    } else {
+      toast.error('select higher then start date!');
+    }
+  };  
   const handleLocation = (location) => {
     console.log(location)
     setFormState({...formState, eventAddress:location})
@@ -192,15 +254,14 @@ console.log(guestType)
     "eventName": formState.eventName,
     "createdatetime": new Date().toISOString().replace("Z", "+0000"),
     "date_created": Date.now().toString(),
-    "event_category": whichType,
+    "event_category": whichType == 'personal' ? selectedSpecificEvent : '',
     "profileid": profileReducer?.profile?.id,
     "eventdateAndTime": new Date(formState?.eventdateAndTime).toLocaleString('en-US', options),
     "eventAddress": formState?.eventAddress,
-    "eventHostPhnNumber": code + formState?.eventHostPhnNumber,
-    "eventfrndEducationType": "need",
+    "eventHostPhnNumber": code ? code + formState?.eventHostPhnNumber : '',
     "eventPrivacyType": "need",
     "eventFrndId": "need",
-    "eventType": selectedSpecificEvent,
+    "eventType":  whichType == 'personal' ? 'Personal' : whichType == 'public' ? 'Public' : selectedSpecificEvent,
     "hostmailid": formState?.hostmailid,
     "id": eventId,
     "aboutevent": inputValue,
@@ -226,12 +287,30 @@ console.log(guestType)
       "isselected": true,
       "isshareenabled": shareEvent,
       "mCreatedUserid": profileReducer?.profile?.id,
-      "rootsIdforPost": profileReducer?.profile?.id
-    }
+      "rootsIdforPost": profileReducer?.profile?.id,
+      "tempdetail": {
+        "bgimage": selectedImage,
+        "category": selectedSpecificEvent,
+        "dateheadingcolor": "#eb4334",
+        "dateheadingstyle": "italic",
+        "eventheadingcolor": "#eb7734",
+        "eventheadingstyle": "bold",
+        "head1": "#0001",
+        "hosttextcolor": "#34dceb",
+        'hosttextstye': "roboto",
+        "locationtextcolor": "#0d6e8c",
+        "locationtextstyle": "arial",
+        "textcolor": "#000000",
+        "textstyle": "bold",
+        "textstyles": "bold",
+      }
+    },
+    "eventLocation": invitePlaceData,
+    "eventfrndEducationType": selectedQualification ? selectedQualification : null,
   }
 
   const handleCreateEvent = async() => {
-    // if(noGuest == null){
+    // if(noGuest == null || invitePlaceData){
     //   return ToastWarning('Please select invities')
     // }
 
@@ -320,7 +399,7 @@ console.log(guestType)
       return 'Guests Added'
     }
   }
-
+console.log(postData)
   useEffect(()=>{
     // if(selectedImgFile){      
     //   (async()=>{
@@ -342,7 +421,7 @@ console.log(guestType)
     })()
 
     if(countryData){
-      setCode(countryData?.inisititete + ` +` + countryData?.code)
+      setCode(`+` + countryData?.code)
     }
 
     setEventId(uuidv4())
@@ -397,7 +476,7 @@ console.log(guestType)
        <section className='flex justify-between items-center'>
         {
           editMyEvent ? <div className='px-3 my-2.5 text-[17px] font-semibold'>Edit Event</div>
-            : <div className='px-3 my-2.5 text-[17px] font-semibold'>Create Event</div>
+            : <div className='px-3 my-2.5 text-[17px] font-semibold'>{whichType =='personal' ? 'Personal Event' : 'Create Event'}</div>
         }
         {selectedImage && (<AiOutlineEye onClick={handlePreview} className='mr-3 w-6 h-6 text-gray-700 cursor-pointer' />)}
        </section>
@@ -416,13 +495,13 @@ console.log(guestType)
           )
           }
 
-          <div className='mt-3'>
+          <div className='mt-3 flex flex-col justify-center items-center'>
             <label>
               {selectedImage ? (
                 <img 
                  src={selectedImage} 
                  alt="Selected" 
-                 className='w-full h-[350px] object-cover rounded-md' />
+                 className='w-ful h-[350px] lg:h-[500px] object-cover rounded-md' />
                 ) : <img src={upload} className='w-full h-[350px] object-cover' />
               }
             </label>
@@ -450,7 +529,7 @@ console.log(guestType)
            name='eventdateAndTime' 
            type={inputType} 
            onClick={handleToggle} 
-           onChange={handleChange}
+           onChange={handleDateChange}
            //value={startDate ? startDate : null}
            className='border-b focus:outline-none h-10 my-2 w-full text-gray-500' 
            placeholder='Start Date & Time*' />
@@ -458,11 +537,20 @@ console.log(guestType)
            name='eventEndDate' 
            type={inputType} 
            onClick={handleToggle} 
-           onChange={handleChange} 
+           onChange={handleEndDateChange} 
            className='border-b focus:outline-none h-10 my-2 w-full text-gray-500' 
            placeholder='End Date & Time*' />
           <div className={`${politicalPartyFeedback ? 'hidden' : ''} my-2 flex items-center`}>
             <span className='font-bold text-xl text-gray-600'>Event Mode</span>
+            <div className='px-6 flex items-center'>
+              <input 
+                type="radio"
+                value="online"
+                checked={eventMode === 'online'}
+                onChange={handleEventMode} 
+                className='accent-[#649B8E] w-5 h-5' 
+                id='online' /><label htmlFor='online' className='pl-2'>Online</label>
+            </div>            
             <div className='px-6 flex items-center'>
               <input 
                type="radio"
@@ -472,15 +560,7 @@ console.log(guestType)
                className='accent-[#649B8E] w-5 h-5' 
                id='location' /><label htmlFor='location' className='pl-2'>Location</label>
             </div>
-            <div className='px-6 flex items-center'>
-              <input 
-                type="radio"
-                value="online"
-                checked={eventMode === 'online'}
-                onChange={handleEventMode} 
-                className='accent-[#649B8E] w-5 h-5' 
-                id='online' /><label htmlFor='online' className='pl-2'>Online</label>
-            </div>
+
           </div>
 
           {/* <input name='eventAddress' onChange={handleChange} className={`${(politicalPartyFeedback || politicalPartyMeeting) ? 'hidden' : ''} border-b border-gray-300 h-10 my-2 w-full`} placeholder='Location*' /> */}
@@ -496,16 +576,16 @@ console.log(guestType)
           <div className={`${(politicalPartyFeedback || politicalPartyMeeting) ? 'hidden' : ''}`}>
             <input 
              name='eventAddress'
-             value={formState.eventAddress} 
+             //value={formState.eventAddress} 
              onChange={handleChange} 
              className={`${(politicalPartyFeedback || politicalPartyMeeting) ? 'hidden' : ''} border-b border-gray-300 h-10 my-2 w-full focus:outline-none`} 
-             placeholder='Enter url*' 
+             placeholder='Enter URL Link*' 
             />
           </div>
           )}          
           <div className={`${(politicalPartyFeedback || publicShopOpening || politicalPartyMeeting) ? 'hidden' : ''} flex items-center`}>
             <div>
-             <span onClick={() => setCountryCode(true)} className={`${code ? 'text-[13px]' : ''} bg-gray-200 min-w-[80px] flex justify-center text-gray-600 cursor-pointer mr-2 outline-none h-10 flex items-center rounded-lg px-2 border border-gray-200`}>          
+             <span onClick={() => setCountryCode(true)} className={`min-w-[80px] flex justify-center text-gray-600 cursor-pointer mr-2 outline-none h-10 flex items-center rounded-lg px-2 border-b border-gray-300`}>          
               {code ? code : 'select'}
             </span>
             </div>
@@ -517,7 +597,7 @@ console.log(guestType)
              onBlur={handleBlur}
              />            
           </div>
-          {!isValid && <div className='text-xs flex justify-center text-red-600'>Please enter a valid 10-digit phone number.</div>}
+          {!isValid && <span className='text-xs flex justify-center text-red-600 bg-red-50 py-1'>Please enter valid phone number</span>}
 
           <input 
            type='email' 
@@ -531,8 +611,8 @@ console.log(guestType)
           <div className='flex justify-between items-center my-2'>
            <div className='flex items-center'>
             <img src={guest} />
-            <label onClick={handleGroupAndCreate} className={`${(invitesEmail || invitesPlace) ? 'hidden' : ''} pl-5 cursor-pointer text-[#649B8E]`}>Add Guests</label>
-            <label onClick={handleEditAdd} className={`${(invitesEmail || invitesPlace) ? '' : 'hidden'} pl-5 cursor-pointer text-[#649B8E]`}>{invitesEmail?.length} <GuestType /></label>
+            <label onClick={handleGroupAndCreate} className={`${(invitesEmail || invitesPlace) ? 'hidden' : ''} pl-1 font-medium cursor-pointer text-[#649B8E]`}>Add Guests</label>
+            <label onClick={handleEditAdd} className={`${(invitesEmail || invitesPlace) ? '' : 'hidden'} pl-2 cursor-pointer font-medium text-[#649B8E]`}>{invitesEmail?.length} <GuestType /></label>
            </div>
            <span onClick={handleEditAdd} className={`${(invitesEmail || invitesPlace) ? '' : 'hidden'} cursor-pointer text-[#649B8E] border border-[#649B8E] px-2 py-0.5 rounded-md`}>Edit List</span>
           </div>
@@ -582,9 +662,10 @@ console.log(guestType)
           <textarea  
            value={inputValue} 
            onChange={handleInputChange} 
-           rows='3' 
+           rows='3'
+           style={{ resize: 'none' }}
            placeholder='say something...' 
-           className={`${(characterCount > 200) ? 'outline-red-100' : ''} w-full text-gray-700 outline-none my-2 rounded-xl relative border p-2`} />
+           className={`${(characterCount > 200) ? 'outline-red-100' : ''} w-full text-gray-700 outline-none my-2 rounded-xl relative border border-gray-300 p-2`} />
           <label className={`${characterCount > 200 ? 'error' : ''} text-xs flex text-gray-600 justify-end`}>
             {characterCount}/200
           </label>
@@ -595,9 +676,10 @@ console.log(guestType)
             <textarea 
              placeholder='What about it?' 
              rows='3' 
+             style={{ resize: 'none' }}
              value={question ? question?.question : ''}
              onChange={()=>{}}
-             className='w-full outline-none my-2 rounded-xl relative border p-2' />
+             className='w-full outline-none my-2 border-gray-300 rounded-xl relative border p-2' />
           </div>
 
           <div className={`${politicalPartyFeedback ? '' : 'hidden'} flex my-7 justify-between`}>
@@ -612,14 +694,15 @@ console.log(guestType)
           <div className='flex flex-col my-1'>
             {editMyEvent ?
               <button onClick={() => dispatch(updateEvent(postData))} className='py-2.5 my-2 text-[17px] rounded-lg text-white font-semibold bg-[#649B8E] '>Update</button>
-              : <button onClick={handleEventCreate} className='py-2.5 my-2 text-[17px] rounded-lg text-white font-semibold bg-[#649B8E] '>send</button>
+              : <button onClick={handleEventCreate} className='py-2.5 my-2 text-[17px] rounded-lg text-white font-semibold bg-[#649B8E] '>Send</button>
             }
             <button className='py-2 text-[17px] rounded-lg font-semibold border border-[#649B8E]'>Cancel</button>
           </div>
 
         </div>
       </div>
-      {previewEvent && <PreviewEvent
+      {previewEvent && 
+      <PreviewEvent
        onClose={()=>setPreviewEvent(false)}
        selectedSpecificEvent={selectedSpecificEvent}
        selectedImage={selectedImage}
@@ -628,6 +711,8 @@ console.log(guestType)
        inputValue={inputValue}
        profileReducer={profileReducer}
        eventMode={eventMode}
+       selectedQualification={selectedQualification}
+       isVeg={isVeg}
        />}
      {showTemplate && 
       <ChooseTemplate 
@@ -645,7 +730,11 @@ console.log(guestType)
        education={education} 
        handleSelectedQualification={handleSelectedQualification}
        handleEducation={(eduData)=>setEducation(eduData)} 
-       onClose={()=>{setShowAddGroup(false); setReunionModal(false)} }
+       onClose={()=>{
+          setShowAddGroup(false); 
+          setReunionModal(false); 
+          }
+        }
        handleShowAddPeopleModal={handleShowAddPeopleModal}
        showAddPeopleModal={showAddPeopleModal}
        handlePeopleModalClose={()=>setShowAddPeopleModal(false)} />}
@@ -669,6 +758,7 @@ console.log(guestType)
       <PoliticalGuestAddModal
        setInvitesPlace={setInvitesPlace}
        setGuestType={setGuestType}
+       setLocationCountry={setLocationCountry}
        onClose={()=>setShowPoliticalAddGroup(false)}
        whichType={whichType} />}
      {showShareMyEvent && 

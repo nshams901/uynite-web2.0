@@ -251,7 +251,7 @@ export default function PoliticalAddBy({ onClose, whichBy,
             </label>
           </div>
 
-          <div className="h-[41%] md:h-[46%] lg:h-[47%] xl:h-[50%] 2xl:h-[53%] overflow-y-scroll">
+          <div className="h-[52%] 2xl:h-[59%] overflow-y-scroll">
             {filteredStateList && filteredStateList?.map((data, i) => (
               <div key={i} className="flex items-center my-2.5">
                 <input

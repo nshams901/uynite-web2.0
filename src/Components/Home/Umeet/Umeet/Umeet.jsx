@@ -29,8 +29,8 @@ import { getEducationDetail } from "../../../../redux/actionCreators/profileActi
 
 export default function Umeet(){
   const [selected, SetSelected] = useState(false)
-  const [noCreateEvent, setNoCreateEvent] = useState(true)
-  const [noMyEvent, setNoMyEvent] = useState(false)
+  const [noCreateEvent, setNoCreateEvent] = useState(false)
+  const [noMyEvent, setNoMyEvent] = useState(true)
   const [createEvent, setCreateEvent] = useState(false)
   const [editMyEvent, setEditMyEvent] = useState(false)
   const [eventDetails, setEventDetails] = useState(false)
@@ -89,6 +89,9 @@ export default function Umeet(){
               editMyEvent={editMyEvent}
               whichType={whichType}
               handleCreatedEvent={handleCreatedEvent}
+              setCreateEvent={setCreateEvent}
+              setNoMyEvent={setNoMyEvent}
+              setNoCreateEvent={setNoCreateEvent}
               // handleShowTemplate={()=>setShowTemplate(true)}
               //handleShowAddGroup={()=>setShowAddGroup(true)}
               //handleShowAddPoliticalGroup={()=>setShowPoliticalAddGroup(true)}
