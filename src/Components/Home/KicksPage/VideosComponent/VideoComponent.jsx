@@ -277,6 +277,7 @@ const VideoComponent = ({ dataList, data, handleMute, isMute }) => {
           postid: video.id,
           profileid: profileDetail.id
         }
+        
         dispatch(addViews(payload))
         viewAdded = true
       }

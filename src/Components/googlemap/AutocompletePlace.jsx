@@ -34,6 +34,22 @@ function Autocomplete({ livePlace, placeholder, value, types, handleChangeLocati
       handleChangeLocation(e.target.value)
       // onPlacesChanged(value);
     };
+
+    const handleClickLocation = () => {
+      const currentLoc = navigator.geolocation.getCurrentPosition( showPosition )
+      console.log(currentLoc, 'KKKKKKK TTTTTT');
+    }
+
+
+    const showPosition =  async ( position ) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      const location = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&result_type=administrative_area_level_1&key=AIzaSyCxfRNiw6DgtJadpT7qVO2It8rVhaiGCx0`).then((res) => {
+          return res.json()        
+      }).then((res) => res)
+
+      livePlace(location?.results?.[0].formatted_address)
+    }
   return (
     <>
       {window.google === undefined ? (
@@ -84,7 +100,7 @@ function Autocomplete({ livePlace, placeholder, value, types, handleChangeLocati
           </GoogleMap>
         </LoadScript>
       ) : (
-        <StandaloneSearchBox onLoad={onLoad} onPlacesChanged={onPlacesChanged}>
+        <StandaloneSearchBox onLoad={onLoad} onPlacesChanged={onPlacesChanged} >
         <div className='flex items-center'>
           <input
             type="text"
@@ -105,7 +121,7 @@ function Autocomplete({ livePlace, placeholder, value, types, handleChangeLocati
             autoComplete="true"
             onChange={handleChange}
           />
-              <SlLocationPin size={20} className="ml-4" />
+              <SlLocationPin onClick={handleClickLocation} size={20} className="ml-4" />
 
         </div>
         </StandaloneSearchBox>
