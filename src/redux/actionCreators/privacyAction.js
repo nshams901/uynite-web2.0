@@ -19,12 +19,13 @@ export const addProfilePrivacy = (data) => async (dispatch) => {
 
 export const getBlockedUser = (data) => async (dispatch) => {
   try {
-    const response = axios.post(
+    const response = await axios.get(
       `https://web.uynite.com/friend/api/friend/getblockedlistprofile/${data}`
     );
+    console.log(response?.data?.data, 'blockedUsers')
     dispatch({
-      type: "",
-      payload: "",
+      type: "GET_BLOCKED_USERS",
+      payload: response?.data?.data,
     });
     return response?.data;
   } catch (err) {
