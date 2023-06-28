@@ -39,7 +39,6 @@ const SignupOtp = ({ title }) => {
   const { otp, signupData, isEmailOtp, isPhoneNo, userInfo } = useSelector(
     (state) => state.authReducer
   );
-console.log("singup Data", signupData);
 
   const timerFunction = async () => {
     const dataObj = {
@@ -72,7 +71,7 @@ console.log("singup Data", signupData);
       }, 5 * 60 * 1000);
     }
   };
-console.log("userInfo,userInfo", userInfo);
+
   const onConfirmOtp = async () => {
     setIsLoading(true);
     if (otp?.length < 4) {
@@ -82,7 +81,7 @@ console.log("userInfo,userInfo", userInfo);
     if (isPhoneNo) {
       confirmationResult
         .confirm(otp)
-        .then((result) => {
+        .then( async(result) => {
           const payload = {
             password: userInfo.password,
             datetime: Date.now().toString(),
@@ -94,15 +93,23 @@ console.log("userInfo,userInfo", userInfo);
           const user = result.user;
           setIsLoading(false);
           dispatch(isOtpValid({ validOtp: true, userInfo: false }));
-          dispatch(userRegistration(payload))
-          navigate(`/auth/verification/signup?${userInfo?.profileType}`);
+          console.log("START REGISTRATIONNNNNNNNN 11111111");
+          const registration = await dispatch(userRegistration(payload)).then((res) => {
+            if(res.status){
+              navigate(`/auth/verification/signup?${userInfo?.profileType}`);
+            }else {
+              toast.error(registration.message)
+            }
+          }).catch(err => {
+            toast.error(err.message)
+          });
         })
         .catch((error) => {
           setIsLoading(false);
           // User couldn't sign in (bad verification code?)
         });
     }
-    if (signupData?.uemail) {
+    else if (signupData?.uemail) {
       const result = await dispatch(matchingOtp(signupData?.uemail, otp));
       if (!result?.status) {
         setIsLoading(false);
@@ -127,12 +134,8 @@ console.log("userInfo,userInfo", userInfo);
           password: userInfo?.password,
           token: res,
           uemail: userInfo?.uemail,
-          // user
-          //  "umobile": "weware5007@fectode.com"
         };
-
-        console.log("getFirebaseToken", data);
-            console.log("[userInfo", userInfo);
+        console.log("START REGISTRATIONNNNNNNNN 2222222222");
         await dispatch(userRegistration(data));
         setIsLoading(false);
       })

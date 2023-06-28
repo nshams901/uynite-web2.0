@@ -25,8 +25,9 @@ function Autocomplete({ livePlace, placeholder, value, types, handleChangeLocati
   function onPlacesChanged (value){
     const place = searchBox.getPlaces()
     // console.log(place?.[0]?.formatted_address, "PPPPPP LLLLLLLLL");
-    console.log(place);
-    livePlace(place?.[0]?.formatted_address);
+    const lat = place?.[0]?.geometry.location.lat();
+    const lng = place?.[0]?.geometry.location.lng();
+    livePlace(place?.[0]?.formatted_address, { lat, lng });
   };
     const handleChange = (e) => {
       const { value } = e.target
@@ -37,7 +38,6 @@ function Autocomplete({ livePlace, placeholder, value, types, handleChangeLocati
 
     const handleClickLocation = () => {
       const currentLoc = navigator.geolocation.getCurrentPosition( showPosition )
-      console.log(currentLoc, 'KKKKKKK TTTTTT');
     }
 
 

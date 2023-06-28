@@ -12,6 +12,7 @@ import Collections from '../../../Assets/Images/Collections.png'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import EmptyComponent from '../../empty component/EmptyComponent';
+import { useLocation, useParams } from 'react-router-dom';
 
 const dataList = [
     { title: "mute", img: mute },
@@ -25,7 +26,17 @@ const dataList = [
 
 const UserVideos = () => {
     const dispatch = useDispatch();
+    const params = useParams()
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location)
     const [ isMobile , setIsMobile] = useState({})
+    const { userKickList } = useSelector((state) => state.kicksReducer);
+
+    const [ state, setState] = useState({
+      videoList: location?.search ? [] : userKickList
+    });
+    const { videoList, isMute} = state
+
     useEffect(() => {
         window.addEventListener(
           "resize",
@@ -36,8 +47,10 @@ const UserVideos = () => {
           false
         );
       }, [isMobile]);
-      const { userKickList } = useSelector((state) => state.kicksReducer);
-    console.log(userKickList, 'JJJJJJJ');
+
+      const handleMute = () => setState({ ...state, isMute: !isMute})
+    // console.log(userKickList,params,location, 'JJJJJJJ');
+
     return (
         <div className='w-full h-screen md:w-1/3 2xl:w-1/3 bg-white mx-auto'>
             <div className='p-3'>
@@ -47,16 +60,16 @@ const UserVideos = () => {
             }`}
             id="video-container"
           >
-            {isEmpty(userKickList) ? (
+            {isEmpty(videoList) ? (
               <EmptyComponent
                 message={`There is no video in this section`}
               />
             ) : (
-              userKickList?.map((item) => {
+              videoList?.map((item) => {
                 const { text, id } = item;
                 return (
                   <div className="w-full h-full inline-block" key={id}>
-                    <VideoComponent dataList={dataList} data={item} />
+                    <VideoComponent dataList={dataList} data={item} handleMute={handleMute} isMute={isMute} />
                   </div>
                 );
               })

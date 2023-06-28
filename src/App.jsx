@@ -97,8 +97,6 @@ const App = () => {
       })
       .catch((err) => console.log("service worker registration failed", err));
   }
-
-  console.log("sdbjnnnnnnnnnnnnnnnnUser Info >>>>>>>",userInfo);
   return (
     <>
       <Routes>
@@ -190,6 +188,8 @@ const App = () => {
             />
             <Route path="privacy-policy" element={<PrivacyPolicy />} />
             <Route path="reals" element={<Reals />} />
+            <Route path="reals/:state" element={<Reals />} />
+
             <Route path="user/videos/:userid" element={<UserVideos />} />
 
             {/* <Route path="user" element={<User />} /> */}
