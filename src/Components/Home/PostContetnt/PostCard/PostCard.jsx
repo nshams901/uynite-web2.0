@@ -267,6 +267,10 @@ const PostCard = ({ userData, item = {} }) => {
   const handleModal = (data) => {
     setState({ ...state, modalOpen: !modalOpen, modalData: data });
   };
+
+  const handleBlock = () => {
+    dispatch(blockUser())
+  }
   return (
     <>
       <div

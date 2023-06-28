@@ -97,7 +97,8 @@ const VideoComponent = ({ dataList, data, handleMute, isMute }) => {
     utcategory,
     utcategoryid,
     isFollow,
-    postdatetime
+    postdatetime,
+    likeid
   } = data;
   
   const name = profile?.fname + profile?.lname;
@@ -149,9 +150,9 @@ const VideoComponent = ({ dataList, data, handleMute, isMute }) => {
           type: "p",
           datetime: new Date().getTime(),
         };
-        dispatch(deletePostLike(id)).then((res) => {
+        dispatch(deletePostLike( profileDetail.id, id )).then((res) => {
           if (res.status) {
-            toast.success(res.message);
+            // toast.success(res.message);
           } else {
             toast.error(res.message);
           }

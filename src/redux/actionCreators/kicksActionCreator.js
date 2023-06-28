@@ -209,10 +209,10 @@ export const addCommentReplyOnKicks = (commentReplyDetails) => async (dispatch) 
 
 
 
-export const deletePostLike = (data) => async (dispatch) => {
+export const deletePostLike = (data, likeid) => async (dispatch) => {
   try {
     const response = await axios.delete(
-      `https://web.uynite.com/instance/api/instancelike/dislike/${data}`,
+      `https://web.uynite.com/instance/api/instancelike/dislike/${data}/${likeid}`,
     );
     dispatch({
       type: "",
