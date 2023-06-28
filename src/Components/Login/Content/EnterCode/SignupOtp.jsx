@@ -82,30 +82,34 @@ const SignupOtp = ({ title }) => {
       confirmationResult
         .confirm(otp)
         .then( async(result) => {
-          const payload = {
-            password: userInfo.password,
+          const data = {
             datetime: Date.now().toString(),
-            uemail: userInfo.uemail
-          }
+            deviceid: uuid(),
+            password: userInfo?.password,
+            token: res,
+            uemail: userInfo?.uemail,
+          };
           dispatch(settingOtp(""));
           setState({ ...state, showModal: true });
           // User signed in successfully.
           const user = result.user;
           setIsLoading(false);
           dispatch(isOtpValid({ validOtp: true, userInfo: false }));
-          console.log("START REGISTRATIONNNNNNNNN 11111111");
-          const registration = await dispatch(userRegistration(payload)).then((res) => {
+
+          await dispatch(userRegistration(data)).then((res) => {
             if(res.status){
-              navigate(`/auth/verification/signup?${userInfo?.profileType}`);
-            }else {
-              toast.error(registration.message)
+                navigate(`/auth/verification/signup?${userInfo?.profileType}`);
+            }else{
+              toast.error(res.message)
             }
-          }).catch(err => {
-            toast.error(err.message)
+          }).catch((err) => {
+            console.log(err);
           });
         })
         .catch((error) => {
+          toast.error(error.message)
           setIsLoading(false);
+          console.log(error);
           // User couldn't sign in (bad verification code?)
         });
     }
@@ -135,8 +139,6 @@ const SignupOtp = ({ title }) => {
           token: res,
           uemail: userInfo?.uemail,
         };
-        console.log("START REGISTRATIONNNNNNNNN 2222222222");
-        await dispatch(userRegistration(data));
         setIsLoading(false);
       })
       .catch((err) => {

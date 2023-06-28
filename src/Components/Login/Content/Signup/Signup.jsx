@@ -162,6 +162,7 @@ const Signup = () => {
     try {
       configureRecaptcha(phoneNumber, auth);
     } catch (err) {
+      captchaEl.current.innerHTML = null;
       console.log(err, "captcha error");
     }
 
@@ -174,9 +175,9 @@ const Signup = () => {
         navigate(`/auth/verification/signup?${profileType}`);
       })
       .catch((err) => {
-        captchaEl.current.innerHTML = "";
-
-        console.log(err);
+        captchaEl.current.innerHTML = null;
+        // window.location.reload()
+        // console.log(err);
         toast.error(err.message);
       });
   }

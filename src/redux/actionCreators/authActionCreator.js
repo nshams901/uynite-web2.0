@@ -200,8 +200,8 @@ export const userRegistration = (data) => async (dispatch) => {
       type: "SET_USER_DATA",
       payload: response.data,
     });
-    console.log(">>>>>>>>>>",response);
-    localStorage.setItem("userid", response.data.data.id);
+    // console.log(">>>>>>>>>>",response);
+    localStorage.setItem("userid", response.data?.data?.id);
     return response.data;
   } catch (err) {
     console.log(err);
