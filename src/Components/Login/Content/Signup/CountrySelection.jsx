@@ -108,7 +108,7 @@ const CountrySelection = ({ modalType }) => {
     const payload = {
       celibrity: false, //default value.
       countrycode: "+91", //default selected in signup screen..
-      dob: moment(dob).format("YYYY-MM-DD"), //from user input
+      dob: moment(userInfo.dob).format("YYYY-MM-DD"), //from user input
       email: userInfo.uemail, //from signup screen.
       fname: userInfo?.fname, //from user input BUSINESS NAME
       gender: userInfo?.gender,
