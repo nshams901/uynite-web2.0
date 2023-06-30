@@ -5,7 +5,7 @@ export default function SuccessCreate({ handleBothDetails }){
  const { umeetReducer } = useSelector(state=>state)
 console.log(umeetReducer?.createData?.id)
  return (
-  <div className='w-full lg:w-[64%] xl:w-[60%] h-max lg:h-[70%] bg-white rounded-xl p-5'>
+  <div className='w-full lg:w-[64%] xl:w-[60%] h-max lg:h-[70%] xl:h-[90%] bg-white rounded-xl p-5'>
    <p className='font-bold text-xl flex justify-center py-2'>Success</p>
    <p className='font-medium text-xl flex justify-center'>Congratulations!</p>
    <div className='my-4 flex justify-center items-center'>

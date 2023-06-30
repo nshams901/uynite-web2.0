@@ -59,7 +59,7 @@ const PersonalOtherGuest = ({ onClose, handleAddByContactModal }) => {
     const collgues = data?.filter((item)=>
       item?.friend?.collgues == true
     ).map(obj=> obj)
-    setClassmatesDataList(friends)
+    setOfficematesDataList(collgues)
     
     const relative = data?.filter((item)=>
       item?.friend?.relative == true
@@ -69,7 +69,7 @@ const PersonalOtherGuest = ({ onClose, handleAddByContactModal }) => {
     const classment = data?.filter((item)=>
       item?.friend?.classment == true
     ).map(obj=> obj)
-    setOfficematesDataList(classment)  
+    setClassmatesDataList(classment)  
   }
 
 
@@ -104,10 +104,7 @@ const PersonalOtherGuest = ({ onClose, handleAddByContactModal }) => {
          onClick={()=>{ handleSelected('Officemates'); setDataList(officematesDataList) }}  
          className={`${selectedBy == 'Officemates' ? 'bg-[#649B8E] text-white' : ''} px-1 py-1 rounded-md ml-1 border boredr-[#649B8E] text-[#649B8E]`}>
          Officemates</button>
-         <button 
-         onClick={()=>{ handleSelected('Unions'); setDataList([]) }}  
-         className={`${selectedBy == 'Unions' ? 'bg-[#649B8E] text-white' : ''} px-1 py-1 rounded-md ml-1 border boredr-[#649B8E] text-[#649B8E]`}>
-         Unions</button>
+
          <button 
          onClick={()=>{
           handleSelected('Add by Email/Phone')
@@ -133,7 +130,7 @@ const PersonalOtherGuest = ({ onClose, handleAddByContactModal }) => {
     	   <div className='w-1/6'>
     	    <img src={data?.profile?.pimage} className='w-10 h-10 rounded-full object-cover' />
     	   </div>
-    	   <span className='w-4/6 font-medium text-[15px]'>{data?.friend?.fname + ' ' + data?.friend?.lname}</span>
+    	   <span className='w-4/6 font-medium text-[15px]'>{data?.profile?.fname}</span>
     	   <div className='w-1/6 flex justify-end'>
     	     <input 
             type="checkbox"

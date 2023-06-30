@@ -46,6 +46,7 @@ export default function Umeet(){
   // const [templateSelected, setTemplateSelected] = useState('')
   // const [selectedImage, setSelectedImage] = useState(null)
   // const [selectedImgFile, setSelectedImgFile] = useState(null)
+  const [deleteId, setDeleteId] = useState(null)
 
   {/* modals related states*/}
   const [showRvspModal, setShowRvspModal] = useState(false)
@@ -92,23 +93,10 @@ export default function Umeet(){
               setCreateEvent={setCreateEvent}
               setNoMyEvent={setNoMyEvent}
               setNoCreateEvent={setNoCreateEvent}
-              // handleShowTemplate={()=>setShowTemplate(true)}
-              //handleShowAddGroup={()=>setShowAddGroup(true)}
-              //handleShowAddPoliticalGroup={()=>setShowPoliticalAddGroup(true)}
+              handleMyEvent={handleMyEvent}
               politicalPartyFeedback={politicalPartyFeedback}
-              //handlePoliticalFeedbackQuestion={()=>setShowPoliticalFeedbackQuestionModal(true)}
               politicalPartyMeeting={politicalPartyMeeting}
               publicShopOpening={publicShopOpening}
-              //handlePersonalOtherModal={()=>setShowAddGroupPersonalOthers(true)}
-              //handleShowAddPeopleModal={handleShowAddPeopleModal}
-              //showAddGroup={showAddGroup}
-              //reunionModal={reunionModal}
-              // selectedImage={selectedImage}
-              // setSelectedImage={setSelectedImage} 
-              // selectedImgFile={selectedImgFile} 
-              // setSelectedImgFile={setSelectedImgFile}
-              // handleSelectedImgFile={(file)=>setSelectedImgFile(file)}            
-              
               />
     }else if(eventCreated){
       return <SuccessCreate handleBothDetails={handleBothDetails}/>
@@ -120,6 +108,8 @@ export default function Umeet(){
               handleRvspModal={()=>setShowRvspModal(true)}
               singleEvent={singleEvent}
               handleFeedbacks={()=>setShowFeedbackModule(true)}
+              setDeleteId={setDeleteId}
+              deleteId={deleteId}
               />
     }
   }
@@ -156,14 +146,6 @@ export default function Umeet(){
     setSelectedSpecificEvent(false)    
   }
 
-  // const handleShowAddPeopleModal = ()=>{
-  //   setShowAddPeopleModal(true)
-  // }
-
-  // const handleTemplateImage = (url) => {
-  //   setState({...state, templateImage: url})
-  // }
-
   const handleEventSelectChange = (event) => {
     setIsInvitedAll(event.target.value);
   }
@@ -182,13 +164,6 @@ export default function Umeet(){
     handleEventDetails(id)
     dispatch(getEventDetails(id))
   }  
-
-  // const handleImageChange = (data) => {
-  //   if (event.target.files && event.target.files[0]) {
-  //     const image = event.target.files[0];
-  //     setSelectedImage(URL.createObjectURL(image));
-  //   }    
-  // };
 
   const handleSelectEventType = ( data )=>{
     setSelectSpecificEvent(true)
@@ -210,11 +185,6 @@ export default function Umeet(){
     dispatch(getEducationDetail(profileReducer?.profile?.id))
   }, [])  
 
-  // useEffect(()=>{
-  //   if(editMyEvent){
-  //     setSelectedImage(umeetReducer?.eventDetail?.eventTemplate)
-  //   }
-  // },[])
   console.log('yes re-render')
   const handleCreateEventForm = (data)=>{
     umeetReducer.inviteEmailsUI = null
@@ -224,7 +194,6 @@ export default function Umeet(){
     setCreateEvent(true)
     setEditMyEvent(false)
     setSelectedSpecificEvent(data.event)
-    //setSelectedImage(null)
     if(data.event == 'Party Feedback'){
       setPoliticalPartyFeedback(true)
     }else if(data.event == 'Party Meeting'){
@@ -343,6 +312,8 @@ export default function Umeet(){
         handleSingleEventDetail={handleEventDetails}
         isInvitedAll={isInvitedAll}
         handleBothDetails={handleBothDetails}
+        setDeleteId={setDeleteId}
+        deleteId={deleteId}
        />
       </div>
      </section>

@@ -10,7 +10,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getAllEvents, getEventList, getEventByProfileid, 
 getEventDetails, getAllInvitedEvents } from '../../../../redux/actionCreators/umeetActionCreator'
 import EventLoadingAnimation from './EventLoadingAnimation'
- 
+import EventDeleteModal from './Modal/EventDeleteModal'
+
 function EventStatus({ data, handleBothDetails, invites }) {
 if(data?.eventstatus){
   if(data?.eventstatus == 'Cancel'){
@@ -32,8 +33,9 @@ if(invites){
 }
 
 const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
-  myEvent, handleDeleteEvent, handleEditEvent, handleShareEvent,
-  isInvitedAll, handleBothDetails, handleImageSelect }) => {
+  myEvent, handleEditEvent, handleShareEvent,
+  isInvitedAll, handleBothDetails, handleImageSelect, setDeleteId,
+  deleteId, }) => {
 
   const reducerData = useSelector((state) => {
     return {
@@ -43,7 +45,7 @@ const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
       allInvitedEvents: state?.umeetReducer?.allInvitedEvents?.slice(0, 70),
     }
   });
-
+console.log(deleteId, 'deleteId')
   const { profile, allEvents, allMyEvents, allInvitedEvents } = reducerData
 
   const [showDetail, setShowDetail] = useState(false)
@@ -56,6 +58,9 @@ const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
   const [completedMyEvents, setCompletedMyEvents] = useState(null)
   const [upcomingMyEvents, setUpcomingMyEvents] = useState(null)
   const [cancelledMyEvents, setCancelledMyEvents] = useState(null)
+
+  const [clickedElement, setClickedElement] = useState(null);
+  const [showDeleteMyEvent, setShowDeleteMyEvent] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -89,14 +94,15 @@ const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
      })
 
      setCancelledEvents(cancells)
-    }else if(isInvitedAll == 'Inprogrss Events'){
-      const progress = allInvitedEvents?.filter(item =>{         
+    }else if(isInvitedAll == 'Inprogress Events'){
+      const progress = allInvitedEvents?.filter(item =>{
+      console.log(item)         
       const hasProgress = item?.invities?.attend == '1'
 
       return hasProgress
      })
 
-     setProgressedEvents(hasProgress)
+     setProgressedEvents(progress)
     }
 
 
@@ -150,6 +156,16 @@ const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
     return <div>{formattedDate}</div>;
   };
 
+  const handleElementClick = (index) => {
+    setClickedElement(index);
+  }
+
+  const handleDeleteEvent = (id)=>{
+    setShowDeleteMyEvent(true)
+    setDeleteId(id)
+    setShowDetail(!showDetail)
+  }
+
   return (
     <>
       {myEvent ? (
@@ -159,15 +175,18 @@ const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
           { 
             (isInvitedAll == 'All Events') && allMyEvents.map((data, i) => (
               <div 
-               key={i} 
-               onClick={()=>{handleBothDetails(data.id); handleImageSelect}} 
+               key={i}                 
                className='relative cursor-pointer flex p-2.5 justify-between m-1 my-1.5 border rounded-xl border-gray-300'>
                 {/* Img section */}
-                <div className='w-4/12 fle h-[75px] items-center justify-center'>
+                <div
+                 onClick={()=>{handleBothDetails(data.id); handleImageSelect}} 
+                 className='w-4/12 fle h-[75px] items-center justify-center'>
                   <img src={data?.eventTemplate} className='w-11/12 h-full object-cover rounded-md' />
                 </div>
                 {/* center section */}
-                <div className='8/12 flex flex-col'>
+                <div 
+                 onClick={()=>{handleBothDetails(data.id); handleImageSelect}}
+                 className='8/12 flex flex-col'>
                   <p className='text-[#649b8e] font-medium text-[14px]'>{data?.eventName}</p>
                   <span 
                    className='text-gray-600 text-[12px]'>
@@ -183,28 +202,24 @@ const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
                   </div>
                  ) : (
                   <div className='w-1/4 flex justify-end'>
-                    {/*
-                    }
-                    <BsThreeDots onClick={() => setShowDetail(!showDetail)} className='w-8 h-8 cursor-pointer mr-2 text-gray-700' />
-                    {/*
-
-                      showDetail ? (
-                        <section className='absolute z-30 right-[4%] top-[45%] border bg-white border-gray-300'>
-                          <div onClick={handleEditEvent} className='flex hover:bg-gray-300 p-2 z-40 cursor-pointer border-b border-gray-300'>
+                    
+                    <BsThreeDots onClick={() => {setShowDetail(!showDetail);handleElementClick(data?.id)}} className='w-8 h-8 cursor-pointer mr-2 text-gray-700' />
+                      { data?.id == clickedElement && showDetail ? (
+                        <section className='absolute z-30 right-[3%] top-[40%] border bg-white rounded-xl overflow-hidden border-gray-300'>
+                          <div onClick={handleEditEvent} className='flex hover:bg-gray-300 p-2.5 z-40 cursor-pointer border-b border-gray-300'>
                            <img src={editImg} className='w-6 h-6' />
                            <span className='pr-4 px-2'>Edit Event</span>
                           </div>
-                          <div onClick={handleDeleteEvent} className='flex hover:bg-gray-300 cursor-pointer p-2 border-b border-gray-300'>
+                          <div onClick={()=>handleDeleteEvent(data?.id)} className='flex hover:bg-gray-300 cursor-pointer p-2.5 border-b border-gray-300'>
                            <img src={deleteImg} className='w-6 h-6' />
                            <span className='pr-4 px-2'>Delete Event</span>
                           </div>
-                          <div onClick={handleShareEvent} className='flex hover:bg-gray-300 cursor-pointer p-2'>
+                          <div onClick={handleShareEvent} className='flex hover:bg-gray-300 cursor-pointer p-2.5'>
                            <img src={shareImg} className='w-6 h-6' />
                            <span className='pr-4 px-2'>Share Event</span>
                           </div> 
                         </section>
-                      ) : null
-                    */}
+                      ) : null }
                   </div>
                 )}
               </div>
@@ -366,7 +381,7 @@ const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
                   </section>
                   {/* End status section */}
                   <div className='w-2/12 flex items-center justify-center'>
-                    <EventStatus data={data?.eventdetail} handleEventDetails={handleEventDetails} />
+                    <EventStatus data={data?.eventdetail} invites={data?.invities} handleEventDetails={handleEventDetails} />
                   </div>
                 </div>
               )) :
@@ -401,7 +416,7 @@ const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
                   <div className='w-4/12 fle h-[75px] items-center justify-center'>
                     <img src={data?.eventdetail?.eventTemplate} className='w-11/12 h-full object-cover rounded-md' />
                   </div>
-                  {/* center section */console.log(data)}
+                  {/* center section */}
                   <section className='w-6/12 pl-2'>
                     <div className='flex w-full flex-col'>
                       <p className='text-[#649b8e] font-medium text-[14px]'>{data?.eventdetail?.eventName}</p>
@@ -459,7 +474,12 @@ const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
             : <EventLoadingAnimation />}
           </>)
       }
-
+     {showDeleteMyEvent && 
+      <EventDeleteModal 
+       onClose={()=>setShowDeleteMyEvent(false)}
+       deleteId={deleteId} 
+      />
+     }
     </>
   )
 }

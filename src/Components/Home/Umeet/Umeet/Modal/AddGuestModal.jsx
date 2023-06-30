@@ -6,7 +6,7 @@ import { getAllUgFriends, getAllPgFriends } from '../../../../../redux/actionCre
 
 const AddGuestModal = ({ onClose, handleEducation, education,
   handleShowAddPeopleModal, showAddPeopleModal, handlePeopleModalClose,
-  handleSelectedQualification }) => {  
+  handleSelectedQualification, onGuestClose }) => {  
   const dispatch = useDispatch()
   const { umeetReducer, profileReducer } = useSelector(state=>state)
 
@@ -55,7 +55,7 @@ const AddGuestModal = ({ onClose, handleEducation, education,
      <div className='w-[78%] md:w-[41%] lg:w-[37%] xl:w-[29%] bg-white rounded-xl p-3'>
       <div className='flex justify-between py-1 text-gray-600'>
         <span className='text-[18px] text-gray-700'>Select a Group</span>
-        <AiOutlineCloseCircle onClick={onClose} className='w-8 cursor-pointer hover:text-red-500 h-7'/>
+        <AiOutlineCloseCircle onClick={onGuestClose} className='w-8 cursor-pointer hover:text-red-500 h-7'/>
       </div>
       {
         dataList?.map((data, i)=>(

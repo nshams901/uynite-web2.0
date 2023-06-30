@@ -28,8 +28,8 @@ import PoliticalFeedbackQuestion from './PoliticalFeedbackQuestion'
 
 const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   handleCreatedEvent, whichType, politicalPartyFeedback,
-  politicalPartyMeeting, publicShopOpening, setNoMyEvent, setNoCreateEvent, setCreateEvent
-   }) => {
+  politicalPartyMeeting, publicShopOpening, setNoMyEvent, setNoCreateEvent, setCreateEvent,
+  handleMyEvent }) => {
 
   const { profileReducer, umeetReducer } = useSelector(state => state)
 
@@ -132,6 +132,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     console.log(data, 'jd')
     setSelectedQualification(data)
   }
+
   let emialObjects = [];
 
   invitesEmail?.forEach(function(email) {
@@ -151,8 +152,6 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
       };
       emialObjects.push(obj);
   });
-
-console.log(emialObjects);
 
   useEffect(()=>{
     if(invitesPlace && guestType){
@@ -199,6 +198,9 @@ console.log(emialObjects);
   };
 
   const handlePreview =()=>{
+    if(!selectedImage){
+      return toast.error('Please Select Image to Preview!')
+    }
     setPreviewEvent(true)
   }
 
@@ -331,9 +333,9 @@ console.log(emialObjects);
   }
 
   const handleCreateEvent = async() => {
-    // if(noGuest == null || invitePlaceData){
-    //   return ToastWarning('Please select invities')
-    // }
+    if(invitesEmail == null || invitePlaceData){
+      return ToastWarning('Please select invities')
+    }
 
     if(!question?.question && isFeedbackEvent){
       return ToastWarning('Please craete a question')
@@ -341,6 +343,9 @@ console.log(emialObjects);
     
     if(!postData?.eventName) {
       return ToastWarning('Event name is required')
+    }
+    if(!selectedImage){
+      return ToastWarning('Please Select Event Template!')
     }
 
     if(!formState?.eventdateAndTime){
@@ -351,12 +356,11 @@ console.log(emialObjects);
       if(!isFeedbackEvent){
         return ToastWarning("please enter the location/url")
       }
+    }else if(formState?.hostmailid?.length == 1){
+      if(!formState.hostmailid.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)){
+        return toast.error("Add valid host mail id")
+      }
     }
-    // else if (!phoneNumberRules.test(formState?.eventHostPhnNumber)) {
-    //   return toast.error("Add valid mobile number")
-    // }else if(!formState.hostmailid.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)){
-    //   return toast.error("Add valid host mail id")
-    // }
     setShowShareMyEvent(true)
     console.log(shareEvent)
     // if(showShareMyEvent == false && shareEvent!= null){
@@ -420,7 +424,7 @@ console.log(emialObjects);
       return 'Guests Added'
     }
   }
-console.log(postData)
+
   useEffect(()=>{
     // if(selectedImgFile){      
     //   (async()=>{
@@ -499,7 +503,7 @@ console.log(postData)
           editMyEvent ? <div className='px-3 my-2.5 text-[17px] font-semibold'>Edit Event</div>
             : <div className='px-3 my-2.5 text-[17px] font-semibold'>{whichType =='personal' ? 'Personal Event' : 'Create Event'}</div>
         }
-        {selectedImage && (<AiOutlineEye onClick={handlePreview} className='mr-3 w-6 h-6 text-gray-700 cursor-pointer' />)}
+        <AiOutlineEye onClick={handlePreview} className='mr-3 w-6 h-6 text-gray-700 cursor-pointer' />
        </section>
         <div className='border-2 mx-3'></div>
         <div className='px-7'>
@@ -754,9 +758,11 @@ console.log(postData)
        handleEducation={(eduData)=>setEducation(eduData)} 
        onClose={()=>{
           setShowAddGroup(false); 
-          setReunionModal(false); 
+          setReunionModal(false);
+          
           }
         }
+       onGuestClose={handleMyEvent}
        handleShowAddPeopleModal={handleShowAddPeopleModal}
        showAddPeopleModal={showAddPeopleModal}
        handlePeopleModalClose={()=>setShowAddPeopleModal(false)} />}
