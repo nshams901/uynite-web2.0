@@ -114,3 +114,10 @@ export const kicksCategory =
 export const getCategory = (id) => {
     return kicksCategory.find((item) => item.id === id)
 }
+
+export const sortList = ( data, key) => {
+  const sorted = data?.sort((a, b) => {
+    return a[key] > b[key]
+  })
+  return sorted;
+}

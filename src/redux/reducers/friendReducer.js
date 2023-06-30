@@ -1,3 +1,5 @@
+import { sortList } from "../../Components/Utility/utility";
+
 const initialState = {
   usersList: [],
   requestList: [],
@@ -13,16 +15,17 @@ const  friendReducer= (state = initialState, action) => {
       return { ...state, usersList: action.payload.data };
     case "GET_REQUEST_LIST":
       const data = action.payload.data
-      const request = data?.filter(item => item.friend.requesttype !== 'Accepted')
-      return { ...state, requestList: request };
+      const request = data?.filter(item => item.friend.requesttype !== 'Accepted');
+      const sortedRequest = request?.sort(( a, b) => a.profile.fname > b.profile.fname);
+      return { ...state, requestList: sortedRequest };
     case "FRIEND_LIST":
-      return { ...state, friends: action.payload.data };
+      const sorted = action.payload.data?.sort(( a, b) => a.profile.fname > b.profile.fname);
+      return { ...state, friends: sorted };
     case "GET_MUTUAL_FRIEND":
       return { ...state, mutualFriends: action.payload.data };
     case "MY_FRIEND_LIST":
       return { ...state, myFriendsList: action.payload.data };
     case "SET_FRIEND_PROFILE":
-      console.log(action.payload, 'okkkkkkkkkkkkkkk')
       return { ...state, friendProfileId: action.payload };
     default:
       return state;
