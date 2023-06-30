@@ -20,6 +20,7 @@ import {
   removeFollowers,
   removeFriend,
   unfollow,
+  updateFriendProfileId,
 } from "../../../../redux/actionCreators/friendsAction";
 import { toast } from "react-toastify";
 import User from "../../../../Assets/Images/user.png";
@@ -31,6 +32,7 @@ import { createPost } from "../../../../redux/actionCreators/postActionCreator";
 import alreadyFrnd from '../../../../Assets/Images/acceptFriendRequest.png';
 import addFrnd from '../../../../Assets/Images/SendFriendRequest.png'
 import moment from "moment";
+import { useParams } from "react-router"
 
 const ProfileImageSection = ({
   isOther,
@@ -46,15 +48,19 @@ const ProfileImageSection = ({
   const followingCount = following?.length || 0;
   const followersCount = followers?.length || 0;
   const { profile }  = useSelector((state) => state.profileReducer );
+  const { friendProfileId }  = useSelector((state) => state.friendReducer );
 
   const userName = data?.fname + data?.lname;
 
   const [state, setState] = useState({});
   const { showModal, modalName, modalData, coverImgModal, profileImgModal, profileImg, coverImg, isFriends } = state;
   const dispatch = useDispatch();
+  const params = useParams();
 
   const handleModal = async (name) => {
     if (name === "Friends") {
+      console.log('handle ma')
+      dispatch(updateFriendProfileId(params?.id))
       navigate('/myfriend')
     } else if (name === "Followers") {
       dispatch(getFollower(id));
@@ -75,6 +81,10 @@ const ProfileImageSection = ({
     }
   };
   const handleRemove = (friend) => {
+    if (name === "Friends") {
+      console.log('remove ma')
+      const friendProfileId = params?.id
+    }
     const payload = {
       profileid: id,
       friendprofileid: friend?.profile?.id || friend?.id,
@@ -249,7 +259,7 @@ const ProfileImageSection = ({
 
             <section
               className=" flex flex-col w-[40%] sm:w-[45%] items-center cursor-pointer"
-              // onClick}
+              onClick={() => handleModal("Friends")}
             >
             {
               data?.isFriend ? 
@@ -319,6 +329,7 @@ const ProfileImageSection = ({
       {/* {
         showModal && createPortal(<FollowersModal modalName={`Your ${modalName}`} data={friends}/>, document.getElementById('root'))
       } */}
+     { console.log(modalName)}
       {showModal && (
         <Portals closeModal={() => setState({ ...state, showModal: false })}>
           <FollowersModal

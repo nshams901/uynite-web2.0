@@ -14,7 +14,8 @@ const initialState = {
   emailSendSuccess: false,
   inviteEmailsUI: null,
   createData: null,
-  question: null
+  question: null,
+  cancelEvent: null,
 };
 
 const umeetReducer = (state = initialState, action) => {
@@ -49,7 +50,6 @@ const umeetReducer = (state = initialState, action) => {
       case "GET_PG_FRIENDS":
         return { ...state, pgFriends: action.payload.data }
       case "SEND_EMAIL_INVITES":
-        console.log(action.payload, 'ak is coming')
         if(action.payload.status){
           return { ...state, emailSendSuccess: true}
         }
@@ -58,8 +58,11 @@ const umeetReducer = (state = initialState, action) => {
       case "CREATE_DATA_UI":
         return { ...state, createData: action.payload }
       case "CREATE_QUESTION_UI":
-        console.log(action.payload)
         return { ...state, question: action.payload }
+      case "CANCEL_EVENT":
+        return { ...state, cancelEvent: action.payload}
+      case "CANCEL_EVENT_RESET":
+        return { ...state, cancelEvent: action.payload}
       default:
         return state;
     }

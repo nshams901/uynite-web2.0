@@ -139,6 +139,21 @@ export const cancelInvitation = (data) => async (dispatch) => {
   }
 };
 
+export const exitFromUnion = (data) => async (dispatch) => {
+  try {
+    const response = await axios.patch(
+      `https://web.uynite.com/friend/api/group/exitGroup`, data
+    );
+    dispatch({
+      type: "",
+      payload: response.data,
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 
 export const getPartOfUnions = (data) => async (dispatch) => {
   try {

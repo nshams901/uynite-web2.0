@@ -14,6 +14,7 @@ import {
   settingOtp,
   savingPhoneNo,
   userSingupInformation,
+  isOtpValid,
 } from "../../../../redux/actionCreators/authActionCreator";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -32,7 +33,7 @@ import ReactCountryFlag from "react-country-flag";
 
 const Signup = () => {
   const captchaEl = useRef();
-  const [profileType, setProfileType] = useState("");
+  const [profileType, setProfileType] = useState('Personal');
   const dispatch = useDispatch();
   const passwordRules = /^(?=.*\d)(?=.*[a-z]).{5,}$/;
   const navigate = useNavigate();
@@ -75,6 +76,7 @@ const Signup = () => {
         }),
     }),
     onSubmit: async (event) => {
+      dispatch(isOtpValid({}))
       dispatch(settingOtp(""));
       setIsLoading(true);
       const isValueExist = formik.values.email || formik.values.phone;
@@ -115,9 +117,7 @@ const Signup = () => {
         uemail: formik.values.email ? formik.values.email : formik.values.phone,
         password: formik.values.password,
       };
-      console.log("Dta Objec>>>>>>>", dataObj);
       let response;
-      console.log(">>>>>>>>>>>>>>", formik.values.phone);
       if (formik.values.email || formik.values.phone) {
         response = await dispatch(sendOtpToUser(dataObj));
       }
@@ -127,7 +127,7 @@ const Signup = () => {
       if (formik.values.phone) {
         result = dispatch(savingPhoneNo(formik.values.phone));
       }
-      console.log("result>>>>>>>>>", result);
+      
 
       if (formik.values.phone) {
         setIsLoading(false);
@@ -162,6 +162,7 @@ const Signup = () => {
     try {
       configureRecaptcha(phoneNumber, auth);
     } catch (err) {
+      captchaEl.current.innerHTML = null;
       console.log(err, "captcha error");
     }
 
@@ -174,9 +175,9 @@ const Signup = () => {
         navigate(`/auth/verification/signup?${profileType}`);
       })
       .catch((err) => {
-        captchaEl.current.innerHTML = "";
-
-        console.log(err);
+        captchaEl.current.innerHTML = null;
+        // window.location.reload()
+        // console.log(err);
         toast.error(err.message);
       });
   }
@@ -216,6 +217,7 @@ const Signup = () => {
               name="signUp"
               id="Personal"
               onChange={(e) => handleClick(e)}
+              checked={ profileType === 'Personal'}
             />
             <span className="ml-1 text-[#7E8081]">Personal</span>
           </span>
@@ -290,7 +292,7 @@ const Signup = () => {
             id="phone"
             value={formik.values.phone}
             onChange={(event) => {
-              if (event.target.value.length > 10) {
+              if (event.target.value.length > 12) {
                 formik.handleChange(
                   event.target.value.slice(event.target.value.length - 1)
                 );

@@ -55,7 +55,7 @@ const Kicks = () => {
   const { profile, followingsContent, trendingContents, latestContents, getData } =
     reducerDate;
   const [state, setState] = useState({});
-  const { kicksType = params.segment || "Following", videoData =[] } = state;
+  const { kicksType = params.segment || "Following", videoData =[], isMute} = state;
   const [comments, setComments] = useState(true);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectVideo, setSelectVideo] = useState(false);
@@ -130,7 +130,8 @@ const Kicks = () => {
     };
     let params = { index: 0, size: 10 };
     if (kicksType === "Latest") {
-      dispatch(getLatestKicks(params, { ...data, segment: "LATEST" }));
+      dispatch(getLatestKicks(params, { ...data, segment: "LATEST" })).then(res => {
+      });
       setOpenCat(true);
     } else if (kicksType === "Trending") {
       dispatch(getTrendingKicks(params, { ...data, segment: "TRENDING" }));
@@ -153,6 +154,10 @@ const Kicks = () => {
       dispatch(addCommentOnKicks(payload));
     }
   };
+
+  const handleMute = () => {
+    setState({ ...state, isMute: !isMute})
+  }
 
   return (
     <>
@@ -199,7 +204,7 @@ const Kicks = () => {
           </div>
           {/*  */}
           <section
-            className={`video-container mt-[3%] text-white bg-[#E4E7EC] ${
+            className={`video-container w-1/2 mt-[3%] text-white bg-[#E4E7EC] ${
               isMobile ? "video-container_mobile" : ""
             }`}
             id="video-container"
@@ -212,7 +217,7 @@ const Kicks = () => {
               videoData?.content?.map((item) => {
                 const { text, id } = item;
                 return (
-                  <div className="w-1/3 inline-block" key={id}>
+                  <div className="w-1/2 h-[90vh] inline-block" key={id}>
                     <VideoComponent dataList={dataList} data={item} />
                   </div>
                 );
@@ -282,7 +287,7 @@ const Kicks = () => {
         {/* Reels Section */}
 
         <section
-          className="video-container mt-[3%] flex-1 text-white bg-[#E4E7EC]"
+          className="video-container mt-[3%] w-[300px] md:w-[400px]  text-white bg-[#E4E7EC]"
           id="video-container"
         >
           {isEmpty(videoData?.content) ? (
@@ -295,8 +300,8 @@ const Kicks = () => {
             videoData?.content?.map((item) => {
               const { text, id } = item;
               return (
-                <div className="flex h-full " key={id}>
-                  <VideoComponent dataList={dataList} data={item} />
+                <div className="flex h-full mb-6 " key={id}>
+                  <VideoComponent dataList={dataList} data={item} handleMute={handleMute} isMute={isMute} />
                 </div>
               );
             })

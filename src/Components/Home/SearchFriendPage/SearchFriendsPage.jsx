@@ -129,7 +129,6 @@ const SearchFriendsPage = ({ isFriend }) => {
       friendtype: "Friend",
       profileid: id,
       requesttype: "Send",
-      isFriend: "true",
 
       classment: data.includes("classmate"),
       collgues: data.includes("officemate"),

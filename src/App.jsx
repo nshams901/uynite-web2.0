@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Footer from "./Components/Footer/Footer";
 import Home from "./Components/Home/Home";
-import { Routes, Route, useActionData } from "react-router-dom";
+import { Routes, Route, useActionData, useNavigate } from "react-router-dom";
 import LoginPage from "./Components/Login/LoginPage";
 import Signup from "./Components/Login/Content/Signup/Signup";
 import Login from "./Components/Login/Content/Login/Login";
@@ -54,6 +54,7 @@ import Reals from "./screens/Reals/Reals";
 import ProfileType from "./Components/Login/Content/Signup/ProfileType";
 import CountrySelection from "./Components/Login/Content/Signup/CountrySelection";
 import UserKicks from "./Components/Home/KicksPage/UserKicks";
+import UserVideos from "./Components/Home/KicksPage/UserVideos";
 
 const App = () => {
   const token = localStorage.getItem("token");
@@ -61,14 +62,17 @@ const App = () => {
   axios.defaults.headers.common["Content-Type"] = "application-json";
   axios.defaults.headers.common["Accept-Language"] = "en";
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const { isOtpValid, userInfo } = useSelector(
     (state) => state.authReducer
   );
-  let userData = localStorage.getItem("userCredential");
-  userData = JSON.parse(userData);
+  let userCredential = localStorage.getItem("userCredential");
+  let userData = JSON.parse(userCredential);
 
   const isUserLoggedIn = () => {
-    if (userData === null) {
+    if (userCredential === null) {
+        localStorage.clear();
+        navigate("/auth/login");
       dispatch(settingUserLoginData(false, {}));
     } else {
       const token = localStorage.getItem("token");
@@ -97,7 +101,8 @@ const App = () => {
       .catch((err) => console.log("service worker registration failed", err));
   }
 
-  console.log("sdbjnnnnnnnnnnnnnnnnUser Info >>>>>>>",userInfo);
+  console.log("sdbjnnnUser Info",userInfo);
+
   return (
     <>
       <Routes>
@@ -138,7 +143,7 @@ const App = () => {
         </Route>
 
         {/* Private Routes */}
-        {/*<Route element={<PrivateRoute />}>*/}
+        <Route element={<PrivateRoute />}>
           <Route path="select" element={<Select />} />
           <Route path="/" element={<MainView />}>
             <Route path="/root" element={<Home />} />
@@ -189,11 +194,14 @@ const App = () => {
             />
             <Route path="privacy-policy" element={<PrivacyPolicy />} />
             <Route path="reals" element={<Reals />} />
+            <Route path="reals/:state" element={<Reals />} />
+
+            <Route path="user/videos/:userid" element={<UserVideos />} />
 
             {/* <Route path="user" element={<User />} /> */}
             {/* <Route path="friends" element={<Friends />} /> */}
           </Route>
-        {/*</Route>*/}
+        </Route>
       </Routes>
     </>
   );

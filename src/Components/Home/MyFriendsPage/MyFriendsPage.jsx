@@ -11,6 +11,7 @@ import EmptyComponent from "../../empty component/EmptyComponent";
 import {
   getFriendsList,
   getTypeOfFriends,
+  updateFriendProfileId,
 } from "../../../redux/actionCreators/friendsAction";
 import Locations from "../../googlemap/Locations";
 import Dropdown from "../../Login/Content/Modal/Dropdown";
@@ -21,6 +22,7 @@ import { getMyUnion } from "../../../redux/actionCreators/unionActionCreator";
 const MyFriendsPage = () => {
 
   const dispatch = useDispatch();
+  const { friendProfileId }  = useSelector((state) => state.friendReducer )
 
   const reducerData = useSelector((state) => {
     return {
@@ -36,12 +38,17 @@ const MyFriendsPage = () => {
   const [state, setState] = useState({});
   const { relation = { name: "All", key: "all" }, friendList = friends} = state;
   const isPersonal = profile.profiletype === 'Personal'
+  console.log(friendProfileId)
   useEffect(() => {
-    const profileid = JSON.parse(localStorage.getItem("profile"))?.id;
+    const profileid = friendProfileId ? friendProfileId : JSON.parse(localStorage.getItem("profile"))?.id;
     dispatch(getFriendsList(profileid));
     dispatch(getMyUnion(profileid))
     dispatch(getTypeOfFriends(profileid));
-  }, []);
+
+    return ()=>{
+      dispatch(updateFriendProfileId(null))
+    }
+  }, [friendProfileId]);
   // console.log(isEmpty(friends), "CHHHH", friends);
   const option = useMemo(() => {
      const unions = unionList.map((item) => ({name: item.groupName, key: item.groupId}))

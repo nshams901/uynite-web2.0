@@ -29,15 +29,15 @@ import { getEducationDetail } from "../../../../redux/actionCreators/profileActi
 
 export default function Umeet(){
   const [selected, SetSelected] = useState(false)
-  const [noCreateEvent, setNoCreateEvent] = useState(true)
-  const [noMyEvent, setNoMyEvent] = useState(false)
+  const [noCreateEvent, setNoCreateEvent] = useState(false)
+  const [noMyEvent, setNoMyEvent] = useState(true)
   const [createEvent, setCreateEvent] = useState(false)
   const [editMyEvent, setEditMyEvent] = useState(false)
   const [eventDetails, setEventDetails] = useState(false)
   const [selectSpecificEvent, setSelectSpecificEvent] = useState(false)
   const [selectedSpecificEvent, setSelectedSpecificEvent] = useState(null)
   const [myEvent, setMyEvent] = useState(false)
-  const [showDeleteMyEvent, setShowDeleteMyEvent] = useState(false)
+  //const [showDeleteMyEvent, setShowDeleteMyEvent] = useState(false)
   // const [showShareMyEvent, setShowShareMyEvent] = useState(false)
   const [eventCreated, setEventCreated] = useState(false)
   const [eventSuccess, setEventSuccess] = useState(false)
@@ -89,6 +89,9 @@ export default function Umeet(){
               editMyEvent={editMyEvent}
               whichType={whichType}
               handleCreatedEvent={handleCreatedEvent}
+              setCreateEvent={setCreateEvent}
+              setNoMyEvent={setNoMyEvent}
+              setNoCreateEvent={setNoCreateEvent}
               // handleShowTemplate={()=>setShowTemplate(true)}
               //handleShowAddGroup={()=>setShowAddGroup(true)}
               //handleShowAddPoliticalGroup={()=>setShowPoliticalAddGroup(true)}
@@ -111,8 +114,7 @@ export default function Umeet(){
       return <SuccessCreate handleBothDetails={handleBothDetails}/>
     }else if(eventDetails){
       return <EventDetails 
-              handleEditEvent={handleEditEvent} 
-              handleDeleteEvent={()=>setShowDeleteMyEvent(true)} 
+              handleEditEvent={handleEditEvent}                
               handleShareEvent={()=>setShowShareMyEvent(true)} 
               myEvent={myEvent} 
               handleRvspModal={()=>setShowRvspModal(true)}
@@ -380,13 +382,14 @@ export default function Umeet(){
       <EventStatus />
      </section>
 
-     {showDeleteMyEvent && 
-      <EventDeleteModal 
-       onClose={()=>setShowDeleteMyEvent(false)} />}
+
      {showRvspModal && 
       <RvspModal 
        onClose={()=>setShowRvspModal(false)} />}
-{/*   {showShareMyEvent && 
+{/*   {showDeleteMyEvent && 
+      <EventDeleteModal 
+       onClose={()=>setShowDeleteMyEvent(false)} />}
+      {showShareMyEvent && 
       <EventShareModal 
        onClose={()=>setShowShareMyEvent(false)} />}
       {showTemplate && 

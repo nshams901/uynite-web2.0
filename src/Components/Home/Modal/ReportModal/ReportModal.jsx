@@ -49,7 +49,11 @@ const ReportModal = ({ closeModal }) => {
   console.log("dataList",dataList);
   return (
     <>
-      <div className="bg-white w-[35%]  h-[400px] flex flex-col items-center gap-2 rounded-xl absolute">
+    <div
+      className="w-[80%] sm:w-[40%] lg:w-[30%] bg-white flex flex-col rounded-lg  fixed top-[50%] left-[50%]
+  transform translate-x-[-50%] translate-y-[-50%] z-50"
+    >
+      <div className="bg-white h-[400px] flex flex-col items-center gap-2 rounded-xl">
         <h1 className="text-2xl font-bold mt-3">
           Why are you Reporting this Post ?
         </h1>
@@ -74,6 +78,7 @@ const ReportModal = ({ closeModal }) => {
           <ThankuModal />
         </Portals>
       )}
+      </div>
     </>
   );
 };

@@ -20,7 +20,7 @@ const AddDataList = ["State", "Loksabha", "Assembly"];
 const PublicDataList = ["State", "District"]
 
 const PoliticalGuestAddModal = ({ onClose, whichType, setInvitesPlace,
-  setGuestType }) => {
+  setGuestType, setLocationCountry }) => {
   const [showAddPeopleModal, setShowAddPeopleModal] = useState(false);
   const [selectCountry, setSelectCountry] = useState(false);
   const [country, setCountry] = useState(null);
@@ -40,8 +40,9 @@ const PoliticalGuestAddModal = ({ onClose, whichType, setInvitesPlace,
   };
 
   const handleOptionChange = (event) => {
-    console.log(event.target.value);
-    setCountry(event.target.value);
+    console.log(event.target.value)
+    setCountry(event.target.value)
+    setLocationCountry(event.target.value)
   };
 
   const handleAddBy = (data) => {
@@ -54,10 +55,10 @@ const PoliticalGuestAddModal = ({ onClose, whichType, setInvitesPlace,
       setGuestType("Loksabha")
     } else if (data.toLowerCase() == "assembly") {
       setWhichBy("Assembly")
-      setGuestType("Loksabha")
+      setGuestType("Assembly")
     } else if (data.toLowerCase() == "district") {
       setWhichBy("District")
-      setGuestType("Loksabha")
+      setGuestType("District")
     }
   };
 
@@ -74,8 +75,6 @@ const PoliticalGuestAddModal = ({ onClose, whichType, setInvitesPlace,
       console.log(data)      
       setCountryList(data?.data)
     })()
-
-    setCountry('india')
   }, [])
 
   const onHandleCountrySelection = () => {

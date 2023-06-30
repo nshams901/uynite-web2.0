@@ -123,7 +123,10 @@ const CreatePostModal = ({
         createPosts(paths);
         setState({ ...state, uploadFileList: [...uploadFileList, paths] });
       });
-    } else createPosts();
+    } else {
+      setState({ ...state, loading: true });
+      createPosts();
+    }
   }
 
   const unions = myUnionList.map((item) => {
@@ -235,6 +238,7 @@ const CreatePostModal = ({
         </div>
         <div className="flex">
           <button
+            disabled={ loading }
             onClick={handleCreatePost}
             className="bg-[#6780AF] py-1 w-[100px] text-white text-sm px-3 font-semibold  sm:font-bold sm:px-5 rounded-full "
           >
