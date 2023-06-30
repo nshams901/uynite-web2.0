@@ -27,7 +27,7 @@ import { AiOutlineEyeInvisible } from 'react-icons/ai'
 
 const ProfilePage = ({ isOthers }) => {
   const [selectedOption, setSelectedOption] = useState("Posts");
-  const [privacyType, setPrivacyType] = useState('None')
+  const [privacyType, setPrivacyType] = useState('Public')
   const dispatch = useDispatch();
   const params = useParams();
 
@@ -48,7 +48,8 @@ const ProfilePage = ({ isOthers }) => {
           profile, privacyDetails,  myFriendsList} = reducerData;
 
   const isOther = isOthers && params?.id !== profile?.id
-    const user = useMemo(() => {
+
+  const user = useMemo(() => {
     return  isOther ? { id: params?.id} : profile;
   }, [isOther, params.id])
 
@@ -63,7 +64,9 @@ console.log(isFriend)
   useEffect(() => {    
      isPersonal ? getEducation(): '';
      isOther ? dispatch(getPrivacyDetail(params?.id)) : '';
+
      dispatch(getOwnFriendsList(profile?.id))
+
      if(privacyDetails) setPrivacyType(privacyDetails?.viewprofile)
 
      isOther ? dispatch(getFriendProfile(user?.id)).then((res) => {
@@ -109,6 +112,24 @@ console.log(isFriend)
       }
     }
   }
+
+  const ContentBasedOnPrivacy = ()=>{
+    if(privacyType){
+      if(privacyType == 'Public'){
+        return <GridBoxes selectedOption={selectedOption} isOther={isOther} />
+      }else if(privacyType == 'Friends' && isFriend){
+        return <GridBoxes selectedOption={selectedOption} isOther={isOther} />
+      }else{
+        return (
+        <div className='w-[95%] relative lg:w-[80%] xl:w-[70%] flex justify-center flex-col items-center'>
+          <AiOutlineEyeInvisible className='absolute left-[40%] text-gray-300 h-32 w-32'/>
+          <div className='my-6 text-2xl text-gray-600 z-10'>This Account is Private</div>
+          <div className='text-gray-600 z-10'>Profile view hidden by {friendDetail?.fname}</div>
+        </div>)
+      }
+    }
+  }
+  
   return (
     <div className="w-full flex flex-col sm:flex-row justify-evenly bg-[#E4E7EC] mt-2">
       <section className="flex sm:w-[50%] flex-col mt-2 items-center lg:items-end">
@@ -136,7 +157,7 @@ console.log(isFriend)
         </section>
 
         <section className="w-full mt-3 rounded-xl flex justify-center sm:w-[92%] lg:w-full xl:w-[93%]">
-          <GridBoxes selectedOption={selectedOption} isOther={isOther} />
+          <ContentBasedOnPrivacy />
         </section>
       </section>
     </div>

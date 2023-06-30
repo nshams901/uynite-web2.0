@@ -543,3 +543,19 @@ export const getStatesByCountry = (countryCode) => async (dispatch) => {
     throw error;
   }
 }; 
+
+export const getEventFeedbacks = () => async (dispatch) => {
+  try {
+    const response = await axios.get(
+       `https://web.uynite.com/event/api/event/fetch/feedback`,
+       {headers: { Authorization: `Bearer ${token}` }}
+    );
+    console.log(response.data, "feedbacks");
+    dispatch({
+      type: "GET_STATES_BY_COUNTRY",
+      payload: response?.data?.data,
+    });
+  } catch (error) {
+    throw error;
+  }
+}; 

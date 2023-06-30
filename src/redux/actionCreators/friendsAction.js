@@ -324,3 +324,16 @@ export const checkFriends = (userprofile, friendprofile) => async (dispatch) => 
     throw error;
   }
 };
+
+
+export const updateFriendProfileId = (data) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "SET_FRIEND_PROFILE",
+      payload: data,
+    });
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

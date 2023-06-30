@@ -3,32 +3,54 @@ import notAttend from '../../../../../Assets/Images/Umeet/Umeet-Main/Umeet-NotAt
 import Attend from '../../../../../Assets/Images/Umeet/Umeet-Main/Umeet-Attending.png'
 import maybe from '../../../../../Assets/Images/Umeet/Umeet-Main/Umeet-maybe.png'
 import ToggleButton from './ToggleButton';
-import { createEvent, updateEvent, sendEmailInvites } from "../../../../../redux/actionCreators/umeetActionCreator";
+import { createEvent, updateEvent, sendEmailInvites,
+addInvitees } from "../../../../../redux/actionCreators/umeetActionCreator";
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import axios from 'axios'
 
-const EventShareModal = ({ onClose, handleShareEvent }) => {
+const token = localStorage.getItem("userCredential")
+  ? JSON.parse(localStorage.getItem("userCredential")).token
+  : "";
+
+const EventShareModal = ({ onClose, handleShareEvent, invitesEmail,
+  emialObjects }) => {
   const [shareEnabled, setShareEnabled] = useState(true)
   const dispatch = useDispatch()
   const { umeetReducer } = useSelector(state=>state)
-console.log(shareEnabled)
-  const handleShare = ()=>{
-    // async function processShare(array) {
-    //   for (let i = 0; i < array?.length; i++) {
-      
-    //   const object = array[i];
-    //   console.log(object)
-    //   await dispatch(sendEmailInvites({
-    //     "eventname": umeetReducer?.createData?.eventName , 
-    //     "umail" : object }))
-    //   }
-    // } 
 
-    // processShare(umeetReducer.inviteEmailsUI)
+  const handleShare = ()=>{
+    async function processShare(array) {
+      for (let i = 0; i < array?.length; i++) {
+      
+      const object = array[i];
+      console.log(object)
+      await dispatch(sendEmailInvites({
+        "eventname": umeetReducer?.createData?.eventName , 
+        "umail" : object }))
+      }
+    } 
+
+    processShare(invitesEmail)
     handleShareEvent(shareEnabled)
     onClose()          
   }
 
+  useEffect(()=>{
+    try {
+      (async()=>{
+       const response = await axios.post(
+        `https://web.uynite.com/event/api/invities/addInvities`,
+        emialObjects,
+        {headers: { Authorization: `Bearer ${token}` }})
+
+       console.log(response.data, "addInvitees");
+      })()      
+    } catch (error) { 
+      throw error;
+    }
+    //dispatch(addInvitees(emialObjects))
+  }, [])
   return (
   <section className='absolut fixed z-20 justify-center items-center top-0 left-0 h-full w-full flex' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
    <div className='w-[86%] md:w-[42%] lg:w-[36%] xl:w-[26%] flex flex-col justify-between p-3 bg-white md:ml-[9%] mt-[4%] rounded-2xl'>

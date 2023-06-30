@@ -132,6 +132,27 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     console.log(data, 'jd')
     setSelectedQualification(data)
   }
+  let emialObjects = [];
+
+  invitesEmail?.forEach(function(email) {
+      // (async()=>{
+      //   const { data } = await axios.get(
+      //    `https://web.uynite.com/profile/api/profile/profilebyemail/${email}`,
+      //    {headers: { Authorization: `Bearer ${token}` }});
+      //   console.log(data, "getProfileByEmail");
+      // })
+      let obj = {
+          "attend": "Send",
+          "eventid": eventId,
+          "eventtype": "Personal",
+          "invitesasa": email,
+          "nonveg": false,
+          "profileid":  profileReducer?.profile?.id
+      };
+      emialObjects.push(obj);
+  });
+
+console.log(emialObjects);
 
   useEffect(()=>{
     if(invitesPlace && guestType){
@@ -719,6 +740,7 @@ console.log(postData)
        onClose={()=>setShowTemplate(false)} 
        //saveTemplate={handleTemplateImage} 
        //handleImageChange={handleImageChange}
+       templateSelected={templateSelected}
        eventId={eventId}
        selectedImage={selectedImage}
        selectedSpecificEvent={selectedSpecificEvent}
@@ -763,7 +785,9 @@ console.log(postData)
        whichType={whichType} />}
      {showShareMyEvent && 
       <EventShareModal 
-       onClose={()=>setShowShareMyEvent(false)} 
+       onClose={()=>setShowShareMyEvent(false)}
+       invitesEmail={invitesEmail} 
+       emialObjects={emialObjects}
        handleShareEvent={(share)=>{console.log(share);setShareEvent(share)}}/>}
      {showPoliticalFeedbackQuestionModal && 
       <PoliticalFeedbackQuestion

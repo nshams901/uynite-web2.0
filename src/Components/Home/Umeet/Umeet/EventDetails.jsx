@@ -46,7 +46,7 @@ const EventDetails = ({
   const numberOfMaybe = guestsList?.filter(item=>item?.invities?.attend == '3').length
   const NoOfGuests = { numberOfYes, numberOfNo, numberOfMaybe }
   const NoOfResponed = numberOfYes + numberOfNo + numberOfMaybe
-  console.log(NoOfGuests, NoOfResponed)
+
   useEffect(()=>{
     (async function getData(){
       const response = await axios.get(`https://web.uynite.com/event/api/invities/getinvitietslist/${umeetReducer?.eventDetail?.id}`)
@@ -56,7 +56,7 @@ const EventDetails = ({
   }, [])    
 
   const eventDetail = umeetReducer?.eventDetail
-  
+    console.log(eventDetail)
   const handleDetails = ()=>{
     setDetails(true)
     setGuests(false)

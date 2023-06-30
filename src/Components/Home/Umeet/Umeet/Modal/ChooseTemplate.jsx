@@ -6,18 +6,16 @@ import { getReunionTemplates, createEventTemplate } from "../../../../../redux/a
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
+import selectedOne from '../../../../../Assets/Images/Umeet/Umeet-Main/Umeet-Attending.png'
 
 const ChooseTemplate = ({ onClose, saveTemplate, 
   selectedSpecificEvent, setTemplateSelected, handleTemplateSelected,
-  handleSelectedImgFile, eventId, selectedImage }) => {  
-  //const [state, setState] = useState({})
-  //const { templatesImage = [], templates = []} = state
+  handleSelectedImgFile, eventId, selectedImage, templateSelected }) => {  
   const [tempImages, setTempImages] = useState([])
   const [selectedImage1, setSelectedImage1] = useState(null)
   const [imgData, setImgData] = useState(null)
 console.log(selectedImage)
   const dispatch = useDispatch()
-  //const { personalReUnionTemplates } = useSelector(state=>state.umeetReducer)
 
   const handleImageChange = () => {
     if (event.target.files && event.target.files[0]) {
@@ -40,8 +38,8 @@ console.log(selectedImage)
 
    setTempImages(tempData)
   }   
-
-  const handleTemp = async()=>{
+console.log(imgData)
+  const handleTemp = async(item)=>{
     handleUpload()    
     if(selectedImage1){
       setTemplateSelected(selectedImage1);
@@ -55,7 +53,7 @@ console.log(selectedImage)
       textstyle: "bold",
       category: selectedSpecificEvent,
       tempdetail: {
-            "bgimage": selectedImage,
+            "bgimage": imgData,
             "dateheadingcolor": "",
             "dateheadingstyle": "",
             "eventheadingcolor": "",
@@ -134,17 +132,18 @@ console.log(selectedImage)
           </div>
 
           <div className={`h-[88%] ${selectedImage1 ? '' : 'overflow-y-scroll'} `}>
-           <section className={`${selectedImage1 ? 'hidden' : ''} grid grid-cols-2 md:grid-cols-4 2xl:grid-cols-5`}>
+           <section className={`${selectedImage1 ? 'hidden' : ''} grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4`}>
             {tempImages?.map((data, i) => (
               <div
                 key={i}
-                className="justify-center py-3 px-3 items-center"
-              >{}
+                className="flex flex-col justify-center py-3 px-3 items-center"
+              >
                 <img
                   src={data.imgs}
                   onClick={()=>setImgData(data.imgs)}
-                  className="h-52 cursor-pointer md:h-36 w-[150px] md:w-[110px] rounded object-cover"
+                  className="h-52 cursor-pointer relative md:h-52 w-[150px] md:w-[130px] rounded object-cover"
                 />
+                {imgData === data.imgs && <img src={selectedOne} className='absolut flex justify-center left-10 h-5 w-5' />}
               </div>
             ))}
            </section>
