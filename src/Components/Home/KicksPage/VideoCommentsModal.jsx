@@ -171,7 +171,13 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
     }
     if(roots){
       if(dislike){
-        
+        const payload = {
+          profileid: profile.id,
+          likeid: itemId
+        }
+        dispatch(commentDisliked(payload)).then((res) =>{
+         dispatch(getCommentByPostid(activePost?.id, params))
+        })
       } else {
         dispatch(commentPostLiked(payload)).then(res => {
          dispatch(getCommentByPostid(activePost?.id, params))
@@ -201,21 +207,21 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
     setState({ ...state, commentImage: file, imgFile: e.target.files[0] });
   };
 
-  const isLiked = (likes) => {
+  const getLikeId = (likes) => {
     const data = likes?.find(item => item?.profileid === profile?.id);
-    if(data) return true;
+    if(data) return data?.id;
     else return false;
   }
   const handleReplyLike = (id, dislike) => {
     if(dislike) {
       const payload = {
         datetime: new Date().getTime(),
-        postid: id,
+        likeid: id,
         profileid: profile.id,
-        type: "c"
+        type: "r"
       }
       dispatch(commentDisliked(payload)).then((res) => {
-        dispatch(getCommentByPostid(activePost?.id));
+        dispatch(getCommentByPostid(activePost?.id, { pageNumber: 0, pageSize: 10 }));
       })
     }else{
       const payload = {
@@ -309,8 +315,8 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
 
                     <div className="w-1/6 pl-2 text-[#666666]">
                     {
-                      isLiked(likecount) ? 
-                      <img className="w-6 cursor-pointer" src={liked} onClick={() => handleLike(id, "dislike")} /> :
+                      getLikeId(likecount) ? 
+                      <img className="w-6 cursor-pointer" src={liked} onClick={() => handleLike(getLikeId(likecount), "dislike")} /> :
                       <AiFillHeart
                         className="text-2xl cursor-pointer"
                         onClick={() => handleLike(id)}
@@ -384,7 +390,7 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                         >
                         { 
                           isLiked ?
-                          <img className="w-6 cursor-pointer" src={liked} onClick={() => handleReplyLike(id, "dislike")} /> 
+                          <img className="w-6 cursor-pointer" src={liked} onClick={() => handleReplyLike(isLiked.id, "dislike")} /> 
                           :
                           <AiFillHeart className="text-2xl" />
 

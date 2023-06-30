@@ -27,9 +27,9 @@ const UserKicks = () => {
                         userKickList?.map((item) => {
                             return (
                                 <div className='w-1/2 p-3 md:w-1/3 h-60' key={item?.id}>
-                                    <div className='h-full bg-black cursor-pointer'>
+                                    <div className='h-full bg-black cursor-pointer' >
                                         { item?.image ? 
-                                        <img src={item.image} className='h-full m-auto'/>
+                                        <img src={item.image} className='h-full m-auto' onClick={() => navigate(`/user/videos/${params.id}`)}/>
                                         :
                                         <video className='h-full m-auto' src={item.video}></video>
                                         }

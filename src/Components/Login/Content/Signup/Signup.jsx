@@ -49,14 +49,9 @@ const Signup = () => {
   const formik = useFormik({
     validateOnMount: true,
     initialValues: {
-      email:  "",
-      password:  "",
+      email: "",
+      password: "",
       phone: "",
-
-      // email: signupData?.uemail || "",
-      // password: signupData?.password || "",
-      // phone: signupData?.uemail || "",
-      // termsAndConditions: false,
       profileType: "",
     },
     validationSchema: Yup.object({
@@ -78,14 +73,6 @@ const Signup = () => {
           message:
             "Password should be minimum of 8 length characters with one numerical value",
         }),
-      // phone: Yup.string().matches(phoneNumberRules, {
-      //   excludeEmptyString: true,
-      //   message: "Please enter a valid phone number",
-      // }),
-      // termsAndConditions: Yup.bool().oneOf(
-      //   [true],
-      //   "You need to accept the terms and conditions"
-      // ),
     }),
     onSubmit: async (event) => {
       dispatch(settingOtp(""));
@@ -175,6 +162,7 @@ const Signup = () => {
     try {
       configureRecaptcha(phoneNumber, auth);
     } catch (err) {
+      captchaEl.current.innerHTML = null;
       console.log(err, "captcha error");
     }
 
@@ -187,9 +175,9 @@ const Signup = () => {
         navigate(`/auth/verification/signup?${profileType}`);
       })
       .catch((err) => {
-        captchaEl.current.innerHTML = "";
-
-        console.log(err);
+        captchaEl.current.innerHTML = null;
+        // window.location.reload()
+        // console.log(err);
         toast.error(err.message);
       });
   }
@@ -216,7 +204,7 @@ const Signup = () => {
   const closeCountryModal = () => {
     setCountryCode(false);
   };
-console.log("countryData", countryData);
+  console.log("countryData", countryData);
   return (
     <>
       {/* padding increased */}
@@ -270,7 +258,7 @@ console.log("countryData", countryData);
           >
             <div className=" font-bold flex items-center w-[80%] justify-center">
               <ReactCountryFlag
-                svg              
+                svg
                 countryCode={countryData.iso2}
                 style={{
                   width: "1.2em",

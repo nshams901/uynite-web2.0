@@ -176,7 +176,7 @@ export const loginUser = (data) => async (dispatch) => {
     });
     return response.data;
   } catch (err) {
-    console.log(err, "errror login");
+    console.log(err);
     throw err;
   }
 };
@@ -195,15 +195,17 @@ export const userRegistration = (data) => async (dispatch) => {
       }
     );
     console.log("<>>>>>>>>>>>>>>>>,<<<<<<<", response);
-    localStorage.setItem("userid", response.data?.data.id);
+    // localStorage.setItem("userid", response.data?.data.id);
     dispatch({
       type: "SET_USER_DATA",
       payload: response.data,
     });
-    return response;
+    // console.log(">>>>>>>>>>",response);
+    localStorage.setItem("userid", response.data?.data?.id);
+    return response.data;
   } catch (err) {
-    console.log(err, "errror login");
-    throw err;
+    console.log(err);
+    throw err
   }
 };
 
@@ -226,7 +228,7 @@ export const getOrgCategory = (data) => async (dispatch) => {
     });
     return response;
   } catch (err) {
-    console.log(err, "errror login");
+    console.log(err);
     throw err;
   }
 };
@@ -251,7 +253,7 @@ export const createProfile = (data) => async (dispatch) => {
     });
     return response;
   } catch (err) {
-    console.log(err, "errror login");
+    console.log(err);
     throw err.response.data;
   }
 };
@@ -277,7 +279,7 @@ export const uploadImage = (data) => async (dispatch) => {
     // })
     return response;
   } catch (err) {
-    console.log(err, "errror login");
+    console.log(err);
     throw err;
   }
 };
@@ -301,7 +303,7 @@ export const getCountryList = () => async (dispatch) => {
     });
     return response;
   } catch (err) {
-    console.log(err, "errror login");
+    console.log(err);
     throw err?.response?.data;
   }
 };
@@ -325,13 +327,12 @@ export const getStateList = (data) => async (dispatch) => {
     });
     return response;
   } catch (err) {
-    console.log(err, "errror login");
+    console.log(err);
     throw err.response.data;
   }
 };
 
 export const getDistrict = (data) => async (dispatch) => {
-  console.log("daaaaaaaaaaaaaaaattttttttta", data);
   try {
     const response = await axios.get(
       `https://web.uynite.com/api/user/country/getcity/${data}`,
@@ -342,7 +343,6 @@ export const getDistrict = (data) => async (dispatch) => {
         },
       }
     );
-    console.log("==========________response", response);
 
     dispatch({
       type: "GET_DISTRICT_LIST",
@@ -373,7 +373,7 @@ export const getLoksabha = (data) => async (dispatch) => {
     });
     return response;
   } catch (err) {
-    console.log(err, "errror login");
+    console.log(err);
     throw err.response.data;
   }
 };
@@ -397,7 +397,7 @@ export const getAssenbly = (data) => async (dispatch) => {
     });
     return response;
   } catch (err) {
-    console.log(err, "errror login");
+    console.log(err);
     throw err.response.data;
   }
 };
@@ -422,7 +422,7 @@ export const getLocationsList = (data) => async (dispatch) => {
     // })
     return response;
   } catch (err) {
-    console.log(err, "errror login");
+    console.log(err);
     throw err.response.data;
   }
 };
@@ -434,7 +434,7 @@ export const otpType = (typeOfOtp) => (dispatch) => {
       payload: typeOfOtp,
     });
   } catch (err) {
-    console.log(err, "errror login");
+    console.log(err);
     throw err;
   }
 };
@@ -446,7 +446,7 @@ export const savingPhoneNo = (phoneNo) => (dispatch) => {
       payload: phoneNo,
     });
   } catch (err) {
-    console.log(err, "errror login");
+    console.log(err);
     throw err;
   }
 };
@@ -458,7 +458,7 @@ export const isOtpValid = (data) => (dispatch) => {
       payload: data,
     });
   } catch (err) {
-    console.log(err, "errror login");
+    console.log(err);
     throw err;
   }
 };
@@ -470,7 +470,7 @@ export const userSingupInformation = (data) => (dispatch) => {
       payload: data,
     });
   } catch (err) {
-    console.log(err, "errror login");
+    console.log(err);
     throw err;
   }
 };

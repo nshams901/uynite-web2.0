@@ -39,7 +39,6 @@ const SignupOtp = ({ title }) => {
   const { otp, signupData, isEmailOtp, isPhoneNo, userInfo } = useSelector(
     (state) => state.authReducer
   );
-console.log("singup Data", signupData);
 
   const timerFunction = async () => {
     const dataObj = {
@@ -72,7 +71,7 @@ console.log("singup Data", signupData);
       }, 5 * 60 * 1000);
     }
   };
-console.log("userInfo,userInfo", userInfo);
+
   const onConfirmOtp = async () => {
     setIsLoading(true);
     if (otp?.length < 4) {
@@ -82,27 +81,39 @@ console.log("userInfo,userInfo", userInfo);
     if (isPhoneNo) {
       confirmationResult
         .confirm(otp)
-        .then((result) => {
-          const payload = {
-            password: userInfo.password,
+        .then( async(result) => {
+          const data = {
             datetime: Date.now().toString(),
-            uemail: userInfo.uemail
-          }
+            deviceid: uuid(),
+            password: userInfo?.password,
+            token: res,
+            uemail: userInfo?.uemail,
+          };
           dispatch(settingOtp(""));
           setState({ ...state, showModal: true });
           // User signed in successfully.
           const user = result.user;
           setIsLoading(false);
           dispatch(isOtpValid({ validOtp: true, userInfo: false }));
-          dispatch(userRegistration(payload))
-          navigate(`/auth/verification/signup?${userInfo?.profileType}`);
+
+          await dispatch(userRegistration(data)).then((res) => {
+            if(res.status){
+                navigate(`/auth/verification/signup?${userInfo?.profileType}`);
+            }else{
+              toast.error(res.message)
+            }
+          }).catch((err) => {
+            console.log(err);
+          });
         })
         .catch((error) => {
+          toast.error(error.message)
           setIsLoading(false);
+          console.log(error);
           // User couldn't sign in (bad verification code?)
         });
     }
-    if (signupData?.uemail) {
+    else if (signupData?.uemail) {
       const result = await dispatch(matchingOtp(signupData?.uemail, otp));
       if (!result?.status) {
         setIsLoading(false);
@@ -113,7 +124,7 @@ console.log("userInfo,userInfo", userInfo);
           datetime: Date.now().toString(),
           uemail: signupData.uemail
         }
-        // dispatch(userRegistration(payload))
+        dispatch(userRegistration(payload))
         // setState({ ...state, showModal: true });
         dispatch(isOtpValid({ validOtp: true, userInfo: false }));
         navigate(`/auth/verification/signup?${userInfo?.profileType}`);
@@ -127,13 +138,7 @@ console.log("userInfo,userInfo", userInfo);
           password: userInfo?.password,
           token: res,
           uemail: userInfo?.uemail,
-          // user
-          //  "umobile": "weware5007@fectode.com"
         };
-
-        console.log("getFirebaseToken", data);
-            console.log("[userInfo", userInfo);
-        await dispatch(userRegistration(data));
         setIsLoading(false);
       })
       .catch((err) => {

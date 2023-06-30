@@ -89,3 +89,28 @@ export const getTimeDiff = (startDate, endDate = new Date().getTime()) => {
     let duration = moment.duration(moment1.diff(moment2));
     return duration.humanize()
 }
+export const kicksCategory = 
+[
+    { name : 'Adventures', id : '1'},
+    { name : 'Art & craft', id : '2'},
+    { name : 'Beauty tips', id : '3'},
+    { name : 'Comedy', id : '4'},
+    { name : 'Cooking', id : '5'},
+    { name : 'Dance', id : '6'},
+    { name : 'Devotional', id : '7'},
+    { name : 'Education', id : '8'},
+    { name : 'Fashion', id : '9'},
+    { name : 'Fitness', id : '10'},
+    { name : 'General', id : '11'},
+    { name : 'Health tips', id : '12'},
+    { name : 'Home decors/design', id : '13'},
+    { name : 'Others', id : '14'},
+    { name : 'Pet/animals/birds', id : '15'},
+    { name : 'Science & technology', id : '16'},
+    { name : 'Singing', id : '17'},
+    { name : 'Sports', id : '18'},
+    { name : 'Travel', id : '19'},
+]
+export const getCategory = (id) => {
+    return kicksCategory.find((item) => item.id === id)
+}
