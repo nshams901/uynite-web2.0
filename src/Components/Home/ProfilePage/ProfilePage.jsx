@@ -50,6 +50,7 @@ const ProfilePage = ({ isOthers }) => {
   const [state, setState ] = useState({})
   const { coverImg, profileImg, showEditModal} = state
   useEffect(() => {
+    window.scrollTo(0, 0)
      isPersonal ? getEducation(): '';
 
      isOther ? dispatch(getFriendProfile(user?.id)).then((res) => {

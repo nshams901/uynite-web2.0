@@ -34,6 +34,8 @@ import { blockUser } from "../../../../redux/actionCreators/settingsActionCreato
 import kicksLiked from '../../../../Assets/Images/kicksLike.png'
 import { useNavigate } from "react-router-dom";
 import follow from '../../../../Assets/Images/Kicks Follow.png'
+import LikeModal from "../../Modal/LikeModal/LikeModal";
+import Portals from "../../../Portals/Portals";
 const VideoComponent = ({ dataList, data, handleMute, isMute }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
@@ -76,7 +78,7 @@ const VideoComponent = ({ dataList, data, handleMute, isMute }) => {
     }
   };
   const [state, setState] = useState({});
-  const { createKickPost } = state;
+  const { createKickPost, likeModal } = state;
   const {
     id,
     commentcount = "",
@@ -98,7 +100,7 @@ const VideoComponent = ({ dataList, data, handleMute, isMute }) => {
     utcategoryid,
     isFollow,
     postdatetime,
-    likeid
+    likeid,
   } = data;
   
   const name = profile?.fname + profile?.lname;
@@ -297,7 +299,17 @@ const VideoComponent = ({ dataList, data, handleMute, isMute }) => {
     elem.forEach((element) => {
       observer.observe(element)
     })
-  }, [])
+  }, []);
+
+  const handleLikeModal = (e) => {
+    console.log("CLIKEDDDDDDDD");
+    dispatch({
+      type: 'ACTIVE_POST',
+      payload: data
+    })
+    e.stopPropagation();
+    setState({ ...state, likeModal: true})
+  }
 
   // const handlePlay = (res) => {
   //   // console.log(res, data, 'LLLLLLLLLL');
@@ -369,7 +381,7 @@ const VideoComponent = ({ dataList, data, handleMute, isMute }) => {
 
                     <div className="text-[12px] ml-3">
                       {elem?.title === "likes"
-                        ? `${likecount}`
+                        ? <span className="cursor-pointer" onClick={ handleLikeModal }>{likecount}</span>
                         : elem?.title === "comments"
                         ? `${commentcount}`
                         : ""}
@@ -445,7 +457,12 @@ const VideoComponent = ({ dataList, data, handleMute, isMute }) => {
       {commentVideo && (
         <VideoCommentsModal onClose={() => setCommentVideo(false)} />
       )}
-
+        
+      {likeModal && (
+        <Portals closeModal={() => setState({ ...state, likeModal: false})} >
+          <LikeModal kicks closeLikeModal={() => setState({ ...state, likeModal: false})} />
+        </Portals>
+      )}
       {createKickPost && (
         <SelectedVideoModal
           selectedVideo={selectedVideo}

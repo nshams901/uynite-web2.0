@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Footer from "./Components/Footer/Footer";
 import Home from "./Components/Home/Home";
-import { Routes, Route, useActionData } from "react-router-dom";
+import { Routes, Route, useActionData, useNavigate } from "react-router-dom";
 import LoginPage from "./Components/Login/LoginPage";
 import Signup from "./Components/Login/Content/Signup/Signup";
 import Login from "./Components/Login/Content/Login/Login";
@@ -62,14 +62,17 @@ const App = () => {
   axios.defaults.headers.common["Content-Type"] = "application-json";
   axios.defaults.headers.common["Accept-Language"] = "en";
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const { isOtpValid, userInfo } = useSelector(
     (state) => state.authReducer
   );
-  let userData = localStorage.getItem("userCredential");
-  userData = JSON.parse(userData);
+  let userCredential = localStorage.getItem("userCredential");
+  let userData = JSON.parse(userCredential);
 
   const isUserLoggedIn = () => {
-    if (userData === null) {
+    if (userCredential === null) {
+        localStorage.clear();
+        navigate("/auth/login");
       dispatch(settingUserLoginData(false, {}));
     } else {
       const token = localStorage.getItem("token");

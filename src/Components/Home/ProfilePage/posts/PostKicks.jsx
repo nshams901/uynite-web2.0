@@ -24,6 +24,7 @@ const PostKicks = ({ isOther }) => {
             src={item?.image}
             alt=""
             className="w-[250px] cursor-pointer h-[300px] rounded-lg object-cover"
+            onClick={() => navigate(`/user/videos/${params.id}`)}
           />
           :
           <video src={item.video} className='hover:cursor-pointer' onClick={() => navigate(`/user/videos/${params.id}`)}></video>

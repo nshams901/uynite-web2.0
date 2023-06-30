@@ -77,6 +77,7 @@ const Navbar = () => {
   };
 
   const onClickSlectedTab = (option) => {
+    window.scrollTo(0, 0)
     dispatch(isTabSelected(option?.url));
     navigate(option.url);
   };
@@ -109,7 +110,9 @@ const Navbar = () => {
         {/* Logo Section */}
 
         <Link to="/root" className="w-[50px] mx-2 sm:mx-[14px] ml-5 lg:ml-0">
-          <img
+          <img onClick={() => {
+            console.log("JJJJJJJ FFFFFFFF")
+          }}
             src={Logo}
             alt=""
             className="w-[30px] h-[30px] lg:w-[52px] lg:h-[52px] "
@@ -157,7 +160,7 @@ const Navbar = () => {
                 onClick={() => onClickSlectedTab(elem)}
               >
                 <div
-                  className={`h-full flex items-center justify-center ${
+                  className={`h-full flex cursor-pointer items-center justify-center ${
                     isMobile ? "w-full text-center pt-1" : "w-[35px]"
                   }`}
                 >
