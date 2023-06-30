@@ -16,6 +16,7 @@ import ItemList from "../../common/ItemList";
 import { debounce } from "../../Utility/utility";
 import ProfileMenu from "./ProfileMenu";
 import MenuDropdown from "../../common/MenuDropdown";
+import GlobalSearch from "./GlobalSearch";
 
 const Navbar = () => {
   const [profileModal, setProfileModal] = useState(false);
@@ -77,6 +78,7 @@ const Navbar = () => {
   };
 
   const onClickSlectedTab = (option) => {
+    window.scrollTo(0, 0)
     dispatch(isTabSelected(option?.url));
     navigate(option.url);
   };
@@ -117,7 +119,7 @@ const Navbar = () => {
         </Link>
 
         {/* Search Bar Section */}
-        <div className="hidden lg:flex w-[80%] h-[38px] rounded-xl items-center justify-center gap-2 border-[1px] border-[#C8C8C8] ">
+        <div className="hidden relative lg:flex w-[80%] h-[38px] rounded-xl items-center justify-center gap-2 border-[1px] border-[#C8C8C8] ">
           <input
             value={searchInput}
             type="text"
@@ -131,17 +133,7 @@ const Navbar = () => {
             className="w-5 h-5 cursor-pointer"
           />
           {searchInput && (
-            <div className="bg-white h-[400px] overflow-y-scroll overflow-x-hidden">
-              {usersList?.map((item) => {
-                return (
-                  <ItemList
-                    user
-                    item={item}
-                    handleListItem={() => handleListItem(item)}
-                  />
-                );
-              })}
-            </div>
+            <GlobalSearch data= { usersList } handleListItem={ handleListItem }/>
           )}
         </div>
       </div>
@@ -157,7 +149,7 @@ const Navbar = () => {
                 onClick={() => onClickSlectedTab(elem)}
               >
                 <div
-                  className={`h-full flex items-center justify-center ${
+                  className={`h-full flex cursor-pointer items-center justify-center ${
                     isMobile ? "w-full text-center pt-1" : "w-[35px]"
                   }`}
                 >

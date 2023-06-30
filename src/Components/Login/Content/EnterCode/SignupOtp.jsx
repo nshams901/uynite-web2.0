@@ -78,7 +78,7 @@ const SignupOtp = ({ title }) => {
       setIsLoading(false);
       return;
     }
-    if (isPhoneNo) {
+    if (phoneNumberRules.test(signupData?.uemail)) {
       confirmationResult
         .confirm(otp)
         .then( async(result) => {

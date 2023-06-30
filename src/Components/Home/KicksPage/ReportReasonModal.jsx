@@ -17,7 +17,7 @@ const ReportReasonModal = ({ onClose, reportPost, otherModal }) => {
             </div>
           </div>
           :
-          <div className='w-[40%] flex flex-col  p-4 bg-white ml-[9%] mt-[4%] rounded-2xl'>
+          <div className='w-[40%] xl:w-1/4 flex flex-col  p-4 bg-white ml-[9%] mt-[4%] rounded-2xl'>
             <p className='py-3 text-[18px] font-bold flex justify-center'>Report Post</p>
             <p className='my-3 text-center flex justify-center text-[#0ea5e9] font-bold'>Still Do you want to Report this post?</p>
 

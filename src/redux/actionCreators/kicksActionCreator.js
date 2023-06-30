@@ -209,10 +209,26 @@ export const addCommentReplyOnKicks = (commentReplyDetails) => async (dispatch) 
 
 
 
-export const deletePostLike = (data) => async (dispatch) => {
+export const deletePostLike = (data, likeid) => async (dispatch) => {
   try {
     const response = await axios.delete(
-      `https://web.uynite.com/instance/api/instancelike/dislike/${data}`,
+      `https://web.uynite.com/instance/api/instancelike/dislike/${data}/${likeid}`,
+    );
+    dispatch({
+      type: "",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getKicksLike = (likeid) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `https://web.uynite.com/instance/api/instancelike/${likeid}`,
     );
     dispatch({
       type: "",
@@ -343,6 +359,24 @@ export const commentDisliked = (data) => async (dispatch) => {
   try {
     const response = await axios.delete(
       `https://web.uynite.com/post/api/like/dislike/${profileid}/${likeid}`
+    );
+    dispatch({
+      type: "COMMENT_DISLIKED",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const kicksCommentDisliked = (data) => async (dispatch) => {
+  // http://3.233.82.34:8080/post/api/like/dislike/profileid/likeid
+  const { profileid, id} = data
+  try {
+    const response = await axios.delete(
+      `https://web.uynite.com/instance/api/instancelike/dislike/${profileid}/${id}`
     );
     dispatch({
       type: "COMMENT_DISLIKED",
