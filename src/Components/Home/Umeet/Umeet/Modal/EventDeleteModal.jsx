@@ -8,22 +8,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify';
 import axios from 'axios'
 
-const EventDeleteModal = ({ onClose }) => {
+const EventDeleteModal = ({ onClose, deleteId }) => {
   const [eventmessage, setEventmessage] = useState('')
-
+  
   const dispatch = useDispatch() 
-  const { umeetReducer } = useSelector(state=>state)
-
-  const deleteData = {
-    "id": umeetReducer.eventDetail ? umeetReducer?.eventDetail?.id : null,
-    "eventstatusmessage": eventmessage
-  }  
+  const { umeetReducer } = useSelector(state=>state)   
 
   const handleCancelEvent = async()=>{
     try{
       const { data } = await axios.post(
         `https://web.uynite.com/event/api/event/admin/cancelevent`,
-        deleteData
+        {
+          "id": deleteId ? deleteId : null,
+          "eventstatusmessage": eventmessage
+        }
       )
       if(data?.status){
         toast.success('Event deleted sucessfully!')

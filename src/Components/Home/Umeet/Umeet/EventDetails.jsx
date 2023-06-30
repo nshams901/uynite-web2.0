@@ -33,7 +33,7 @@ const responsive = {
 const EventDetails = ({
   myEvent, handleEditEvent,
   handleShareEvent, handleRvspModal, singleEvent,
-  handleFeedbacks }) => {
+  handleFeedbacks, setDeleteId, deleteId }) => {
   const [details, setDetails] = useState(true);
   const [guests, setGuests] = useState(false);
   const [chat, setChat] = useState(false);
@@ -93,6 +93,8 @@ const EventDetails = ({
           handleFeedbacks={handleFeedbacks}
           eventDetail={eventDetail}
           guestsList={guestsList}
+          setDeleteId={setDeleteId}
+          deleteId={deleteId}
         />)
     }else if(guests){
      return <EventGuests guestsList={guestsList} NoOfGuests={NoOfGuests} NoOfResponed={NoOfResponed} />;

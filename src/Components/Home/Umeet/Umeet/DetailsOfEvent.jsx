@@ -6,7 +6,7 @@ import EventDeleteModal from './Modal/EventDeleteModal'
 
 export default function DetailsOfEvent({ myEvent,
  handleEditEvent, handleShareEvent, handleFeedbacks, eventDetail, 
- guestsList, NoOfGuests, NoOfResponed }){
+ guestsList, NoOfGuests, NoOfResponed, setDeleteId, deleteId }){
 
    const [personal, setPersonal] = useState(true)
    const [publics, setPublics] = useState(false)
@@ -17,9 +17,10 @@ export default function DetailsOfEvent({ myEvent,
    const [showDeleteMyEvent, setShowDeleteMyEvent] = useState(false)
 
    const { umeetReducer } = useSelector(state=>state)
-   
+   console.log(umeetReducer?.eventDetail?.id)
    const handleDeleteEvent = ()=>{
-      setShowDeleteMyEvent(true)
+      setDeleteId(umeetReducer?.eventDetail?.id)
+      setShowDeleteMyEvent(true)      
    }
     
    const handleFeedback = ()=>{
@@ -174,7 +175,8 @@ export default function DetailsOfEvent({ myEvent,
       </div>
      {showDeleteMyEvent && 
       <EventDeleteModal 
-       onClose={()=>setShowDeleteMyEvent(false)} 
+       onClose={()=>setShowDeleteMyEvent(false)}
+       deleteId={deleteId}
       />
      }
      </div>
