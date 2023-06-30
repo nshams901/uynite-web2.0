@@ -58,7 +58,7 @@ export const cancelEvent = (data) => async (dispatch) => {
       data
     );
     dispatch({
-      type: "",
+      type: "CANCEL_EVENT",
       payload: response.data,
     });
     console.log(response.data, "deleted event");

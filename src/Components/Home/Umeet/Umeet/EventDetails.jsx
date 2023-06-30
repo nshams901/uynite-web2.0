@@ -31,7 +31,7 @@ const responsive = {
 };
 
 const EventDetails = ({
-  myEvent, handleDeleteEvent, handleEditEvent,
+  myEvent, handleEditEvent,
   handleShareEvent, handleRvspModal, singleEvent,
   handleFeedbacks }) => {
   const [details, setDetails] = useState(true);
@@ -88,7 +88,6 @@ const EventDetails = ({
           myEvent={myEvent}
           NoOfGuests={NoOfGuests}
           NoOfResponed={NoOfResponed}
-          handleDeleteEvent={handleDeleteEvent}
           handleEditEvent={handleEditEvent}
           handleShareEvent={handleShareEvent}
           handleFeedbacks={handleFeedbacks}
