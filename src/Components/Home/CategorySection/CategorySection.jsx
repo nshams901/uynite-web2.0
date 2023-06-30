@@ -1,13 +1,8 @@
 import React, { useState } from "react";
 
-const CatergorySection = ({selectedOption,setSelectedOption}) => {
+const CatergorySection = ({selectedOption,setSelectedOption, data}) => {
  
-  const data = [
-    { title: "Posts" },
-    { title: "Photos" },
-    { title: "Videos" },
-    { title: "Kicks" },
-  ];
+
   return (
     <div className="flex-1 mx-3 bg-white flex justify-around py-2 mt-2 ml-1 rounded-xl">
       {data?.map((elem) => (

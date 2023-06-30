@@ -24,7 +24,12 @@ import moment from "moment";
 import { getUserPostList, imageUploadApi } from "../../../redux/actionCreators/rootsActionCreator";
 import { getPrivacyDetail } from "../../../redux/actionCreators/profileAction"
 import { AiOutlineEyeInvisible } from 'react-icons/ai'
-
+const data = [
+  { title: "Posts" },
+  { title: "Photos" },
+  { title: "Videos" },
+  { title: "Kicks" },
+];
 const ProfilePage = ({ isOthers }) => {
   const [selectedOption, setSelectedOption] = useState("Posts");
   const [privacyType, setPrivacyType] = useState('Public')
@@ -56,7 +61,6 @@ const ProfilePage = ({ isOthers }) => {
   const isFriend = myFriendsList?.some(data => data?.friend?.friendprofileid == params?.id);
 
 
-console.log(isFriend)
   const isPersonal = isOther ? friendDetail?.profiletype === 'Personal' : profile?.profiletype === "Personal";
   const [state, setState ] = useState({})
   const { coverImg, profileImg, showEditModal} = state
@@ -151,6 +155,7 @@ console.log(isFriend)
         {/* Category Section */}
         <section className="w-full sm:w-[90%] flex items-center justify-between">
           <CategorySection
+          data={data}
             selectedOption={selectedOption}
             setSelectedOption={setSelectedOption}
           />

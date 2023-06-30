@@ -33,6 +33,9 @@ import alreadyFrnd from '../../../../Assets/Images/acceptFriendRequest.png';
 import addFrnd from '../../../../Assets/Images/SendFriendRequest.png'
 import moment from "moment";
 import { useParams } from "react-router"
+import ConfirmationModal from "../../../common/ConfirmationModal";
+import { useMemo } from "react";
+import ChangeRelationshipModal from "../../Modal/ChangeRelationshipModal/ChangeRelationshipModal";
 
 const ProfileImageSection = ({
   isOther,
@@ -49,17 +52,19 @@ const ProfileImageSection = ({
   const followersCount = followers?.length || 0;
   const { profile }  = useSelector((state) => state.profileReducer );
   const { friendProfileId }  = useSelector((state) => state.friendReducer );
+  const { myUnionList: unionList } = useSelector((state) => state.unionReducer)
 
   const userName = data?.fname + data?.lname;
 
   const [state, setState] = useState({});
-  const { showModal, modalName, modalData, coverImgModal, profileImgModal, profileImg, coverImg, isFriends } = state;
+  const { showModal, modalName, modalData, coverImgModal, confirmationModal,
+    profileImgModal, profileImg, coverImg, isFriends, handleAddFriendModal, relationOptions,
+   } = state;
   const dispatch = useDispatch();
   const params = useParams();
 
   const handleModal = async (name) => {
     if (name === "Friends") {
-      console.log('handle ma')
       dispatch(updateFriendProfileId(params?.id))
       navigate('/myfriend')
     } else if (name === "Followers") {
@@ -164,7 +169,7 @@ const ProfileImageSection = ({
     }
     setState({ ...state, coverImgModal: false, profileImgModal: false })
   }
-
+console.log(relationOptions, "KKKKKKK");
   const handleCreatePost = (img, isProfile) => {
     const payload = {
       shareto: '',
@@ -222,6 +227,101 @@ const ProfileImageSection = ({
     });
   }
 
+  const addFollowing = () => {
+    const payloads = {
+      myprofileid: profile?.id,
+      followerprofileid: id,
+      datetimes: new Date().getTime(),
+    };
+    dispatch(startFollowing(payloads)).then((res) => {
+      setState({ ...state, confirmationModal: false})
+    })
+  }
+
+  
+  const options = useMemo(async () => {
+    const union = unionList.map((item) => ({
+      name: item.groupName,
+      key: item.groupId,
+      union: true
+    }));
+
+    const forPersonalAcc = [
+      { name: "Friends", key: "friend", checked: true, disable: true },
+      { name: "Relative", key: "relative", checked: false },
+      { name: "Classmate", key: "classmate", checked: false },
+      { name: "Officemate", key: "officemate", checked: false },
+      ...union,
+    ];
+    const forOrgAcc = [
+      { name: "Friend", key: "friend", checked: true, disable: true },
+      ...union,
+    ];
+    setState({ ...state, relationOptions: isPersonal ? forPersonalAcc : forOrgAcc })
+  }, [unionList]);
+
+  
+  const handleRelation = (e) => {
+    const name = e.target.name;
+    const value = e.target.checked;
+    // console.log(name, value);
+    const selected = relationOptions.map((item) => {
+      return item?.name === name ? { ...item, checked: value } : item;
+    });
+    setState({ ...state, relationOptions: selected });
+  };
+
+  const handleSendRequest = () => {
+    const { id, fname, lname } = profile || {};
+    const payloads = {
+      myprofileid: profile?.id,
+      followerprofileid: id,
+      datetimes: new Date().getTime(),
+    };
+    dispatch(startFollowing(payloads));
+    const relationData = relationOptions.flatMap((item) =>
+      item.checked ? item.key : false
+    );
+    const userCredential = JSON.parse(localStorage.getItem('userCredential'));
+    const group = relationOptions?.filter((item) => item.union);
+
+    let payload = {
+      id: profile?.id,
+      fname: fname,
+      lname: lname,
+      friendprofileid: data.id,
+      friendtype: "Friend",
+      profileid: profile?.id,
+      requesttype: "Send",
+
+      classment: relationData.includes("classmate"),
+      collgues: relationData.includes("officemate"),
+      relative: relationData.includes("relative"),
+
+      isFriend: true,
+      party: "",
+      groupsUpdate: group?.map((item) => (
+        {
+          groupId: item.key,
+          groupName: item.name,
+          isAdd: !!item.checked,
+          isRemove: false,
+          profileid: data.id
+        }
+      )),
+      userid: userCredential.id,
+      reqdatetime: new Date().getTime(),
+    };
+    dispatch(addFriend(payload)).then((res) => {
+      if (res.status) {
+        toast.success(res?.message);
+        setState({ ...state, handleAddFriendModal: false });
+      } else {
+        toast.error(res?.message);
+      }
+    });
+  };
+
   return (
     <div className="w-[95%] lg:w-[80%] xl:w-[70%] bg-white rounded-xl flex flex-col items-center mb-3">
       {/*Cover Image Section */}
@@ -259,12 +359,12 @@ const ProfileImageSection = ({
 
             <section
               className=" flex flex-col w-[40%] sm:w-[45%] items-center cursor-pointer"
-              onClick={() => handleModal("Friends")}
+              onClick={() => !isOther && handleModal("Friends")}
             >
             {
               data?.isFriend ? 
               <img className="w-6 h-6" src={ alreadyFrnd }/>
-              : <img onClick={() => handleAddFriend()} className="w-6 h-6" src={ addFrnd }/>
+              : <img onClick={() => setState({ ...state, handleAddFriendModal: true})} className="w-6 h-6" src={ addFrnd }/>
             }
               <Typography variant='small' >Friends</Typography>
               <span className="w-[90%] text-center sm:w-[97%] font-bold text-[7px] sm:text-[9px] xl:text-[11px] my-1 py-[1px] bg-gray-300 px-4  rounded-md">
@@ -289,14 +389,17 @@ const ProfileImageSection = ({
 
           <section
             className=" flex flex-col w-[40%] sm:w-[45%] items-center cursor-pointer"
-            onClick={() => handleModal("Followers")}
+            
           >
             <FaWalking
               alt=""
               className="w-6 h-6 sm:w-7 sm:h-7 text-[#7991bd] py-0.5"
+              onClick={ () =>setState({ ...state, confirmationModal: true}) }
             />
             <Typography variant='small' >Followers</Typography>
-            <span className="text-center w-[90%] sm:w-[97%] font-bold text-[7px] sm:text-[9px] xl:text-[11px] my-1 py-[1px] bg-gray-300 px-3 sm:px-4 rounded-md">
+            <span
+            onClick={() => handleModal("Followers")} 
+            className="text-center w-[90%] sm:w-[97%] font-bold text-[7px] sm:text-[9px] xl:text-[11px] my-1 py-[1px] bg-gray-300 px-3 sm:px-4 rounded-md">
               {followersCount}
             </span>
           </section>
@@ -358,8 +461,33 @@ const ProfileImageSection = ({
           />
         </Portals>
       }
+      {
+        confirmationModal &&
+        <Portals>
+          <ConfirmationModal
+            message={'Do you want to follow ?'}
+            button={'Yes'}
+            closeModal={() => setState({ ...state, confirmationModal: false})}
+            handleAccept={ addFollowing }
+          />
+        </Portals>
+      }
+      
+        { handleAddFriendModal && (
+        <Portals closeModal={() => setState({ ...state, handleAddFriendModal: false})}>
+          <ChangeRelationshipModal
+            relationOption={relationOptions}
+            handleRelation={handleRelation}
+            handleSendRequest={handleSendRequest}
+            button="Send Request"
+            title="Wanna send Friend Request"
+            closeModalOption={() => setState({ ...state, handleAddFriendModal: false})}
+          />
+        </Portals>
+      )}
+
     </div>
-  );
+);
 };
 
 export default ProfileImageSection;
