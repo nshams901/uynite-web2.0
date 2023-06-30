@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import EventResultContentBox from "./EventResultContentBox";
-import Portals from "../Portals/Portals";
+import { useSelector } from "react-redux";
 
 const EventResultsPage = () => {
+  const { eventsResultList } = useSelector((state) => state.eventReducer);
+
+  console.log("eventsResultList", eventsResultList);
   const [openDropdown, setOpenDropdown] = useState({
     fashionShow: false,
     dressContest: false,
