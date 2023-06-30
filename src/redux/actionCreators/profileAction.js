@@ -178,16 +178,16 @@ export const checkFriend = (data) => async (dispatch) => {
   }
 };
 
-export const getPrivacyDetail = (data) => async (dispatch) => {
+export const getPrivacyDetail = (data) => async (dispatch) => { 
   const othersId = data;
   try {
     const response = await axios.get(
       `https://web.uynite.com/profile/api/profile/privacy/${othersId}`
     );
-    console.log(response);
+    console.log(response?.data, 'P R I V A C Y TYPE');
     dispatch({
-      type: "",
-      payload: response.data,
+      type: "GET_PRIVACY_DETAILS",
+      payload: response?.data?.data,
     });
   } catch (error) {
     throw error;

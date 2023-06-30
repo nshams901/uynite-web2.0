@@ -58,7 +58,7 @@ export const cancelEvent = (data) => async (dispatch) => {
       data
     );
     dispatch({
-      type: "",
+      type: "CANCEL_EVENT",
       payload: response.data,
     });
     console.log(response.data, "deleted event");
@@ -535,6 +535,22 @@ export const getStatesByCountry = (countryCode) => async (dispatch) => {
        {headers: { Authorization: `Bearer ${token}` }}
     );
     console.log(response.data, "states dude");
+    dispatch({
+      type: "GET_STATES_BY_COUNTRY",
+      payload: response?.data?.data,
+    });
+  } catch (error) {
+    throw error;
+  }
+}; 
+
+export const getEventFeedbacks = () => async (dispatch) => {
+  try {
+    const response = await axios.get(
+       `https://web.uynite.com/event/api/event/fetch/feedback`,
+       {headers: { Authorization: `Bearer ${token}` }}
+    );
+    console.log(response.data, "feedbacks");
     dispatch({
       type: "GET_STATES_BY_COUNTRY",
       payload: response?.data?.data,

@@ -37,7 +37,6 @@ setInvitesEmail,  }) => {
 
   const emailData = `${email.mail}@${email.extension}`
 
-  console.log(code)
   const handleEmailAdd = async ()=>{
     if(!email.mail || !email.extension){
       toast.error('Enter valid email')

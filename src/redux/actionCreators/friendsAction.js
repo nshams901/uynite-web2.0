@@ -131,6 +131,22 @@ export const getFriendsList = (data) => async (dispatch) => {
   }
 };
 
+export const getOwnFriendsList = (data) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `https://web.uynite.com/friend/api/friend/${data}/Accepted`
+    );
+    console.log('my friends bro', response?.data)
+    dispatch({
+      type: "MY_FRIEND_LIST",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // export const getRequestList = (data) => async (dispatch) => {
 //   try {
 //     const response = await axios.get(
@@ -304,6 +320,19 @@ export const checkFriends = (userprofile, friendprofile) => async (dispatch) => 
       payload: response.data,
     });
     return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const updateFriendProfileId = (data) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "SET_FRIEND_PROFILE",
+      payload: data,
+    });
+    return data;
   } catch (error) {
     throw error;
   }

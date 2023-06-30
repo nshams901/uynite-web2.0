@@ -2,21 +2,27 @@ import navigation from '../../../../Assets/Images/Umeet/Umeet-Main/Umeet navigat
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
+import EventDeleteModal from './Modal/EventDeleteModal'
 
-export default function DetailsOfEvent({ myEvent, handleDeleteEvent,
+export default function DetailsOfEvent({ myEvent,
  handleEditEvent, handleShareEvent, handleFeedbacks, eventDetail, 
  guestsList, NoOfGuests, NoOfResponed }){
 
-    const [personal, setPersonal] = useState(true)
-    const [publics, setPublics] = useState(false)
-    const [political, setPolitical] = useState(false)
-    const [online, setOnline] = useState(false)
-    const [politicalPartyFeedback, setPoliticalPartyFeedback] = useState(false)
-    const [isPoliticalPartyFeedback, setIsPoliticalPartyFeedback] = useState(false)
+   const [personal, setPersonal] = useState(true)
+   const [publics, setPublics] = useState(false)
+   const [political, setPolitical] = useState(false)
+   const [online, setOnline] = useState(false)
+   const [politicalPartyFeedback, setPoliticalPartyFeedback] = useState(false)
+   const [isPoliticalPartyFeedback, setIsPoliticalPartyFeedback] = useState(false)
+   const [showDeleteMyEvent, setShowDeleteMyEvent] = useState(false)
 
-    const { umeetReducer } = useSelector(state=>state)
-
-    const handleFeedback = ()=>{
+   const { umeetReducer } = useSelector(state=>state)
+   
+   const handleDeleteEvent = ()=>{
+      setShowDeleteMyEvent(true)
+   }
+    
+   const handleFeedback = ()=>{
      setIsPoliticalPartyFeedback(true)
     }
 
@@ -166,7 +172,11 @@ export default function DetailsOfEvent({ myEvent, handleDeleteEvent,
       }
        <button onClick={handleShareEvent} className='py-1 w-40 my-1.5 px-4 rounded text-[#649B8E] border border-[#649B8E]'>Share Invitation</button>
       </div>
-
+     {showDeleteMyEvent && 
+      <EventDeleteModal 
+       onClose={()=>setShowDeleteMyEvent(false)} 
+      />
+     }
      </div>
     )
 }

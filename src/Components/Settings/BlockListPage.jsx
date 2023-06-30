@@ -16,13 +16,14 @@ const BlockListPage = () => {
   const [unblockModal, setUnBlockModal] = useState(false);
   const [state, setState] = useState({});
   const { blockedUser } = state;
-  const { profile } = useSelector((state) => state.profileReducer);
+  const { profile, blockedUsers } = useSelector((state) => state.profileReducer);
   const { friendBlockList, searchBlockedFriend } = useSelector(
     (state) => state.settingReducer
   );
   console.log("searchBlockedFriend", searchBlockedFriend);
+  console.log(blockedUsers)
   useEffect(() => {
-    dispatch(getBlockedUser()).then((res) => {
+    dispatch(getBlockedUser(profile?.id)).then((res) => {
       if (res?.status) {
         setState({ ...state, blockedUser: res?.data });
       }
@@ -61,21 +62,21 @@ const BlockListPage = () => {
         />
 
         <div className="flex flex-col gap-3 overflow-y-scroll pb-2 ">
-          {friendBlockList?.length ? (
-            friendBlockList?.map((elem) => (
+          {blockedUsers?.length ? (
+            blockedUsers?.map((elem) => (
               <div className="flex gap-2" key={elem?.friend?.id}>
                 <div className="flex-1 flex items-center gap-2">
                   <img
                     src={
-                      elem?.profile?.pimage
+                      elem?.pimage
                         ? elem?.profile?.pimage
                         : "./images/events.jpg"
                     }
                     alt=""
-                    className="w-[35px] h-[35px] sm:w-[45px] sm:h-[45px] rounded-full"
+                    className="w-[35px] h-[35px] sm:w-[45px] sm:h-[45px] rounded-full object-cover"
                   />
                   <span className="text-[10px] sm:text-xs lg:text-sm font-bold">
-                    {elem?.profile?.fname}
+                    {elem?.fname}
                   </span>
                 </div>
                 <button

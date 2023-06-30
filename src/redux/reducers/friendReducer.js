@@ -2,7 +2,9 @@ const initialState = {
   usersList: [],
   requestList: [],
   friends: [],
-  mutualFriends: []
+  mutualFriends: [],
+  myFriendsList: [],
+  friendProfileId: null,
 };
 
 const  friendReducer= (state = initialState, action) => {
@@ -17,6 +19,11 @@ const  friendReducer= (state = initialState, action) => {
       return { ...state, friends: action.payload.data };
     case "GET_MUTUAL_FRIEND":
       return { ...state, mutualFriends: action.payload.data };
+    case "MY_FRIEND_LIST":
+      return { ...state, myFriendsList: action.payload.data };
+    case "SET_FRIEND_PROFILE":
+      console.log(action.payload, 'okkkkkkkkkkkkkkk')
+      return { ...state, friendProfileId: action.payload };
     default:
       return state;
   }
