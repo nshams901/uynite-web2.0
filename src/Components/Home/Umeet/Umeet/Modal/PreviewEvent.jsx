@@ -4,6 +4,9 @@ import navigation from '../../../../../Assets/Images/Umeet/Umeet-Main/Umeet navi
 export default function PreviewEvent({ onClose, selectedSpecificEvent,
  selectedImage, formState, profileReducer, eventMode, inputValue, code, 
  selectedQualification, isVeg, }){
+ 
+ const options = { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric", hour12: true }
+
  return (
   <section className='absolut z-20 fixed top-0 left-0 h-full w-full flex justify-center items-center' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
     <div className="w-[96%] md:w-[55%] lg:w-[45%] xl:w-[40%] h-[96%] bg-white rounded-xl p-3">
@@ -22,7 +25,19 @@ export default function PreviewEvent({ onClose, selectedSpecificEvent,
         </div>
         </section>
         <section className={`${selectedQualification ? 'h-[85%]' : 'h-[92%]'} mt-1 overflow-y-scroll`}>
-         <img src={selectedImage} alt="Selected" className='w-full h-[300px] rounded-xl object-cover' />
+         <div className='flex justify-center items-center'>
+         <div className='relative '>
+          <img src={selectedImage} alt="Selected" className='w-ful h-[400px] rounded-xl object-cover' />
+          <div class={`${selectedImage?.includes('localhost') ? 'hidden' : ''} absolute inset-0 flex justify-center items-center`}>
+            <div className='w-1/2 flex flex-col justify-center items-center'>
+              <div className='py-0.5'>{formState?.eventName}</div>
+              <div className='py-0.5'>Hosted By: <span className='font-semibold'>{profileReducer?.profile?.fname}</span></div>
+              <div className='py-0.5'>{`${(formState?.eventdateAndTime !== '') ? new Date(formState?.eventdateAndTime).toLocaleString("en-US", options) : 'start date'} - ${(formState?.eventEndDate !== '') ? new Date(formState?.eventEndDate).toLocaleString("en-US", options) : 'end date'}`}</div>
+              <div className='py-0.5'>{formState?.eventAddress}</div>
+            </div>
+           </div>
+          </div>
+          </div>
          <div className='flex my-2'>
 	        <span className='w-1/3'>Hostedt BY</span>
 	        <span className='w-2/3'>:<span className='ml-3 font-semibold'>{profileReducer.profile.fname}</span></span>

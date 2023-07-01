@@ -122,7 +122,7 @@ export default function DetailsOfEvent({ myEvent,
        {online ? (
        <div className={`${politicalPartyFeedback ? 'hidden' : ''} flex mb-3`}>
         <div className='w-1/3'>Online</div>
-        <div className='w-2/3 flex text-[#649B8E]'>:<div className='ml-3 font-bold cursor-pointer'>www.uynite.com</div></div>        
+        <div className='w-2/3 flex text-[#649B8E]'>:<div className='ml-3 font-bold cursor-pointer'><a href={eventDetail?.eventAddress} target='_blank' rel="noreferrer">{eventDetail?.eventAddress}</a></div></div>        
        </div> ) : (
        <div className={`${politicalPartyFeedback ? 'hidden' : ''} flex mb-3`}>
         <div className='w-1/3'>Location</div>
@@ -130,7 +130,7 @@ export default function DetailsOfEvent({ myEvent,
        </div>
        )}
 
-       {(political || publics || politicalPartyFeedback) && (<>
+      
        <div className='flex mb-3'>        
         <span className='w-1/3'>Start Date & Time</span>
         <div className='flex flex-col w-2/3'>
@@ -144,9 +144,9 @@ export default function DetailsOfEvent({ myEvent,
          <span className={`${politicalPartyFeedback ? 'hidden' : ''} text-[#649B8E] ml-3 font-semibold cursor-pointer`}>Add to calender</span>
         </div>        
        </div>
-        </>)}      
+             
 
-       {personal && (
+       {/*personal && (
         <div className={`${politicalPartyFeedback ? 'hidden' : ''} flex mb-3`}>        
          <span className='w-1/3'>Date & Time</span>
          <div className='flex flex-col w-2/3'>
@@ -154,7 +154,7 @@ export default function DetailsOfEvent({ myEvent,
           <span className='text-[#649B8E] ml-3 font-semibold cursor-pointer'>Add to calender</span>
          </div>        
         </div>
-        )}
+        )*/}
 
        <div className='flex pb-4 border-b-2 border-gray-300'>
         <span className='w-1/3'>About</span>

@@ -24,32 +24,37 @@ const PersonalOtherGuest = ({ onClose, handleAddByContactModal }) => {
   const [relativesDataList, setRelativesDataList] = useState([])
   const [officematesDataList, setOfficematesDataList] = useState([])
 
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState([])
+
   const handleSelected = (select)=>{
     setSelectedBy(select)
   }
-
+ 
   const { profileReducer } = useSelector(state=>state)
 
-  // Function to handle checkbox change
   const handleCheckboxChange = (index) => {
-    const updatedCheckboxes = [...dataList];
-    updatedCheckboxes[index].checked = !updatedCheckboxes[index].checked;
-    setDataList(updatedCheckboxes);
-
-    const allChecked = updatedCheckboxes.every((checkbox) => checkbox.checked);
-    setSelectAll(allChecked);
+    const value = event.target.value;
+    console.log(value)
+    if(event.target.checked){
+      setSelectedCheckboxes([...selectedCheckboxes, value]);
+    }else{
+      setSelectedCheckboxes(selectedCheckboxes.filter(item => item !== value));
+    }
   };
 
-  // Function to handle "Select All" checkbox change
   const handleSelectAllChange = () => {
-    const updatedCheckboxes = dataList.map((checkbox) => ({
-      ...checkbox,
-      checked: !selectAll,
-    }));
-    setDataList(updatedCheckboxes);
-    setSelectAll(!selectAll);
-  }
+    const checked = event.target.checked;
 
+    setSelectAll(checked);
+
+    if(checked){
+      const allOptions = dataList?.map(option => option?.profile?.email);
+      setSelectedCheckboxes(allOptions);
+    }else{
+      setSelectedCheckboxes([]);
+    }
+  }
+console.log(selectedCheckboxes)
   const filterType = (data)=>{
     const friends = data?.filter((item)=>
       item?.friend?.isFriend == true
@@ -135,6 +140,8 @@ const PersonalOtherGuest = ({ onClose, handleAddByContactModal }) => {
     	     <input 
             type="checkbox"
             checked={data.checked}
+            value={data?.profile?.email}
+            checked={selectedCheckboxes.includes(data?.profile?.email)}
             onChange={() => handleCheckboxChange(i)}
             className='w-4 h-4' />
     	   </div>

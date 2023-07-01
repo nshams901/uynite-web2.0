@@ -78,7 +78,7 @@ export default function Umeet(){
 
   const dispatch = useDispatch()
   const { umeetReducer, profileReducer } = useSelector(state => state)
-
+console.log(profileReducer)
   function EventStatus({ data }){
     if(noCreateEvent){
       return <BlankEvents event='Create Events' createEvent={createEvent} />
@@ -242,8 +242,8 @@ export default function Umeet(){
       }
       {
       selectEventType.map((data,i)=>(
-       <div key={i} onClick={()=>handleCreateEventForm(data)} className='bg-white hover:bg-teal-100 border border-[#659b8e] animation duration-150 cursor-pointer rounded-xl my-2.5 p-1.5 flex'>
-        <div className='w-2/6 flex justify-center items-center'>
+       <div key={i} onClick={()=>handleCreateEventForm(data)} className={`${(profileReducer?.profile?.profiletype == 'Organisation' && data?.event == 'Re-Union') ? 'hidden' : ''} bg-white hover:bg-teal-100 border border-[#659b8e] animation duration-150 cursor-pointer rounded-xl my-2.5 p-1.5 flex`}>
+        <div className={`w-2/6 flex justify-center items-center`}>
           <img src={data.img} className='h-12 w-12' />
         </div>
         <div className='4/6 ml-3 flex items-center'>
@@ -280,7 +280,6 @@ export default function Umeet(){
   }
   
   function AllEvents({ handleEditEvent }){
-
     return (
      <section className='border overflow-y-scroll hideScrol border-gray-400 bg-white rounded mr-2 w-full h-full'>
       {/* */}

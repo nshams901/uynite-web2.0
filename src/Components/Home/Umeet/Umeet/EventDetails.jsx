@@ -42,6 +42,7 @@ const EventDetails = ({
   const { umeetReducer, profileReducer } = useSelector(state=>state)
   const [guestsList, setGuestsList] = useState([])
   const numberOfYes = guestsList?.filter(item=>item?.invities?.attend == '1').length
+  //const numberOfYes = guestsList?.filter(item=>item?.invities?.attend == '1').length
   const numberOfNo = guestsList?.filter(item=>item?.invities?.attend == '2').length
   const numberOfMaybe = guestsList?.filter(item=>item?.invities?.attend == '3').length
   const NoOfGuests = { numberOfYes, numberOfNo, numberOfMaybe }
@@ -76,10 +77,16 @@ const EventDetails = ({
   };
 
   const showChat = eventDetail?.event_category?.toLowerCase().includes('feedback') || 
-  eventDetail?.eventType?.toLowerCase().includes('partymeeting') || 
-  eventDetail?.event_category?.toLowerCase().includes('partymeeting') || 
-  eventDetail?.eventType?.toLowerCase().includes('feedback') || 
-  !eventDetail?.chat
+  eventDetail?.eventType?.toLowerCase().includes('politicalpartymeeting') || 
+  eventDetail?.event_category?.toLowerCase().includes('politicalpartymeeting') || 
+  eventDetail?.eventType?.toLowerCase().includes('feedback')
+
+  const showFeedback = eventDetail?.event_category?.toLowerCase().includes('feedback') ||  
+  eventDetail?.eventType?.toLowerCase().includes('feedback') 
+
+  const showGuest = eventDetail?.event_category?.toLowerCase().includes('feedback') || 
+  eventDetail?.eventType?.toLowerCase().includes('politicalpartymeeting') || 
+  eventDetail?.eventType?.toLowerCase().includes('feedback') || eventDetail?.eventPrivacyType == 'Public'
 
   function RenderStatus() {
     if (details){
@@ -152,14 +159,14 @@ const EventDetails = ({
           <div
             onClick={handleGuests}
             className={`${guests ? "bg-[#649B8E] text-white" : "bg-[#E4E4E4]"
-              } ${umeetReducer?.eventDetail?.eventType == 'Public' ? 'hidden' : ''} rounded-lg flex justify-center py-1 px-4 w-1/3 mx-2 cursor-pointer`}
+              } ${showFeedback ? 'hidden' : ''} ${showGuest ? 'hidden' : ''} rounded-lg flex justify-center py-1 px-4 w-1/3 mx-2 cursor-pointer`}
           >
             Guests
           </div>
           <div
             onClick={handleChat}
             className={`${chat ? "bg-[#649B8E] text-white" : "bg-[#E4E4E4]"
-              } ${showChat ? 'hidden' : ''} ${umeetReducer?.eventDetail?.eventType == 'Public' ? 'mx-2' : ''} rounded-lg flex justify-center py-1 px-4 w-1/3 cursor-pointer`}
+              } ${showChat  ? 'hidden' : ''} ${showFeedback ? 'hidden' : ''} ${umeetReducer?.eventDetail?.eventType == 'Public' ? 'mx-2' : ''} rounded-lg flex justify-center py-1 px-4 w-1/3 cursor-pointer`}
           >
             Chat
           </div>

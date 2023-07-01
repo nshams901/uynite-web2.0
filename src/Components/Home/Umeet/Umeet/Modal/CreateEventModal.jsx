@@ -187,7 +187,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     }
   }, [invitesPlace, guestType])
 
-  const options = { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true}
+   const options = { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric", hour12: true }
 
   const handleImageChange = () => {
     if (event.target.files && event.target.files[0]) {
@@ -277,12 +277,12 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     "eventName": formState.eventName,
     "createdatetime": new Date().toISOString().replace("Z", "+0000"),
     "date_created": Date.now().toString(),
-    "event_category": whichType == 'personal' ? selectedSpecificEvent : '',
+    "event_category": (whichType == 'personal' || whichType == 'public') ? selectedSpecificEvent : '',
     "profileid": profileReducer?.profile?.id,
     "eventdateAndTime": new Date(formState?.eventdateAndTime).toLocaleString('en-US', options),
     "eventAddress": formState?.eventAddress,
     "eventHostPhnNumber": code ? code + formState?.eventHostPhnNumber : '',
-    "eventPrivacyType": "need",
+    "eventPrivacyType": whichType == 'personal' ? 'Personal' : 'Public',
     "eventFrndId": "need",
     "eventType":  whichType == 'personal' ? 'Personal' : whichType == 'public' ? 'Public' : selectedSpecificEvent,
     "hostmailid": formState?.hostmailid,
@@ -522,12 +522,20 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
 
           <div className='mt-3 flex flex-col justify-center items-center'>
             <label>
-              {selectedImage ? (
+              {selectedImage ? (<div className='relative'>
                 <img 
                  src={selectedImage} 
                  alt="Selected" 
                  className='w-ful h-[350px] lg:h-[500px] object-cover rounded-md' />
-                ) : <img src={upload} className='w-full h-[350px] object-cover' />
+                 <div class={`${selectedImage?.includes('localhost') ? 'hidden' : ''} absolute inset-0 flex justify-center items-center`}>
+                   <div className='w-1/2 flex flex-col justify-center items-center'>
+                    <div className='py-0.5'>{formState?.eventName}</div>
+                    <div className='py-0.5'>Hosted By: <span className='font-semibold'>{profileReducer?.profile?.fname}</span></div>
+                    <div className='py-0.5'>{`${(formState?.eventdateAndTime !== '') ? new Date(formState?.eventdateAndTime).toLocaleString("en-US", options) : 'start date'} - ${(formState?.eventEndDate !== '') ? new Date(formState?.eventEndDate).toLocaleString("en-US", options) : 'end date'}`}</div>
+                    <div className='py-0.5'>{formState?.eventAddress}</div>
+                   </div>
+                 </div>
+                </div>) : <img src={upload} className='w-full h-[350px] object-cover' />
               }
             </label>
             <input 

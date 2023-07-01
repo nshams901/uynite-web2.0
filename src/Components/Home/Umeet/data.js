@@ -89,6 +89,7 @@ export const myEventDataList = [
     status: 'Completed'
  },
 ]
+
 export const selectEventList = [
  {
    img: Personal,
@@ -169,9 +170,5 @@ export const selectPoliticalEventType = [
  {
    img: PartyCandidatesFeedbackPolitical,
    event: 'Party Candidate Feedback'
- },
- // {
- //   img: PoliticalPolitical,
- //   event: 'Political'
- // }
+ }
 ]

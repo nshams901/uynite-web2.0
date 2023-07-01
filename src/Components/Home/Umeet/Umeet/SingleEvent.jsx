@@ -13,23 +13,22 @@ import EventLoadingAnimation from './EventLoadingAnimation'
 import EventDeleteModal from './Modal/EventDeleteModal'
 
 function EventStatus({ data, handleBothDetails, invites }) {
-if(data?.eventstatus){
-  if(data?.eventstatus == 'Cancel'){
-    return <button className='px-0.5 lg:px-2 py-0.5 text-[10px] lg:text-[12px] rounded border-gray-500 text-gray-700 border mr-1'>cancelled</button>
-  }else if(data?.eventstatus == 'Completed'){
-    return <button className='px-0.5 lg:px-2 py-0.5 text-[10px] lg:text-[12px] rounded border-gray-500 text-gray-700 border mr-1'>completed</button>
+  if(data?.eventstatus){
+    if(data?.eventstatus == 'Cancel'){
+      return <button className='px-0.5 font-semibold lg:px-2 py-0.5 text-[10px] lg:text-[12px] rounded border-gray-500 text-gray-700 border mr-1'>cancelled</button>
+    }else if(data?.eventstatus == 'Completed'){
+      return <button className='px-0.5 font-semibold lg:px-2 py-0.5 text-[10px] lg:text-[12px] rounded border-gray-500 text-gray-700 border mr-1'>completed</button>
+    }
   }
-}
-if(invites){
-  if (invites?.attend == '1') {
-    return <img src={UmeetAttending} className='h-8 w-8 cursor-pointer' />
-  } else if (invites?.attend == '2') {
-    return <img src={UmeetNotAttending} className='h-8 w-8 cursor-pointer' />
-  } else if (invites?.attend == '3') {
-    return <img src={Umeetmaybe} className='h-8 w-8 cursor-pointer' />
+  if(invites){
+    if (invites?.attend == '1') {
+      return <img src={UmeetAttending} className='h-8 w-8 cursor-pointer' />
+    } else if (invites?.attend == '2') {
+      return <img src={UmeetNotAttending} className='h-8 w-8 cursor-pointer' />
+    } else if (invites?.attend == '3') {
+      return <img src={Umeetmaybe} className='h-8 w-8 cursor-pointer' />
+    }
   }
-}
-
 }
 
 const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
@@ -45,7 +44,7 @@ const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
       allInvitedEvents: state?.umeetReducer?.allInvitedEvents?.slice(0, 70),
     }
   });
-console.log(deleteId, 'deleteId')
+
   const { profile, allEvents, allMyEvents, allInvitedEvents } = reducerData
 
   const [showDetail, setShowDetail] = useState(false)
@@ -105,7 +104,7 @@ console.log(deleteId, 'deleteId')
      setProgressedEvents(progress)
     }
 
-
+    // my events
     if(isInvitedAll == 'Completed Events'){
       const completes = allMyEvents?.filter(item =>{     
       const hasCompleted = item?.eventstatus == 'Completed'
@@ -186,7 +185,7 @@ console.log(deleteId, 'deleteId')
                 {/* center section */}
                 <div 
                  onClick={()=>{handleBothDetails(data.id); handleImageSelect}}
-                 className='8/12 flex flex-col'>
+                 className={`${data?.eventstatus == 'Completed' || data?.eventstatus == 'Cancel' ? 'opacity-50' : ''} 8/12 flex flex-col justify-start`}>
                   <p className='text-[#649b8e] font-medium text-[14px]'>{data?.eventName}</p>
                   <span 
                    className='text-gray-600 text-[12px]'>
@@ -197,7 +196,7 @@ console.log(deleteId, 'deleteId')
                 {/* End status section */}
                 {data?.eventstatus ? 
                 (
-                  <div className='w-1/4 flex items-center justify-center'>
+                  <div className='w-1/4 flex items-center justify-end'>
                     <EventStatus data={data} />
                   </div>
                  ) : (
@@ -212,7 +211,7 @@ console.log(deleteId, 'deleteId')
                           </div>
                           <div onClick={()=>handleDeleteEvent(data?.id)} className='flex hover:bg-gray-300 cursor-pointer p-2.5 border-b border-gray-300'>
                            <img src={deleteImg} className='w-6 h-6' />
-                           <span className='pr-4 px-2'>Delete Event</span>
+                           <span className='pr-4 px-2'>Cencel Event</span>
                           </div>
                           <div onClick={handleShareEvent} className='flex hover:bg-gray-300 cursor-pointer p-2.5'>
                            <img src={shareImg} className='w-6 h-6' />
@@ -237,7 +236,7 @@ console.log(deleteId, 'deleteId')
                   <img src={data?.eventTemplate} className='w-11/12 h-full object-cover rounded-md' />
                 </div>
                 {/* center section */}
-                <div className='8/12 flex flex-col'>
+                <div className={`${data?.eventstatus == 'Completed' || data?.eventstatus == 'Cancel' ? 'opacity-50' : ''} 8/12 flex flex-col justify-start`}>
                   <p className='text-[#649b8e] font-medium text-[14px]'>{data?.eventName}</p>
                   <span className='text-gray-600 text-[12px]'>{data?.eventdateAndTime}</span>
 
@@ -268,7 +267,7 @@ console.log(deleteId, 'deleteId')
                   <img src={data?.eventTemplate} className='w-11/12 h-full object-cover rounded-md' />
                 </div>
                 {/* center section */}
-                <div className='8/12 flex flex-col'>
+                <div className='8/12 flex flex-col opacity-60 justify-start'>
                   <p className='text-[#649b8e] font-medium text-[14px]'>{data?.eventName}</p>
                   <span className='text-gray-600 text-[12px]'>{data?.eventdateAndTime}</span>
 
@@ -299,7 +298,7 @@ console.log(deleteId, 'deleteId')
                   <img src={data?.eventTemplate} className='w-11/12 h-full object-cover rounded-md' />
                 </div>
                 {/* center section */}
-                <div className='8/12 flex flex-col'>
+                <div className='8/12 flex flex-col opacity-60 justify-start'>
                   <p className='text-[#649b8e] font-medium text-[14px]'>{data?.eventName}</p>
                   <span className='text-gray-600 text-[12px]'>{data?.eventdateAndTime}</span>
 
@@ -325,13 +324,16 @@ console.log(deleteId, 'deleteId')
           <> 
             {(invitedEvents && allInvitedEvents.length !== 0) ?
               (isInvitedAll == 'Completed Events') ? completedEvents?.map((data, i) => (
-                <div key={i} onClick={()=>handleBothDetails(data?.eventdetail.id)} className='flex cursor-pointer p-2 m-1 my-1.5 border rounded-xl border-gray-300'>
+                <div 
+                 key={i} 
+                 onClick={()=>handleBothDetails(data?.eventdetail.id)} 
+                 className='flex cursor-pointer p-2 m-1 my-1.5 border rounded-xl border-gray-300'>
                   {/* Img section */}
                   <div className='w-4/12 fle h-[75px] items-center justify-center'>
                     <img src={data?.eventdetail?.eventTemplate} className='w-11/12 h-full object-cover rounded-md' />
                   </div>
                   {/* center section */}
-                  <section className='w-6/12 pl-2'>
+                  <section className='w-6/12 pl-2 opacity-60'>
                     <div className='flex w-full flex-col'>
                       <p className='text-[#649b8e] font-medium text-[14px]'>{data?.eventdetail?.eventName}</p>
                       <span className='text-gray-600 text-[12px]'>{data?.eventdetail?.eventdateAndTime}</span>
@@ -341,11 +343,11 @@ console.log(deleteId, 'deleteId')
                        {data?.eventprofile?.fname} {data?.eventprofile?.lname}
                        </strong>
                       </span>
-
                       {
-                        data.eventstatus && data.eventstatus !== 'Completed' ? (
-                          <span className='text-[12px] text-gray-600'>Status:<strong className='text-gray-800'> {data?.eventdetail?.eventstatus}</strong></span>
-                        ) : null
+                        data?.invities?.attend == '3' ? (
+                          <span className='text-[12px] text-gray-600'>Status: <strong className='text-gray-800'>Maybe</strong></span>
+                        ) : data?.invities?.attend == '1' ? <span className='text-[12px] text-gray-600'>Status: <strong className='text-gray-800'>Attending</strong></span> 
+                        : <span className='text-[12px] text-gray-600'>Status: <strong className='text-gray-800'>Received</strong></span>
                       }
                     </div>
                   </section>
@@ -371,11 +373,11 @@ console.log(deleteId, 'deleteId')
                        {data?.eventprofile?.fname} {data?.eventprofile?.lname}
                        </strong>
                       </span>
-
                       {
-                        data.eventstatus && data.eventstatus !== 'Completed' ? (
-                          <span className='text-[12px] text-gray-600'>Status:<strong className='text-gray-800'> {data?.eventdetail?.eventstatus}</strong></span>
-                        ) : null
+                        data?.invities?.attend == '3' ? (
+                          <span className='text-[12px] text-gray-600'>Status: <strong className='text-gray-800'>Maybe</strong></span>
+                        ) : data?.invities?.attend == '1' ? <span className='text-[12px] text-gray-600'>Status: <strong className='text-gray-800'>Attending</strong></span> 
+                        : <span className='text-[12px] text-gray-600'>Status: <strong className='text-gray-800'>Received</strong></span>
                       }
                     </div>
                   </section>
@@ -392,15 +394,16 @@ console.log(deleteId, 'deleteId')
                     <img src={data?.eventdetail?.eventTemplate} className='w-11/12 h-full object-cover rounded-md' />
                   </div>
                   {/* center section */}
-                  <section className='w-6/12 pl-2'>
+                  <section className={`${data?.eventdetail?.eventstatus == 'Completed' || data?.eventdetail?.eventstatus == 'Cancel' ? 'opacity-50' : ''} w-6/12 pl-2`}>
                     <div className='flex w-full flex-col'>
                       <p className='text-[#649b8e] font-medium text-[14px]'>{data?.eventdetail?.eventName}</p>
                       <span className='text-gray-600 text-[12px]'>{data?.eventdetail?.eventdateAndTime}</span>
                       <span className='text-[12px] text-gray-600'>Hosted by:<strong className='text-gray-800'> {data?.eventdetail?.host}</strong></span>
                       {
-                        data.eventstatus && data.eventstatus !== 'completed' ? (
-                          <span className='text-[12px] text-gray-600'>Status:<strong className='text-gray-800'> {data?.eventdetail?.eventstatus}</strong></span>
-                        ) : null
+                        data?.invities?.attend == '3' ? (
+                          <span className='text-[12px] text-gray-600'>Status: <strong className='text-gray-800'>Maybe</strong></span>
+                        ) : data?.invities?.attend == '1' ? <span className='text-[12px] text-gray-600'>Status: <strong className='text-gray-800'>Attending</strong></span> 
+                        : <span className='text-[12px] text-gray-600'>Status: <strong className='text-gray-800'>Received</strong></span>
                       }
                     </div>
                   </section>
@@ -411,26 +414,30 @@ console.log(deleteId, 'deleteId')
                 </div>
               )) : 
               (isInvitedAll == 'All Events') ? invitedEvents?.map((data, i) => (
-                <div key={i} onClick={()=>handleBothDetails(data?.eventdetail.id)} className='flex cursor-pointer p-2 m-1 my-1.5 border rounded-xl border-gray-300'>
+                <div 
+                 key={i} 
+                 onClick={()=>handleBothDetails(data?.eventdetail.id)} 
+                 className={`flex cursor-pointer p-2 m-1 my-1.5 border rounded-xl border-gray-300`}>
                   {/* Img section */}
                   <div className='w-4/12 fle h-[75px] items-center justify-center'>
                     <img src={data?.eventdetail?.eventTemplate} className='w-11/12 h-full object-cover rounded-md' />
                   </div>
                   {/* center section */}
-                  <section className='w-6/12 pl-2'>
+                  <section className={`${data?.eventdetail?.eventstatus == 'Completed' || data?.eventdetail?.eventstatus == 'Cancel' ? 'opacity-50' : ''} w-6/12 pl-2`}>
                     <div className='flex w-full flex-col'>
                       <p className='text-[#649b8e] font-medium text-[14px]'>{data?.eventdetail?.eventName}</p>
                       <span className='text-gray-600 text-[12px]'>{data?.eventdetail?.eventdateAndTime}</span>
                       <span className='text-[12px] text-gray-600'>
                        Hosted by:
                        <strong className='text-gray-800'>
-                       {data?.eventprofile?.fname} {data?.eventprofile?.lname}
+                       {data?.eventprofile?.fname}
                        </strong>
                       </span>
                       {
-                        data?.eventdetail?.eventstatus && data?.eventdetail?.eventstatus !== 'Completed' ? (
-                          <span className='text-[12px] text-gray-600'>Status:<strong className='text-gray-800'> {data?.eventdetail?.eventstatus}</strong></span>
-                        ) : null
+                        data?.invities?.attend == '3' ? (
+                          <span className='text-[12px] text-gray-600'>Status: <strong className='text-gray-800'>Maybe</strong></span>
+                        ) : data?.invities?.attend == '1' ? <span className='text-[12px] text-gray-600'>Status: <strong className='text-gray-800'>Attending</strong></span> 
+                        : <span className='text-[12px] text-gray-600'>Status: <strong className='text-gray-800'>Received</strong></span>
                       }
                     </div>
                   </section>
@@ -444,29 +451,30 @@ console.log(deleteId, 'deleteId')
                 <div key={i} onClick={()=>handleBothDetails(data?.eventdetail.id)} className='flex cursor-pointer p-2 m-1 my-1.5 border rounded-xl border-gray-300'>
                   {/* Img section */}
                   <div className='w-4/12 fle h-[75px] items-center justify-center'>
-                    <img src={data?.eventTemplate} className='w-11/12 h-full object-cover rounded-md' />
+                    <img src={data?.eventdetail?.eventTemplate} className='w-11/12 h-full object-cover rounded-md' />
                   </div>
                   {/* center section */}
-                  <section className='w-6/12 pl-2'>
+                  <section className='w-6/12 pl-2 opacity-60'>
                     <div className='flex w-full flex-col'>
-                      <p className='text-[#649b8e] font-medium text-[14px]'>{data?.eventName}</p>
-                      <span className='text-gray-600 text-[12px]'>{data?.eventdateAndTime}</span>
+                      <p className='text-[#649b8e] font-medium text-[14px]'>{data?.eventdetail?.eventName}</p>
+                      <span className='text-gray-600 text-[12px]'>{data?.eventdetail?.eventdateAndTime}</span>
                       <span className='text-[12px] text-gray-600'>
                        Hosted by:
                        <strong className='text-gray-800'>
-                       {data?.profile?.fname} {data?.profile?.lname}
+                       {data?.eventprofile?.fname} {data?.eventprofile?.lname}
                        </strong>
                       </span>
                       {
-                        data?.eventstatus && data?.eventstatus !== 'Completed' ? (
-                          <span className='text-[12px] text-gray-600'>Status:<strong className='text-gray-800'> {data?.eventstatus}</strong></span>
-                        ) : null
+                        data?.invities?.attend == '3' ? (
+                          <span className='text-[12px] text-gray-600'>Status: <strong className='text-gray-800'>Maybe</strong></span>
+                        ) : data?.invities?.attend == '1' ? <span className='text-[12px] text-gray-600'>Status: <strong className='text-gray-800'>Attending</strong></span> 
+                        : <span className='text-[12px] text-gray-600'>Status: <strong className='text-gray-800'>Received</strong></span>
                       }
                     </div>
                   </section>
                   {/* End status section */}
                   <div className='w-2/12 flex items-center justify-center'>
-                    <EventStatus data={data} handleEventDetails={handleEventDetails} />
+                    <EventStatus data={data?.eventdetail} handleEventDetails={handleEventDetails} />
                   </div>
                 </div>
               )) :
