@@ -176,9 +176,9 @@ const CreatePostModal = ({
     }
     // await uploadAllImages();
     const payload = {
-      shareto: postPrivacy?.name,
-      type: "personal",
-      template: "template1",
+      shareto: postPrivacy?.name === 'Public' ? 'Public' : postPrivacy.name.slice(0,-1),
+      type: "Post",
+      template: "No_template",
       image: images?.join("@"),
       text: postContent,
       suggesttemp: "sugest1",
@@ -193,14 +193,15 @@ const CreatePostModal = ({
     };
     const updatePayload = {
       profileid: profile?.id,
-      shareto: postPrivacy?.name,
-      type: "personal",
-      template: "template1",
+      shareto: postPrivacy?.name === 'Public' ? 'Public' : postPrivacy.name.slice(0,-1),
+      type: "Post",
+      template: "No_template",
       image: images?.join("@"),
       text: postContent,
       suggesttemp: "sugest1",
       utag: null,
       delete: false,
+      active: false,
       close: "close",
       id: activePost?.id,
       location: location,

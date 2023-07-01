@@ -1,3 +1,5 @@
+import { checkingFrnd } from "../actionCreators/friendsAction";
+
 const initialState = {
     posts: [
         {
@@ -344,7 +346,7 @@ const postReducer = (state = initialState, action) => {
             return { ...state, posts: newPosts };
         case "GET_POST_HISTORY":
             return {...state, postHistory: action.payload.data}
-        case "GET_POST_LIKE":
+        case "GET_POST_LIKE":            
             return { ...state, postLikes: action.payload.data}
         default:
             return state;

@@ -42,6 +42,9 @@ import ConfirmationModal from "../../../common/ConfirmationModal";
 import { BsThreeDots } from "react-icons/bs";
 import { getPrivacy, getTimeDiff } from "../../../Utility/utility";
 import ReportModal from "../../KicksPage/ReportModal";
+import { getFriendsList } from "../../../../redux/actionCreators/friendsAction";
+import shareIcon from '../../../../Assets/Images/share.png';
+import sendIcon from '../../../../Assets/Images/sendIcon.png'
 
 const PostCard = ({ userData, item = {} }) => {
   const navigate = useNavigate();
@@ -126,6 +129,7 @@ const PostCard = ({ userData, item = {} }) => {
       pageSize: 10,
     };
     dispatch(getPostLike(item?.id, payload));
+    dispatch(getFriendsList(profile?.id))
     setOpenModal({
       ...openModal,
       OnLikeModal: true,
@@ -212,7 +216,7 @@ const PostCard = ({ userData, item = {} }) => {
     const commentData = {
       datetime: Date.now(),
       postid: item?.id,
-      profileid: item?.profileid,
+      profileid: profile?.id,
       text: inputComment,
     };
     if (!inputComment) {
@@ -533,7 +537,7 @@ const PostCard = ({ userData, item = {} }) => {
                   showAlert={alert}
                   button={
                     <img
-                      src="./images/sendIcon.png"
+                      src={ sendIcon}
                       alt=""
                       className="w-[40px] pr-2 cursor-pointer"
                       onClick={onCommetIncrease}
@@ -549,9 +553,9 @@ const PostCard = ({ userData, item = {} }) => {
               onClick={onShowShareModal}
             >
               <img
-                src="./images/share.png"
+                src={shareIcon}
                 alt=""
-                className="w-[54%] cursor-pointer"
+                className="w-[50%] cursor-pointer"
               />
             </div>
           </div>

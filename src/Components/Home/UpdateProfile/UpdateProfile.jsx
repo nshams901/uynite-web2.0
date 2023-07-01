@@ -44,7 +44,7 @@ const UpdateProfile = () => {
     ...profile,
     gender: {name: profile.gender},
     state : { state: profile.state},
-    district : { district: profile.district},
+    city : { distric : profile.city},
     loksabha :  {loksabha: profile?.loksabha},
     assembly : { assembly: profile.assembly},
   });
@@ -109,7 +109,7 @@ const UpdateProfile = () => {
   const handleChange = (name, value) => {
     const obj = {
       state: getDistrict(value.statecode),
-      district: getLoksabha(value.did),
+      city: getLoksabha(value.did),
       loksabha: getAssenbly(value.lid),
     };
     obj[name] && dispatch(obj[name]);
@@ -144,7 +144,8 @@ const UpdateProfile = () => {
       pimage: pimage, //if profile image is there, add the URL here.
       loksabha: states.loksabha?.loksabha,
       state: states.state?.state || "",
-      city: location,
+      city: states.city.distric,
+      hometown: states.hometown,
       pcoverimage: pcoverimage,
       lname: lname, //from user input – profile lnamein SLIDE 4
       personalname: !isPersonal ?  personalname : "", //from user input – profilefnamein SLIDE 4
@@ -198,12 +199,11 @@ const UpdateProfile = () => {
   });
   }
   const handleEducation = (name, value) => setEducation({...education, isEditEdu: true, [name]: value})
-  // console.log(profileDetail, stateName, moment(dob).format('YYYY-MM-DD'), 'PPPPPPPPPPPPPPP');
   const checkDisable = () => {
     return !(fname || lname)
   }
     const handleLocation = (location) => {
-      setState({...states, location})
+      setState({...states, hometown: location})
     };
   return (
     <div className="bg-[#E4E7EC] w-[100%]  p-6">

@@ -325,6 +325,17 @@ export const checkFriends = (userprofile, friendprofile) => async (dispatch) => 
   }
 };
 
+export const checkingFrnd =async (userprofile, friendprofile) => {
+  try {
+    const response = await axios.get(
+      `https://web.uynite.com/friend/api/friend/chkfriends/${userprofile}/${friendprofile}`,
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 export const updateFriendProfileId = (data) => async (dispatch) => {
   try {

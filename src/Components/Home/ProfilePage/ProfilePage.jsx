@@ -24,17 +24,17 @@ import moment from "moment";
 import { getUserPostList, imageUploadApi } from "../../../redux/actionCreators/rootsActionCreator";
 import { getPrivacyDetail } from "../../../redux/actionCreators/profileAction"
 import { AiOutlineEyeInvisible } from 'react-icons/ai'
-const data = [
-  { title: "Posts" },
-  { title: "Photos" },
-  { title: "Videos" },
-  { title: "Kicks" },
-];
 const ProfilePage = ({ isOthers }) => {
   const [selectedOption, setSelectedOption] = useState("Posts");
   const [privacyType, setPrivacyType] = useState('Public')
   const dispatch = useDispatch();
   const params = useParams();
+  const data = [
+    { title: "Posts" },
+    { title: "Photos" },
+    { title: "Videos" },
+    { title: "Kicks" },
+  ];
 
   console.log(privacyType, 'privacyType eh')
   const reducerData = useSelector((state) => {
@@ -80,12 +80,6 @@ const ProfilePage = ({ isOthers }) => {
        }
 
        dispatch(checkFriend(payload))
-      if (!res.status) {
-        toasterFunction(res.message);
-        // toast.error(res.message)
-      }
-      else{
-      }
     }): "";
     dispatch(getFollowing(user?.id));
     dispatch(getFollower(user?.id));

@@ -7,6 +7,7 @@ const initialState = {
   mutualFriends: [],
   myFriendsList: [],
   friendProfileId: null,
+  friendsIds: []
 };
 
 const  friendReducer= (state = initialState, action) => {
@@ -20,11 +21,12 @@ const  friendReducer= (state = initialState, action) => {
       return { ...state, requestList: sortedRequest };
     case "FRIEND_LIST":
       const sorted = action.payload.data?.sort(( a, b) => a.profile.fname > b.profile.fname);
-      return { ...state, friends: sorted };
+      const friendsIds = action.payload.data.map(( friend) => friend.profile.id );
+      return { ...state, friends: sorted, friendsIds: friendsIds };
     case "GET_MUTUAL_FRIEND":
       return { ...state, mutualFriends: action.payload.data };
     case "MY_FRIEND_LIST":
-      return { ...state, myFriendsList: action.payload.data };
+      return { ...state, myFriendsList: action.payload.data, friendsIds: friendsIds };
     case "SET_FRIEND_PROFILE":
       return { ...state, friendProfileId: action.payload };
     default:

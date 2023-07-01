@@ -87,11 +87,11 @@ const PersonalAccount = ({
         <div className="w-full">
           <AutocompletePlace
             livePlace={(schoolLocation) =>
-              handleEducation("schoolname", schoolLocation)
+              handleEducation("schooladdress", schoolLocation)
             }
             // value={`${schoolname || "" } ${schooladdress || ""}`}
-            value={schoolname ? schoolname : schooladdress}
-            handleChangeLocation={(value) => handleEducation('schoolname', value)}
+            value={ schooladdress}
+            handleChangeLocation={(value) => handleEducation('schooladdress', value)}
             placeholder={"Enter your school"}
           />
         </div>
@@ -126,26 +126,17 @@ const PersonalAccount = ({
             }
           >
           {
-            collegenameug ?
-            <Input
-              attributes={{
-                name: "collegenameug",
-                type: "text",
-                onChange: (e) => handleEducation(e.target.name, e.target.value),
-                value: `${collegenameug}`,
-                placeholder: "College Name",
-              }}
-            />
-            :
-            <Input
-              attributes={{
-                name: "ugaddress",
-                type: "text",
-                onChange: (e) => handleEducation(e.target.name, e.target.value),
-                value: `${ugaddress}`,
-                placeholder: "College Name",
-              }}
-            />
+            
+            <AutocompletePlace
+            livePlace={(schoolLocation) =>
+              handleEducation("ugaddress", schoolLocation)
+            }
+            // value={`${schoolname || "" } ${schooladdress || ""}`}
+            value={ ugaddress }
+            handleChangeLocation={(value) => handleEducation('ugaddress', value)}
+            placeholder={"College Name"}
+            hideIcon
+          />
 
           }
             <div className="">
@@ -194,27 +185,17 @@ const PersonalAccount = ({
               </p>
             }
           >
-            { collegenamepg ?
-              <Input
-              attributes={{
-                name: "collegenamepg",
-                type: "text",
-                onChange: (e) => handleEducation(e.target.name, e.target.value),
-                value: `${collegenamepg || ""}`,
-                placeholder: "College Name",
-              }}
-            />
-            :
-            <Input
-              attributes={{
-                name: "pgaddress",
-                type: "text",
-                onChange: (e) => handleEducation(e.target.name, e.target.value),
-                value: `${pgaddress || ""}`,
-                placeholder: "College Name",
-              }}
-            />
+           <AutocompletePlace
+            livePlace={(schoolLocation) =>
+              handleEducation("pgaddress", schoolLocation)
             }
+            // value={`${schoolname || "" } ${schooladdress || ""}`}
+            value={ pgaddress }
+            handleChangeLocation={(value) => handleEducation('pgaddress', value)}
+            placeholder={"College Name"}
+            hideIcon
+          />
+            
             <div className="">
               <DropdownComp
                 up={true}

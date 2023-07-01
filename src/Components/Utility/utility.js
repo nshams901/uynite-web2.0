@@ -75,10 +75,10 @@ export function debounce(func, timeout = 1200) {
 export const getPrivacy = (relation) => {
   const obj = {
     Public: globe,
-    Relatives: home,
-    Friends: friend,
-    Classmates: books,
-    Officemates: person,
+    Relative: home,
+    Friend: friend,
+    Classmate: books,
+    Officemate: person,
   }
   return obj[relation] || union
 }
