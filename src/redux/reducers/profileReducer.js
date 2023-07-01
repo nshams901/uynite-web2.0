@@ -5,7 +5,7 @@ const initialState = {
     profileDetail: {},
     educationDetails: {},
     profile: JSON.parse(localStorage.getItem('profile')) || {},
-    userPostList: [],
+    userPostsList: [],
     blockedUsers: [],
     privacyDetails: null,
 };
@@ -34,8 +34,8 @@ const profileReducer = (state = initialState, action) => {
         return { ...state, ugdegreeList: action.payload.data};
       case "GET_PG_LIST":
         return { ...state, pgdegreeList: action.payload.data}
-      case "GET_USER_POST":
-        return { ...state, userPostList: action.payload.data}
+      case "GET_USERS_POST":
+        return { ...state, userPostsList: action.payload.data}
       case "GET_FRIEND_DETAILS":
         return { ...state, friendDetail: action.payload.data}
       case "INCREASE_COMMENT_COUNT":

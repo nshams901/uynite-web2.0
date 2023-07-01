@@ -27,6 +27,10 @@ export default function ProfileMenu({}) {
   const onHandleEventsResultList = () => {
     dispatch(allSponsoredEventResultsList());
   };
+  const handleProfile = () => {
+    navigate("/profile")
+    // dispatch(getUserPostList(profile?.id))
+  }
   return (
     <Menu>
       <MenuHandler>
@@ -40,7 +44,7 @@ export default function ProfileMenu({}) {
       {/* <BsChevronCompactDown className="" size={22} /> */}
       <MenuList className="w-fit max-w-[300px] z-50">
         <MenuItem
-          onClick={() => navigate("/profile")}
+          onClick={() => handleProfile()}
           className="flex items-center mb-1"
         >
           <Typography

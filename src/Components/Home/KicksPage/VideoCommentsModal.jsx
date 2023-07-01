@@ -30,6 +30,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import user from "../../../Assets/Images/user.png";
 import liked from '../../../Assets/Images/kicksLike.png';
+import afterLike from '../../../Assets/Images/afterLike.png'
 import MenuDropdown from "../../../Components/common/MenuDropdown";
 
 
@@ -349,7 +350,7 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                               // onClick={showMenuListModal}
                               />
                             }
-                            options={postOption}
+                            options={ userprofileid === profile?.id ? postOption : [ { name: 'Report'}]}
                             handleOption={(option) => handleClickMenu(option, text)}
                           />
                         </div>
@@ -381,7 +382,7 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                     <div className="w-1/6 pl-2 text-[#666666]">
                       {
                         getLikeId(likecount) ?
-                          <img className="w-6 cursor-pointer" src={liked} onClick={() => handleLike(getLikeId(likecount), "dislike", id)} /> :
+                          <img className="w-6 cursor-pointer" src={ roots ? afterLike : liked} onClick={() => handleLike(getLikeId(likecount), "dislike", id)} /> :
                           <AiFillHeart
                             className="text-2xl cursor-pointer"
                             onClick={() => handleLike(id)}
@@ -455,7 +456,7 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                         >
                           {
                             isLiked ?
-                              <img className="w-6 cursor-pointer" src={liked} onClick={() => handleReplyLike(isLiked.id, "dislike")} />
+                              <img className="w-6 cursor-pointer" src={roots ? afterLike :liked} onClick={() => handleReplyLike(isLiked.id, "dislike")} />
                               :
                               <AiFillHeart className="text-2xl"
                                 onClick={() => handleReplyLike(id)}
