@@ -75,10 +75,10 @@ export function debounce(func, timeout = 1200) {
 export const getPrivacy = (relation) => {
   const obj = {
     Public: globe,
-    Relatives: home,
-    Friends: friend,
-    Classmates: books,
-    Officemates: person,
+    Relative: home,
+    Friend: friend,
+    Classmate: books,
+    Officemate: person,
   }
   return obj[relation] || union
 }
@@ -113,4 +113,11 @@ export const kicksCategory =
 ]
 export const getCategory = (id) => {
     return kicksCategory.find((item) => item.id === id)
+}
+
+export const sortList = ( data, key) => {
+  const sorted = data?.sort((a, b) => {
+    return a[key] > b[key]
+  })
+  return sorted;
 }

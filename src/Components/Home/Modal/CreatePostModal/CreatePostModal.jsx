@@ -31,6 +31,7 @@ import home from '../../../../Assets/Images/home.png';
 import books from '../../../../Assets/Images/books.png';
 import person from '../../../../Assets/Images/personIcon.png';
 import union from '../../../../Assets/Images/unionIcon.png'
+import { getFriendsList } from "../../../../redux/actionCreators/friendsAction";
 
 export let privacyList = [
   { name: "Public", icon: globe },
@@ -51,9 +52,10 @@ const CreatePostModal = ({
       profile: state.profileReducer.profile,
       activePost: state.rootsReducer.activePost,
       myUnionList: state.unionReducer.myUnionList,
+      friends: state.friendReducer.friends,
     };
   });
-  const { profile, activePost, myUnionList } = reducerData;
+  const { profile, activePost, myUnionList, friends } = reducerData;
   const name = profile?.fname + profile?.lname;
   const [state, setState] = useState({});
   const { selectedFile } = state;
@@ -68,12 +70,14 @@ const CreatePostModal = ({
     alert,
     loading,
     allFiles = isEdit ? activePost?.image?.split("@") : "",
+    isRelationAvailable = true,
   } = state;
 
   const [ImageFile, setImageFile] = useState(isEdit ? [activePost?.image] : []);
   const [VideoFile, setVideoFile] = useState([]);
 
   useEffect(() => {
+    dispatch(getFriendsList(profile?.id))
     dispatch(getMyUnion(profile?.id));
   }, []);
 
@@ -111,6 +115,9 @@ const CreatePostModal = ({
   };
 
   async function handleCreatePost() {
+    if(isRelationAvailable !== true){
+        return toast.error( `${isRelationAvailable} is not present`)
+    }
     if (allFiles) {
       setState({ ...state, loading: true });
       await Promise.all(
@@ -136,11 +143,24 @@ const CreatePostModal = ({
     ? [...privacyList, ...unions]
     : [{ name: "Friends" }, ...unions];
   const handlePostPrivacy = (selectedValue) => {
-    if (selectedValue?.name === "Friends") {
-      setState({ ...state, alert: true, postPrivacy: selectedValue });
-    } else {
-      setState({ ...state, alert: true, postPrivacy: selectedValue });
+    // if (selectedValue?.name === "Friends") {
+    //   setState({ ...state, alert: true, postPrivacy: selectedValue });
+    // } else {
+    // }
+    let isRelationAvailable = true
+    if(selectedValue.name === 'Friends'){
+      isRelationAvailable = friends.length > 0 ? true : 'Friend';
+    }else if(selectedValue.name === 'Relatives'){
+      const isRelative = friends.find((item) => item.friend.relative);
+      isRelationAvailable = isRelative ? true : 'Relative'
+    }else if ( selectedValue.name === 'Classmates'){
+      const isClassmate = friends.find(item => item.friend.classment);
+      isRelationAvailable = isClassmate ? true : 'Classmate'
+    }else if( selectedValue.name === 'Officemates'){
+      const isOfficemate = friends.find( item => item.friend.collgues);
+      isRelationAvailable = isOfficemate ? true : 'Officemate';
     }
+    setState({ ...state, alert: true, postPrivacy: selectedValue, isRelationAvailable: isRelationAvailable });
 
     // setTimeout(() => {
     //   setState({ ...state, postPrivacy: selectedValue, alert: false });
@@ -156,9 +176,9 @@ const CreatePostModal = ({
     }
     // await uploadAllImages();
     const payload = {
-      shareto: postPrivacy?.name,
-      type: "personal",
-      template: "template1",
+      shareto: postPrivacy?.name === 'Public' ? 'Public' : postPrivacy.name.slice(0,-1),
+      type: "Post",
+      template: "No_template",
       image: images?.join("@"),
       text: postContent,
       suggesttemp: "sugest1",
@@ -173,14 +193,15 @@ const CreatePostModal = ({
     };
     const updatePayload = {
       profileid: profile?.id,
-      shareto: postPrivacy?.name,
-      type: "personal",
-      template: "template1",
+      shareto: postPrivacy?.name === 'Public' ? 'Public' : postPrivacy.name.slice(0,-1),
+      type: "Post",
+      template: "No_template",
       image: images?.join("@"),
       text: postContent,
       suggesttemp: "sugest1",
       utag: null,
       delete: false,
+      active: false,
       close: "close",
       id: activePost?.id,
       location: location,

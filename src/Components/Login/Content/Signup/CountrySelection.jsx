@@ -86,6 +86,10 @@ const CountrySelection = ({ modalType }) => {
       assembly: "",
       city: "",
       selectedCountry: val,
+      selectedState: "",
+      selectedDistrict: "",
+      selectedLoksabha: "",
+      selectedAssembly : "",
     });
 
     dispatch(getStateList(val.code));
@@ -108,7 +112,7 @@ const CountrySelection = ({ modalType }) => {
     const payload = {
       celibrity: false, //default value.
       countrycode: "+91", //default selected in signup screen..
-      dob: moment(dob).format("YYYY-MM-DD"), //from user input
+      dob: moment(userInfo.dob).format("YYYY-MM-DD"), //from user input
       email: userInfo.uemail, //from signup screen.
       fname: userInfo?.fname, //from user input BUSINESS NAME
       gender: userInfo?.gender,
@@ -123,12 +127,6 @@ const CountrySelection = ({ modalType }) => {
       userid: userid, // stored User ID from (Slide 3)
     };
 
-    console.log(
-      "sdhkjlsdhfljksdhlsdhjljkdfsjklhsdfkjhdfkjg>>>>>>>>>",
-      userInfo
-    );
-
-    console.log("IssssssssPersonal", isPersonal);
     const payloads = {
       assembly: states?.selectedAssembly?.assembly
         ? states.selectedAssembly.assembly
@@ -136,7 +134,7 @@ const CountrySelection = ({ modalType }) => {
       celibrity: false,
       countrycode: "+91", //default selected in signup screen..
       country: states?.selectedCountry?.country,
-      dob: moment(dob).format("YYYY-MM-DD"), //from user input
+      dob: moment(userInfo?.dob).format("YYYY-MM-DD"), //from user input
       email: userInfo?.uemail.toString().includes("@") ? userInfo?.uemail : "", //from signup screen.
       fname: userInfo?.fname, //from user input BUSINESS NAME
       gender: userInfo?.gender,
@@ -154,6 +152,7 @@ const CountrySelection = ({ modalType }) => {
       profiletype: isPersonal ? "Personal" : "Organization", //profile type, while we passing in signup screen
       updatedate: userInfo.datetime, //Current UTC time in milliseconds
       userid: userid, // stored User ID from (Slide 3)
+      id:null
     };
 
     console.log("Payyyyyyyyyaloads", payload);
@@ -318,6 +317,8 @@ const CountrySelection = ({ modalType }) => {
                         state: e.target.value,
                       })
                     }
+
+                    emptyMessage={'Please select country first'}
                   />
 
                   {console.log("selectedCountry?.code", selectedCountry?.code)}
@@ -339,6 +340,7 @@ const CountrySelection = ({ modalType }) => {
                         })
                       }
                       selectedOption={selectedDistrict}
+                      emptyMessage={'Please select state first'}
                     />
                   )}
                 </div>
@@ -362,6 +364,7 @@ const CountrySelection = ({ modalType }) => {
                             loksabha: e.target.value,
                           })
                         }
+                        emptyMessage={'Please select district first'}
                       />
                       <Dropdown
                         name={"Assembly*"}
@@ -380,6 +383,7 @@ const CountrySelection = ({ modalType }) => {
                             assembly: e.target.value,
                           })
                         }
+                        emptyMessage={'Please select loksabha first'}
                       />
                     </div>
                   </>
@@ -392,7 +396,8 @@ const CountrySelection = ({ modalType }) => {
                     map={false}
                     placeholder={"Living location"}
                     types={"cities"}
-                    onHandleChange={handleLiveLocationn}
+                    value={city}
+                    handleChangeLocation={handleLiveLocationn}
                   />
                   {/* <input id="autocomplete" type="text"/> */}
                 </div>

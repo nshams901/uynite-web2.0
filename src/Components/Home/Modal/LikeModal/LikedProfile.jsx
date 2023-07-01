@@ -16,6 +16,7 @@ const LikedProfile = ({ data }) => {
   const dispatch = useDispatch()
   const { profile: myprofile } = useSelector((state) => state.profileReducer);
   const { myUnionList } = useSelector((state)  => state.unionReducer)
+  const { friendsIds } = useSelector((state) => state.friendReducer)
   const { profile, id } = data || {};
   const [state, setState] = useState({})
   const { requestModal, relationOptions} = state
@@ -110,7 +111,7 @@ const LikedProfile = ({ data }) => {
   return (
     <div className="w-full h-[55px] flex items-center ">
       <Link
-        to={`profile/${id}`}
+        to={`/profile/${id}`}
         className=" h-[50px] flex flex-1 items-center gap-2"
       >
         <img
@@ -123,9 +124,14 @@ const LikedProfile = ({ data }) => {
       </Link>
 
       <div className=" h-[50px] flex items-center cursor-pointer">
+      {
+        [...friendsIds, myprofile.id].includes(profile.id) ? ""
+        :
         <button onClick={handleAddFriend} className="px-5 text-blue-400 bg-white border-[1px] border-blue-400 font-bold py-1 text-xs rounded-lg">
           Add friend
         </button>
+
+      }
       </div>
       {requestModal && (
       <Portals closeModal={onHandleCloseModal}>

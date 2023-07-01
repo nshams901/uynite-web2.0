@@ -7,20 +7,30 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import user from "../../../Assets/Images/user.png";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ProfileFooter from "../Modal/ProfileModal/ProfileFooter";
 import { useNavigate } from "react-router-dom";
 import { MdArrowForwardIos } from "react-icons/md";
 import { BsChevronCompactDown } from "react-icons/bs";
+import { allSponsoredEventResultsList } from "../../../redux/actionCreators/eventActionCreator";
 
 export default function ProfileMenu({}) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { profile } = useSelector((state) => state.profileReducer);
 
   const handleLogout = () => {
     localStorage.clear();
     navigate("/auth/login");
   };
+
+  const onHandleEventsResultList = () => {
+    dispatch(allSponsoredEventResultsList());
+  };
+  const handleProfile = () => {
+    navigate("/profile")
+    // dispatch(getUserPostList(profile?.id))
+  }
   return (
     <Menu>
       <MenuHandler>
@@ -34,7 +44,7 @@ export default function ProfileMenu({}) {
       {/* <BsChevronCompactDown className="" size={22} /> */}
       <MenuList className="w-fit max-w-[300px] z-50">
         <MenuItem
-          onClick={() => navigate("/profile")}
+          onClick={() => handleProfile()}
           className="flex items-center mb-1"
         >
           <Typography
@@ -51,7 +61,11 @@ export default function ProfileMenu({}) {
           onClick={() => navigate("/events-result")}
           className="flex justify-between items-center mb-1 gap-2"
         >
-          <Typography variant="small" className="font-bold">
+          <Typography
+            variant="small"
+            className="font-bold"
+            onClick={onHandleEventsResultList}
+          >
             Sponsored event results
           </Typography>
           <MdArrowForwardIos className="w-5 text-gray-500" />

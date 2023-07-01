@@ -25,6 +25,7 @@ export default function Dropdown({
   onHandleChange,
   filteredData,
   selectedOption,
+  emptyMessage,
 }) {
 
 
@@ -64,10 +65,12 @@ export default function Dropdown({
             className={`
                ${
                  up ? "bottom-[44px]" : ""
-               } h-[8rem] xl:h-[16rem] overflow-auto absolute z-10 mt-1 mb-2 w-[100%] lg:w-50 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+               } 
+               ${ options.length ? 'h-[16rem]': ""}
+               h-[8rem] xl:h-[16rem] overflow-auto absolute z-10 mt-1 mb-2 w-[100%] lg:w-50 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
           >
             {isEmpty(options) ? (
-              <EmptyComponent message={"Data not available"} />
+              <EmptyComponent message={emptyMessage || "Data not found"} />
             ) : (
               <div className="py-1">
                 <div className="w-full px-2">

@@ -5,7 +5,8 @@ import { RxCrossCircled } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import { getPostLike } from "../../../../redux/actionCreators/postActionCreator";
 import { useState } from "react";
-const LikeModal = ({ closeLikeModal }) => {
+import { getKicksLike } from "../../../../redux/actionCreators/kicksActionCreator";
+const LikeModal = ({ closeLikeModal, kicks }) => {
   const dispatch = useDispatch();
   const reducerData = useSelector((state) => {
     return {
@@ -21,11 +22,14 @@ const LikeModal = ({ closeLikeModal }) => {
       pageNumber: 0,
       pageSize: 10,
     };
-    dispatch(getPostLike(activePost?.id, payload)).then((res) => {
+    dispatch( kicks ? getKicksLike(activePost?.id) :getPostLike(activePost?.id, payload)).then((res) => {
       if (res?.status) {
-        setState({ ...state, allLikesList: res.data });
+        setState({ ...state, allLikesList: res.data.content || res.data });
       }
     });
+    // if(kicks){
+    //   dispatch(getKicksLike(activePost?.id))
+    // }
   }, []);
   return (
     <div
@@ -35,7 +39,7 @@ const LikeModal = ({ closeLikeModal }) => {
       <div className="flex w-full  items-center">
         <div className="flex-1 gap-1 items-center flex justify-center">
           <img src={LikeIcon} alt="" className="w-[30px] h-[30px]" />
-          <h1>{allLikesList?.content?.length || 0} Likes</h1>
+          <h1>{allLikesList?.length || 0} Likes</h1>
         </div>
         <RxCrossCircled
           size={20}
@@ -45,7 +49,7 @@ const LikeModal = ({ closeLikeModal }) => {
       </div>
       <div className="w-full h-[1px] bg-gray-500"></div>
       <div className="w-full h-full overflow-y-scroll">
-        {allLikesList?.content?.map((item) => {
+        {allLikesList?.map((item) => {
           return <LikedProfile data={item} />;
         })}
       </div>

@@ -264,8 +264,8 @@ export const unfollow = (data) => async (dispatch) => {
 export const removeFollowers = (data) => async (dispatch) => {
   const { profileid, friendprofileid } = data;
   try {
-    const response = await axios.put(
-      `https://web.uynite.com/friend/api/friend/delete/${profileid}/${friendprofileid}`,
+    const response = await axios.delete(
+      `https://web.uynite.com/friend/api/follow/deletefollow/${friendprofileid}/${profileid}`,
       data
     );
     dispatch({
@@ -319,6 +319,17 @@ export const checkFriends = (userprofile, friendprofile) => async (dispatch) => 
       type: "",
       payload: response.data,
     });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const checkingFrnd =async (userprofile, friendprofile) => {
+  try {
+    const response = await axios.get(
+      `https://web.uynite.com/friend/api/friend/chkfriends/${userprofile}/${friendprofile}`,
+    );
     return response.data;
   } catch (error) {
     throw error;

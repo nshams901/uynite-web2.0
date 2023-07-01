@@ -33,9 +33,9 @@ const Locations = ({
         assemblyList,
 
       } = reducerData;
-  const { state, district, assembly, loksabha } = states;
+  const { state, city , assembly, loksabha, hometown } = states;
   const countryName = ["India"];
-
+console.log(states, 'GGGGGGGGGGGGGGGGGGGGGGGG');
   return (
     <>
       <DropdownComp
@@ -63,9 +63,9 @@ const Locations = ({
             label={"District"}
             name={"District"}
             options={districtList}
-            selectedValue={district}
+            selectedValue={ city }
             keyName={"distric"}
-            handleChange={(value) => handleChange("district", value)}
+            handleChange={(value) => handleChange("city", value)}
           />
           <div className="flex gap-2">
             <DropdownComp
@@ -95,7 +95,7 @@ const Locations = ({
           <AutocompletePlace
             livePlace={(location) => handleLocation(location)}
             handleChangeLocation={handleLocation}
-            value={location}
+            value={hometown}
             placeholder={"Living Location"}
           />
         </div>

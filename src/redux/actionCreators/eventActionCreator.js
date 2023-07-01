@@ -93,7 +93,6 @@ export const addEventPost = (data) => async (dispatch) => {
   }
 };
 
-
 // ADD EVENT POST API
 export const createSponsoredEvent = (data) => async (dispatch) => {
   try {
@@ -101,7 +100,7 @@ export const createSponsoredEvent = (data) => async (dispatch) => {
 
     const eventResult = await axios.post(
       `https://web.uynite.com/event/api/post/add`,
-      data,
+      data
     );
     dispatch({
       type: "CREATE_EVENT",
@@ -188,3 +187,28 @@ export const imageUploadApi = (image) => async (dispatch) => {
   }
 };
 
+// GET ALL Events Result List
+export const allSponsoredEventResultsList =
+  () => async (dispatch) => {
+    try {
+      const getStoredData = await getUserDataFromLocalStorage();
+
+      const getAllEventResults = await axios.get(
+        `http://web.uynite.com/post/api/post/eventpost/0`,
+
+        {
+          headers: {
+            "Accept-Language": "en",
+            Authorization: `Bearer ${getStoredData?.token}`,
+          },
+        }
+      );
+      console.log("All Events Result", getAllEventResults);
+      dispatch({
+        type: "GET_ALL_EVENT_RESULT_LIST",
+        payload: getAllEventResults?.data,
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };

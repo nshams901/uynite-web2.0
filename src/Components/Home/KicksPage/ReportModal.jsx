@@ -65,17 +65,17 @@ const ReportModal = ({ onClose }) => {
 
   return (
     <section className='fixed justify-center items-center top-0 left-0 h-full w-full flex z-20' style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)' }}>
-      <div className='w-full md:w-[25%] flex flex-col bg-white mt-[4%] rounded-xl'>
+      <div className='w-full md:w-1/3 overflow-hidden flex flex-col bg-white  rounded-xl'>
         <div className='flex justify-between py-3 border-b bg-[#3b82f680]'>
           <span className='text-[19px] font-medium m-auto text-white'>Report</span>
           <AiOutlineCloseCircle onClick={onClose} className='w-7 h-7 text-gray-700 cursor-pointer' />
 
         </div>
-        <p className='mt-1 font-medium text-start px-2'>Why are you Reporting this Post ?</p>
+        <p className='mt-1 font-medium text-start p-2'>Why are you Reporting this Post ?</p>
 
-        <div className="px-8">
+        <div className="mx-8">
           {ReasonsData.map((reason, i) => (
-            <div onClick={() => handleReportClick(reason)} className='py-1.5 text-start cursor-pointer hover:bg-blue-50'>{reason}</div>
+            <div onClick={() => handleReportClick(reason)} className='p-1.5 text-start cursor-pointer hover:bg-blue-50'>{reason}</div>
           ))}
         </div>
       </div>

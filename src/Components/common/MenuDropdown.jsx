@@ -12,7 +12,7 @@ export default function MenuDropdown({ button, options, handleOption, arrow,item
       <MenuHandler >
         <Button variant="text" className="text-gray-700 p-0">{button}</Button>
       </MenuHandler>
-      <MenuList className={`z-10 overflow-visible relative left-0 p-0 ${classes}`}>
+      <MenuList className={`z-[99999] overflow-visible relative left-0 p-0 ${classes}`}>
       {/* {
         arrow &&
         <div className="absolute -right-6 border-4">HH</div>

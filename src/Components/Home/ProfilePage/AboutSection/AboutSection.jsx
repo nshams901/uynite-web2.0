@@ -131,7 +131,7 @@ const AboutSection = ({ isOther, data }) => {
 
           <p className="text-sm w-full">
             <strong className="text-md font-medium w-1/2 inline-block">Living Location</strong>
-            <strong>: {`${city ? `${city} ` : ""}`} </strong>
+            <strong>: {`${hometown ? `${hometown} ` : ""}`} </strong>
           </p>
         </div>
 
@@ -158,7 +158,7 @@ const AboutSection = ({ isOther, data }) => {
 
           <p className="text-sm w-full">
             <strong className="text-md font-medium w-1/2 inline-block">District</strong>
-            <strong>: {`${"" ? `${""} ` : ""}`} </strong>
+            <strong>: {`${city ? `${city} ` : ""}`} </strong>
           </p>
         </div>
 
@@ -208,7 +208,7 @@ const AboutSection = ({ isOther, data }) => {
                   Completed schooling from
                   <strong>
                     {" "}
-                    {schoolname}, {schooladdress}
+                    {schooladdress}
                   </strong>{" "}
                   in the year
                   <strong> {schoolpass}</strong>.
@@ -218,7 +218,7 @@ const AboutSection = ({ isOther, data }) => {
               ""
             )}
             {/* Graduation Section */}
-            {collagenameug || ugaddress ? (
+            { ugaddress ? (
               <>
                 <div className="px-4 font-bold text-gray-500">Graduation</div>
                 <div className="flex items-center gap-2 px-4">

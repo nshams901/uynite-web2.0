@@ -4,7 +4,7 @@ import { GrLocation } from "react-icons/gr";
 import { HiUserGroup } from "react-icons/hi";
 import CommentBox from "./CommentBox/CommentBox";
 import MenuModal from "../../Modal/MenuModel/MenuModal";
-import ReportModal from "../../Modal/ReportModal/ReportModal";
+
 import { useDispatch, useSelector } from "react-redux";
 // import { commentsData } from "../../../../redux/actionCreators/userActionCreator";
 import ShareWithModal from "../../Modal/ShareWithModal/ShareWithModal";
@@ -41,6 +41,10 @@ import moment from "moment";
 import ConfirmationModal from "../../../common/ConfirmationModal";
 import { BsThreeDots } from "react-icons/bs";
 import { getPrivacy, getTimeDiff } from "../../../Utility/utility";
+import ReportModal from "../../KicksPage/ReportModal";
+import { getFriendsList } from "../../../../redux/actionCreators/friendsAction";
+import shareIcon from '../../../../Assets/Images/share.png';
+import sendIcon from '../../../../Assets/Images/sendIcon.png'
 
 const PostCard = ({ userData, item = {} }) => {
   const navigate = useNavigate();
@@ -57,6 +61,7 @@ const PostCard = ({ userData, item = {} }) => {
     editPost: false,
     originalPost: false,
     externalShare: false,
+    reportModal: false
   });
   const [alert, setAlert] = useState();
   const [state, setState] = useState({});
@@ -124,6 +129,7 @@ const PostCard = ({ userData, item = {} }) => {
       pageSize: 10,
     };
     dispatch(getPostLike(item?.id, payload));
+    dispatch(getFriendsList(profile?.id))
     setOpenModal({
       ...openModal,
       OnLikeModal: true,
@@ -210,7 +216,7 @@ const PostCard = ({ userData, item = {} }) => {
     const commentData = {
       datetime: Date.now(),
       postid: item?.id,
-      profileid: item?.profileid,
+      profileid: profile?.id,
       text: inputComment,
     };
     if (!inputComment) {
@@ -237,8 +243,8 @@ const PostCard = ({ userData, item = {} }) => {
     } else if (modalName === "History") {
       dispatch(getPostHistory(item.id))
       setPostMenuModal({ ...postMenuModal, originalPost: true });
-    } else if (modalName === "External Share") {
-      setPostMenuModal({ ...postMenuModal, showReportModal: true });
+    } else if (modalName === "Report") {
+      setPostMenuModal({ ...postMenuModal, reportModal: true });
     } else if (modalName === "Block user") {
       setState({ ...state, blockModal: true });
     } else if (modalName === "Delete Post") {
@@ -262,23 +268,40 @@ const PostCard = ({ userData, item = {} }) => {
       originalPost: false,
       editPost: false,
       externalShare: false,
+      reportModal: false
+
     });
   };
   const handleModal = (data) => {
     setState({ ...state, modalOpen: !modalOpen, modalData: data });
   };
+
+  const handleBlock = () => {
+    const payload = {
+      blockedid: activePost.profileid,
+      myprofileid: profile.id,
+    };
+    dispatch(blockUser(payload)).then((res) => {
+      setState({ ...state, blockModal: false })
+      if (res.status) {
+        toast.success(res.message)
+      } else {
+        toast.error(res.message)
+      }
+    })
+  }
   return (
     <>
       <div
         className={`flex w-full rounded-lg py-2 justify-between items-center px-2 flex-col mt-2 bg-white mb-2`}
       >
         {/* Top Section */}
-        <section className="w-full flex items-centern justify-between">
+        <section className="w-full flex items-center justify-between">
           <div
-            className="flex cursor-pointer"
+            className="flex overflow-hidden text-ellipsis w-full cursor-pointer"
             onClick={() => navigate(`/profile/${item?.profile.id}`)}
           >
-            <div className="flex w-[46px] h-[46px]">
+            <div className="flex min-w-[46px] w-[46px] h-[46px]">
               {/* due to img broke dynamic src commented */}
               <img
                 src={item?.profile?.pimage ? item?.profile?.pimage : user}
@@ -287,7 +310,7 @@ const PostCard = ({ userData, item = {} }) => {
               />
             </div>
 
-            <div className="flex flex-col flex-1 justify-center ml-2">
+            <div className="flex  flex-col flex-1 justify-center ml-2">
               <div className="flex items-center">
                 {/*font weight removed*/}
                 <span className="ml-1 font-bold">
@@ -299,7 +322,7 @@ const PostCard = ({ userData, item = {} }) => {
                 </span>
               </div>
 
-              <div className=" flex flex-col gap-1">
+              <div className="w-full flex items-center whitespace-nowrap text-ellipsis overflow-hidden gap-2">
                 {/* <HiUserGroup size={16} /> */}
                 {item?.viptype === 5 ? (
                   <div className="text-xs">Updated profile picture</div>
@@ -321,15 +344,15 @@ const PostCard = ({ userData, item = {} }) => {
                 {/* font size reduced */}
                 {/* <span className="text-[11px] font-semibold">1 year ago</span> */}
                 {item?.location ? (
-                  <div className="flex gap-1 items-center">
-                    <GrLocation size={10} />
+                  <div title={item?.location} className="flex gap-1 items-center">
+                    <GrLocation size={12} />
                     <span className="text-xs">{item?.location}</span>
                   </div>
                 ) : (
                   ""
                 )}
                 {/* <img src="" alt="" /> */}
-                <span className="text-[11px] font-semibold">
+                <span title={item?.profile?.location} className="text-[11px] font-semibold">
                   {item?.profile?.location}
                 </span>
               </div>
@@ -431,18 +454,18 @@ const PostCard = ({ userData, item = {} }) => {
                   className="m-3 mb-0 w-[300px] sm:w-full max-w-[500px] h-[260px] rounded-full"
                   onClick={() => handleModal(item)}
                 >
-                {
-                  item.image.includes('mp4')
-                  ? <video src={item?.image}
-                   className="w-full h-full object-cover border border-gray-500"
-                    controls></video>
-                  : 
-                  <img
-                    src={item?.image}
-                    alt=""
-                    className="w-full h-full object-cover border border-gray-500"
-                  />
-                }
+                  {
+                    item.image.includes('mp4')
+                      ? <video src={item?.image}
+                        className="w-full h-full object-cover border border-gray-500"
+                        controls></video>
+                      :
+                      <img
+                        src={item?.image}
+                        alt=""
+                        className="w-full h-full object-cover border border-gray-500"
+                      />
+                  }
                 </div>
               </>
             )
@@ -514,7 +537,7 @@ const PostCard = ({ userData, item = {} }) => {
                   showAlert={alert}
                   button={
                     <img
-                      src="./images/sendIcon.png"
+                      src={ sendIcon}
                       alt=""
                       className="w-[40px] pr-2 cursor-pointer"
                       onClick={onCommetIncrease}
@@ -530,9 +553,9 @@ const PostCard = ({ userData, item = {} }) => {
               onClick={onShowShareModal}
             >
               <img
-                src="./images/share.png"
+                src={shareIcon}
                 alt=""
-                className="w-[54%] cursor-pointer"
+                className="w-[50%] cursor-pointer"
               />
             </div>
           </div>
@@ -585,6 +608,10 @@ const PostCard = ({ userData, item = {} }) => {
           />
         </Portals>
       )}
+      {postMenuModal?.reportModal &&
+          <ReportModal onClose={ handleCloseModal }/>
+      }
+
       {deleteModal && (
         <Portals closeModal={() => setState({ ...state, deleteModal: false })}>
           <ConfirmationModal

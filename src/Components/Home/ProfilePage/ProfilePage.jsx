@@ -21,17 +21,21 @@ import { toast } from "react-toastify";
 import PostCard from "../PostContetnt/PostCard/PostCard";
 import { createPost } from "../../../redux/actionCreators/postActionCreator";
 import moment from "moment";
-import { getUserPostList, imageUploadApi } from "../../../redux/actionCreators/rootsActionCreator";
+import { getUserPostsList, imageUploadApi } from "../../../redux/actionCreators/rootsActionCreator";
 import { getPrivacyDetail } from "../../../redux/actionCreators/profileAction"
 import { AiOutlineEyeInvisible } from 'react-icons/ai'
-
 const ProfilePage = ({ isOthers }) => {
   const [selectedOption, setSelectedOption] = useState("Posts");
   const [privacyType, setPrivacyType] = useState('Public')
   const dispatch = useDispatch();
   const params = useParams();
+  const data = [
+    { title: "Posts" },
+    { title: "Photos" },
+    { title: "Videos" },
+    { title: "Kicks" },
+  ];
 
-  console.log(privacyType, 'privacyType eh')
   const reducerData = useSelector((state) => {
     return {
       following: state?.profileReducer?.following,
@@ -56,40 +60,34 @@ const ProfilePage = ({ isOthers }) => {
   const isFriend = myFriendsList?.some(data => data?.friend?.friendprofileid == params?.id);
 
 
-console.log(isFriend)
   const isPersonal = isOther ? friendDetail?.profiletype === 'Personal' : profile?.profiletype === "Personal";
   const [state, setState ] = useState({})
   const { coverImg, profileImg, showEditModal} = state
-
-  useEffect(() => {    
+  useEffect(() => {
+    window.scrollTo(0, 0)
      isPersonal ? getEducation(): '';
-     isOther ? dispatch(getPrivacyDetail(params?.id)) : '';
-
+     
      dispatch(getOwnFriendsList(profile?.id))
-
+     dispatch(getUserPostsList(user?.id));
      if(privacyDetails) setPrivacyType(privacyDetails?.viewprofile)
-
-     isOther ? dispatch(getFriendProfile(user?.id)).then((res) => {
-       const payload ={
-         ownProfileId: profile?.id,
-         othersProfileId: user?.id,
-       }
-
-       dispatch(checkFriend(payload))
-      if (!res.status) {
-        toasterFunction(res.message);
-        // toast.error(res.message)
-      }
-      else{
-      }
-    }): "";
+     if(isOther){
+      dispatch(getPrivacyDetail(params?.id));
+      dispatch(getFriendProfile(user?.id)).then((res) => {
+           const payload ={
+             ownProfileId: profile?.id,
+             othersProfileId: user?.id,
+           }
+    
+           dispatch(checkFriend(payload))
+        });
+        // dispatch(getUserPostList(user?.id));
+    }
     dispatch(getFollowing(user?.id));
     dispatch(getFollower(user?.id));
     dispatch(getFriendsList(user?.id));
     // dispatch
-    dispatch(getUserPostList(user?.id));
 
-  }, [params?.id, isOther]);
+  }, []);
 
 
   function getEducation (){
@@ -151,6 +149,7 @@ console.log(isFriend)
         {/* Category Section */}
         <section className="w-full sm:w-[90%] flex items-center justify-between">
           <CategorySection
+          data={data}
             selectedOption={selectedOption}
             setSelectedOption={setSelectedOption}
           />

@@ -456,14 +456,14 @@ export const getPostById = (data) => async (dispatch) => {
   }
 };
 
-export const getUserPostList = (data) => async (dispatch) => {
+export const getUserPostsList = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
       `https://web.uynite.com/post/api/post/getposts/${data}`
     );
     console.log(response);
     dispatch({
-      type: "GET_USER_POST",
+      type: "GET_USERS_POST",
       payload: response.data,
     });
   } catch (error) {

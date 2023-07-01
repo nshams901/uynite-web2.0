@@ -38,9 +38,16 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
   const relations = [
     friend?.isFriend && "friend",
     friend?.classment && "classmate",
-    friend?.collgues && "colleague",
+    friend?.collgues && "officemate",
     friend?.relative && "relative",
   ];
+
+  const [modalType, setModalType] = useState({
+    unFriend: false,
+    changeRelationship: false,
+    block: false,
+  });
+
   const profile = useSelector((state) => state.profileReducer.profile);
 
   const options = useMemo(() => {
@@ -60,7 +67,7 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
       {
         name: "Officemate",
         key: "officemate",
-        checked: relations.includes("colleague"),
+        checked: relations.includes("officemate"),
       },
     ];
     const forOrgAcc = [
@@ -69,7 +76,7 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
     return {
       relation: profiletype === "Personal" ? forPersonalAcc : forOrgAcc,
     };
-  }, []);
+  }, [modalType.changeRelationship]);
 
   const { relation } = options;
 
@@ -84,11 +91,7 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
     });
     setState({ ...state, relationOption: selected });
   };
-  const [modalType, setModalType] = useState({
-    unFriend: false,
-    changeRelationship: false,
-    block: false,
-  });
+ 
   const openModalOption = (optionName) => {
     if (optionName === "Un-Friend") {
       setModalType({

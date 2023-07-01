@@ -120,7 +120,7 @@ const SearchFriendsPage = ({ isFriend }) => {
     const userCredential = JSON.parse(localStorage.getItem('userCredential'));
     console.log(data.some((item) => item?.key === 'classmate'), data);
     const group = relationOptions?.filter((item) => item.union);
-    console.log(group, data, 'GROUPPPPPPPPPPP');
+
     let payload = {
       id: profile?.id,
       fname: fname,

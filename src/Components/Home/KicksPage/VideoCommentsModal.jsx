@@ -1,5 +1,5 @@
 import { MdOutlineMusicNote } from "react-icons/md";
-import { TiArrowBack } from "react-icons/ti";
+import { TiArrowBack, TiTickOutline } from "react-icons/ti";
 import { AiFillHeart } from "react-icons/ai";
 import { IoSend } from "react-icons/io5";
 import { AiOutlineCloseCircle } from "react-icons/ai";
@@ -16,6 +16,7 @@ import {
   commentPostLiked,
   getCommentsByPostid,
   getCommentsReplyByPostid,
+  kicksCommentDisliked,
 } from "../../../redux/actionCreators/kicksActionCreator";
 import moment from "moment";
 import { toast } from "react-toastify";
@@ -28,7 +29,10 @@ import {
 } from "../../../redux/actionCreators/rootsActionCreator";
 import { useNavigate } from "react-router-dom";
 import user from "../../../Assets/Images/user.png";
-import liked from '../../../Assets/Images/kicksLike.png'
+import liked from '../../../Assets/Images/kicksLike.png';
+import afterLike from '../../../Assets/Images/afterLike.png'
+import MenuDropdown from "../../../Components/common/MenuDropdown";
+
 
 export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
   const dispatch = useDispatch();
@@ -47,7 +51,7 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
   const [state, setState] = useState({
     msgText: "",
   });
-  const { commentImage, imgFile, alert, msgText } = state;
+  const { commentImage, imgFile, alert, msgText, editComment, editableComment} = state;
   const [openInput, setOpenInput] = useState(false);
   const [id, setid] = useState("");
   const openReplyModal = (id) => {
@@ -55,6 +59,7 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
     setid(id);
   };
 
+  const postOption = [{ name: 'Edit' }, { name: 'Delete' }]
   // comment Reply api intregration....
   const handleSendReply = async () => {
     if (!msgText) {
@@ -158,41 +163,47 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
     }
   };
 
-  const handleLike = (itemId, dislike) => {
+  const handleLike = (itemId, dislike, commentid) => {
     const payload = {
       datetime: new Date().getTime(),
       postid: itemId,
       profileid: profile.id,
       type: "c"
     }
-    let params ={
+    let params = {
       pageNumber: 0,
       pageSize: 10
     }
-    if(roots){
-      if(dislike){
+    if (roots) {
+      if (dislike) {
         const payload = {
           profileid: profile.id,
           likeid: itemId
         }
-        dispatch(commentDisliked(payload)).then((res) =>{
-         dispatch(getCommentByPostid(activePost?.id, params))
+        dispatch(commentDisliked(payload)).then((res) => {
+          dispatch(getCommentByPostid(activePost?.id, params))
         })
       } else {
         dispatch(commentPostLiked(payload)).then(res => {
-         dispatch(getCommentByPostid(activePost?.id, params))
+          dispatch(getCommentByPostid(activePost?.id, params))
         })
       }
       return;
     }
-    if(dislike) {
-
-    }else
-    dispatch(commentLiked(payload)).then(res => {
-      if(res?.status){
-        dispatch(getCommentsByPostid(activePost?.id));
+    if (dislike) {
+      const payload = {
+        profileid: profile.id,
+        id: commentid
       }
-    })
+      dispatch(kicksCommentDisliked(payload)).then((res) => {
+        dispatch(getCommentsByPostid(activePost?.id));
+      })
+    } else
+      dispatch(commentLiked(payload)).then(res => {
+        if (res?.status) {
+          dispatch(getCommentsByPostid(activePost?.id));
+        }
+      })
   };
   const handleEmojiClick = (emoji) => {
     console.log(emoji);
@@ -209,11 +220,11 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
 
   const getLikeId = (likes) => {
     const data = likes?.find(item => item?.profileid === profile?.id);
-    if(data) return data?.id;
+    if (data) return data?.id;
     else return false;
   }
   const handleReplyLike = (id, dislike) => {
-    if(dislike) {
+    if (dislike) {
       const payload = {
         datetime: new Date().getTime(),
         likeid: id,
@@ -223,24 +234,57 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
       dispatch(commentDisliked(payload)).then((res) => {
         dispatch(getCommentByPostid(activePost?.id, { pageNumber: 0, pageSize: 10 }));
       })
-    }else{
-      const payload = {
-        datetime: new Date().getTime(),
-        postid: id,
-        profileid: profile.id,
-        type: "c"
-      }
-      let params ={
+    } else {
+      let params = {
         pageNumber: 0,
         pageSize: 10
       }
-      dispatch(commentPostLiked(payload)).then(res => {
-        dispatch(getCommentByPostid(activePost.id, params))
-        if(res?.status){
+      if (roots) {
+        const payload = {
+          datetime: new Date().getTime(),
+          postid: id,
+          profileid: profile.id,
+          type: "r"
         }
-      })
+        dispatch(commentPostLiked(payload)).then(res => {
+          dispatch(getCommentByPostid(activePost.id, params))
+          if (res?.status) {
+          }
+        })
+      } else {
+
+        // like comment in kicks
+        const payload = {
+          datetime: new Date().getTime(),
+          postid: id,
+          profileid: profile.id,
+          type: "r"
+        }
+        dispatch(commentLiked(payload)).then(res => {
+          dispatch(getCommentsByPostid(activePost?.id));
+          if (res?.status) {
+          }
+        })
+      }
 
     }
+  }
+
+  const handleClickMenu = ( option, text ) => {
+    if( option === 'Edit'){
+      setState({ ...state, editComment: text, editableComment: true})
+    }else if( option === 'Delete'){
+      setState({ ...state, confirmModal: true})
+    }
+  }
+
+  const handleComment = (e) => {
+    const { value } = e.target
+    setState({ ...state, editComment: value})
+  }
+
+  const handleSaveComment = () => {
+    setState({ ...state, editableComment: false})
   }
 
   return (
@@ -296,10 +340,30 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                           </span>
                         </div>
                         <div>
-                          <BsThreeDots />
+                          <MenuDropdown
+                            placement={"left-end"}
+                            arrow={true}
+                            button={
+                              <BsThreeDots
+                                size={28}
+                                className="cursor-pointer m-0 text-gray-800 font-bold z-[999999] !p-0"
+                              // onClick={showMenuListModal}
+                              />
+                            }
+                            options={ userprofileid === profile?.id ? postOption : [ { name: 'Report'}]}
+                            handleOption={(option) => handleClickMenu(option, text)}
+                          />
                         </div>
                       </div>
                       <div className="flex justify-between items-end">
+                      {
+                        editableComment ? 
+                        <>
+                          <Input className="bg-white rounded-md" value={editComment} onChange={handleComment}/>
+                          <TiTickOutline size={25} className="ml-2 my-auto" onClick={ handleSaveComment}/>
+                        </>
+                        :
+                        <>
                         <span className="text-[14px]">{text}
                           {image ? <img className="w-24" src={image} /> : ""}
                         </span>
@@ -309,19 +373,21 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                           </span>
                           <span>{replycount?.length || 0} replies</span>
                         </div>
+                        </>
+                      }
                       </div>
                     </div>
                     {/* <input type="text" /> */}
 
                     <div className="w-1/6 pl-2 text-[#666666]">
-                    {
-                      getLikeId(likecount) ? 
-                      <img className="w-6 cursor-pointer" src={liked} onClick={() => handleLike(getLikeId(likecount), "dislike")} /> :
-                      <AiFillHeart
-                        className="text-2xl cursor-pointer"
-                        onClick={() => handleLike(id)}
-                      />
-                    }
+                      {
+                        getLikeId(likecount) ?
+                          <img className="w-6 cursor-pointer" src={ roots ? afterLike : liked} onClick={() => handleLike(getLikeId(likecount), "dislike", id)} /> :
+                          <AiFillHeart
+                            className="text-2xl cursor-pointer"
+                            onClick={() => handleLike(id)}
+                          />
+                      }
                       <TiArrowBack
                         className="text-2xl cursor-pointer"
                         onClick={() => openReplyModal(id)}
@@ -385,16 +451,18 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
                         <button
                           onClick={(e) => {
                             e.preventDefault()
-                            handleReplyLike(id)}}
+                          }}
                           className="w-1/6 pl-2 text-[#666666]"
                         >
-                        { 
-                          isLiked ?
-                          <img className="w-6 cursor-pointer" src={liked} onClick={() => handleReplyLike(isLiked.id, "dislike")} /> 
-                          :
-                          <AiFillHeart className="text-2xl" />
+                          {
+                            isLiked ?
+                              <img className="w-6 cursor-pointer" src={roots ? afterLike :liked} onClick={() => handleReplyLike(isLiked.id, "dislike")} />
+                              :
+                              <AiFillHeart className="text-2xl"
+                                onClick={() => handleReplyLike(id)}
+                              />
 
-                        }
+                          }
                         </button>
                       </div>
                     );
