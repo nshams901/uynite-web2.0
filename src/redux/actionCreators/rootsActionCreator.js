@@ -127,9 +127,10 @@ export const getCommentByPostid = (data, payload) => async (dispatch) => {
       payload
     );
     dispatch({
-      type: "COMMENTS_LIST",
+      type: "",
       payload: response.data,
     });
+    return response.data
   } catch (error) {
     throw error;
   }
@@ -200,7 +201,7 @@ export const getLikesById = (postDetails) => async (dispatch) => {
     );
     console.log("likesResult", likesResult);
     dispatch({
-      type: "GET_LIKE_BY_POST_ID",
+      type: "ADD_POST_LIKE",
       payload: likesResult?.data,
     });
     return likesResult?.data;

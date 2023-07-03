@@ -18,10 +18,15 @@ const rootsReducer = (state = initialState, action) => {
         postList: [action.payload, ...state.postList],
       };
 
-    case "GET_LIKE_BY_POST_ID":
+    case "ADD_POST_LIKE":
+      const { postList: allPostLists} = state
+      const resp = action.payload.data
+      const list = allPostLists.map((post) => post.id === resp.postid ? { ...post, likeid: resp.id} : post)
+
       return {
         ...state,
         likedDetails: action.payload,
+        postList: list
       };
     case "ACTIVE_POST":
       return {

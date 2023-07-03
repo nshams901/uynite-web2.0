@@ -6,15 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPostLike } from "../../../../redux/actionCreators/postActionCreator";
 import { useState } from "react";
 import { getKicksLike } from "../../../../redux/actionCreators/kicksActionCreator";
-const LikeModal = ({ closeLikeModal, kicks }) => {
+const LikeModal = ({ closeLikeModal, kicks, activePost }) => {
   const dispatch = useDispatch();
   const reducerData = useSelector((state) => {
     return {
       // allLikesList: state.postReducer.postLikes,
-      activePost: state.rootsReducer.activePost,
+      // activePost: state.rootsReducer.activePost,
     };
   });
-  const { activePost, postLikes } = reducerData;
+  const {  postLikes } = reducerData;
   const [state, setState] = useState({});
   const { allLikesList } = state;
   useEffect(() => {

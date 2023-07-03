@@ -32,32 +32,43 @@ import user from "../../../Assets/Images/user.png";
 import liked from '../../../Assets/Images/kicksLike.png';
 import afterLike from '../../../Assets/Images/afterLike.png'
 import MenuDropdown from "../../../Components/common/MenuDropdown";
+import { useEffect } from "react";
 
 
-export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
+export default function VideoCommentsModal({ onClose, ispenComment, roots, activePost}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const reducerData = useSelector((state) => {
     return {
       commentsList: state?.kicksReducer.comments,
-      activePost: state?.rootsReducer?.activePost, //active post --- that post which is currently click by user
+      // activePost: state?.rootsReducer?.activePost, //active post --- that post which is currently click by user
       profile: state?.profileReducer?.profile,
       replyList: state?.kicksReducer?.reply,
       userprofileid: state.profileReducer.profile?.id
     };
   });
 
-  const { commentsList = [], activePost, profile, userprofileid } = reducerData;
+  const {  profile, userprofileid } = reducerData;
   const [state, setState] = useState({
     msgText: "",
   });
-  const { commentImage, imgFile, alert, msgText, editComment, editableComment} = state;
+  const { commentImage, imgFile, alert, msgText, editComment, editableComment, commentsList = []} = state;
   const [openInput, setOpenInput] = useState(false);
   const [id, setid] = useState("");
   const openReplyModal = (id) => {
     setOpenInput(true);
     setid(id);
   };
+
+  useEffect(() => {
+    let payload = {
+      pageNumber: 0,
+      pageSize: 10,
+    };
+    dispatch(getCommentByPostid(activePost?.id, payload)).then((res) => {
+      setState({ ...state, commentsList: [...commentsList, ...res.data.content]})
+    });
+  }, [])
 
   const postOption = [{ name: 'Edit' }, { name: 'Delete' }]
   // comment Reply api intregration....
@@ -286,7 +297,7 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots }) {
   const handleSaveComment = () => {
     setState({ ...state, editableComment: false})
   }
-
+console.log(commentsList, ">>>>>>>>>>>");
   return (
     <section
       className=" items-stretch justify-center h-full w-full flex  fixed top-[50%] left-[50%]
