@@ -211,7 +211,7 @@ const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
                           </div>
                           <div onClick={()=>handleDeleteEvent(data?.id)} className='flex hover:bg-gray-300 cursor-pointer p-2.5 border-b border-gray-300'>
                            <img src={deleteImg} className='w-6 h-6' />
-                           <span className='pr-4 px-2'>Cencel Event</span>
+                           <span className='pr-4 px-2'>Cancel Event</span>
                           </div>
                           <div onClick={handleShareEvent} className='flex hover:bg-gray-300 cursor-pointer p-2.5'>
                            <img src={shareImg} className='w-6 h-6' />

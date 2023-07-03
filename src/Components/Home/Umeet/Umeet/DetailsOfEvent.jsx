@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 import EventDeleteModal from './Modal/EventDeleteModal'
+import selectedOne from '../../../../Assets/Images/Umeet/Umeet-Main/Umeet-Attending.png'
+import { toast } from 'react-toastify'
 
 export default function DetailsOfEvent({ myEvent,
  handleEditEvent, handleShareEvent, handleFeedbacks, eventDetail, 
@@ -15,17 +17,21 @@ export default function DetailsOfEvent({ myEvent,
    const [politicalPartyFeedback, setPoliticalPartyFeedback] = useState(false)
    const [isPoliticalPartyFeedback, setIsPoliticalPartyFeedback] = useState(false)
    const [showDeleteMyEvent, setShowDeleteMyEvent] = useState(false)
+   const [feedback, setFeedback] = useState('')
+   const [questionresponse, setQuestionresponse] = useState(null)
 
-   const { umeetReducer } = useSelector(state=>state)
-   console.log(umeetReducer?.eventDetail?.id)
+   const { umeetReducer, profileReducer } = useSelector(state=>state)
+
    const handleDeleteEvent = ()=>{
       setDeleteId(umeetReducer?.eventDetail?.id)
       setShowDeleteMyEvent(true)      
    }
     
-   const handleFeedback = ()=>{
+   const handleFeedback = (opt)=>{
+      console.log(opt)
      setIsPoliticalPartyFeedback(true)
-    }
+     setQuestionresponse(opt)
+   }
 
     useEffect(()=>{
       if(eventDetail && eventDetail.eventName){
@@ -53,7 +59,21 @@ export default function DetailsOfEvent({ myEvent,
       }
     }, [])
 
-    const options = {weekday: 'long',year: 'numeric',month: 'long',day: 'numeric',hour: 'numeric',minute: 'numeric',second: 'numeric',timeZone: 'UTC'}
+   const options = {weekday: 'long',year: 'numeric',month: 'long',day: 'numeric',hour: 'numeric',minute: 'numeric',second: 'numeric',timeZone: 'UTC'}
+
+   const feedbackPostData = {
+      "eventId": umeetReducer?.eventDetail?.id,
+      "feedback": feedback,
+      "feedbackBy": profileReducer?.profile?.id,
+      "questionresponse": questionresponse
+   }
+
+   const handleSendFeedback = async()=>{
+      const { data } = await axios.post(`https://web.uynite.com/event/api/event/feedback`,
+         feedbackPostData)
+      console.log(data), 'feedback'
+      if(toast) toast.success('feedback sended!')
+   }
 
     return (
      <div className='p-4 bg-white rounded-xl w-full'>
@@ -71,32 +91,35 @@ export default function DetailsOfEvent({ myEvent,
       </div>
 
       <div className=''>
-
        <div className={`${politicalPartyFeedback ? '' : 'hidden'} my-3 border-b`}>
         <p className='z-10 text-[17px] left-4 font-semibold'>{eventDetail?.eventQuestion}</p>
         <section>
-         <div onClick={handleFeedback} className='py-1.5 px-4 cursor-pointer my-1.5 font-bold w-full lg:w-[60%] bg-[#e7e1e1] rounded-2xl flex justify-between items-center'>
+         <div onClick={()=>handleFeedback('OPT1')} className='py-1.5 relative px-4 cursor-pointer my-1.5 font-bold relative w-full lg:w-[60%] bg-[#e7e1e1] rounded-2xl flex justify-between items-center'>
           <span className='font-bold'>{eventDetail?.eventquestionopt1}</span>
-          <span className='p-1 text-white rounded-full flex justify-center items-center h-6 w-6 bg-green-600'>0</span>
+          <span className='p-1 text-white rounded-full flex justify-center items-center h-6 w-6 bg-green-600'>{questionresponse == 'OPT1' ? '1' : '0'}</span>
+          {questionresponse == 'OPT1' ? <img src={selectedOne} className='w-6 h-6 absolute right-14'/> : null}
          </div>
-         <div onClick={handleFeedback} className='py-1.5 px-4 cursor-pointer my-1.5 font-bold w-full lg:w-[60%] bg-[#e7e1e1] rounded-2xl flex justify-between items-center'>
+         <div onClick={()=>handleFeedback('OPT2')} className='py-1.5 px-4 cursor-pointer my-1.5 font-bold w-full relative lg:w-[60%] bg-[#e7e1e1] rounded-2xl flex justify-between items-center'>
           <span className='font-bold'>{eventDetail?.eventquestionopt2}</span>
-          <span className='p-1 text-white rounded-full flex justify-center items-center h-6 w-6 bg-green-600'>0</span>
+          <span className='p-1 text-white rounded-full flex justify-center items-center h-6 w-6 bg-green-600'>{questionresponse == 'OPT2' ? '1' : '0'}</span>
+          {questionresponse == 'OPT2' ? <img src={selectedOne} className='w-6 h-6 absolute right-14'/> : null}
          </div>
-         <div onClick={handleFeedback} className='py-1.5 px-4 my-1.5 cursor-pointer font-bold w-full lg:w-[60%] bg-[#e7e1e1] rounded-2xl flex justify-between items-center'>
+         <div onClick={()=>handleFeedback('OPT3')} className='py-1.5 px-4 my-1.5 cursor-pointer font-bold w-full relative lg:w-[60%] bg-[#e7e1e1] rounded-2xl flex justify-between items-center'>
           <span className='font-bold'>{eventDetail?.eventquestionopt3}</span>
-          <span className='p-1 text-white rounded-full flex justify-center items-center h-6 w-6 bg-green-600'>0</span>
+          <span className='p-1 text-white rounded-full flex justify-center items-center h-6 w-6 bg-green-600'>{questionresponse == 'OPT3' ? '1' : '0'}</span>
+          {questionresponse == 'OPT3' ? <img src={selectedOne} className='w-6 h-6 absolute right-14'/> : null}
          </div>
-         <div onClick={handleFeedback} className={`${eventDetail?.eventquestionopt4 ? '' : 'hidden'} py-1.5 px-4 my-1.5 cursor-pointer font-bold w-full lg:w-[60%] bg-[#e7e1e1] rounded-2xl flex justify-between items-center`}>
+         <div onClick={()=>handleFeedback('OPT4')} className={`${eventDetail?.eventquestionopt4 ? '' : 'hidden'} relative py-1.5 px-4 my-1.5 cursor-pointer font-bold w-full lg:w-[60%] bg-[#e7e1e1] rounded-2xl flex justify-between items-center`}>
           <span className='font-bold'>{eventDetail?.eventquestionopt4}</span>
-          <span className='p-1 text-white rounded-full flex justify-center items-center h-6 w-6 bg-green-600'>0</span>
+          <span className='p-1 text-white rounded-full flex justify-center items-center h-6 w-6 bg-green-600'>{questionresponse == 'OPT4' ? '1' : '0'}</span>
+          {questionresponse == 'OPT4' ? <img src={selectedOne} className='w-6 h-6 absolute right-14'/> : null}
          </div>                           
         </section>
         {isPoliticalPartyFeedback &&(
         <div className='relative w-full lg:w-[60%]'>
          <label className='absolute z-10 text-[10px] left-4 bg-white px-2 font-semibold text-gray-400'>Add Your Feedback here</label>
-         <textarea rows='2' className='w-full outline-none my-1 rounded-lg border border-gray-300 p-2'/>
-         <p className='cursor-pointer text-[#649B8E] text-[15px] flex justify-end font-bold'>Send Vote</p>
+         <textarea rows='2' onChange={e=>setFeedback(e.target.value)} className='w-full outline-none my-1 rounded-lg border border-gray-300 p-2'/>
+         <p onClick={handleSendFeedback} className='cursor-pointer text-[#649B8E] text-[15px] flex justify-end font-bold'>Send Vote</p>
         </div>
         )}
         
