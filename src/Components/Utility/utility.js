@@ -79,6 +79,7 @@ export const getPrivacy = (relation) => {
     Friend: friend,
     Classmate: books,
     Officemate: person,
+    Colleague: person
   }
   return obj[relation] || union
 }

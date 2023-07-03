@@ -34,11 +34,11 @@ import union from '../../../../Assets/Images/unionIcon.png'
 import { getFriendsList } from "../../../../redux/actionCreators/friendsAction";
 
 export let privacyList = [
-  { name: "Public", icon: globe },
-  { name: "Friends" , icon: friends},
-  { name: "Relatives", icon: home },
-  { name: "Classmates", icon: books },
-  { name: "Officemates", icon: person},
+  { name: "Public", key: 'Public', icon: globe },
+  { name: "Friends" , key: 'Friend', icon: friends},
+  { name: "Relatives", key: 'Relative', icon: home },
+  { name: "Classmates", key: 'Classmate', icon: books },
+  { name: "Officemates", key: 'Colleague', icon: person},
 ];
 const CreatePostModal = ({
   // setShowCreatePostModal,
@@ -176,7 +176,7 @@ const CreatePostModal = ({
     }
     // await uploadAllImages();
     const payload = {
-      shareto: postPrivacy?.name === 'Public' ? 'Public' : postPrivacy.name.slice(0,-1),
+      shareto: postPrivacy?.key,
       type: "Post",
       template: "No_template",
       image: images?.join("@"),
@@ -193,7 +193,7 @@ const CreatePostModal = ({
     };
     const updatePayload = {
       profileid: profile?.id,
-      shareto: postPrivacy?.name === 'Public' ? 'Public' : postPrivacy.name.slice(0,-1),
+      shareto: postPrivacy?.key,
       type: "Post",
       template: "No_template",
       image: images?.join("@"),

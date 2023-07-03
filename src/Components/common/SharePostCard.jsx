@@ -7,9 +7,11 @@ import {
 } from "@material-tailwind/react";
 import user from "../../Assets/Images/user.png";
 import { useNavigate } from "react-router-dom";
+import { responsive } from "../Home/SliderSection/MainCarousel";
+import Carousel from "react-multi-carousel";
 //   import { StarIcon } from "@heroicons/react/24/solid";
 
-export default function SharePostCard({ data, profileData }) {
+export default function SharePostCard({ data, profileData , handleModal}) {
   const navigate = useNavigate();
   const { text, image } = data;
   const { pimage, fname, lname, job, id } = profileData;
@@ -43,10 +45,69 @@ export default function SharePostCard({ data, profileData }) {
       <CardBody className="mb-2 p-0">
         <Typography> {text} </Typography>
         {
-          image && 
-          <div className="h-[250px]">
-            <img className="w-full h-full object-cover" src={image}/>
-          </div>
+            data.viptype === 5 ? (
+              <>
+                <div
+                  className="m-3 mb-0 w-[200px] h-[200px] rounded-full"
+                  // onClick={() => handleModal(item)}
+                >
+                  <img
+                    src={image}
+                    alt=""
+                    className="w-full h-full rounded-full object-cover border border-gray-500"
+                  />
+                </div>
+              </>
+            ) : 
+            image ?
+             image?.split("@").length > 1 ? (
+              <Carousel
+                infinite
+                arrows
+                responsive={responsive}
+                showDots={true}
+                className="w-full"
+              >
+                {image?.split("@").map((item) => {
+                  return (
+                    <div className="flex justify-center ">
+                      <div className="w-full h-[260px] border border-gray-400">
+                        {
+                          item.includes('mp4') ?
+                            <video src={item} > </video>
+                            :
+                            <img
+                              src={item}
+                              alt="image"
+                              className="mb-3 opacity-40 w-full h-full object-cover"
+                            />
+                        }
+                      </div>
+                    </div>
+                  );
+                })}
+              </Carousel>
+            ) :
+              <>
+                <div
+                  className="m-3 mb-0  sm:w-full max-w-[500px] h-[260px] rounded-full"
+                  onClick={() => handleModal(data)}
+                >
+                  {
+                    image.includes('mp4')
+                      ? <video src={image}
+                        className="w-full h-full object-cover border border-gray-500"
+                        controls></video>
+                      :
+                      <img
+                        src={image}
+                        alt=""
+                        className="w-full opacity-40 h-full object-cover border border-gray-500"
+                      />
+                  }
+                </div>
+              </>
+            : ""
         }
       </CardBody>
     </Card>

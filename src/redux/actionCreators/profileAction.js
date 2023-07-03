@@ -50,6 +50,30 @@ export const getFriendProfile = (data) => async (dispatch) => {
   }
 };
 
+export const getPostProfile = (data) => async (dispatch) => {
+  const token = JSON.parse(localStorage.getItem("userCredential")).token;
+  try {
+    const response = await axios.get(
+      `https://web.uynite.com/profile/api/profile/${data}`,
+      {
+        headers: {
+          "Accept-Language": "en",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(response.data, "<<<<<<<<<<");
+    dispatch({
+      type: "GET_POST_PROFILE",
+      payload: response.data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 export const getProfileDetails = (data) => async (dispatch) => {
   const token = JSON.parse(localStorage.getItem("userCredential")).token;

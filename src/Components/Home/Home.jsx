@@ -15,6 +15,7 @@ import {
 } from "../../redux/actionCreators/rootsActionCreator";
 import NoPostPage from "./NoPostPage/NoPostPage";
 import { getFollowingKicks, getLatestKicks, getTrendingKicks } from "../../redux/actionCreators/kicksActionCreator";
+import { getFriendsList } from "../../redux/actionCreators/friendsAction";
 
 const Home = ({ onShowReportModal, showReportModal }) => {
   const dispatch = useDispatch();
@@ -46,6 +47,9 @@ const Home = ({ onShowReportModal, showReportModal }) => {
       dispatch(
         getUnionListByProfileId(defaultRootData?.data?.postdata?.profileid)
       );
+
+      dispatch(getFriendsList(profile?.id))
+
     }
   };
   useEffect(() => {

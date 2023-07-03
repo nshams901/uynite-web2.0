@@ -106,6 +106,7 @@ const PostCard = ({ userData, item = {} }) => {
   const [openModal, setOpenModal] = useState({
     OnLikeModal: false,
     commentModal: false,
+    activePost: {}
   });
 
   const onHandleShareModal = () => {
@@ -120,36 +121,15 @@ const PostCard = ({ userData, item = {} }) => {
     });
   };
   const onHandleOpenLikeModal = () => {
-    dispatch({
-      type: "ACTIVE_POST",
-      payload: item,
-    });
-    let payload = {
-      pageNumber: 0,
-      pageSize: 10,
-    };
-    dispatch(getPostLike(item?.id, payload));
-    dispatch(getFriendsList(profile?.id))
     setOpenModal({
       ...openModal,
       OnLikeModal: true,
+      activePost: item
     });
   };
 
   const onHandleOpenCommentModal = () => {
-    dispatch({
-      type: "ACTIVE_POST",
-      payload: item,
-    });
-    let payload = {
-      pageNumber: 0,
-      pageSize: 10,
-    };
-    dispatch(getCommentByPostid(item?.id, payload));
-    setOpenModal({
-      ...openModal,
-      commentModal: true,
-    });
+    setOpenModal(prev => ({...prev, commentModal: true, activePost: item }));
   };
 
   const onHandleCloseModal = () => {
@@ -185,9 +165,6 @@ const PostCard = ({ userData, item = {} }) => {
         decreaseLikeByLikeId(profile?.id, item?.likeid)
       );
       if (dislikeResponse?.status) {
-        dispatch(
-          getAllPostWithLimit(defaultRootData?.data?.postdata?.profileid)
-        );
         setLikeButton(false);
       }
     } else {
@@ -290,6 +267,8 @@ const PostCard = ({ userData, item = {} }) => {
       }
     })
   }
+
+  console.log(openModal.commentModal, showShareModal.shareModal, "CCCCCCCCCCCCCCCCCCCC");
   return (
     <>
       <div
@@ -402,10 +381,10 @@ const PostCard = ({ userData, item = {} }) => {
 
           {item?.sharedpostid ? (
             <div className="w-full">
-              <SharedPost
+              {/* <SharedPost
                 postid={item.sharedpostid}
                 profileid={item?.shareprofileid}
-              />
+              /> */}
             </div>
           ) : item?.image ? (
             item.viptype === 5 ? (
@@ -592,12 +571,12 @@ const PostCard = ({ userData, item = {} }) => {
 
       {openModal?.OnLikeModal && (
         <Portals closeModal={onHandleCloseModal}>
-          <LikeModal closeLikeModal={onHandleCloseModal} />
+          <LikeModal activePost={ openModal.activePost } closeLikeModal={onHandleCloseModal} />
         </Portals>
       )}
       {openModal?.commentModal && (
         <Portals closeModal={onHandleCloseModal}>
-          <VideoCommentsModal roots onClose={onHandleCloseModal} post={posts} />
+          <VideoCommentsModal activePost={ openModal.activePost } roots onClose={onHandleCloseModal} post={posts} />
         </Portals>
       )}
       {blockModal && (

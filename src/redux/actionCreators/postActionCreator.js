@@ -70,7 +70,7 @@ export const getPostLike = (postid, params) => async (dispatch) => {
   );
   console.log("postDataResult", postDataResult);
   dispatch({
-    type: "GET_POST_LIKE",
+    type: "",
     payload: postDataResult.data,
   });
   return postDataResult.data;
