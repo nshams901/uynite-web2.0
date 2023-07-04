@@ -77,7 +77,9 @@ const UpdateProfile = () => {
     businesscategory,
     others_address,
     personalname,
-    personalLastName
+    personalLastName,
+    job= profile.job,
+    company
   } = states;
 
   const isPersonal = profiletype === "Personal";
@@ -141,6 +143,8 @@ const UpdateProfile = () => {
       fname: fname, //from user input BUSINESS NAME
       gender: gender?.name,
       mobile: mobile,
+      job: states.job,
+      company: states.company,
       pimage: pimage, //if profile image is there, add the URL here.
       loksabha: states.loksabha?.loksabha,
       state: states.state?.state || "",
@@ -336,6 +340,35 @@ const UpdateProfile = () => {
                   )}
                 </div>
               )}
+              {
+                isPersonal ?
+                <div className="flex gap-2">
+                <Input
+                  classes={"my-2 w-1/2"}
+                  label={"Job"}
+                  attributes={{
+                    name: 'job',
+                    onChange: (e) => handleChange(e.target.name, e.target.value),
+                    type: "text",
+                    placeholder: "Job",
+                    value: job
+                  }}
+                />
+                <Input
+                  classes={"my-2 w-1/2"}
+                  label={"Company"}
+                  attributes={{
+                    name: 'company',
+                    onChange: (e) => e.target.value?.length < 16 &&
+                      handleChange(e.target.name, e.target.value),
+                    type: "text",
+                    placeholder: 'Company Name',
+                    value: company
+                  }}
+                />
+              </div>
+              : <></>
+              }
               <Input
                 classes={"flex my-2"}
                 label={"Email"}

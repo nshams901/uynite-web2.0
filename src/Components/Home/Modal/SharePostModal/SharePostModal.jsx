@@ -6,18 +6,18 @@ import ShareWithModal from "../ShareWithModal/ShareWithModal";
 import { useDispatch, useSelector } from "react-redux";
 import Dropdown from "../../../Login/Content/Modal/Dropdown";
 import { privacyList } from "../CreatePostModal/CreatePostModal";
-import { getMyUnion } from "../../../../redux/actionCreators/unionActionCreator";
+import { getMyUnion, getUnions } from "../../../../redux/actionCreators/unionActionCreator";
 import Loader from "../../../common/Loader";
 import { sharePost } from "../../../../redux/actionCreators/postActionCreator";
 import moment from "moment";
 import user from "../../../../Assets/Images/user.png";
-import { getAllPostWithLimit } from "../../../../redux/actionCreators/rootsActionCreator";
+import { getAllPostWithLimit, getUserPostsList } from "../../../../redux/actionCreators/rootsActionCreator";
 import DropdownComp from "../../../common/DropdownComp";
 import { useNavigate } from "react-router-dom";
 import { Typography } from "@material-tailwind/react";
 import unionIcon from '../../../../../src/Assets/Images/unionIcon.png'
 
-const SharePostModal = ({ handleClose }) => {
+const SharePostModal = ({ handleClose, activePost }) => {
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
@@ -42,12 +42,15 @@ const SharePostModal = ({ handleClose }) => {
   const navigate = useNavigate()
   const reducerData = useSelector((state) => {
     return {
-      activePost: state.rootsReducer.activePost || {},
+      // activePost: state.rootsReducer.activePost || {},
       profile: state.profileReducer.profile || {},
-      myUnionList: state.unionReducer.myUnionList,
+      // myUnionList: state.unionReducer.myUnionList,
     };
   });
-  const { activePost, profile, myUnionList } = reducerData;
+  const { profile,  } = reducerData;
+  const [state, setState] = useState({});
+  const { postPrivacy = {name: 'Public'}, content, loading , myUnionList = []} = state;
+
   const { text, image } = activePost;
   const isPersonal = profile?.profiletype === "Personal";
 
@@ -58,11 +61,11 @@ const SharePostModal = ({ handleClose }) => {
     ? [...privacyList, ...unions]
     : [{ name: "Friends" }, ...unions];
 
-  const [state, setState] = useState({});
-  const { postPrivacy = {name: 'Public'}, content, loading } = state;
 
   useEffect(() => {
-    dispatch(getMyUnion(profile?.id));
+    dispatch(getUnions(profile?.id)).then((res) => {
+      setState({ ...state, myUnionList: res.data})
+    });
   }, []);
 
   const handlePostPrivacy = (selectedValue) => {
@@ -87,7 +90,7 @@ const SharePostModal = ({ handleClose }) => {
       delete: false,
       close: "close",
       profileid: profile?.id,
-      postprofileid: profile?.id,
+      postprofileid: activePost?.profile?.id,
       sharedpostid: activePost.id,
       location: "",
       postdate: moment().format("DD-MM-YYYY HH:mm:ms"),
@@ -97,6 +100,7 @@ const SharePostModal = ({ handleClose }) => {
         handleClose();
         setState({ ...state, loading: false });
         dispatch(getAllPostWithLimit(profile.id));
+        dispatch(getUserPostsList(profile.id))
       }
     });
   };

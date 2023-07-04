@@ -40,6 +40,22 @@ export const getMyUnion = (data) => async (dispatch) => {
       type: "GET_MY_UNION",
       payload: response.data,
     });
+    return response.data
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getUnions = (data) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `https://web.uynite.com/friend/api/group/getGroups/${data}`
+    );
+    dispatch({
+      type: "",
+      payload: response.data,
+    });
+    return response.data
   } catch (error) {
     throw error;
   }

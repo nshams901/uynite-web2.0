@@ -27,10 +27,10 @@ function Autocomplete({ livePlace, placeholder, value, types, handleChangeLocati
 
   function onPlacesChanged(value) {
     const place = searchBox.getPlaces()
-    // console.log(place?.[0]?.name, "PPPPPP LLLLLLLLL");
+    console.log(place, "PPPPPP LLLLLLLLL");
     const lat = place?.[0]?.geometry.location.lat();
     const lng = place?.[0]?.geometry.location.lng();
-    livePlace(place?.[0]?.formatted_address, { lat, lng });
+    livePlace( place?.[0].types?.[0] === 'administrative_area_level_1' ? place?.[0]?.formatted_address : place?.[0]?.name , { lat, lng });
   };
   const handleChange = (e) => {
     const { value } = e.target
@@ -48,7 +48,7 @@ function Autocomplete({ livePlace, placeholder, value, types, handleChangeLocati
   const showPosition = async (position) => {
     const lat = position.coords.latitude;
     const lng = position.coords.longitude;
-    const location = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&result_type=administrative_area_level_1&key=AIzaSyCxfRNiw6DgtJadpT7qVO2It8rVhaiGCx0`).then((res) => {
+    const location = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&result_type=administrative_area_level_3&key=AIzaSyCxfRNiw6DgtJadpT7qVO2It8rVhaiGCx0`).then((res) => {
       return res.json();
     }).then((res) => res)
     

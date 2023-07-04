@@ -31,6 +31,7 @@ const AboutSection = ({ isOther, data }) => {
     businesscategory,
     createdate,
     orgemail,
+    job, company,
     orgmobile, others_address, personalname, personalLastName, others_website
   } = data || {};
   const reducerData = useSelector((state) => {
@@ -199,6 +200,13 @@ const AboutSection = ({ isOther, data }) => {
         </div> */}
         {isPersonal ? (
           <>
+          <Typography className="text-lg w-full py-1 px-4 bg-gray-300  font-[800]">Profession</Typography>
+          <div className="flex items-center gap-2 px-4">
+          <p className="text-sm w-full">
+            <strong className="text-md font-medium w-1/2 inline-block">Company</strong>
+            <strong>: { ( job || company ) ? `works ${ company ? `at ${company}`: ""} ${ job ? `as ${job}`: ""}` : "" }</strong>
+          </p>
+        </div>
             <Typography className="text-lg w-full py-1 px-4 bg-gray-300  font-[800]">Education Details</Typography>
             <div className="px-4 font-bold text-gray-500">School</div>
             {/* Scholling Section */}
@@ -226,7 +234,7 @@ const AboutSection = ({ isOther, data }) => {
                     <strong> {ugdegree} </strong>
                     {
                       ugaddress ?
-                        <>form <strong>{ugaddress} </strong></>
+                        <>from <strong>{ugaddress} </strong></>
                         : ""
                     }
                     {
