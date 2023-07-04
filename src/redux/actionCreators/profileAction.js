@@ -317,7 +317,7 @@ export const getGraduationList = (data) => async (dispatch) => {
 export const graduationBranch = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/profile/api/graduation/graduations/BA`
+      `https://web.uynite.com/profile/api/graduation/graduations/${data}`
     );
     console.log(response);
     dispatch({
@@ -361,7 +361,7 @@ export const getPgList = (data) => async (dispatch) => {
 export const pgBranch = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/profile/api/pg/postgraduation`
+      `https://web.uynite.com/profile/api/pg/postgraduation/${data}`
     );
     console.log(response);
     dispatch({

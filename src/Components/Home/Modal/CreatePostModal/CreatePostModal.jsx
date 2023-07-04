@@ -22,7 +22,7 @@ import { toast } from "react-toastify";
 import AutocompletePlace from "../../../googlemap/AutocompletePlace";
 import { Alert, Typography } from "@material-tailwind/react";
 import user from "../../../../Assets/Images/user.png";
-import { getMyUnion } from "../../../../redux/actionCreators/unionActionCreator";
+import { getUnions } from "../../../../redux/actionCreators/unionActionCreator";
 import ImageEditor from "../../../Roots/ImageEditor";
 import DropdownComp from "../../../common/DropdownComp";
 import globe from '../../../../Assets/Images/globe.png';
@@ -44,18 +44,19 @@ const CreatePostModal = ({
   // setShowCreatePostModal,
   title,
   handleCloseModal,
+  activePost
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
   const reducerData = useSelector((state) => {
     return {
       profile: state.profileReducer.profile,
-      activePost: state.rootsReducer.activePost,
-      myUnionList: state.unionReducer.myUnionList,
+      // activePost: state.rootsReducer.activePost,
+      // myUnionList: state.unionReducer.myUnionList,
       friends: state.friendReducer.friends,
     };
   });
-  const { profile, activePost, myUnionList, friends } = reducerData;
+  const { profile, friends } = reducerData;
   const name = profile?.fname + profile?.lname;
   const [state, setState] = useState({});
   const { selectedFile } = state;
@@ -71,14 +72,17 @@ const CreatePostModal = ({
     loading,
     allFiles = isEdit ? activePost?.image?.split("@") : "",
     isRelationAvailable = true,
+    myUnionList = []
   } = state;
 
   const [ImageFile, setImageFile] = useState(isEdit ? [activePost?.image] : []);
   const [VideoFile, setVideoFile] = useState([]);
 
   useEffect(() => {
-    dispatch(getFriendsList(profile?.id))
-    dispatch(getMyUnion(profile?.id));
+    // dispatch(getFriendsList(profile?.id))
+    dispatch(getUnions(profile?.id)).then((res) => {
+      setState({ ...state, myUnionList: res.data})
+    })
   }, []);
 
   const handlePostContent = (e) => {

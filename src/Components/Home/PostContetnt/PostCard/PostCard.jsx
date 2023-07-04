@@ -20,6 +20,7 @@ import {
   getAllPostWithLimit,
   getCommentByPostid,
   getLikesById,
+  getUserPostsList,
 } from "../../../../redux/actionCreators/rootsActionCreator";
 import user from "../../../../Assets/Images/user.png";
 import OriginalPostModal from "../../Modal/OriginalPostModal/OriginalPostModal";
@@ -84,12 +85,12 @@ const PostCard = ({ userData, item = {} }) => {
 
   const shortDescription = description.substring(0, 300);
   const onShowShareModal = () => {
-    dispatch({
-      type: "ACTIVE_POST",
-      payload: item,
-    });
+    // dispatch({
+    //   type: "ACTIVE_POST",
+    //   payload: item,
+    // });
     // console.log("jwww");
-    setShowShareModal({ ...showShareModal, shareModal: true });
+    setShowShareModal({ ...showShareModal, shareModal: true, activePost: item });
   };
   const dispatch = useDispatch();
   const showMenuListModal = () => {
@@ -110,14 +111,15 @@ const PostCard = ({ userData, item = {} }) => {
   });
 
   const onHandleShareModal = () => {
-    dispatch({
-      type: "ACTIVE_POST",
-      payload: item,
-    });
+    // dispatch({
+    //   type: "ACTIVE_POST",
+    //   payload: item,
+    // });
     setShowShareModal({
       ...showShareModal,
       shareModal: false,
       shareWith: false,
+      activePost: item
     });
   };
   const onHandleOpenLikeModal = () => {
@@ -211,27 +213,28 @@ const PostCard = ({ userData, item = {} }) => {
   };
 
   const handleClickMenu = (modalName) => {
-    dispatch({
-      type: "ACTIVE_POST",
-      payload: item,
-    });
+    // dispatch({
+    //   type: "ACTIVE_POST",
+    //   payload: item,
+    // });
     if (modalName === "Edit Post") {
-      setPostMenuModal({ ...postMenuModal, editPost: true });
+      setPostMenuModal({ ...postMenuModal, editPost: true, activePost: item });
     } else if (modalName === "History") {
       dispatch(getPostHistory(item.id))
-      setPostMenuModal({ ...postMenuModal, originalPost: true });
+      setPostMenuModal({ ...postMenuModal, originalPost: true, activePost: item });
     } else if (modalName === "Report") {
-      setPostMenuModal({ ...postMenuModal, reportModal: true });
+      setPostMenuModal({ ...postMenuModal, reportModal: true, activePost: item });
     } else if (modalName === "Block user") {
-      setState({ ...state, blockModal: true });
+      setState({ ...state, blockModal: true, activePost: item });
     } else if (modalName === "Delete Post") {
-      setState({ ...state, deleteModal: true });
+      setState({ ...state, deleteModal: true, activePost: item });
     }
   };
 
   const handleDelete = () => {
-    dispatch(deletePostByPostId(profile?.id, activePost.id)).then((res) => {
+    dispatch(deletePostByPostId(profile?.id, state.activePost.id)).then((res) => {
       dispatch(getAllPostWithLimit(profile?.id));
+      dispatch(getUserPostsList(profile.id))
       if (res?.status) {
         setState({ ...state, deleteModal: false });
         toast.success(res?.message);
@@ -268,7 +271,6 @@ const PostCard = ({ userData, item = {} }) => {
     })
   }
 
-  console.log(openModal.commentModal, showShareModal.shareModal, "CCCCCCCCCCCCCCCCCCCC");
   return (
     <>
       <div
@@ -381,10 +383,10 @@ const PostCard = ({ userData, item = {} }) => {
 
           {item?.sharedpostid ? (
             <div className="w-full">
-              {/* <SharedPost
+              <SharedPost
                 postid={item.sharedpostid}
                 profileid={item?.shareprofileid}
-              /> */}
+              />
             </div>
           ) : item?.image ? (
             item.viptype === 5 ? (
@@ -543,6 +545,7 @@ const PostCard = ({ userData, item = {} }) => {
       {showShareModal?.shareModal && (
         <Portals closeModal={onHandleShareModal}>
           <SharePostModal
+            activePost={ showShareModal.activePost}
             showShareModal={showShareModal}
             onClickOnNext={onClickOnNext}
             handleClose={onHandleShareModal}
@@ -559,13 +562,13 @@ const PostCard = ({ userData, item = {} }) => {
       )}
       {postMenuModal?.editPost && (
         <Portals closeModal={handleCloseModal}>
-          <UpdatePostModal title="Edit" handleCloseModal={handleCloseModal} />
+          <UpdatePostModal activePost={ postMenuModal.activePost } title="Edit" handleCloseModal={handleCloseModal} />
         </Portals>
       )}
 
       {postMenuModal?.originalPost && (
         <Portals closeModal={handleCloseModal}>
-          <OriginalPostModal handleCloseModal={handleCloseModal} />
+          <OriginalPostModal activePost={ postMenuModal.activePost } handleCloseModal={handleCloseModal} />
         </Portals>
       )}
 
@@ -582,18 +585,20 @@ const PostCard = ({ userData, item = {} }) => {
       {blockModal && (
         <Portals closeModal={() => setState({ ...state, blockModal: false })}>
           <BlockModal
+            activePost = { state.activePost }
             handleBlock={handleBlock}
             closeModalOption={() => setState({ ...state, blockModal: false })}
           />
         </Portals>
       )}
       {postMenuModal?.reportModal &&
-          <ReportModal onClose={ handleCloseModal }/>
+          <ReportModal activePost={ state.activePost } onClose={ handleCloseModal }/>
       }
 
       {deleteModal && (
         <Portals closeModal={() => setState({ ...state, deleteModal: false })}>
           <ConfirmationModal
+            activePost= { state.activePost}
             message={"Are you sure you want to delete this post?"}
             button={"Confirm"}
             closeModal={() => setState({ ...state, deleteModal: false })}

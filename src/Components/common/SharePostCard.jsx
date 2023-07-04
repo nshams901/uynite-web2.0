@@ -27,7 +27,7 @@ export default function SharePostCard({ data, profileData , handleModal}) {
         <Avatar
           size="md"
           variant="circular"
-          className="rounded-full"
+          className="rounded-full min-w-[48px]"
           src={pimage || user}
           alt="User"
         />
