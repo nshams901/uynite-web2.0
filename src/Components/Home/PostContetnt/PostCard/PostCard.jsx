@@ -220,7 +220,7 @@ const PostCard = ({ userData, item = {} }) => {
     if (modalName === "Edit Post") {
       setPostMenuModal({ ...postMenuModal, editPost: true, activePost: item });
     } else if (modalName === "History") {
-      dispatch(getPostHistory(item.id))
+      // dispatch(getPostHistory(item.id))
       setPostMenuModal({ ...postMenuModal, originalPost: true, activePost: item });
     } else if (modalName === "Report") {
       setPostMenuModal({ ...postMenuModal, reportModal: true, activePost: item });

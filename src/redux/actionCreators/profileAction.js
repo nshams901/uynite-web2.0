@@ -321,7 +321,7 @@ export const graduationBranch = (data) => async (dispatch) => {
     );
     console.log(response);
     dispatch({
-      type: "",
+      type: "GET_GRADUATION_BRANCH",
       payload: response.data,
     });
   } catch (error) {
@@ -365,7 +365,7 @@ export const pgBranch = (data) => async (dispatch) => {
     );
     console.log(response);
     dispatch({
-      type: "",
+      type: "GET_PG_BRANCH",
       payload: response.data,
     });
   } catch (error) {

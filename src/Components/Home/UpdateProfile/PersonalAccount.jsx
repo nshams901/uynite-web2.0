@@ -4,15 +4,17 @@ import Dropdown from "../../Login/Content/Modal/Dropdown";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import Accordion from "../../Accordion/Accordion";
 import Dropdown2 from "../../Login/Content/Modal/Dropdown2";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AutocompletePlace from "../../googlemap/AutocompletePlace";
 import DropdownComp from "../../common/DropdownComp";
+import { useEffect } from "react";
 
 const PersonalAccount = ({
   states ,
   education,
   handleEducation,
 }) => {
+  const dispatch = useDispatch()
   const { state, district, assembly, loksabha } = states;
   const {
     // pgadress,
@@ -39,18 +41,18 @@ const PersonalAccount = ({
   } = education || {};
   const reducerData = useSelector((state) => {
     return {
-      countryList: state.authReducer.countryList,
-      stateList: state.authReducer.stateList,
-      districtList: state.authReducer.districtList,
-      loksabhaList: state.authReducer.loksabhaList,
-      assemblyList: state.authReducer.assemblyList,
+      ugbranchList: state.profileReducer.graduationBranchList ,
+      pgbranchList: state.profileReducer.pgBranchList,
       ugdegreeList: state.profileReducer.ugdegreeList,
       pgdegreeList: state.profileReducer.pgdegreeList,
+
     };
   });
   const {
     ugdegreeList,
     pgdegreeList,
+    ugbranchList,
+    pgbranchList
   } = reducerData;
 
   const year = [
@@ -154,7 +156,7 @@ const PersonalAccount = ({
               <DropdownComp
                 up={true}
                 style={" w-full"}
-                options={ugdegreeList}
+                options={ugbranchList}
                 keyName="branch"
                 name={"Select Branch"}
                 handleChange={(value) =>
@@ -211,7 +213,7 @@ const PersonalAccount = ({
               <DropdownComp
                 up={true}
                 style={"max-w-full"}
-                options={pgdegreeList}
+                options={pgbranchList}
                 keyName="branch"
                 name={"Select Branch"}
                 handleChange={(value) =>

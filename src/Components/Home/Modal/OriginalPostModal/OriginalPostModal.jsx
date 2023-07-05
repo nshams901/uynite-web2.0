@@ -1,18 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GrLocation } from "react-icons/gr";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import user from '../../../../Assets/Images/user.png'
+import { getHistory  } from "../../../../redux/actionCreators/postActionCreator";
 
-const OriginalPostModal = ({ handleCloseModal }) => {
+const OriginalPostModal = ({ handleCloseModal, activePost }) => {
+  const dispatch = useDispatch()
   const reducerData = useSelector((state) => {
     return {
-      postHistory: state.postReducer.postHistory,
-      activePost: state.rootsReducer.activePost
+      // postHistory: state.postReducer.postHistory,
+      // activePost: state.rootsReducer.activePost
     }
   })
-  const { postHistory = [], activePost = {}} = reducerData;
-  const {  profile, text, location, image} = activePost 
 
+  // const { activePost = {}} = reducerData;
+  const {  profile, text, location, image} = activePost;
+
+  const [state, setState] = useState({ });
+  const { postHistory = []} = state
+  
+  useEffect(() => {
+      dispatch(getHistory(activePost.id)).then(res => {
+        setState({ ...state, postHistory: res.data})
+      })
+  }, [])
   return (
     // Original Post Section
 
