@@ -8,6 +8,8 @@ const initialState = {
   userPostsList: [],
   blockedUsers: [],
   privacyDetails: null,
+  graduationBranchList: [],
+  pgBranchList: []
 };
 
 
@@ -64,14 +66,20 @@ const profileReducer = (state = initialState, action) => {
       });
       return { ...state, userPostsList: desliked };
 
-      case "ADD_POST_LIKE":
-        const { userPostsList: allPostLists} = state
-        const resp = action.payload.data
-        const list = allPostLists.map((post) => post.id === resp.postid ? { ...post, likeid: resp.id} : post)
+    case "ADD_POST_LIKE":
+      const { userPostsList: allPostLists } = state
+      const resp = action.payload.data
+      const list = allPostLists.map((post) => post.id === resp.postid ? { ...post, likeid: resp.id } : post)
       return {
         ...state,
         userPostsList: list
       }
+
+    case "GET_GRADUATION_BRANCH":
+      return { ...state, graduationBranchList: action.payload.data }
+
+    case "GET_PG_BRANCH":
+      return { ...state, pgBranchList: action.payload.data }
     default:
       return state;
   }

@@ -17,6 +17,7 @@ import { debounce } from "../../Utility/utility";
 import ProfileMenu from "./ProfileMenu";
 import MenuDropdown from "../../common/MenuDropdown";
 import GlobalSearch from "./GlobalSearch";
+import searchIcon from '../../../Assets/Images/Search.png'
 
 const Navbar = () => {
   const [profileModal, setProfileModal] = useState(false);
@@ -128,7 +129,7 @@ const Navbar = () => {
             onChange={handleChange}
           />
           <img
-            src="./images/Search.png"
+            src={ searchIcon }
             alt=""
             className="w-5 h-5 cursor-pointer"
           />

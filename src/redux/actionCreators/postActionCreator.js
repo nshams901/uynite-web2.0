@@ -58,6 +58,24 @@ export const getPostHistory = (postData) => async (dispatch) => {
   return postDataResult.data;
 };
 
+export const getHistory = (postData) => async (dispatch) => {
+  const postDataResult = await axios.get(
+    `https://web.uynite.com/post/api/post/posthistory/${postData}`,
+    postData,
+    {
+      headers: {
+        "Accept-Language": "en",
+        // "Authorization" : `Bearer ${postData.token}`
+      },
+    }
+  );
+  dispatch({
+    type: "",
+    payload: postDataResult.data,
+  });
+  return postDataResult.data;
+};
+
 export const getPostLike = (postid, params) => async (dispatch) => {
   const postDataResult = await axios.get(
     `https://web.uynite.com/post/api/like/${postid}?${getQueryParams(params)}`,

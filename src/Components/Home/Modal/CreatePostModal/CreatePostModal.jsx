@@ -120,6 +120,9 @@ const CreatePostModal = ({
 
   async function handleCreatePost() {
     if(isRelationAvailable !== true){
+        if(isRelationAvailable === 'group'){
+          return toast.error(`You don't have any friends in this group`)
+        }else
         return toast.error( `${isRelationAvailable} is not present`)
     }
     if (allFiles) {
@@ -141,7 +144,7 @@ const CreatePostModal = ({
   }
 
   const unions = myUnionList.map((item) => {
-    return { name: item?.groupName, icon: union };
+    return {...item, name: item?.groupName, icon: union, key: 'group' };
   });
   const postPrivacyList = isPersonal
     ? [...privacyList, ...unions]
@@ -151,6 +154,7 @@ const CreatePostModal = ({
     //   setState({ ...state, alert: true, postPrivacy: selectedValue });
     // } else {
     // }
+    console.log(selectedValue);
     let isRelationAvailable = true
     if(selectedValue.name === 'Friends'){
       isRelationAvailable = friends.length > 0 ? true : 'Friend';
@@ -163,6 +167,8 @@ const CreatePostModal = ({
     }else if( selectedValue.name === 'Officemates'){
       const isOfficemate = friends.find( item => item.friend.collgues);
       isRelationAvailable = isOfficemate ? true : 'Officemate';
+    }else if( selectedValue.key === 'group'){
+      isRelationAvailable = selectedValue.count ? true : 'group'
     }
     setState({ ...state, alert: true, postPrivacy: selectedValue, isRelationAvailable: isRelationAvailable });
 

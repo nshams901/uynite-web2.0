@@ -13,7 +13,7 @@ import {
 } from "../../../redux/actionCreators/authActionCreator";
 import AutocompletePlace from "../../googlemap/AutocompletePlace";
 import Dropdown2 from "../../Login/Content/Modal/Dropdown2";
-import { addGraduation, getGraduationList, getPgList, getProfileById, updateEducation, updateProfile } from "../../../redux/actionCreators/profileAction";
+import { addGraduation, getGraduationList, getPgList, getProfileById, graduationBranch, pgBranch, updateEducation, updateProfile } from "../../../redux/actionCreators/profileAction";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -90,7 +90,11 @@ const UpdateProfile = () => {
   }, [profiletype]);
 
   const getPersonalDetail = () => {
-     dispatch(getEducationDetail(id));
+    console.log(educationDetails.ugdegree, educationDetails);
+    dispatch(getEducationDetail(id)).then((res) => {
+       dispatch(graduationBranch( res.ugdegree));
+       dispatch(pgBranch( res.pgdegree))
+     });
      dispatch(getPgList());
      dispatch(getGraduationList());
   }
@@ -202,7 +206,14 @@ const UpdateProfile = () => {
     }
   });
   }
-  const handleEducation = (name, value) => setEducation({...education, isEditEdu: true, [name]: value})
+  const handleEducation = (name, value) => {
+    console.log(name, value);
+    if(name === 'ugdegree') {
+      dispatch(graduationBranch(value))
+    }else if(name=== 'pgdegree'){
+      dispatch(pgBranch(value))
+    }
+    setEducation({...education, isEditEdu: true, [name]: value})}
   const checkDisable = () => {
     return !(fname || lname)
   }

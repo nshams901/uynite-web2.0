@@ -407,7 +407,7 @@ const VideoComponent = ({ dataList, data, handleMute, isMute }) => {
         >
           <div className=" cursor-pointer px-6">
             <div className="flex gap-2 items-center mb-3">
-              <img src={eye} alt="" className="w-[25px] h-[15px] ml-2" />
+              <img src={eye} alt="" className="w-[25px] invert ml-2" />
               <p className="text-[10px]">{viewcount} Views </p>
             </div>
             <div className="flex " onClick={() => navigate(`/profile/${profileid}`)}>
