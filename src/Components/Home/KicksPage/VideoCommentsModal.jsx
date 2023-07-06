@@ -52,7 +52,7 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots, activ
   const [state, setState] = useState({
     msgText: "",
   });
-  const { commentImage, imgFile, alert, msgText, editComment, editableComment, commentsList = []} = state;
+  const { commentImage, imgFile, alert, msgText,liked_commentId = [], editComment, editableComment, commentsList = []} = state;
   const [openInput, setOpenInput] = useState(false);
   const [id, setid] = useState("");
   const openReplyModal = (id) => {
@@ -161,7 +161,7 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots, activ
         dispatch(addCommentOnKicks(commentData))
           .then((res) => {
             if (res?.status) {
-              setState({ ...state, msgText: "", commentsList: [...commentsList, { ...res.data, profile: profile }]})
+              setState({ ...state, msgText: "",  commentsList: [...commentsList, { ...res.data, profile: profile }]})
             } else {
               toast.error(res?.message);
             }
@@ -207,12 +207,14 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots, activ
         id: commentid
       }
       dispatch(kicksCommentDisliked(payload)).then((res) => {
-        dispatch(getCommentsByPostid(activePost?.id));
+        dispatch(getCommentsByPostid(activePost?.id)).then((res) => {
+          setState({ ...state, commentsList: res.data})
+        });
       })
     } else
       dispatch(commentLiked(payload)).then(res => {
         if (res?.status) {
-          dispatch(getCommentsByPostid(activePost?.id));
+          setState({...state, liked_commentId: [...liked_commentId, res.data] })
         }
       })
   };
@@ -230,6 +232,7 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots, activ
   };
 
   const getLikeId = (likes) => {
+    console.log(likes);
     const data = likes?.find(item => item?.profileid === profile?.id);
     if (data) return data?.id;
     else return false;
@@ -327,6 +330,8 @@ console.log(commentsList, ">>>>>>>>>>>");
                 profileid,
               } = data || {};
               const name = profile?.fname + profile?.lname;
+              const isLike = liked_commentId.find((item) => item.postid === id)
+              let likecounts = [...(likecount || []), isLike && isLike]
               return (
                 <>
                   <div key={id} className="my-2 flex items-center z-50 ">
@@ -380,7 +385,7 @@ console.log(commentsList, ">>>>>>>>>>>");
                         </span>
                         <div className="text-[11px]">
                           <span className="px-1">
-                            {likecount?.length || 0} likes
+                            {likecounts?.length || 0} likes
                           </span>
                           <span>{replycount?.length || 0} replies</span>
                         </div>
@@ -392,8 +397,8 @@ console.log(commentsList, ">>>>>>>>>>>");
 
                     <div className="w-1/6 pl-2 text-[#666666]">
                       {
-                        getLikeId(likecount) ?
-                          <img className="w-6 cursor-pointer" src={ roots ? afterLike : liked} onClick={() => handleLike(getLikeId(likecount), "dislike", id)} /> :
+                        getLikeId(likecounts) ?
+                          <img className="w-6 cursor-pointer" src={ roots ? afterLike : liked} onClick={() => handleLike(getLikeId(likecounts), "dislike", id)} /> :
                           <AiFillHeart
                             className="text-2xl cursor-pointer"
                             onClick={() => handleLike(id)}

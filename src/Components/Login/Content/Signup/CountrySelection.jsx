@@ -22,7 +22,7 @@ import { setDataOnStorage, toasterFunction } from "../../../Utility/utility";
 import axios from "axios";
 
 const CountrySelection = ({ modalType }) => {
-  console.log("modalll 2222221111111111", modalType);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [orgCategory, setOrgCategory] = useState("");
@@ -53,8 +53,7 @@ const CountrySelection = ({ modalType }) => {
   const [states, setState] = useState({});
   const [country, setCountry] = useState("");
 
-  console.log("Countryyyyyyyyyyyy", country);
-  console.log("reducerData", reducerData);
+
   const {
     imgFile,
     orgName,
@@ -101,7 +100,6 @@ const CountrySelection = ({ modalType }) => {
     return item.category.toLowerCase().includes(orgCategory.toLowerCase());
   });
   const handleLiveLocationn = (location) => {
-    // console.log(location, "LLLLLLLLL TTTTTTTTTTTTT");
     setState({ ...states, city: location });
   };
 
@@ -138,13 +136,14 @@ const CountrySelection = ({ modalType }) => {
       email: userInfo?.uemail.toString().includes("@") ? userInfo?.uemail : "", //from signup screen.
       fname: userInfo?.fname, //from user input BUSINESS NAME
       gender: userInfo?.gender,
-      city: city,
+      
+      hometown: city,
       mobile: !userInfo?.uemail.toString().includes("@")
         ? userInfo?.uemail
         : "",
       lname: userInfo?.lname,
       state: states?.selectedState?.state,
-      district: states?.selectedDistrict?.distric,
+      city: states?.selectedDistrict?.distric,
       pimage: "", //if profile image is there, add the URL here.
       loksabha: states?.selectedLoksabha?.loksabha,
       personalLastName: userInfo?.lname, //from user input – profile lnamein SLIDE 4
@@ -154,8 +153,6 @@ const CountrySelection = ({ modalType }) => {
       userid: userid, // stored User ID from (Slide 3)
       id:null
     };
-
-    console.log("Payyyyyyyyyaloads", payload);
     const file = new FormData();
     file.append("file", imgFile);
     const data = isPersonal ? payloads : payload;
@@ -250,13 +247,11 @@ const CountrySelection = ({ modalType }) => {
   };
 
   const handleChange = (name, value) => {
-    console.log("Value =========", value.statecode);
     const obj = {
       selectedState: getDistrict(value.statecode),
       selectedDistrict: getLoksabha(value.did),
       selectedLoksabha: getAssenbly(value.lid),
     };
-    console.log("name", name);
     obj[name] && dispatch(obj[name]);
     if (value.length > 32) {
       setState({ ...states, [name]: value.slice(0, value.length - 1) });
