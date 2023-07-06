@@ -150,8 +150,11 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots, activ
         //   payload: activePost.id,
         // });
         const res = await dispatch(addCommentOnPost(commentData));
+
         if (res?.status) {
-          dispatch(getCommentByPostid(activePost?.id, params))
+          dispatch(getCommentByPostid(activePost?.id, params)).then((res) => {
+            setState({ ...state, commentsList: res.data})
+          })
           dispatch({
             type: "INCREASE_COMMENT_COUNT",
             payload: activePost.id,
@@ -192,11 +195,15 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots, activ
           likeid: itemId
         }
         dispatch(commentDisliked(payload)).then((res) => {
-          dispatch(getCommentByPostid(activePost?.id, params))
+          dispatch(getCommentByPostid(activePost?.id, params)).then((res)=> {
+            setState({ ...state, commentsList: res.data})
+          })
         })
       } else {
         dispatch(commentPostLiked(payload)).then(res => {
-          dispatch(getCommentByPostid(activePost?.id, params))
+          dispatch(getCommentByPostid(activePost?.id, params)).then((res) => {
+            setState({ ...state, commentsList: res.data})
+          })
         })
       }
       return;
