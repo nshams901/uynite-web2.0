@@ -1,11 +1,12 @@
 import React from "react";
 
-const CustomGroupModal = ({setGroupModal}) => {
-  const onCloseGroupModal = ()=>{
+const CustomGroupModal = ({ setGroupModal }) => {
+  const onCloseGroupModal = () => {
     setGroupModal(false)
   }
   return (
-    <div className="flex w-[35%] bg-white items-center flex-col rounded-lg h-[400px]">
+    <div className="flex w-[35%] bg-white items-center flex-col fixed top-[50%] left-[50%]
+  transform translate-x-[-50%] translate-y-[-50%] z-50 rounded-lg h-[400px]">
       <div className="flex w-full justify-between my-2 px-2">
         <span className="text-md font-bold">Custom Group</span>
         <button className="text-md font-semibold rounded-lg flex items-center text-white bg-[#6780AF] px-[30px] py-0.5">
@@ -25,7 +26,7 @@ const CustomGroupModal = ({setGroupModal}) => {
         <button className="bg-[#E4E4E4] mx-2 px-4 py-1 text-xs font-bold text-gray-500 rounded-md">
           Travel Mates
         </button>
-     
+
 
         <img src="./images/mute.png" alt="" className="w-[30px]" />
       </div>
@@ -53,7 +54,7 @@ const CustomGroupModal = ({setGroupModal}) => {
         <button className="bg-[#6780AF] text-white w-[120px] text-sm py-1 rounded-xl mb-2 font-semibold mt-2">Create Group</button>
         <button className="bg-[#6780AF] text-white w-[120px] text-sm py-1 rounded-xl mb-2 font-semibold mt-2" onClick={onCloseGroupModal}>Cancel</button>
       </div>
-    
+
     </div>
   );
 };

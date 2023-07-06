@@ -65,8 +65,8 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots, activ
       pageNumber: 0,
       pageSize: 10,
     };
-    dispatch(getCommentByPostid(activePost?.id, payload)).then((res) => {
-      setState({ ...state, commentsList: [...commentsList, ...res.data.content]})
+    dispatch(roots ? getCommentByPostid(activePost?.id, payload) : getCommentsByPostid(activePost?.id, payload)).then((res) => {
+      setState({ ...state, commentsList: res.data })
     });
   }, [])
 
@@ -161,7 +161,7 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots, activ
         dispatch(addCommentOnKicks(commentData))
           .then((res) => {
             if (res?.status) {
-              dispatch(getCommentsByPostid(activePost?.id));
+              setState({ ...state, msgText: "", commentsList: [...commentsList, { ...res.data, profile: profile }]})
             } else {
               toast.error(res?.message);
             }
@@ -325,7 +325,7 @@ console.log(commentsList, ">>>>>>>>>>>");
                 image,
                 postid,
                 profileid,
-              } = data;
+              } = data || {};
               const name = profile?.fname + profile?.lname;
               return (
                 <>

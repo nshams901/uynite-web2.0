@@ -55,6 +55,7 @@ import ProfileType from "./Components/Login/Content/Signup/ProfileType";
 import CountrySelection from "./Components/Login/Content/Signup/CountrySelection";
 import UserKicks from "./Components/Home/KicksPage/UserKicks";
 import UserVideos from "./Components/Home/KicksPage/UserVideos";
+import { getFriendsList } from "./redux/actionCreators/friendsAction";
 
 const App = () => {
   const token = localStorage.getItem("token");
@@ -88,7 +89,9 @@ const App = () => {
   };
 
   useEffect(() => {
-    dispatch(getProfileById(userData?.id));
+    dispatch(getProfileById(userData?.id)).then((res) => {
+      // dispatch(getFriendsList(res.data?.id))
+    });
     isUserLoggedIn();
   }, []);
 
@@ -165,6 +168,8 @@ const App = () => {
               element={<FriendRequestPage isFriend={true} />}
             />
             <Route path="chat-page" element={<ChatPages />} />
+            <Route path="chat-page/:id" element={<ChatPages />} />
+
             <Route path="umeet" element={<Umeet />} />
             <Route path="profile-page" element={<ProfilePage />} />
             <Route path="event" element={<Event />} />

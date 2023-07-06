@@ -10,6 +10,7 @@ import { eventReducer } from './reducers/eventReducer';
 import unionReducer from "./reducers/unionReducer";
 import rootsReducer from './reducers/rootsReducer';
 import settingReducer from './reducers/settingsReducer';
+import { chatReducer } from "./reducers/chatReducer";
 
 
 const allReducer = combineReducers({
@@ -24,6 +25,7 @@ const allReducer = combineReducers({
   unionReducer,
   umeetReducer,
   settingReducer,
+  chatReducer,
 });
 
 

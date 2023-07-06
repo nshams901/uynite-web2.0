@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import PostForm from "../PostForm/PostForm";
 import FriendList from "../FriendList/FriendList";
 import CustomGroupModal from "../Modal/CustomGroupModal/CustomGroupModal";
@@ -7,17 +7,27 @@ import SearchComponent from "../SearchComponent/SearchComponent";
 import { ImPhone } from "react-icons/im";
 import { TbVideoPlus } from "react-icons/tb";
 import ChatMessage from "../../chat/ChatMessage";
-import io from "socket.io-client";
+import io, { Socket } from "socket.io-client";
 import axios from "axios";
 import { BsEmojiSmile } from "react-icons/bs";
 import { RiImageFill } from "react-icons/ri";
 import { MdSend } from "react-icons/md";
 import EmojiModal from "../../chat/EmojiModal";
+import { useDispatch, useSelector } from "react-redux";
+import { getFriendsList } from "../../../redux/actionCreators/friendsAction";
+import { useMemo } from "react";
+import userIcon from '../../../Assets/Images/user.png'
+import { isEmpty } from "../../Utility/utility";
 
 const ENDPOINT = "http://localhost:4000";
 var socket, selectedChatCompare;
 
 const ChatPages = () => {
+  const dispatch = useDispatch()
+
+  const { friends } = useSelector((state) => state.friendReducer);
+  const { profile } = useSelector((state) => state.profileReducer);
+  
   const [createGroupModal, setCreateGroupModal] = useState(false);
 
   const [isModalOpen, setModalOpen] = useState(false);
@@ -32,10 +42,13 @@ const ChatPages = () => {
   const [replyData, setReplyData] = useState({});
   const [showReplyContainer, setShowReplyContainer] = useState(false);
   const [messageId, setMessageId] = useState("");
+  const [activeProfile, setActiveProfile] = useState({ })
+  const [ state, setState ] = useState({ })
+  const { activeUserProfile , chatId, fetchMsg } = state
 
   const messagesContainerRef = useRef(null);
   const divRef = useRef(null);
-
+ 
   const selectedChatId = "6446555a7765e7b3114b4164";
 
   const toggleModal = () => {
@@ -93,32 +106,37 @@ const ChatPages = () => {
   };
 
   useEffect(() => {
-    if (newMessage === undefined) {
-      setnewMessage("");
+    if( isEmpty(friends)){
+      dispatch(getFriendsList( profile.id ))
     }
-  }, [newMessage]);
-
-  const fetchMessages = async () => {
-    if (!selectedChatId) return;
-    try {
-      const { data } = await axios.get(`/api/v1/${selectedChatId}`);
-      setMessages(data);
-
-      //console.log(messages);
-
-      socket.emit("join chat", selectedChatId);
-    } catch (error) {
-      console.log("error occured", error);
-    }
-  };
-
-  useEffect(() => {
     socket = io(ENDPOINT);
     socket.emit("setup", { _id: "64464c66a7918bce5dce5a22" });
     socket.on("connected", () => setSocketConnected(true));
     socket.on("typing", () => setIsTypinig(true));
     socket.on("stop typing", () => setIsTypinig(false));
   }, []);
+
+  useEffect(() => {
+    if (newMessage === undefined) {
+      setnewMessage("");
+    }
+  }, [newMessage]);
+
+  const fetchMessages = async (chatid) => {
+    if (!(chatid)) {
+      return console.log('Chat id not found');
+    };
+    try {
+      const { data } = await axios.get(`/api/v1/${chatid}`);
+      setMessages(data);
+
+      //console.log(messages);
+
+      socket.emit("join chat", chatid);
+    } catch (error) {
+      console.log("error occured", error);
+    }
+  };
 
   // Receiving message from socket.
 
@@ -166,16 +184,18 @@ const ChatPages = () => {
           "/api/v1/message",
           {
             content: newMessage,
+            userId: profile.id,
+            receiverId: activeProfile.id,
             replyContent: showReplyContainer ? replyData.content : "",
             type: "text",
             isReply: showReplyContainer,
             isDeleted: false,
-            chatId: selectedChatId,
+            chatId: chatId,
           },
           config
         );
 
-        // console.log(data);
+        console.log(data, ':::::::::::::::::::');
         socket.emit("new message", data);
         setShowReplyContainer(false);
         setnewMessage("");
@@ -194,25 +214,31 @@ const ChatPages = () => {
 
         console.log("image is", image);
 
-        const { data } = await axios.post(
-          "/api/v1/message",
-          {
-            content: image,
-            replyContent: showReplyContainer ? replyData.content : "",
-            type: "file",
-            isReply: showReplyContainer,
-            isDeleted: false,
-            chatId: selectedChatId,
-          },
-          config
-        );
-
-        socket.emit("new message", data);
         setShowReplyContainer(false);
         setImage("");
         setFile("");
         setnewMessage("");
         setMessages([...messages, data]);
+        
+        const { data } = await axios.post(
+          "/api/v1/message",
+          {
+            content: image,
+            userId: profile.id,
+            replyContent: showReplyContainer ? replyData.content : "",
+            type: "file",
+            isReply: showReplyContainer,
+            isDeleted: false,
+            chatId: chatId,
+            receiverId: activeUserProfile?.id
+          },
+          config
+          );
+
+          console.log(data, 'OOOOOOOOOOOOOOOOO');
+          
+          socket.emit("new message", data);
+        
       } catch (error) {
         console.log("error occured", error);
       }
@@ -220,7 +246,6 @@ const ChatPages = () => {
   };
 
   const deleteMessage = async (messageId) => {
-    console.log(">>>>>>>>>>Message Id", messageId);
     const response = window.confirm(
       "Are you sure you want to delete this message?"
     );
@@ -251,7 +276,7 @@ const ChatPages = () => {
   };
 
   useEffect(() => {
-    fetchMessages();
+    // activeUser()
     selectedChatCompare = selectedChatId;
   }, [selectedChatId, deleted, messageId]);
 
@@ -323,10 +348,24 @@ const ChatPages = () => {
   const showCreateGroupModal = () => {
     setCreateGroupModal(true);
   };
+console.log(chatId);
+  const activeUser = async ( data) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    setActiveProfile(data.profile)
+    const res = await axios.post('/api/v1/chat', { userId: profile.id, receiverId: data.profile.id }, config).then((res) => {
+      fetchMessages(res.data?._id)
+      return res
+    })
+    setState((prev) => ({ ...prev, chatId: res?.data?._id}));
+  }
   return (
     <>
       <div
-        className="flex-1 w-full grid grid-cols-12 gap-2 mt-1"
+        className="flex-1 w-full grid grid-cols-12 mt-1"
         style={{ maxHeight: "calc(100vh - 200px)" }}
       >
         {/* Recent Chats */}
@@ -348,7 +387,7 @@ const ChatPages = () => {
             />
           </div>
           <div className="h-[600px] overflow-y-scroll pt-3 flex flex-col gap-4">
-            {[1, 2, 3, 4, 55, 56, 67, 7, 4, 43, 43, 33, 2, 2, 2, 2].map(
+            {[].map(
               (elem, index) => (
                 <FriendList key={index} icon={true} desc={true} menuButton />
               )
@@ -357,18 +396,18 @@ const ChatPages = () => {
         </section>
 
         {/* Chats Section */}
-        <section className="px-3 col-span-6 flex flex-col justify-between">
+        <section className="px-3 col-span-6 flex flex-col justify-between bg-[#e4e7ec]">
           {/* Top Section */}
-          <div className="flex h-[55px] px-2 items-center bg-[#F6F6F6]">
+          <div className="flex h-[55px] bg-white px-2 items-center">
             <div className="">
               <img
-                src="./images/events.jpg"
+                src={ activeProfile?.pimage || userIcon }
                 alt=""
                 className="w-[45px] h-[45px] rounded-full"
               />
             </div>
             <div className=" flex flex-1 flex-col justify-center ml-2">
-              <h1 className="font-bold">Elisa K</h1>
+              <h1 className="font-bold">{ activeProfile?.fname || ""} { activeProfile?.lname || ""}</h1>
               <p className="text-[10px] font-bold">Active 3 hours ago</p>
             </div>
             <div>{isTypinig ? <div>typing...</div> : <></>}</div>
@@ -417,7 +456,7 @@ const ChatPages = () => {
                     replyMessage={replyMessage}
                     messageId={message._id}
                     toggleModal={toggleModal}
-                    sender={message.sender._id}
+                    sender={message.sender?._id}
                     type={message.type ? message.type : "text"}
                   />
                 );
@@ -438,7 +477,7 @@ const ChatPages = () => {
                     replyMessage={replyMessage}
                     messageId={message._id}
                     toggleModal={toggleModal}
-                    sender={message.sender._id}
+                    sender={message?.sender?._id}
                     type={message.type ? message.type : "text"}
                   />
                 );
@@ -465,7 +504,7 @@ const ChatPages = () => {
             </div>
           )}
 
-          <div className="flex items-center mb-8">
+          <div className="flex bg-white px-3 py-2 rounded-md items-center mb-8">
             <BsEmojiSmile
               size={32}
               className="me-2 cursor-pointer"
@@ -486,12 +525,12 @@ const ChatPages = () => {
             <label htmlFor="sendFile">
               <RiImageFill size={32} className="cursor-pointer" />
             </label>
-            <div className="mx-6 w-full relative">
+            <div className="bg-white w-full relative">
               <form onSubmit={sendMessage}>
                 <input
                   type="text"
                   placeholder="write messages here..."
-                  className={` w-[90%] rounded-md pl-3 py-2 outline-none bg-[#e4e7ec]`}
+                  className={` w-[90%] rounded-md pl-3 py-2 outline-none bg-white`}
                   onChange={typingHandler}
                   value={newMessage}
                 />
@@ -523,8 +562,8 @@ const ChatPages = () => {
           </div>
 
           <div className="h-[600px] overflow-y-scroll pt-2 flex flex-col gap-4">
-            {[1, 2, 3, 4, 55, 56, 67, 7, 4, 43, 43, 33, 2, 2, 2, 2].map(() => (
-              <FriendList icon={null} desc={null} />
+            {friends.map((item) => (
+              <FriendList activeUser={() => activeUser(item)} chat data={ item } icon={null} desc={null} />
             ))}
           </div>
         </div>

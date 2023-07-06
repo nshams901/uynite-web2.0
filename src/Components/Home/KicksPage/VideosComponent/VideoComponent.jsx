@@ -78,7 +78,7 @@ const VideoComponent = ({ dataList, data, handleMute, isMute }) => {
     }
   };
   const [state, setState] = useState({});
-  const { createKickPost, likeModal } = state;
+  const { createKickPost, likeModal, activePost} = state;
   const {
     id,
     commentcount = "",
@@ -139,7 +139,8 @@ const VideoComponent = ({ dataList, data, handleMute, isMute }) => {
     if (title === "comments") {
       dispatch(getCommentsByPostid(id));
       setCommentVideo(true);
-      dispatch({ type: 'INCREASE_COMMENT', payload: id})
+      setState({ ...state, activePost: data})
+      // dispatch({ type: 'INCREASE_COMMENT', payload: id})
     } else if (title === "mute") {
       handleMute()
     } else if (title === "likes") {
@@ -167,7 +168,7 @@ const VideoComponent = ({ dataList, data, handleMute, isMute }) => {
           type: "p",
           datetime: new Date().getTime(),
         };
-        // console.log("add like payload", payload)
+        console.log("add like payload", payload)
         dispatch(addLikes(payload)).then((res) => {
           // console.log("responce of add like", res)
           if (res.status) {
@@ -302,13 +303,12 @@ const VideoComponent = ({ dataList, data, handleMute, isMute }) => {
   }, []);
 
   const handleLikeModal = (e) => {
-    console.log("CLIKEDDDDDDDD");
     dispatch({
       type: 'ACTIVE_POST',
       payload: data
     })
     e.stopPropagation();
-    setState({ ...state, likeModal: true})
+    setState({ ...state, likeModal: true, activePost: data})
   }
 
   // const handlePlay = (res) => {
@@ -455,12 +455,12 @@ const VideoComponent = ({ dataList, data, handleMute, isMute }) => {
         <DeleteVideoModal onClose={() => setDeletetVideo(false)} />
       )}
       {commentVideo && (
-        <VideoCommentsModal onClose={() => setCommentVideo(false)} />
+        <VideoCommentsModal activePost={activePost} onClose={() => setCommentVideo(false)} />
       )}
         
       {likeModal && (
         <Portals closeModal={() => setState({ ...state, likeModal: false})} >
-          <LikeModal kicks closeLikeModal={() => setState({ ...state, likeModal: false})} />
+          <LikeModal activePost={activePost} kicks closeLikeModal={() => setState({ ...state, likeModal: false})} />
         </Portals>
       )}
       {createKickPost && (

@@ -126,6 +126,7 @@ export const getCommentsByPostid = (data) => async (dispatch) => {
       type: "COMMENTS_LIST",
       payload: response.data,
     });
+    return response.data
   } catch (error) {
     throw error;
   }

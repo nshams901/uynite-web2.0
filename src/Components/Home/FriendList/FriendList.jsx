@@ -18,7 +18,7 @@ import {
 import { toast } from "react-toastify";
 import { blockUser } from "../../../redux/actionCreators/settingsActionCreator";
 
-const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
+const FriendList = ({ icon, desc, handleMenuClick, data = {}, chat, activeUser }) => {
   const dispatch = useDispatch();
   const {
     fname,
@@ -204,15 +204,15 @@ const FriendList = ({ icon, desc, handleMenuClick, data = {} }) => {
       <div className="flex hover:bg-gray-300 h-[50px] px-4 items-center py-2 relative">
         {/* {openMenuModal && <CommentMenuModal data={data} leftPosition={50} topPosition={34}/>} */}
 
-        <Link to={`/profile/${id}`} className="">
+        <Link to={ chat ? "" : `/profile/${id}`} onClick={activeUser} className="">
           <img
             src={pimage || User}
             alt=""
             className="w-[45px] h-[45px] rounded-full"
           />
         </Link>
-        <Link
-          to={`/profile/${id}`}
+        <Link onClick={ activeUser }
+          to={ chat ? "" : `/profile/${id}`}
           className=" flex flex-1 flex-col justify-center ml-4"
         >
           <span className="font-medium ">
