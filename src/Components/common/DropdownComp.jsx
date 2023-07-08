@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { BsChevronDown } from 'react-icons/bs'
 
-export default function DropdownComp({ label, options,keyName, name, selectedValue, handleChange, labelClass}) {
+export default function DropdownComp({ label,flag, options,keyName, name, selectedValue, handleChange, labelClass}) {
   return (
     <div className="w-full mb-2 items-center flex">
         { label && <div className={`mr-3 w-1/4 ${labelClass}`}>{label}</div>}

@@ -239,7 +239,6 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots, activ
   };
 
   const getLikeId = (likes) => {
-    console.log(likes);
     const data = likes?.find(item => item?.profileid === profile?.id);
     if (data) return data?.id;
     else return false;

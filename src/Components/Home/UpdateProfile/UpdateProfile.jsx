@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Dropdown from "../../Login/Content/Modal/Dropdown";
@@ -22,15 +22,19 @@ import Input from "../../input/input";
 import PersonalAccount from "./PersonalAccount";
 import OrganizationAccount from "./OrganizationAccount";
 import { getEducationDetail } from "../../../redux/actionCreators/profileAction";
-import { Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import { getUserDataFromLocalStorage, isEmpty } from "../../Utility/utility";
 import Locations from "./Locations";
 import { imageUploadApi } from "../../../redux/actionCreators/rootsActionCreator";
 import DropdownComp from "../../common/DropdownComp";
+import countryList from "../../Login/Content/Signup/countryList";
+import CountryCodeDropdown from "../../profile/CountryCodeDropdown";
+import { RecaptchaVerifier, getAuth, signInWithPhoneNumber } from "firebase/auth";
 
 const UpdateProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const captchaEl = useRef()
 
   const reducerData = useSelector((state) => {
     return {
@@ -79,7 +83,10 @@ const UpdateProfile = () => {
     personalname,
     personalLastName,
     job= profile.job,
-    company
+    company,
+    countrycode,
+    otpSent,
+    otp,
   } = states;
 
   const isPersonal = profiletype === "Personal";
@@ -113,6 +120,7 @@ const UpdateProfile = () => {
     dispatch(getStateList(val.code));
   };
   const handleChange = (name, value) => {
+    console.log(name, value);
     const obj = {
       state: getDistrict(value.statecode),
       city: getLoksabha(value.did),
@@ -124,6 +132,63 @@ const UpdateProfile = () => {
     }else 
     setState({ ...states, [name]: value });
   };
+
+  const handleCountryCode = (value) => {
+    setState({ ...states, countrycode: value })
+  }
+
+  const handleVerify = () =>{
+    if(!countrycode.code){
+     return toast.error('Please select country')
+    }
+    signIn("+"+countrycode.code+mobile)
+  }
+
+  const submitOtp = () => {
+    confirmationResult.confirm(otp).then((res) => {
+      toast.success(res.message)
+      setState({ ...states, otpSent: false})
+    }).catch((err)=> {
+      toast.error(err.message)
+    })
+  }
+
+  function configureRecaptcha(phoneNumber, auth) {
+    window.recaptchaVerifier = new RecaptchaVerifier(
+      "sign-in-button",
+      {
+        size: "invisible",
+        callback: (response) => {},
+      },
+      auth
+    );
+  }
+
+  function signIn(phoneNumber) {
+    const auth = getAuth();
+    try {
+      configureRecaptcha(phoneNumber, auth);
+    } catch (err) {
+      captchaEl.current.innerHTML = null;
+      console.log(err, "captcha error");
+    }
+
+    // const auth = getAuth();
+    const appVerifier = window.recaptchaVerifier;
+    signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+      .then((confirmationResult) => {
+        window.confirmationResult = confirmationResult;
+        captchaEl.current.innerHTML = "";
+        setState({ ...states, otpSent: true })
+        // navigate(`/auth/verification/signup?${profileType}`);
+      })
+      .catch((err) => {
+        captchaEl.current.innerHTML = null;
+        // window.location.reload()
+        // console.log(err);
+        toast.error(err.message);
+      });
+  }
 
   const handleOrganization = (name, value) => {
     setOrgDetail({...orgDetail, [name]: value})
@@ -392,16 +457,15 @@ const UpdateProfile = () => {
                 }}
               />
               <div className="my-3 gap-2 flex w-full items-center justify-between">
-                <DropdownComp
-                  labelClass={'mr-[6rem]'}
-                  style={"w-full"}
-                  label={"Phone"}
-                  options={[{ code: "+91" }, { code: "+1" }]}
-                  keyName={"code"}
+                <div>
+                <CountryCodeDropdown
+                  label={'Phone'}
                   name={'code'}
-                  selectedValue={code}
-                  handleChange={(value) => handleChange("code", value)}
+                  handleChange={handleCountryCode}
+                  selectedValue={countrycode}
+                  keyName={'code'}
                 />
+                </div>
                 <Input
                   labelclass={'w-1/4'}
                   classes={"w-full"}
@@ -409,18 +473,35 @@ const UpdateProfile = () => {
                   attributes={{
                     value: mobile,
                     name: "mobile",
-                    onChange: (e) =>
-                      handleChange(e.target.name, e.target.value),
+                    onChange: (e) => e.target.value.length < 12 && handleChange(e.target.name, e.target.value),
                     type: "text",
                     placeholder: "Phone Number",
                   }}
                 />
-                {/* <input
-                  type="tel"
-                  placeholder="7878787878"
-                  className="mb-6   ml-3 border-none  p-2 outline-none  w-[70%] "
-                /> */}
+                {
+                mobile !== profile.mobile && 
+                <div>
+                <div ref={ captchaEl } id="sign-in-button"></div>
+                <Button onClick={ handleVerify } variant="text" className="m-0 p-0" >Verify</Button>
+
+                </div>
+              }
               </div>
+              { otpSent &&
+                <div className=" flex justify-end">
+                <div className="flex gap-2">
+                  <Input 
+                    attributes={{
+                      value: otp,
+                      placeholder: 'Enter Code',
+                      onChange: (e) => e.target.value?.length<7 && handleChange('otp', e.target.value),
+                      type: 'text'
+                    }}
+                  />
+                  <div><Button onClick={submitOtp } className={`py-2 bg-[#7991bd]`} >Confirm</Button></div>
+                </div>
+                </div>
+              }
               <div className=" gap-2 my-2 ">
                 <div className="">
                   <Input
