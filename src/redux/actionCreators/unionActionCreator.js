@@ -1,9 +1,10 @@
 import axios from "axios";
+import { config } from "../../config/config";
 
 export const addUnion = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/friend/api/group/add`,
+      `${config.API_URI}friend/api/group/add`,
       data
     );
     dispatch({
@@ -19,7 +20,7 @@ export const addUnion = (data) => async (dispatch) => {
 export const getUnionList = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/friend/api/group/partOfGroup/${data}`
+      `${config.API_URI}friend/api/group/partOfGroup/${data}`
     );
     dispatch({
       type: "UNION_LIST",
@@ -34,7 +35,7 @@ export const getUnionList = (data) => async (dispatch) => {
 export const getMyUnion = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/friend/api/group/getGroups/${data}`
+      `${config.API_URI}friend/api/group/getGroups/${data}`
     );
     dispatch({
       type: "GET_MY_UNION",
@@ -49,7 +50,7 @@ export const getMyUnion = (data) => async (dispatch) => {
 export const getUnions = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/friend/api/group/getGroups/${data}`
+      `${config.API_URI}friend/api/group/getGroups/${data}`
     );
     dispatch({
       type: "",
@@ -65,7 +66,7 @@ export const getUnionMembers = (data) => async (dispatch) => {
   // GET http://3.233.82.34:8080/friend/api/group/getFriends/6491c1f30e83591195655221
   try {
     const response = await axios.get(
-      `https://web.uynite.com/friend/api/group/getFriends/${data}`
+      `${config.API_URI}friend/api/group/getFriends/${data}`
     );
     console.log(response);
     dispatch({
@@ -80,7 +81,7 @@ export const getUnionMembers = (data) => async (dispatch) => {
 export const inviteMember = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/friend/api/group/addInGroup`,
+      `${config.API_URI}friend/api/group/addInGroup`,
       data 
     );
     console.log(response);
@@ -98,7 +99,7 @@ export const removeUserFromUnion = (data) => async (dispatch) => {
   const { groupId, profileId } = data;
   try {
     const response = await axios.delete(
-      `https://web.uynite.com/friend/api/group/deleteFromGroup/${groupId}/${profileId}`
+      `${config.API_URI}friend/api/group/deleteFromGroup/${groupId}/${profileId}`
     );
     console.log(response);
     dispatch({
@@ -114,7 +115,7 @@ export const removeUserFromUnion = (data) => async (dispatch) => {
 export const getInviteeList = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/friend/api/group/getInvitedMembers/${data}`
+      `${config.API_URI}friend/api/group/getInvitedMembers/${data}`
     );
     dispatch({
       type: "GET_INVITEE_LIST",
@@ -128,7 +129,7 @@ export const getInviteeList = (data) => async (dispatch) => {
 export const deleteUnion = (data) => async (dispatch) => {
   try {
     const response = await axios.delete(
-      `https://web.uynite.com/friend/api/group/deleteGroup/${data}`
+      `${config.API_URI}friend/api/group/deleteGroup/${data}`
     );
     dispatch({
       type: "GET_INVITEE_LIST",
@@ -144,7 +145,7 @@ export const cancelInvitation = (data) => async (dispatch) => {
   const { groupId, profileId } = data;
   try {
     const response = await axios.get(
-      `https://web.uynite.com/friend/api/group/deleteFromGroup/${groupId}/${profileId}`
+      `${config.API_URI}friend/api/group/deleteFromGroup/${groupId}/${profileId}`
     );
     dispatch({
       type: "GET_INVITEE_LIST",
@@ -158,7 +159,7 @@ export const cancelInvitation = (data) => async (dispatch) => {
 export const exitFromUnion = (data) => async (dispatch) => {
   try {
     const response = await axios.patch(
-      `https://web.uynite.com/friend/api/group/exitGroup`, data
+      `${config.API_URI}friend/api/group/exitGroup`, data
     );
     dispatch({
       type: "",

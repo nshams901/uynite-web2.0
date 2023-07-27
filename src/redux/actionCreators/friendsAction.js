@@ -1,10 +1,11 @@
 import axios from "axios";
 import { getQueryParams } from "../../Components/Utility/utility";
+import { config } from "../../config/config";
 
 export const requestAction = (data, Action) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/friend/api/friend/${data}/${Action}`
+      `${config.API_URI}friend/api/friend/${data}/${Action}`
     );
     dispatch({
       type: "",
@@ -19,7 +20,7 @@ export const requestAction = (data, Action) => async (dispatch) => {
 export const getUserByMail = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/login/api/user/usersbyemail/${data}`
+      `${config.API_URI}login/api/user/usersbyemail/${data}`
     );
     console.log(
       { data: [response.data.data] },
@@ -38,7 +39,7 @@ export const getUserByMail = (data) => async (dispatch) => {
 export const getUsers = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/profile/api/profile/search/${data}`
+      `${config.API_URI}profile/api/profile/search/${data}`
     );
     dispatch({
       type: "GET_USERS",
@@ -53,7 +54,7 @@ export const getUsers = (data) => async (dispatch) => {
 export const findFriends = (data, profileid) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/profile/api/profile/search/${profileid}/${data}`
+      `${config.API_URI}profile/api/profile/search/${profileid}/${data}`
     );
     dispatch({
       type: "",
@@ -68,7 +69,7 @@ export const findFriends = (data, profileid) => async (dispatch) => {
 export const addFriend = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/friend/api/friend/add`,
+      `${config.API_URI}friend/api/friend/add`,
       data
     );
     dispatch({
@@ -85,7 +86,7 @@ export const updateRelation = (data) => async (dispatch) => {
 
   try {
     const response = await axios.post(
-      `https://web.uynite.com/friend/api/friend/add`,
+      `${config.API_URI}friend/api/friend/add`,
       data
     );
     console.log(response);
@@ -102,7 +103,7 @@ export const updateRelation = (data) => async (dispatch) => {
 export const deleteRequest = (data) => async (dispatch) => {
   try {
     const response = await axios.put(
-      `https://web.uynite.com/friend/api/delete/${data}`
+      `${config.API_URI}friend/api/delete/${data}`
     );
     console.log(response);
     dispatch({
@@ -119,7 +120,7 @@ export const deleteRequest = (data) => async (dispatch) => {
 export const getFriendsList = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/friend/api/friend/${data}/Accepted`
+      `${config.API_URI}friend/api/friend/${data}/Accepted`
     );
     dispatch({
       type: "FRIEND_LIST",
@@ -134,7 +135,7 @@ export const getFriendsList = (data) => async (dispatch) => {
 export const getOwnFriendsList = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/friend/api/friend/${data}/Accepted`
+      `${config.API_URI}friend/api/friend/${data}/Accepted`
     );
     console.log('my friends bro', response?.data)
     dispatch({
@@ -150,7 +151,7 @@ export const getOwnFriendsList = (data) => async (dispatch) => {
 // export const getRequestList = (data) => async (dispatch) => {
 //   try {
 //     const response = await axios.get(
-//       `https://web.uynite.com/friend/api/friend/getfriendrequest/${data}/Send`
+//       `${config.API_URI}friend/api/friend/getfriendrequest/${data}/Send`
 //     );
 //     dispatch({
 //       type: "GET_REQUEST_LIST",
@@ -165,7 +166,7 @@ export const getOwnFriendsList = (data) => async (dispatch) => {
 export const getRequestsList = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/friend/api/friend/getprofileidwithdetail/${data}`
+      `${config.API_URI}friend/api/friend/getprofileidwithdetail/${data}`
     );
     dispatch({
       type: "GET_REQUEST_LIST",
@@ -180,7 +181,7 @@ export const getRequestsList = (data) => async (dispatch) => {
 export const acceptFriendRequest = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/friend/api/friend/add`,
+      `${config.API_URI}friend/api/friend/add`,
       data
     );
     dispatch({
@@ -197,7 +198,7 @@ export const acceptFriendRequest = (data) => async (dispatch) => {
 export const getMutualFriends = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/friend/api/friend/getfriendfriends/${data}`,
+      `${config.API_URI}friend/api/friend/getfriendfriends/${data}`,
       data
     );
     dispatch({
@@ -215,7 +216,7 @@ export const getMutualFriends = (data) => async (dispatch) => {
 export const getSuggestedFriends = (data, params) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/friend/api/friend/test/getfriendfriends/${data}?${getQueryParams(params)}`,
+      `${config.API_URI}friend/api/friend/test/getfriendfriends/${data}?${getQueryParams(params)}`,
       data
     );
     dispatch({
@@ -231,7 +232,7 @@ export const removeFriend = (data) => async (dispatch) => {
   const { profileid, friendprofileid } = data;
   try {
     const response = await axios.put(
-      `https://web.uynite.com/friend/api/friend/delete/${profileid}/${friendprofileid}`,
+      `${config.API_URI}friend/api/friend/delete/${profileid}/${friendprofileid}`,
       data
     );
     dispatch({
@@ -248,7 +249,7 @@ export const unfollow = (data) => async (dispatch) => {
   const { profileid, friendprofileid } = data;
   try {
     const response = await axios.delete(
-      `https://web.uynite.com/friend/api/follow/deletefollow/${profileid}/${friendprofileid}`,
+      `${config.API_URI}friend/api/follow/deletefollow/${profileid}/${friendprofileid}`,
       data
     );
     dispatch({
@@ -265,7 +266,7 @@ export const removeFollowers = (data) => async (dispatch) => {
   const { profileid, friendprofileid } = data;
   try {
     const response = await axios.delete(
-      `https://web.uynite.com/friend/api/follow/deletefollow/${friendprofileid}/${profileid}`,
+      `${config.API_URI}friend/api/follow/deletefollow/${friendprofileid}/${profileid}`,
       data
     );
     dispatch({
@@ -281,7 +282,7 @@ export const removeFollowers = (data) => async (dispatch) => {
 export const getTypeOfFriends = (profileid) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/friend/api/friend/gettypeoffriends/${profileid}/Friend`
+      `${config.API_URI}friend/api/friend/gettypeoffriends/${profileid}/Friend`
     );
     console.log("GET_TYPE_OF_FRIENDS", response);
     dispatch({
@@ -298,7 +299,7 @@ export const getTypeOfFriends = (profileid) => async (dispatch) => {
 export const checkFollow = (userprofile, friendprofile) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/friend/api/follow/followyesno/${userprofile}/${friendprofile}`,
+      `${config.API_URI}friend/api/follow/followyesno/${userprofile}/${friendprofile}`,
     );
     dispatch({
       type: "KICKS_SEARCH_BY_TEXT",
@@ -313,7 +314,7 @@ export const checkFollow = (userprofile, friendprofile) => async (dispatch) => {
 export const checkFriends = (userprofile, friendprofile) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/friend/api/friend/chkfriends/${userprofile}/${friendprofile}`,
+      `${config.API_URI}friend/api/friend/chkfriends/${userprofile}/${friendprofile}`,
     );
     dispatch({
       type: "",
@@ -328,7 +329,7 @@ export const checkFriends = (userprofile, friendprofile) => async (dispatch) => 
 export const checkingFrnd =async (userprofile, friendprofile) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/friend/api/friend/chkfriends/${userprofile}/${friendprofile}`,
+      `${config.API_URI}friend/api/friend/chkfriends/${userprofile}/${friendprofile}`,
     );
     return response.data;
   } catch (error) {

@@ -1,10 +1,11 @@
 import axios from "axios";
 import { getUserDataFromLocalStorage } from "../../Components/Utility/utility";
+import { config } from "../../config/config";
 
 export const getEventData = () => async (dispatch) => {
   try {
     const eventData = await axios.get(
-      "https://web.uynite.com/post/api/post/getspost",
+      "${config.API_URI}post/api/post/getspost",
       {
         headers: {
           "Accept-Language": "en",
@@ -26,7 +27,7 @@ export const defaultRootScreen = () => async (dispatch) => {
   try {
     const getStoredData = await getUserDataFromLocalStorage();
     const defaultRootResult = await axios.get(
-      `https://web.uynite.com/post/api/post/getspost`,
+      `${config.API_URI}post/api/post/getspost`,
       {
         headers: {
           "Accept-Language": "en",
@@ -51,7 +52,7 @@ export const defaultEventScreen = (profileid) => async (dispatch) => {
     const getStoredData = await getUserDataFromLocalStorage();
 
     const defaultEventResult = await axios.get(
-      ` https://web.uynite.com/post/api/post/getpostbypostid/${profileid}`,
+      ` ${config.API_URI}post/api/post/getpostbypostid/${profileid}`,
 
       {
         headers: {
@@ -75,7 +76,7 @@ export const addEventPost = (data) => async (dispatch) => {
     const getStoredData = await getUserDataFromLocalStorage();
 
     const eventResult = await axios.post(
-      "https://web.uynite.com/post/api/post/add",
+      "${config.API_URI}post/api/post/add",
       data,
       {
         headers: {
@@ -99,7 +100,7 @@ export const createSponsoredEvent = (data) => async (dispatch) => {
     // const getStoredData = await getUserDataFromLocalStorage();
 
     const eventResult = await axios.post(
-      `https://web.uynite.com/event/api/post/add`,
+      `${config.API_URI}event/api/post/add`,
       data
     );
     dispatch({
@@ -116,7 +117,7 @@ export const getAllEventPost = (eventpostid, profileid) => async (dispatch) => {
   try {
     const getStoredData = await getUserDataFromLocalStorage();
     const allEventResult = await axios.get(
-      `https://web.uynite.com/post/api/post/getsponser/${eventpostid}/${profileid}`,
+      `${config.API_URI}post/api/post/getsponser/${eventpostid}/${profileid}`,
 
       {
         headers: {
@@ -142,7 +143,7 @@ export const getAllTrendingPost =
       const getStoredData = await getUserDataFromLocalStorage();
 
       const trendingPostResult = await axios.get(
-        `https://web.uynite.com/post/api/post/topgetsponser/${eventpostid}/${profileid}`,
+        `${config.API_URI}post/api/post/topgetsponser/${eventpostid}/${profileid}`,
 
         {
           headers: {
@@ -164,7 +165,7 @@ export const imageUploadApi = (image) => async (dispatch) => {
   console.log(image, "[[[[[");
   try {
     const getUploadedResult = await axios.post(
-      // `https://web.uynite.com/fileservice/s3/upload`,
+      // `${config.API_URI}fileservice/s3/upload`,
       `http://35.183.76.174:9098/s3/upload`,
       image,
       {

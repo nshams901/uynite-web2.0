@@ -1,9 +1,10 @@
 import axios from "axios";
 import { getQueryParams } from "../../Components/Utility/utility";
+import { config } from "../../config/config";
 
 export const createPost = (postData) => async (dispatch) => {
   const postDataResult = await axios.post(
-    "https://web.uynite.com/post/api/post/add",
+    "${config.API_URI}post/api/post/add",
     postData,
     {
       headers: {
@@ -22,7 +23,7 @@ export const createPost = (postData) => async (dispatch) => {
 
 export const updatePost = (postData) => async (dispatch) => {
   const postDataResult = await axios.put(
-    `https://web.uynite.com/post/api/post/updatePost`,
+    `${config.API_URI}post/api/post/updatePost`,
     postData,
     {
       headers: {
@@ -41,7 +42,7 @@ export const updatePost = (postData) => async (dispatch) => {
 
 export const getPostHistory = (postData) => async (dispatch) => {
   const postDataResult = await axios.get(
-    `https://web.uynite.com/post/api/post/posthistory/${postData}`,
+    `${config.API_URI}post/api/post/posthistory/${postData}`,
     postData,
     {
       headers: {
@@ -60,7 +61,7 @@ export const getPostHistory = (postData) => async (dispatch) => {
 
 export const getHistory = (postData) => async (dispatch) => {
   const postDataResult = await axios.get(
-    `https://web.uynite.com/post/api/post/posthistory/${postData}`,
+    `${config.API_URI}post/api/post/posthistory/${postData}`,
     postData,
     {
       headers: {
@@ -78,7 +79,7 @@ export const getHistory = (postData) => async (dispatch) => {
 
 export const getPostLike = (postid, params) => async (dispatch) => {
   const postDataResult = await axios.get(
-    `https://web.uynite.com/post/api/like/${postid}?${getQueryParams(params)}`,
+    `${config.API_URI}post/api/like/${postid}?${getQueryParams(params)}`,
     {
       headers: {
         "Accept-Language": "en",
@@ -97,7 +98,7 @@ export const getPostLike = (postid, params) => async (dispatch) => {
 
 export const getPostById = (postid) => async (dispatch) => {
   const postDataResult = await axios.get(
-    `https://web.uynite.com/post/api/post/getbyid/${postid}`,
+    `${config.API_URI}post/api/post/getbyid/${postid}`,
     {
       headers: {
         "Accept-Language": "en",
@@ -115,7 +116,7 @@ export const getPostById = (postid) => async (dispatch) => {
 
 export const sharePost = (data) => async (dispatch) => {
   const postDataResult = await axios.post(
-    `https://web.uynite.com/post/api/share/add`, data,
+    `${config.API_URI}post/api/share/add`, data,
   );
   
   dispatch({

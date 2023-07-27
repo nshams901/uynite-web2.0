@@ -112,7 +112,7 @@ export default function PoliticalAddBy({ onClose, whichBy,
     if(country && whichBy == 'State'){
       (async()=>{
         const { data } = await axios.get(
-        `https://web.uynite.com/api/user/country/getstate/${countryId}`)
+        `${config.API_URI}api/user/country/getstate/${countryId}`)
 
         console.log(data)
         setData(data?.data)
@@ -127,7 +127,7 @@ export default function PoliticalAddBy({ onClose, whichBy,
           "countrycode": countryId
         }
         const { data } = await axios.post(
-        `https://web.uynite.com/profile/api/country/citytype`,
+        `${config.API_URI}profile/api/country/citytype`,
         postData)
 
         console.log(data)
@@ -143,7 +143,7 @@ export default function PoliticalAddBy({ onClose, whichBy,
           "countrycode": countryId
         }
         const { data } = await axios.post(
-        `https://web.uynite.com/profile/api/country/citytype`,
+        `${config.API_URI}profile/api/country/citytype`,
         postData).catch(err=>toast.error(err.message))
 
         console.log(data)
@@ -159,7 +159,7 @@ export default function PoliticalAddBy({ onClose, whichBy,
           "countrycode": countryId
         }
         const { data } = await axios.post(
-        `https://web.uynite.com/profile/api/country/citytype`,
+        `${config.API_URI}profile/api/country/citytype`,
         postData)
 
         console.log(data)

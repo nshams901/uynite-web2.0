@@ -78,32 +78,32 @@ console.log(imgData)
   useEffect(()=>{
     if(selectedSpecificEvent == 'Re-Union'){
       (async function fetchData(){
-        const { data } = await axios.get(`https://web.uynite.com/event/api/eventtemp/category/Reunion`)                  
+        const { data } = await axios.get(`${config.API_URI}event/api/eventtemp/category/Reunion`)                  
         callTemp(data)
       })()                        
     }else if(selectedSpecificEvent == 'Birthday'){
       (async function fetchData(){
-        const { data } = await axios.get(`https://web.uynite.com/event/api/eventtemp/category/Birthday`)                  
+        const { data } = await axios.get(`${config.API_URI}event/api/eventtemp/category/Birthday`)                  
         callTemp(data)
       })()                        
     }else if(selectedSpecificEvent == 'Wedding'){
       (async function fetchData(){
-        const { data } = await axios.get(`https://web.uynite.com/event/api/eventtemp/category/Wedding`)                  
+        const { data } = await axios.get(`${config.API_URI}event/api/eventtemp/category/Wedding`)                  
         callTemp(data)
       })()                        
     }else if(selectedSpecificEvent == 'Anniversary'){
       (async function fetchData(){
-        const { data } = await axios.get(`https://web.uynite.com/event/api/eventtemp/category/Anniversary`)                  
+        const { data } = await axios.get(`${config.API_URI}event/api/eventtemp/category/Anniversary`)                  
         callTemp(data)
       })()                        
     }else if(selectedSpecificEvent == 'Others'){
       (async function fetchData(){
-        const { data } = await axios.get(`https://web.uynite.com/event/api/eventtemp/category/Others`)                  
+        const { data } = await axios.get(`${config.API_URI}event/api/eventtemp/category/Others`)                  
         callTemp(data)
       })()                        
     }else if(selectedSpecificEvent == 'Baby Shower'){
       (async function fetchData(){
-        const { data } = await axios.get(`https://web.uynite.com/event/api/eventtemp/category/Baby%20Shower`)                  
+        const { data } = await axios.get(`${config.API_URI}event/api/eventtemp/category/Baby%20Shower`)                  
         callTemp(data)
       })()                        
     }

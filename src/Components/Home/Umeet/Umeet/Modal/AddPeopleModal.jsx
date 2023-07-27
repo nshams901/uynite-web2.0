@@ -60,7 +60,7 @@ console.log(education)
     }else if(education == 'pg'){
       (async()=>{
         const  { data } = await axios.post(
-        `https://web.uynite.com/profile/api/education/getpgfriends`,
+        `${config.API_URI}profile/api/education/getpgfriends`,
         pgPostData, {headers: { Authorization: `Bearer ${token}` }})
         console.log(data?.data, "getAllPgFriends")
         setEduData(data?.data)
@@ -69,7 +69,7 @@ console.log(education)
     }else if(education == 'school'){
       // (async()=>{
       //   const  { data } = await axios.post(
-      //   `https://web.uynite.com/profile/api/education/getschoolfriends`,
+      //   `${config.API_URI}profile/api/education/getschoolfriends`,
       //   schoolPostData, {headers: { Authorization: `Bearer ${token}` }})
       //   console.log(data?.data, "schoolFriends")
       //   setEduData(data?.data)

@@ -1,9 +1,10 @@
+import { config } from "../../config/config";
 import axios from "axios";
 
 export const updatePrivacyData = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/profile/api/profile/privacy/add`,
+      `${config.API_URI}profile/api/profile/privacy/add`,
       data
     );
     dispatch({
@@ -21,7 +22,7 @@ export const updatePrivacyData = (data) => async (dispatch) => {
 export const currentPasswordCheck = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/api/user/authenticate`,
+      `${config.API_URI}api/user/authenticate`,
       data
     );
     dispatch({
@@ -39,7 +40,7 @@ export const currentPasswordCheck = (data) => async (dispatch) => {
 export const changeNewPassword = (uemail, password) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/login/api/user/changepassword/${uemail}/${password}/${password}`
+      `${config.API_URI}login/api/user/changepassword/${uemail}/${password}/${password}`
     );
     dispatch({
       type: "CHANGE_NEW_PASSWORD",
@@ -58,7 +59,7 @@ export const blockedFriendList = (profileId) => async (dispatch) => {
   console.log("profileId", profileId);
   try {
     const response = await axios.get(
-      `https://web.uynite.com/friend/api/friend/${profileId}/Accepted`
+      `${config.API_URI}friend/api/friend/${profileId}/Accepted`
     );
     dispatch({
       type: "BLOCK_FRIEND_LIST",
@@ -75,7 +76,7 @@ export const searchBlockedFriend =
   (profileId, userName) => async (dispatch) => {
     try {
       const response = await axios.get(
-        `https://web.uynite.com/profile/api/profile/search/${profileId}/${userName}`
+        `${config.API_URI}profile/api/profile/search/${profileId}/${userName}`
       );
       dispatch({
         type: "SEARCH_BLOCK_FRIEND",
@@ -92,7 +93,7 @@ export const unBlockFriend =
   (profileId, blockedprofileid) => async (dispatch) => {
     try {
       const response = await axios.get(
-        `https://web.uynite.com/friend/api/friend/unblock/${profileId}/${blockedprofileid}`
+        `${config.API_URI}friend/api/friend/unblock/${profileId}/${blockedprofileid}`
       );
       dispatch({
         type: "UNBLOCK_FRIEND",
@@ -110,7 +111,7 @@ export const unBlockFriend =
 export const onDeactivateAccount = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/login/api/user/deactiveuser`,
+      `${config.API_URI}login/api/user/deactiveuser`,
       data
     );
     dispatch({
@@ -129,7 +130,7 @@ export const onDeactivateAccount = (data) => async (dispatch) => {
 export const defaultCallOnVerficationPage = (profileId) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/profile/api/profile/verify/${profileId}`
+      `${config.API_URI}profile/api/profile/verify/${profileId}`
     );
     dispatch({
       type: "DEFAULT_CALL_ON_VERFICATION_PAGE",
@@ -143,7 +144,7 @@ export const defaultCallOnVerficationPage = (profileId) => async (dispatch) => {
 export const blockUser = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/friend/api/friend/block`,
+      `${config.API_URI}friend/api/friend/block`,
       data
     );
     dispatch({
@@ -160,7 +161,7 @@ export const blockUser = (data) => async (dispatch) => {
 export const contactUsPage = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      ` https://web.uynite.com/profile/api/profile/contact/add`,
+      ` ${config.API_URI}profile/api/profile/contact/add`,
       data
     );
     dispatch({

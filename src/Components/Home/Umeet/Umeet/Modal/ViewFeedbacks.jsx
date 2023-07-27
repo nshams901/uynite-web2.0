@@ -16,7 +16,7 @@ const ViewFeedbacks = ({ onClose }) => {
         "eventId": eventDetail?.id,
         "profileId": eventDetail?.profileid,
       }
-      const { data } = await axios.post(`https://web.uynite.com/event/api/event/fetch/feedback`,
+      const { data } = await axios.post(`${config.API_URI}event/api/event/fetch/feedback`,
         postData)
       setFeedbackDetail(data?.data?.feedbacks)      
     })()

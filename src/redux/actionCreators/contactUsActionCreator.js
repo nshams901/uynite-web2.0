@@ -1,11 +1,12 @@
 import axios from "axios";
+import { config } from "../../config/config";
 
 export const addContactDetails = (data) => async (dispatch) => {
   try {
     const getStoredData = await getUserDataFromLocalStorage();
 
     const eventResult = await axios.post(
-      "https://web.uynite.com/post/api/post/add",
+      `${config.API_URI}post/api/post/add`,
       data,
       {
         headers: {

@@ -4,6 +4,7 @@ import {
   getUserDataFromLocalStorage,
 } from "../../Components/Utility/utility";
 import { Data } from "@react-google-maps/api";
+import { config } from "../../config/config";
 
 export const selectKicksType = (kicksType) => (dispatch) => {
   if (kicksType === "Latest") {
@@ -21,7 +22,7 @@ export const addKicks = (data) => async (dispatch) => {
 
   try {
     const response = await axios.post(
-      `https://web.uynite.com/instance/api/instancepost/add`,
+      `${config.API_URI}instance/api/instancepost/add`,
       data,
       {
         headers: {
@@ -43,7 +44,7 @@ export const getLatestKicks = (urlParams, data) => async (dispatch) => {
   const getStoredData = await getUserDataFromLocalStorage();
   try {
     const response = await axios.post(
-      `https://web.uynite.com/instance/api/fetch/kicks?${getQueryParams(
+      `${config.API_URI}instance/api/fetch/kicks?${getQueryParams(
         urlParams
       )}`,
       data,
@@ -67,7 +68,7 @@ export const getLatestKicks = (urlParams, data) => async (dispatch) => {
 export const getFollowingKicks = (urlParams, data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/instance/api/fetch/kicks?${getQueryParams(
+      `${config.API_URI}instance/api/fetch/kicks?${getQueryParams(
         urlParams
       )}`,
       data
@@ -85,7 +86,7 @@ export const getFollowingKicks = (urlParams, data) => async (dispatch) => {
 export const getTrendingKicks = (urlParams, data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/instance/api/fetch/kicks?${getQueryParams(
+      `${config.API_URI}instance/api/fetch/kicks?${getQueryParams(
         urlParams
       )}`,
       data
@@ -100,11 +101,11 @@ export const getTrendingKicks = (urlParams, data) => async (dispatch) => {
   }
 };
 
-// https://web.uynite.com/instance/api/instancelike/add
+// ${config.API_URI}instance/api/instancelike/add
 export const addLikes = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/instance/api/instancelike/add`,
+      `${config.API_URI}instance/api/instancelike/add`,
       data
     );
     dispatch({
@@ -120,7 +121,7 @@ export const addLikes = (data) => async (dispatch) => {
 export const getCommentsByPostid = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/instance/api/comment/${data}`
+      `${config.API_URI}instance/api/comment/${data}`
     );
     dispatch({
       type: "COMMENTS_LIST",
@@ -135,7 +136,7 @@ export const getCommentsByPostid = (data) => async (dispatch) => {
 export const getCommentsReplyByPostid = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/instance/api/instancereply/${data}`
+      `${config.API_URI}instance/api/instancereply/${data}`
     );
     dispatch({
       type: "COMMENTS_REPLY_LIST",
@@ -151,7 +152,7 @@ export const getCommentsReplyByPostid = (data) => async (dispatch) => {
 export const createKicksPost = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/instance/api/instancepost/add`,
+      `${config.API_URI}instance/api/instancepost/add`,
       data
     );
     dispatch({
@@ -167,7 +168,7 @@ export const addCommentOnKicks = (commentDetails) => async (dispatch) => {
   try {
     // const getStoredData = await getUserDataFromLocalStorage
     const getCommentResult = await axios.post(
-      `https://web.uynite.com/instance/api/comment/add`,
+      `${config.API_URI}instance/api/comment/add`,
       commentDetails,
       {
         headers: {
@@ -190,7 +191,7 @@ export const addCommentOnKicks = (commentDetails) => async (dispatch) => {
 export const addCommentReplyOnKicks = (commentReplyDetails) => async (dispatch) => {
   try {
     const getCommentReplyResult = await axios.post(
-      `https://web.uynite.com/instance/api/instancereply/add`,
+      `${config.API_URI}instance/api/instancereply/add`,
       commentReplyDetails,
       {
         headers: {
@@ -213,7 +214,7 @@ export const addCommentReplyOnKicks = (commentReplyDetails) => async (dispatch) 
 export const deletePostLike = (data, likeid) => async (dispatch) => {
   try {
     const response = await axios.delete(
-      `https://web.uynite.com/instance/api/instancelike/dislike/${data}/${likeid}`,
+      `${config.API_URI}instance/api/instancelike/dislike/${data}/${likeid}`,
     );
     dispatch({
       type: "",
@@ -229,7 +230,7 @@ export const deletePostLike = (data, likeid) => async (dispatch) => {
 export const getKicksLike = (likeid) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/instance/api/instancelike/${likeid}`,
+      `${config.API_URI}instance/api/instancelike/${likeid}`,
     );
     dispatch({
       type: "",
@@ -240,13 +241,13 @@ export const getKicksLike = (likeid) => async (dispatch) => {
     throw error;
   }
 };
-// https://web.uynite.com/instance/api/instancepost/getpoststag/utag1/utype1
-// https://web.uynite.com/instance/api/instancetag/getprofile/utag
+// ${config.API_URI}instance/api/instancepost/getpoststag/utag1/utype1
+// ${config.API_URI}instance/api/instancetag/getprofile/utag
 
 export const getCategoryList = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/instance/api/instancepost/getvideocat/${data}`,
+      `${config.API_URI}instance/api/instancepost/getvideocat/${data}`,
     );
     dispatch({
       type: "",
@@ -263,7 +264,7 @@ export const getCategoryList = (data) => async (dispatch) => {
 export const getKicksByText = (data, id) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/instance/api/instancepost/searchkikstext/${id}/${data}`,
+      `${config.API_URI}instance/api/instancepost/searchkikstext/${id}/${data}`,
     );
     dispatch({
       type: "KICKS_SEARCH_BY_TEXT",
@@ -279,7 +280,7 @@ export const getKicksByText = (data, id) => async (dispatch) => {
 export const getKicksByTag = (data, id) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/instance/api/instancetag/searchtags/${data}`,
+      `${config.API_URI}instance/api/instancetag/searchtags/${data}`,
     );
     dispatch({
       type: "KICKS_SEARCH_BY_TAG",
@@ -295,7 +296,7 @@ export const getKicksByTag = (data, id) => async (dispatch) => {
 export const getProfileList = (data, id) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/profile/api/profile/search/${id}/${data}`,
+      `${config.API_URI}profile/api/profile/search/${id}/${data}`,
     );
     dispatch({
       type: "GET_PROFILE_LIST",
@@ -311,7 +312,7 @@ export const getProfileList = (data, id) => async (dispatch) => {
 export const getUserKickList = (frienduserid, userid = "") => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/instance/api/instancepost/getallmyposts/${frienduserid}/${userid}`,
+      `${config.API_URI}instance/api/instancepost/getallmyposts/${frienduserid}/${userid}`,
     );
     dispatch({
       type: "GET_USER_KICKS",
@@ -326,7 +327,7 @@ export const getUserKickList = (frienduserid, userid = "") => async (dispatch) =
 export const commentLiked = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/instance/api/instancelike/add`, data
+      `${config.API_URI}instance/api/instancelike/add`, data
     );
     dispatch({
       type: "COMMENT_LIKED",
@@ -341,7 +342,7 @@ export const commentLiked = (data) => async (dispatch) => {
 export const commentPostLiked = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/post/api/like/add`, data
+      `${config.API_URI}post/api/like/add`, data
     );
     dispatch({
       type: "COMMENT_LIKED",
@@ -359,7 +360,7 @@ export const commentDisliked = (data) => async (dispatch) => {
   const { profileid, likeid} = data
   try {
     const response = await axios.delete(
-      `https://web.uynite.com/post/api/like/dislike/${profileid}/${likeid}`
+      `${config.API_URI}post/api/like/dislike/${profileid}/${likeid}`
     );
     dispatch({
       type: "COMMENT_DISLIKED",
@@ -377,7 +378,7 @@ export const kicksCommentDisliked = (data) => async (dispatch) => {
   const { profileid, id} = data
   try {
     const response = await axios.delete(
-      `https://web.uynite.com/instance/api/instancelike/dislike/${profileid}/${id}`
+      `${config.API_URI}instance/api/instancelike/dislike/${profileid}/${id}`
     );
     dispatch({
       type: "COMMENT_DISLIKED",
@@ -393,7 +394,7 @@ export const kicksCommentDisliked = (data) => async (dispatch) => {
 export const addViews = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/instance/api/instview/add`, data
+      `${config.API_URI}instance/api/instview/add`, data
     );
     dispatch({
       type: "ADD_VIEWS",

@@ -50,7 +50,7 @@ const EventDetails = ({
 
   useEffect(()=>{
     (async function getData(){
-      const response = await axios.get(`https://web.uynite.com/event/api/invities/getinvitietslist/${umeetReducer?.eventDetail?.id}`)
+      const response = await axios.get(`${config.API_URI}event/api/invities/getinvitietslist/${umeetReducer?.eventDetail?.id}`)
       console.log(response.data.data)
       setGuestsList(response.data.data)
     })()      

@@ -138,7 +138,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   invitesEmail?.forEach(function(email) {
       // (async()=>{
       //   const { data } = await axios.get(
-      //    `https://web.uynite.com/profile/api/profile/profilebyemail/${email}`,
+      //    `${config.API_URI}profile/api/profile/profilebyemail/${email}`,
       //    {headers: { Authorization: `Bearer ${token}` }});
       //   console.log(data, "getProfileByEmail");
       // })
@@ -430,7 +430,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     //   (async()=>{
     //     console.log(selectedImgFile)     
     //     const { data } = await 
-    //     axios.post(`https://web.uynite.com/fileservice/s3/upload`, 
+    //     axios.post(`${config.API_URI}fileservice/s3/upload`, 
     //       selectedImgFile).catch(err=>toast.error(err.message))
     //     console.log(data)
     //   })()
@@ -438,7 +438,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
 
     (async()=>{
       const { data } = await axios.get(
-      `https://web.uynite.com/api/user/country/countrylist`,
+      `${config.API_URI}api/user/country/countrylist`,
       {headers: {"Accept-Language": "us","Content-Type": "application/json"}})
 
       //console.log(data?.data, 'countrylist')

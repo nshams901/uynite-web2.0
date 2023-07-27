@@ -17,7 +17,7 @@ const EventDeleteModal = ({ onClose, deleteId }) => {
   const handleCancelEvent = async()=>{
     try{
       const { data } = await axios.post(
-        `https://web.uynite.com/event/api/event/admin/cancelevent`,
+        `${config.API_URI}event/api/event/admin/cancelevent`,
         {
           "id": deleteId ? deleteId : null,
           "eventstatusmessage": eventmessage

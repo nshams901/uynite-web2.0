@@ -1,4 +1,6 @@
 import axios from "axios";
+import { config } from "../../config/config";
+
 
 const token = localStorage.getItem("userCredential")
   ? JSON.parse(localStorage.getItem("userCredential")).token
@@ -7,7 +9,7 @@ const token = localStorage.getItem("userCredential")
 export const createEvent = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/event/api/event/createEvent`,
+      `${config.API_URI}event/api/event/createEvent`,
       data
     );
     dispatch({ type: "EVENT_CREATE_SUCCESS", payload: response.data });
@@ -22,7 +24,7 @@ export const createEvent = (data) => async (dispatch) => {
 export const updateEvent = (data) => async (dispatch) => {
   try {
     const response = await axios.put(
-      `https://web.uynite.com/event/api/event/updateEvent`,
+      `${config.API_URI}event/api/event/updateEvent`,
       data
     );
     dispatch({
@@ -38,7 +40,7 @@ export const updateEvent = (data) => async (dispatch) => {
 export const deleteEvent = (data) => async (dispatch) => {
   try {
     const response = await axios.delete(
-      `https://web.uynite.com/event/api/event/deleteEvent/${data}`
+      `${config.API_URI}event/api/event/deleteEvent/${data}`
     );
     dispatch({
       type: "",
@@ -54,7 +56,7 @@ export const deleteEvent = (data) => async (dispatch) => {
 export const cancelEvent = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/event/api/event/admin/cancelevent`,
+      `${config.API_URI}event/api/event/admin/cancelevent`,
       data
     );
     dispatch({
@@ -71,7 +73,7 @@ export const cancelEvent = (data) => async (dispatch) => {
 export const getEventDetails = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/event/api/event/geteventbyid/${data}/${Date.now()}`,
+      `${config.API_URI}event/api/event/geteventbyid/${data}/${Date.now()}`,
       {headers: { Authorization: `Bearer ${token}` }}
     );
     console.log(response, "single event details");
@@ -88,7 +90,7 @@ export const getEventDetails = (data) => async (dispatch) => {
 export const getEventList = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/event/api/event/getEvent`,
+      `${config.API_URI}event/api/event/getEvent`,
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
@@ -107,7 +109,7 @@ export const getEventList = (data) => async (dispatch) => {
 export const getEventByProfileid = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/event/api/event/getmyallevent/${data}/1684318282119`,
+      `${config.API_URI}event/api/event/getmyallevent/${data}/1684318282119`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -126,7 +128,7 @@ export const getEventByProfileid = (data) => async (dispatch) => {
 export const getAllInvitedEvents = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/event/api/invities/getmyevent/${data}/1684318282119`,
+      `${config.API_URI}event/api/invities/getmyevent/${data}/1684318282119`,
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
@@ -144,7 +146,7 @@ export const getAllInvitedEvents = (data) => async (dispatch) => {
 export const getInviteList = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/event/api/invities/getprofiles/${data}/true`,
+      `${config.API_URI}event/api/invities/getprofiles/${data}/true`,
       {headers: { Authorization: `Bearer ${token}` }}
     );
     dispatch({
@@ -160,7 +162,7 @@ export const getInviteList = (data) => async (dispatch) => {
 export const getInviteListByFood = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/event/api/invities/getprofilesvegnonveg/${data}/false`,
+      `${config.API_URI}event/api/invities/getprofilesvegnonveg/${data}/false`,
       {headers: { Authorization: `Bearer ${token}` }}
     );
     console.log(response);
@@ -176,7 +178,7 @@ export const getInviteListByFood = (data) => async (dispatch) => {
 export const updateInviteeName = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/event/api/invities/add`,
+      `${config.API_URI}event/api/invities/add`,
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
@@ -193,7 +195,7 @@ export const updateInviteeName = (data) => async (dispatch) => {
 export const addInvitee = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/event/api/invities/add`,
+      `${config.API_URI}event/api/invities/add`,
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
@@ -227,7 +229,7 @@ export const getInviteesList = (data) => async (dispatch) => {
 export const addInvitees = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/event/api/invities/addInvities`,
+      `${config.API_URI}event/api/invities/addInvities`,
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
@@ -247,7 +249,7 @@ export const createEventTemplate = (data) => async (dispatch) => {
     // formData.append('image', data);
     // console.log(data, formData)
     const response = await axios.post(
-      `https://web.uynite.com/event/api/eventtemp/createtemp`,
+      `${config.API_URI}event/api/eventtemp/createtemp`,
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
@@ -264,7 +266,7 @@ export const createEventTemplate = (data) => async (dispatch) => {
 export const getTemplateByEventid = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/event/api/eventtemp/12`,
+      `${config.API_URI}event/api/eventtemp/12`,
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
@@ -281,7 +283,7 @@ export const getTemplateByEventid = (data) => async (dispatch) => {
 export const getAllEvents = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/event/api/invities/getmyevent/${data}`,
+      `${config.API_URI}event/api/invities/getmyevent/${data}`,
       {headers: { Authorization: `Bearer ${token}` }}
     );
     console.log(response);
@@ -299,7 +301,7 @@ export const getAllEvents = (data) => async (dispatch) => {
 export const addEventMessage = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/event/api/eventmessage/add`,
+      `${config.API_URI}event/api/eventmessage/add`,
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
@@ -315,7 +317,7 @@ export const addEventMessage = (data) => async (dispatch) => {
 
   try {
     const response = await axios.get(
-      `https://web.uynite.com/event/api/invities/getmyevent/${data}`,
+      `${config.API_URI}event/api/invities/getmyevent/${data}`,
       {headers: { Authorization: `Bearer ${token}` }}
     );
     console.log(response);
@@ -331,7 +333,7 @@ export const addEventMessage = (data) => async (dispatch) => {
 export const searchByCountryInUmeet = (country) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/profile/api/profile/searchcountry/${country}`,
+      `${config.API_URI}profile/api/profile/searchcountry/${country}`,
       {headers: { Authorization: `Bearer ${token}` }}
     );
     console.log(response, "earchByCountryInUmeet");
@@ -349,7 +351,7 @@ export const searchByStateInUmeet = (coutrycode) => async (dispatch) => {
   console.log("COoooooooooooood", coutrycode);
   try {
     const response = await axios.get(
-      `https://web.uynite.com/profile/api/country/getstate/${coutrycode}`,
+      `${config.API_URI}profile/api/country/getstate/${coutrycode}`,
       {headers: { Authorization: `Bearer ${token}` }}
     );
     console.log(response, 'searchByStateInUmeet');
@@ -366,7 +368,7 @@ export const addEmailToList = (emailList) => async (dispatch) => {
   console.log("emailList", emailList);
   try {
     // const response = await axios.get(
-    //   `https://web.uynite.com/profile/api/country/getstate/${coutrycode}`
+    //   `${config.API_URI}profile/api/country/getstate/${coutrycode}`
     // );
     // console.log("asdsadasas", response);
     dispatch({
@@ -382,7 +384,7 @@ export const allEmailInvites = (emailList) => async (dispatch) => {
   console.log("emailList", emailList);
   try {
     const response = await axios.get(
-      `https://web.uynite.com/profile/event/api/user/all/sendemails`,
+      `${config.API_URI}profile/event/api/user/all/sendemails`,
       emailList,
       {headers: { Authorization: `Bearer ${token}` }}
     );
@@ -399,7 +401,7 @@ export const allEmailInvites = (emailList) => async (dispatch) => {
 export const getAllEventChatMessage = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/event/api/eventmessage/getallmessage/${data}`,
+      `${config.API_URI}event/api/eventmessage/getallmessage/${data}`,
       {headers: { Authorization: `Bearer ${token}` }}
     );
     console.log(response, "eventmessages");
@@ -415,7 +417,7 @@ export const getAllEventChatMessage = (data) => async (dispatch) => {
 export const getAllUgFriends = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/profile/api/education/getugfriends`,
+      `${config.API_URI}profile/api/education/getugfriends`,
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
@@ -432,7 +434,7 @@ export const getAllUgFriends = (data) => async (dispatch) => {
 export const getAllPgFriends = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/profile/api/education/getpgfriends`,
+      `${config.API_URI}profile/api/education/getpgfriends`,
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
@@ -449,7 +451,7 @@ export const getAllPgFriends = (data) => async (dispatch) => {
 export const getProfileByEmail = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-       `https://web.uynite.com/profile/api/profile/profilebyemail/${data}`,
+       `${config.API_URI}profile/api/profile/profilebyemail/${data}`,
        {headers: { Authorization: `Bearer ${token}` }}
     );
     console.log(response.data, "getProfileByEmail", data);
@@ -465,7 +467,7 @@ export const getProfileByEmail = (data) => async (dispatch) => {
 export const sendEmailInvites = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-       `https://web.uynite.com/login/api/user/sendemails`,
+       `${config.API_URI}login/api/user/sendemails`,
        data,
        {headers: { Authorization: `Bearer ${token}` }}
     );
@@ -504,7 +506,7 @@ export const handleCreateDataUI = (data) => async (dispatch) => {
 export const getReunionTemplates = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-       `https://web.uynite.com/event/api/eventtemp/category/Reunion`,
+       `${config.API_URI}event/api/eventtemp/category/Reunion`,
        {headers: { Authorization: `Bearer ${token}` }}
     );
     console.log(response.data, "getReunionTemplates");
@@ -531,7 +533,7 @@ export const handleCreateQuestionUI = (data) => async (dispatch) => {
 export const getStatesByCountry = (countryCode) => async (dispatch) => {
   try {
     const response = await axios.get(
-       `https://web.uynite.com/api/user/country/getstate/${countryCode}`,
+       `${config.API_URI}api/user/country/getstate/${countryCode}`,
        {headers: { Authorization: `Bearer ${token}` }}
     );
     console.log(response.data, "states dude");
@@ -547,7 +549,7 @@ export const getStatesByCountry = (countryCode) => async (dispatch) => {
 export const getEventFeedbacks = () => async (dispatch) => {
   try {
     const response = await axios.get(
-       `https://web.uynite.com/event/api/event/fetch/feedback`,
+       `${config.API_URI}event/api/event/fetch/feedback`,
        {headers: { Authorization: `Bearer ${token}` }}
     );
     console.log(response.data, "feedbacks");

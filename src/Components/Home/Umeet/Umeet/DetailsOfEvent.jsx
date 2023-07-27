@@ -69,7 +69,7 @@ export default function DetailsOfEvent({ myEvent,
    }
 
    const handleSendFeedback = async()=>{
-      const { data } = await axios.post(`https://web.uynite.com/event/api/event/feedback`,
+      const { data } = await axios.post(`${config.API_URI}event/api/event/feedback`,
          feedbackPostData)
       console.log(data), 'feedback'
       if(toast) toast.success('feedback sended!')

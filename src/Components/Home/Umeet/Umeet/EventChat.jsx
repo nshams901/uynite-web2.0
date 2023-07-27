@@ -56,7 +56,7 @@ console.log(profileReducer?.profile?.id)
     //dispatch(getAllEventChatMessage(umeetReducer?.eventDetail?.id))
     (async function getMessages(){
     const { data } = await axios.get(
-      `https://web.uynite.com/event/api/eventmessage/getallmessage/${umeetReducer?.eventDetail?.id}`
+      `${config.API_URI}event/api/eventmessage/getallmessage/${umeetReducer?.eventDetail?.id}`
     );
     const AllMessages = data?.data?.map(data=>{
       let msgData = {

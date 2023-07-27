@@ -68,7 +68,7 @@ setInvitesEmail,  }) => {
     }
     (async()=>{
       const { data } = await axios.get(
-      `https://web.uynite.com/api/user/country/countrylist`,
+      `${config.API_URI}api/user/country/countrylist`,
       {headers: {"Accept-Language": "us","Content-Type": "application/json"}})
 
       console.log(data?.data, 'countrylist')

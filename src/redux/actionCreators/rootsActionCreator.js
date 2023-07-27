@@ -1,6 +1,8 @@
 import axios from "axios";
 import { getUserDataFromLocalStorage } from "../../Components/Utility/utility";
 import { getQueryParams } from "../../Components/Utility/utility";
+import { config } from "../../config/config";
+
 // -----------------------------------------------FOR ALL POST RELATED API------------------------------------------------------------
 
 // GET KICKS VIDEOS WITH LIMITS
@@ -8,7 +10,7 @@ export const getKicksVideosWithLimit = (data) => async (dispatch) => {
   try {
     const getStoredData = await getUserDataFromLocalStorage();
     const getAllKicksVideos = await axios.post(
-      `https://web.uynite.com/instance/api/fetch/kicks?&index=0&size=10`,
+      `${config.API_URI}instance/api/fetch/kicks?&index=0&size=10`,
       data,
       {
         headers: {
@@ -31,7 +33,7 @@ export const getAllPostWithLimit = (profileId, params) => async (dispatch) => {
   try {
     const getStoredData = await getUserDataFromLocalStorage();
     const getAllPost = await axios.post(
-      `https://web.uynite.com/post/api/v2/fetch/home/posts/${profileId}?index=0&size=10`,
+      `${config.API_URI}post/api/v2/fetch/home/posts/${profileId}?index=0&size=10`,
       {},
       {
         headers: {
@@ -55,7 +57,7 @@ export const getPostByPostId = (postId) => async (dispatch) => {
   try {
     const getStoredData = await getUserDataFromLocalStorage();
     const getPostbyid = await axios.get(
-      `https://web.uynite.com/post/api/post/getpostbypostid/${postId}`,
+      `${config.API_URI}post/api/post/getpostbypostid/${postId}`,
       {
         headers: {
           "Accept-Language": "en",
@@ -76,7 +78,7 @@ export const getPostList = (data) => async (dispatch) => {
   const getStoredData = await getUserDataFromLocalStorage();
   try {
     const response = await axios.get(
-      `https://web.uynite.com/post/api/post/getposts/${data}`,
+      `${config.API_URI}post/api/post/getposts/${data}`,
       {
         headers: {
           "Accept-Language": "en",
@@ -98,7 +100,7 @@ export const addCommentOnPost = (commentDetails) => async (dispatch) => {
   try {
     const getStoredData = await getUserDataFromLocalStorage();
     const getCommentResult = await axios.post(
-      `https://web.uynite.com/post/api/comment/add`,
+      `${config.API_URI}post/api/comment/add`,
       commentDetails,
       {
         headers: {
@@ -121,7 +123,7 @@ export const addCommentOnPost = (commentDetails) => async (dispatch) => {
 export const getCommentByPostid = (data, payload) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/post/api/comment/${data}?${getQueryParams(
+      `${config.API_URI}post/api/comment/${data}?${getQueryParams(
         payload
       )}`,
       payload
@@ -141,7 +143,7 @@ export const getPostHistoryByPostId = (postId) => async (dispatch) => {
   try {
     const getStoredData = await getUserDataFromLocalStorage();
     const getPostHistory = await axios.get(
-      `https://web.uynite.com/post/api/post/posthistory/${postId}`,
+      `${config.API_URI}post/api/post/posthistory/${postId}`,
       {
         headers: {
           "Accept-Language": "en",
@@ -164,7 +166,7 @@ export const setPostReport = (reportResult) => async (dispatch) => {
   try {
     const getStoredData = await getUserDataFromLocalStorage();
     const postReportResult = await axios.post(
-      `https://web.uynite.com/post/api/post/report`,
+      `${config.API_URI}post/api/post/report`,
       reportResult,
       {
         headers: {
@@ -190,7 +192,7 @@ export const getLikesById = (postDetails) => async (dispatch) => {
   try {
     const getStoredData = await getUserDataFromLocalStorage();
     const likesResult = await axios.post(
-      `https://web.uynite.com/post/api/like/add`,
+      `${config.API_URI}post/api/like/add`,
       postDetails,
       {
         headers: {
@@ -215,7 +217,7 @@ export const decreaseLikeByLikeId = (profileId, likeId) => async (dispatch) => {
   try {
     const getStoredData = await getUserDataFromLocalStorage();
     const disLikesResult = await axios.delete(
-      `https://web.uynite.com/post/api/like/dislike/${profileId}/${likeId}`,
+      `${config.API_URI}post/api/like/dislike/${profileId}/${likeId}`,
 
       {
         headers: {
@@ -240,7 +242,7 @@ export const decreaseLikeByLikeId = (profileId, likeId) => async (dispatch) => {
 //   try {
 //     const getStoredData = await getUserDataFromLocalStorage();
 //     const likesResult = await axios.get(
-//       `https://web.uynite.com/post/api/like/add`,
+//       `${config.API_URI}post/api/like/add`,
 //       reportResult,
 //       {
 //         headers: {
@@ -269,7 +271,7 @@ export const imageUploadApi = (file) => async (dispatch) => {
     const getStoredData = await getUserDataFromLocalStorage();
     const body = { file: file };
     const getUploadedResult = await axios.post(
-      `https://web.uynite.com/fileservice/s3/upload`,
+      `${config.API_URI}fileservice/s3/upload`,
       body,
       {
         headers: {
@@ -298,7 +300,7 @@ export const multipleImageUpload = (image) => async (dispatch) => {
     const getStoredData = await getUserDataFromLocalStorage();
 
     const multipleImageResult = await axios.post(
-      `https://web.uynite.com/fileservice/files`,
+      `${config.API_URI}fileservice/files`,
       image,
       {
         headers: {
@@ -379,7 +381,7 @@ export const deletePostByPostId = (profileId, postId) => async (dispatch) => {
     const getStoredData = await getUserDataFromLocalStorage();
 
     const deletePostResult = await axios.delete(
-      `https://web.uynite.com/post/api/post/deletePost/${profileId}/${postId}`,
+      `${config.API_URI}post/api/post/deletePost/${profileId}/${postId}`,
 
       {
         headers: {
@@ -407,7 +409,7 @@ export const getUnionListByProfileId = (profileId) => async (dispatch) => {
     const getStoredData = await getUserDataFromLocalStorage();
 
     const getUnionListResult = await axios.get(
-      `https://web.uynite.com/friend/api/group/getGroups/${profileId}`,
+      `${config.API_URI}friend/api/group/getGroups/${profileId}`,
 
       {
         headers: {
@@ -430,7 +432,7 @@ export const getUnionListByProfileId = (profileId) => async (dispatch) => {
 export const getInstancePost = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/instance/api/instancepost/getbyid/${data}`
+      `${config.API_URI}instance/api/instancepost/getbyid/${data}`
     );
     console.log(response);
     dispatch({
@@ -445,7 +447,7 @@ export const getInstancePost = (data) => async (dispatch) => {
 export const getPostById = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/post/api/post/getbyid/${data}`
+      `${config.API_URI}post/api/post/getbyid/${data}`
     );
     console.log(response);
     dispatch({
@@ -460,7 +462,7 @@ export const getPostById = (data) => async (dispatch) => {
 export const getUserPostsList = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/post/api/post/getposts/${data}`
+      `${config.API_URI}post/api/post/getposts/${data}`
     );
     console.log(response);
     dispatch({
@@ -475,7 +477,7 @@ export const getUserPostsList = (data) => async (dispatch) => {
 export const getImageList = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/post/api/image/getbyid/ids/profile`
+      `${config.API_URI}post/api/image/getbyid/ids/profile`
     );
     console.log(response);
     dispatch({
@@ -492,7 +494,7 @@ export const addCommentReplyOnRoots =
   (commentReplyDetails) => async (dispatch) => {
     try {
       const getCommentReplyResult = await axios.post(
-        `https://web.uynite.com//api/reply/add`,
+        `${config.API_URI}/api/reply/add`,
         commentReplyDetails,
         {
           headers: {
@@ -513,7 +515,7 @@ export const addCommentReplyOnRoots =
 export const getCommentReplyOnRoots = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com//api/reply/${data}`
+      `${config.API_URI}/api/reply/${data}`
     );
     dispatch({
       type: "COMMENTS_REPLY_LIST",
@@ -526,7 +528,7 @@ export const getCommentReplyOnRoots = (data) => async (dispatch) => {
 export const addPostReply = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/post/api/reply/add`,
+      `${config.API_URI}post/api/reply/add`,
       data
     );
     dispatch({

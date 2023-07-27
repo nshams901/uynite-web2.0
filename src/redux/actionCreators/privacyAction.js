@@ -1,9 +1,10 @@
 import axios from "axios";
+import { config } from "../../config/config";
 
 export const addProfilePrivacy = (data) => async (dispatch) => {
   try {
     const response = await axios.post(
-      `https://web.uynite.com/profile/api/profile/privacy/add`,
+      `${config.API_URI}profile/api/profile/privacy/add`,
       data
     );
     console.log("addProfilePrivacy", response);
@@ -20,7 +21,7 @@ export const addProfilePrivacy = (data) => async (dispatch) => {
 export const getBlockedUser = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://web.uynite.com/friend/api/friend/getblockedlistprofile/${data}`
+      `${config.API_URI}friend/api/friend/getblockedlistprofile/${data}`
     );
     console.log(response?.data?.data, 'blockedUsers')
     dispatch({
@@ -37,7 +38,7 @@ export const updatePassword = (data) => async (dispatch) => {
   const { uemail, confirmPassword, newPassword } = data;
   try {
     const response = axios.post(
-      `https://web.uynite.com/login/api/user/changepassword/${uemail}/${newPassword}/${confirmPassword}`
+      `${config.API_URI}login/api/user/changepassword/${uemail}/${newPassword}/${confirmPassword}`
     );
     dispatch({
       type: "",

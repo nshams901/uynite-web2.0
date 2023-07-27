@@ -81,7 +81,7 @@ console.log(selectedCheckboxes)
   useEffect(()=>{
     (async()=>{
      const { data } = await axios.get(
-      `https://web.uynite.com/friend/api/friend/${profileReducer?.profile?.id}/Accepted`)    
+      `${config.API_URI}friend/api/friend/${profileReducer?.profile?.id}/Accepted`)    
        console.log(data?.data)
        setDataList(data?.data)
       filterType(data?.data)

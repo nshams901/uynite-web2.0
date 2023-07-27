@@ -56,6 +56,7 @@ import CountrySelection from "./Components/Login/Content/Signup/CountrySelection
 import UserKicks from "./Components/Home/KicksPage/UserKicks";
 import UserVideos from "./Components/Home/KicksPage/UserVideos";
 import { getFriendsList } from "./redux/actionCreators/friendsAction";
+import { config } from "./config/config";
 
 const App = () => {
   const token = localStorage.getItem("token");
@@ -89,6 +90,7 @@ const App = () => {
   };
 
   useEffect(() => {
+    console.log(config.API_URI, 'KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK');
     dispatch(getProfileById(userData?.id)).then((res) => {
       // dispatch(getFriendsList(res.data?.id))
     });

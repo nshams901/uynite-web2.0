@@ -40,7 +40,7 @@ const EventShareModal = ({ onClose, handleShareEvent, invitesEmail,
     try {
       (async()=>{
        const response = await axios.post(
-        `https://web.uynite.com/event/api/invities/addInvities`,
+        `${config.API_URI}event/api/invities/addInvities`,
         emialObjects,
         {headers: { Authorization: `Bearer ${token}` }})
 
