@@ -169,7 +169,7 @@ const ProfileImageSection = ({
     }
     setState({ ...state, coverImgModal: false, profileImgModal: false })
   }
-console.log(relationOptions, "KKKKKKK");
+
   const handleCreatePost = (img, isProfile) => {
     const payload = {
       shareto: '',

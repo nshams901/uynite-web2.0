@@ -271,7 +271,7 @@ export const imageUploadApi = (file) => async (dispatch) => {
     const getStoredData = await getUserDataFromLocalStorage();
     const body = { file: file };
     const getUploadedResult = await axios.post(
-      `${config.API_URI}fileservice/s3/upload`,
+      `${config.UPLOAD_URI}`,
       body,
       {
         headers: {
