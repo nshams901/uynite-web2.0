@@ -27,7 +27,6 @@ function Autocomplete({ livePlace, placeholder, value, types, handleChangeLocati
 
   function onPlacesChanged(value) {
     const place = searchBox.getPlaces()
-    console.log(place, "PPPPPP LLLLLLLLL");
     const lat = place?.[0]?.geometry.location.lat();
     const lng = place?.[0]?.geometry.location.lng();
     livePlace( place?.[0].types?.[0] === 'administrative_area_level_1' ? place?.[0]?.formatted_address : place?.[0]?.name , { lat, lng });

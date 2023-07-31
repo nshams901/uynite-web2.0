@@ -30,7 +30,6 @@ const ChatMessage = ({
   };
 
   const handleDeleteMessage = () => {
-    console.log("MEsaaaaaage ID", messageId);
     deleteMessage(messageId);
     setAnchorEl(null);
   };

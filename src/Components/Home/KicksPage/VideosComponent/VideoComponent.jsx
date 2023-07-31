@@ -116,8 +116,6 @@ const VideoComponent = ({ dataList, data, handleMute, isMute }) => {
 
 
   const handleIsMyVideo = (data) => {
-    // console.log(data)
-    console.log(profileDetail);
     dispatch({
       type: "ACTIVE_POST",
       payload: data,

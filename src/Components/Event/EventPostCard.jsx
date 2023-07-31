@@ -82,7 +82,6 @@ const EventPostCard = (props) => {
     dispatch(addCommentOnPost(commentData));
     setInputComment("");
     dispatch(getAllPostWithLimit(defaultRootData?.data?.postdata?.profileid));
-    console.log("DOnee");
   };
 
   return (

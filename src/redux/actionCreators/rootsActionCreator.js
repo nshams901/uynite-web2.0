@@ -309,7 +309,6 @@ export const multipleImageUpload = (image) => async (dispatch) => {
         },
       }
     );
-    console.log("multipleImageResult", multipleImageResult);
     dispatch({
       type: "GET_IMAGE_UPLOAD",
       payload: multipleImageResult,
@@ -335,7 +334,6 @@ export const getListOfImagesByPiPT = () => async (dispatch) => {
         },
       }
     );
-    console.log("getImageListResult", getImageListResult);
     dispatch({
       type: "GET_LIST_OF_IMAGE_UPLOAD",
       payload: getImageListResult,
@@ -361,7 +359,6 @@ export const addImageByProfileId = () => async (dispatch) => {
         },
       }
     );
-    console.log("addImageResult", addImageResult);
     dispatch({
       type: "ADD_IMAGE_BY_PROFILE_ID",
       payload: addImageResult?.data,
@@ -418,7 +415,6 @@ export const getUnionListByProfileId = (profileId) => async (dispatch) => {
         },
       }
     );
-    console.log("getUnionListResult", getUnionListResult);
     dispatch({
       type: "GET_UNION_LIST_BY_PROFILE_ID",
       payload: getUnionListResult?.data,

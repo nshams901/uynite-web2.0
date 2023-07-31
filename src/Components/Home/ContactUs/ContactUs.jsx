@@ -6,7 +6,6 @@ import { toasterFunction } from "../../Utility/utility";
 
 const ContactUs = () => {
   const { profile } = useSelector((state) => state.profileReducer);
-  console.log("Profi;e", profile?.id);
   const dispatch = useDispatch();
   const [inputBox, setInputBox] = useState({
     email: profile?.email,
@@ -29,7 +28,6 @@ const ContactUs = () => {
       replymessage: "",
     };
     const response =await dispatch(contactUsPage(dataObj));
-    console.log("sdhgklsjdhsdf",response);
     if (!response?.status) {
       return toasterFunction(response?.message);
     }

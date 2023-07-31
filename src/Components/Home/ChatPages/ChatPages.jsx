@@ -80,8 +80,6 @@ const ChatPages = () => {
         config
       );
 
-      console.log(data);
-
       setMessageId("");
     } catch (error) {
       console.log("an error occured while reacting to a message");
@@ -194,8 +192,6 @@ const ChatPages = () => {
           },
           config
         );
-
-        console.log(data, ':::::::::::::::::::');
         socket.emit("new message", data);
         setShowReplyContainer(false);
         setnewMessage("");
@@ -211,8 +207,6 @@ const ChatPages = () => {
             "Content-Type": "application/json",
           },
         };
-
-        console.log("image is", image);
 
         setShowReplyContainer(false);
         setImage("");
@@ -348,7 +342,6 @@ const ChatPages = () => {
   const showCreateGroupModal = () => {
     setCreateGroupModal(true);
   };
-console.log(chatId);
   const activeUser = async ( data) => {
     const config = {
       headers: {

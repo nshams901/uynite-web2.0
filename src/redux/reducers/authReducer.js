@@ -39,7 +39,6 @@ const authReducer = (state = initialState, action) => {
       return { ...state, loginData: action.payload };
 
     case "LOGIN_SUCCESSFUL":
-      // console.log(state, '------------SSSSSSSSSSSS');
       return { ...state, isLoggedIn: true };
 
     case "SENDING_MAIL_FOR_OTP":
@@ -66,15 +65,12 @@ const authReducer = (state = initialState, action) => {
       return { ...state, isEmailOtp: action.payload };
 
     case "PHONE_NO":
-      console.log("Action.PAylaod PHONE_NO++++", action.payload);
       return { ...state, isPhoneNo: action.payload };
 
     case "VALID_OTP":
-      console.log("Valid Otp", action.payload);
       return { ...state, isOtpValid: action.payload };
 
     case "USER_INFORMATION":
-      console.log("USER_INFORMATION ", action.payload);
       return { ...state, userInfo: action.payload, };
     default:
       return state;

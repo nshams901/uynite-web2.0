@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 const EventResultsPage = () => {
   const { eventsResultList } = useSelector((state) => state.eventReducer);
 
-  console.log("eventsResultList", eventsResultList);
   const [openDropdown, setOpenDropdown] = useState({
     fashionShow: false,
     dressContest: false,

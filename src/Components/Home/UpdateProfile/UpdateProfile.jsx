@@ -97,7 +97,7 @@ const UpdateProfile = () => {
   }, [profiletype]);
 
   const getPersonalDetail = () => {
-    console.log(educationDetails.ugdegree, educationDetails);
+    // console.log(educationDetails.ugdegree, educationDetails);
     dispatch(getEducationDetail(id)).then((res) => {
        dispatch(graduationBranch( res.ugdegree));
        dispatch(pgBranch( res.pgdegree))
@@ -120,7 +120,6 @@ const UpdateProfile = () => {
     dispatch(getStateList(val.code));
   };
   const handleChange = (name, value) => {
-    console.log(name, value);
     const obj = {
       state: getDistrict(value.statecode),
       city: getLoksabha(value.did),

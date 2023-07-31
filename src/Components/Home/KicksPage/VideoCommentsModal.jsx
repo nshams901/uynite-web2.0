@@ -306,7 +306,6 @@ export default function VideoCommentsModal({ onClose, ispenComment, roots, activ
   const handleSaveComment = () => {
     setState({ ...state, editableComment: false})
   }
-console.log(commentsList, ">>>>>>>>>>>");
   return (
     <section
       className=" items-stretch justify-center h-full w-full flex  fixed top-[50%] left-[50%]

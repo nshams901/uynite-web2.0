@@ -10,7 +10,7 @@ const ImageModal = ({ showModal, handleModal, closeModal, confirmClick, handleIm
 
     const [state, setState] = useState({});
     const { image } = state;
-console.log(file);
+
     return (
         <div
             onClick={(e) => e.stopPropagation()}

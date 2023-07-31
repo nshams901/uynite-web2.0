@@ -103,7 +103,6 @@ const kicksReducer = (state = initialState, action) => {
             ? { ...item, commentcount: item?.commentcount + 1 }
             : item;
         });
-        console.log(liked);
         return {
           ...state,
           totalLikes: action.payload.data,

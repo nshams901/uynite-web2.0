@@ -32,10 +32,8 @@ useEffect(() => {
     }, 2000);
 })
 function getAddress (data){
-    console.log(data, "KKKKKK");
 }
 function handleSelect(data){
-    console.log(data, "MAAAAAAAAAAAAAAPPPPPPPPPPPPPPPP");
 }
  const handlePlaceSelect = () => {
     let addressObject = autocomplete.getPlace();

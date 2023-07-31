@@ -46,7 +46,6 @@ const Event = () => {
   const { eventTabSelected } = useSelector((state) => state.userReducer);
 
   const onSelectedTab = (option) => {
-    console.log("option", option);
     dispatch(sponseredTabSelected(option));
   };
   return (

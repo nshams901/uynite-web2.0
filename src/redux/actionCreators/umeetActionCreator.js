@@ -76,7 +76,6 @@ export const getEventDetails = (data) => async (dispatch) => {
       `${config.API_URI}event/api/event/geteventbyid/${data}/${Date.now()}`,
       {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response, "single event details");
     dispatch({
       type: "SINGLE_EVEVT_DETAIL",
       payload: response.data,
@@ -94,13 +93,11 @@ export const getEventList = (data) => async (dispatch) => {
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response, "getAllEventList");
     dispatch({
       type: "GET_ALL_EVEVTS",
       payload: response.data,
     });
   } catch (error) {
-    console.log("err", error);
     throw error;
   }
 };
@@ -114,7 +111,6 @@ export const getEventByProfileid = (data) => async (dispatch) => {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    console.log(response, "myevents by id", data);
     dispatch({
       type: "GET_ALL_MYEVEVTS",
       payload: response.data,
@@ -132,13 +128,11 @@ export const getAllInvitedEvents = (data) => async (dispatch) => {
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response.data, "getAllInvitedEvents");
     dispatch({
       type: "GET_ALL_INVITED_EVENTS",
       payload: response.data,
     });
   } catch (error) {
-    console.log('jd2')
     throw error;
   }
 };
@@ -165,7 +159,6 @@ export const getInviteListByFood = (data) => async (dispatch) => {
       `${config.API_URI}event/api/invities/getprofilesvegnonveg/${data}/false`,
       {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response);
     dispatch({
       type: "",
       payload: response.data,
@@ -199,7 +192,6 @@ export const addInvitee = (data) => async (dispatch) => {
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response);
     dispatch({
       type: "",
       payload: response.data,
@@ -233,7 +225,6 @@ export const addInvitees = (data) => async (dispatch) => {
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response.data, "addInvitees");
     dispatch({
       type: "ADD_INVITIES",
       payload: response.data,
@@ -247,13 +238,11 @@ export const createEventTemplate = (data) => async (dispatch) => {
   try {
     // const formData = new FormData();
     // formData.append('image', data);
-    // console.log(data, formData)
     const response = await axios.post(
       `${config.API_URI}event/api/eventtemp/createtemp`,
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response, 'ok ji');
     dispatch({
       type: "",
       payload: response.data,
@@ -270,7 +259,6 @@ export const getTemplateByEventid = (data) => async (dispatch) => {
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response);
     dispatch({
       type: "",
       payload: response.data,
@@ -286,13 +274,11 @@ export const getAllEvents = (data) => async (dispatch) => {
       `${config.API_URI}event/api/invities/getmyevent/${data}`,
       {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response);
     dispatch({
       type: "",
       payload: response.data,
     });
   } catch (error) {
-    console.log('jd')
     throw error;
   }
 };
@@ -305,7 +291,6 @@ export const addEventMessage = (data) => async (dispatch) => {
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response);
     dispatch({
       type: "",
       payload: response.data,
@@ -320,7 +305,6 @@ export const addEventMessage = (data) => async (dispatch) => {
       `${config.API_URI}event/api/invities/getmyevent/${data}`,
       {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response);
     dispatch({
       type: "",
       payload: response.data,
@@ -336,7 +320,6 @@ export const searchByCountryInUmeet = (country) => async (dispatch) => {
       `${config.API_URI}profile/api/profile/searchcountry/${country}`,
       {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response, "earchByCountryInUmeet");
     dispatch({
       type: "",
       payload: response.data,
@@ -348,13 +331,11 @@ export const searchByCountryInUmeet = (country) => async (dispatch) => {
 };
 
 export const searchByStateInUmeet = (coutrycode) => async (dispatch) => {
-  console.log("COoooooooooooood", coutrycode);
   try {
     const response = await axios.get(
       `${config.API_URI}profile/api/country/getstate/${coutrycode}`,
       {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response, 'searchByStateInUmeet');
     dispatch({
       type: "ADD_GUEST_BY_STATE",
       payload: response?.data,
@@ -365,12 +346,10 @@ export const searchByStateInUmeet = (coutrycode) => async (dispatch) => {
 };
 
 export const addEmailToList = (emailList) => async (dispatch) => {
-  console.log("emailList", emailList);
   try {
     // const response = await axios.get(
     //   `${config.API_URI}profile/api/country/getstate/${coutrycode}`
     // );
-    // console.log("asdsadasas", response);
     dispatch({
       type: "ADD_EMAIL_TO_LIST",
       payload: emailList,
@@ -381,14 +360,12 @@ export const addEmailToList = (emailList) => async (dispatch) => {
 };
 
 export const allEmailInvites = (emailList) => async (dispatch) => {
-  console.log("emailList", emailList);
   try {
     const response = await axios.get(
       `${config.API_URI}profile/event/api/user/all/sendemails`,
       emailList,
       {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log("allll EMaillll Invited", response);
     dispatch({
       type: "ALL_EMAIL_INVITES",
       //   payload: emailList,
@@ -404,7 +381,6 @@ export const getAllEventChatMessage = (data) => async (dispatch) => {
       `${config.API_URI}event/api/eventmessage/getallmessage/${data}`,
       {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response, "eventmessages");
     // dispatch({
     //   type: "EVEVT_CHAT_DETAIL",
     //   payload: response.data,
@@ -421,7 +397,6 @@ export const getAllUgFriends = (data) => async (dispatch) => {
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response.data, "getAllUgFriends");
     dispatch({
       type: "GET_UG_FRIENDS",
       payload: response.data,
@@ -438,7 +413,6 @@ export const getAllPgFriends = (data) => async (dispatch) => {
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response.data, "getAllPgFriends");
     dispatch({
       type: "GET_PG_FRIENDS",
       payload: response.data,
@@ -454,7 +428,6 @@ export const getProfileByEmail = (data) => async (dispatch) => {
        `${config.API_URI}profile/api/profile/profilebyemail/${data}`,
        {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response.data, "getProfileByEmail", data);
     dispatch({
       type: "GET_EMAIL_FOUND",
       payload: response.data,
@@ -471,7 +444,6 @@ export const sendEmailInvites = (data) => async (dispatch) => {
        data,
        {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response.data, "sendemailinvites", data);
     dispatch({
       type: "SEND_EMAIL_INVITES",
       payload: response.data,
@@ -509,7 +481,6 @@ export const getReunionTemplates = (data) => async (dispatch) => {
        `${config.API_URI}event/api/eventtemp/category/Reunion`,
        {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response.data, "getReunionTemplates");
     dispatch({
       type: "GET_REUNION_TEMPLATES",
       payload: response.data,
@@ -536,7 +507,6 @@ export const getStatesByCountry = (countryCode) => async (dispatch) => {
        `${config.API_URI}api/user/country/getstate/${countryCode}`,
        {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response.data, "states dude");
     dispatch({
       type: "GET_STATES_BY_COUNTRY",
       payload: response?.data?.data,
@@ -552,7 +522,6 @@ export const getEventFeedbacks = () => async (dispatch) => {
        `${config.API_URI}event/api/event/fetch/feedback`,
        {headers: { Authorization: `Bearer ${token}` }}
     );
-    console.log(response.data, "feedbacks");
     dispatch({
       type: "GET_STATES_BY_COUNTRY",
       payload: response?.data?.data,

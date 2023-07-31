@@ -49,7 +49,6 @@ const UserVideos = () => {
       }, [isMobile]);
 
       const handleMute = () => setState({ ...state, isMute: !isMute})
-    // console.log(userKickList,params,location, 'JJJJJJJ');
 
     return (
         <div className='w-full h-screen md:w-1/3 2xl:w-1/3 bg-white mx-auto'>

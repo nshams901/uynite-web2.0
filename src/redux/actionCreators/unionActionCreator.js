@@ -68,7 +68,6 @@ export const getUnionMembers = (data) => async (dispatch) => {
     const response = await axios.get(
       `${config.API_URI}friend/api/group/getFriends/${data}`
     );
-    console.log(response);
     dispatch({
       type: "GET_UNION_MEMBER",
       payload: response.data,
@@ -84,7 +83,6 @@ export const inviteMember = (data) => async (dispatch) => {
       `${config.API_URI}friend/api/group/addInGroup`,
       data 
     );
-    console.log(response);
     dispatch({
       type: "",
       payload: response.data,
@@ -101,7 +99,6 @@ export const removeUserFromUnion = (data) => async (dispatch) => {
     const response = await axios.delete(
       `${config.API_URI}friend/api/group/deleteFromGroup/${groupId}/${profileId}`
     );
-    console.log(response);
     dispatch({
       type: "",
       payload: response.data,

@@ -90,7 +90,6 @@ const App = () => {
   };
 
   useEffect(() => {
-    console.log(config.API_URI, 'KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK');
     dispatch(getProfileById(userData?.id)).then((res) => {
       // dispatch(getFriendsList(res.data?.id))
     });

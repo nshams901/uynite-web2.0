@@ -18,7 +18,6 @@ export default function KicksComment({ addComment }) {
   const handleSendBtn = () => {
     addComment(commentText);
     setState({ ...state, commentText: "" });
-    console.log("comment", commentText);
   };
   return (
     <>

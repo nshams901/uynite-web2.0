@@ -50,7 +50,6 @@ export const menuModalTabSelect = (menuTab)=>(dispatch)=>{
 
 // SELECTED TAB SPONSHERED EVENT SECTION
 export const sponseredTabSelected = (selectedTab)=>(dispatch)=>{
-    console.log("selectedTab",selectedTab);
     dispatch({
         type:"SELECTED_TAB_SPONSERED_EVENT",
         payload:selectedTab
