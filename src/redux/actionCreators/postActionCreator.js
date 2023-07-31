@@ -4,7 +4,7 @@ import { config } from "../../config/config";
 
 export const createPost = (postData) => async (dispatch) => {
   const postDataResult = await axios.post(
-    "${config.API_URI}post/api/post/add",
+    `${config.API_URI}post/api/post/add`,
     postData,
     {
       headers: {
