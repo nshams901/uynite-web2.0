@@ -267,7 +267,7 @@ export const decreaseLikeByLikeId = (profileId, likeId) => async (dispatch) => {
 export const imageUploadApi = (file) => async (dispatch) => {
   try {
     //
-    console.log("Files", file);
+    console.log("Files", config.UPLOAD_URI);
     const getStoredData = await getUserDataFromLocalStorage();
     const body = { file: file };
     const getUploadedResult = await axios.post(

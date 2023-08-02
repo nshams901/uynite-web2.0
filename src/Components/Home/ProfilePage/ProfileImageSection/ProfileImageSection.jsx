@@ -432,7 +432,7 @@ const ProfileImageSection = ({
       {/* {
         showModal && createPortal(<FollowersModal modalName={`Your ${modalName}`} data={friends}/>, document.getElementById('root'))
       } */}
-     { console.log(modalName)}
+
       {showModal && (
         <Portals closeModal={() => setState({ ...state, showModal: false })}>
           <FollowersModal

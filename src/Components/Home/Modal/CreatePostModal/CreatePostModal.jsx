@@ -15,6 +15,7 @@ import {
 import moment from "moment";
 import {
   getAllPostWithLimit,
+  getPostList,
   imageUploadApi,
 } from "../../../../redux/actionCreators/rootsActionCreator";
 import Loader from "../../../common/Loader";
@@ -223,12 +224,14 @@ const CreatePostModal = ({
       ? dispatch(updatePost(updatePayload)).then((res) => {
           handleCloseModal();
           dispatch(getAllPostWithLimit(profile?.id));
+          dispatch(getPostList(profile?.id));
         })
       : dispatch(createPost(payload)).then((res) => {
           if (res?.status) {
             toast.success(res.message);
             handleCloseModal();
             dispatch(getAllPostWithLimit(profile?.id));
+            dispatch(getPostList(profile?.id));
           } else {
             toast.error(res.message);
           }
