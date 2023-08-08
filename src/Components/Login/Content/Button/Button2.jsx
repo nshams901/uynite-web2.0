@@ -8,7 +8,7 @@ const Button2 = ({ title, onClick, disabled, id,width }) => {
         type="button"
         className={`${
           disabled
-            ? "bg-opacity-[65%] text-[#7E8082] "
+            ? "bg-opacity-[65%] text-gray-700 "
             : "bg-opacity-[100%] text-[black] "
         }  ${
           width ? `w-[${width}]` : "w-[70%]"

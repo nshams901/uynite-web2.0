@@ -28,7 +28,7 @@ const CountryCodeModal = ({
         type="text"
         placeholder="Search..."
         value={searchCountry}
-        className="border-b-2 border-[#48B2DB] text-[#7E8082] outline-none"
+        className="border-b-2 border-[#48B2DB] text-black outline-none"
       />
 
       <div className="overflow-y-scroll flex flex-col gap-1">

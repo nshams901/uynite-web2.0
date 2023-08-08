@@ -55,7 +55,6 @@ const ProfileType = ({ modalType }) => {
       checkBox,
       profiletype: modalType,
     };
-    console.log("USERRRRRRRRRRRRRRRR", userData);
 
     dispatch(
       userSingupInformation({
@@ -66,6 +65,14 @@ const ProfileType = ({ modalType }) => {
     );
     dispatch(isOtpValid({ validOtp: true, userInfo: true }));
   };
+
+  console.log(              
+    states?.fname &&
+    states?.lname  &&
+    states?.dob && 
+    states?.gender &&
+    states?.checkBox
+);
   return (
     <div className="w-full rounded-[20px] flex flex-col h-full justify-evenly items-center gap-1 px-2 my-2">
       <div className="relative">
@@ -288,7 +295,7 @@ const ProfileType = ({ modalType }) => {
             <p className="text-[10px] font-semibold text-[#7E8082] w-full">
               I agree to all
               <Link to="/auth/reals" className="text-[#05B7FD]">
-                &nbsp; Terms, Data, Cookies & Privacy.
+                &nbsp; Terms & Conditions, Cookies & Privacy.
               </Link>
             </p>
             <br />
@@ -299,17 +306,16 @@ const ProfileType = ({ modalType }) => {
             title="Next"
             width="100%"
             disabled={
-              states?.fname === "" ||
-              states?.lname === "" ||
-              states?.dob === undefined ||
-              states?.gender === undefined ||
-              states?.checkBox === undefined
+              !(states?.fname &&
+              states?.lname  &&
+              states?.dob && 
+              states?.gender &&
+              states?.checkBox)
             }
             onClick={onNextClick}
           />
         </div>
       </div>
-      {console.log("Staaaaaaaaaaaeeeee", states)}
     </div>
   );
 };

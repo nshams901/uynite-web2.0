@@ -31,9 +31,9 @@ export default function Dropdown2({
       >
         <div>
           <Listbox.Button
-            className={`inline-flex w-full gap-x-1.5 rounded-md bg-white px-3 py-2 border-[1px] border-[#7E8082] text-sm ${
+            className={`inline-flex w-full gap-x-1.5 rounded-md bg-white px-3 py-2 border-[1px] border-gray-300 text-sm ${
               selectedCountry ? "text-black-400" : "text-gray-400"
-            }  shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50`}
+            }  shadow-sm  hover:bg-gray-50`}
           >
             {selectedCountry?.country || name}
             <MdArrowDropDown

@@ -421,7 +421,7 @@ const ProfileImageSection = ({
               <span className="font-bold sm:text-xl lg:text-2xl flex items-center justify-center">{`${userName ? `${data?.fname} ${data?.lname || ""}` : "User"
                 }`}</span>
               :
-              <span className="font-bold sm:text-xl lg:text-2xl flex items-center justify-center">{`${userName ? `${data?.fname || ""} ${data?.lname || ""}` : "User"
+              <span className="font-bold sm:text-xl lg:text-2xl flex items-center justify-center">{`${ data.personalname ? `${data.personalname || ""} ${data.personalLastName || ""}` : "User"
                 }`}</span>
           }
           <span className=" text-xs lg:text-sm font-medium text-gray-700  2xl:text-[20px] flex items-center justify-center">

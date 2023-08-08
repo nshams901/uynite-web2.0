@@ -255,7 +255,7 @@ export const createEventTemplate = (data) => async (dispatch) => {
 export const getTemplateByEventid = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `${config.API_URI}event/api/eventtemp/12`,
+      `${config.API_URI}event/api/eventtemp`,
       data,
       {headers: { Authorization: `Bearer ${token}` }}
     );

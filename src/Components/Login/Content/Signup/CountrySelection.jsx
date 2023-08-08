@@ -112,7 +112,7 @@ const CountrySelection = ({ modalType }) => {
       countrycode: "+91", //default selected in signup screen..
       dob: moment(userInfo.dob).format("YYYY-MM-DD"), //from user input
       email: userInfo.uemail, //from signup screen.
-      fname: userInfo?.fname, //from user input BUSINESS NAME
+      fname: orgName, //from user input BUSINESS NAME
       gender: userInfo?.gender,
       lname: userInfo?.lname,
       pimage: userInfo?.imgFile, //if profile image is there, add the URL here.
@@ -316,7 +316,6 @@ const CountrySelection = ({ modalType }) => {
                     emptyMessage={'Please select country first'}
                   />
 
-                  {console.log("selectedCountry?.code", selectedCountry?.code)}
                   {countryCode?.includes(selectedCountry?.code) && (
                     <Dropdown
                       name={"District*"}
@@ -401,7 +400,7 @@ const CountrySelection = ({ modalType }) => {
           ) : null}
         </>
       ) : (
-        <div className="w-[90%] h-[26%] pt-8">
+        <div className="w-[90%] pt-8">
           <Input
             type="search"
             inputValue={states?.orgName}
@@ -427,10 +426,22 @@ const CountrySelection = ({ modalType }) => {
 
       <div className="w-full mt-2">
         <Button2
+           disabled={
+            isPersonal ?
+            !(
+              selectedCountry && selectedState && 
+              (countryCode.includes(selectedCountry.code) ? ( selectedDistrict && selectedLoksabha && selectedAssembly ) : true)
+            )
+            :
+            !(states.orgName && selectedCategory.category)
+           }
           width="90%"
           title="Create Profile"
           onClick={handleCreateProfile}
         />
+        {
+          console.log("Create Profile", states.orgName, selectedCategory)
+        }
       </div>
     </div>
   );

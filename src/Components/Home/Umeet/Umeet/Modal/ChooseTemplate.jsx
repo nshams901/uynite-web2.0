@@ -2,7 +2,7 @@ import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { MdKeyboardArrowRight } from 'react-icons/md'
 import { HiUpload } from 'react-icons/hi'
 import wishes from '../../../../../Assets/Images/Umeet/wishesTemplate.webp';
-import { getReunionTemplates, createEventTemplate } from "../../../../../redux/actionCreators/umeetActionCreator";
+import { getReunionTemplates, createEventTemplate, getTemplateByEventid } from "../../../../../redux/actionCreators/umeetActionCreator";
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
@@ -17,6 +17,10 @@ const ChooseTemplate = ({ onClose, saveTemplate,
 console.log(selectedImage)
   const dispatch = useDispatch()
 
+  useEffect(() => {
+    dispatch(getReunionTemplates())
+    dispatch(getTemplateByEventid())
+  }, [dispatch])
   const handleImageChange = () => {
     if (event.target.files && event.target.files[0]) {
       const image = event.target.files[0];

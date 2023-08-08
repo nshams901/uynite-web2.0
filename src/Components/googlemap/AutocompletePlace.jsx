@@ -105,8 +105,10 @@ function Autocomplete({ livePlace, placeholder, value, types, handleChangeLocati
           </GoogleMap>
         </LoadScript>
       ) : (
-        <StandaloneSearchBox onLoad={onLoad} onPlacesChanged={onPlacesChanged} >
-          <div className='flex items-center'>
+        <div className='relative'>
+
+        <StandaloneSearchBox  onLoad={onLoad} onPlacesChanged={onPlacesChanged} >
+          <div className='flex overflow-auto items-center'>
             <input
               type="text"
               value={value}
@@ -120,7 +122,7 @@ function Autocomplete({ livePlace, placeholder, value, types, handleChangeLocati
                 fontSize: `14px`,
                 outline: `none`,
                 textOverflow: `ellipses`,
-                position: "absolute",
+                // position: "absolute",
 
               }}
               autoComplete="true"
@@ -141,6 +143,7 @@ function Autocomplete({ livePlace, placeholder, value, types, handleChangeLocati
 
           </div>
         </StandaloneSearchBox>
+        </div>
       )}
     </>
   );

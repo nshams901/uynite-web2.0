@@ -28,8 +28,6 @@ export default function Dropdown({
   emptyMessage,
 }) {
 
-
-  console.log("Opppppppp+++++++++---------=====",options);
   return (
     <div className="flex items-center w-full">
       {label && <div className="w-[40%] md:min-w-[165px] ">{label}</div>}
@@ -40,9 +38,9 @@ export default function Dropdown({
       >
         <div>
           <Listbox.Button
-            className={`inline-flex w-full gap-x-1.5 rounded-md bg-white px-3 py-1.5 border-[1px] border-[#7E8082] outline-none text-xs font-bold  ${
+            className={`inline-flex w-full gap-x-1.5 rounded-md bg-white px-3 py-1.5 border-[1px] border-gray-300 outline-none text-xs font-bold  ${
               selectedOption ? "text-black" : "text-gray-400"
-            } shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50`}
+            } shadow-sm hover:bg-gray-50`}
           >
             {selectedOption && selectedOption[keyName] || name}
             <MdArrowDropDown
@@ -77,7 +75,7 @@ export default function Dropdown({
                   <input
                     type="text"
                     placeholder="Search..."
-                    className="border-b-2 border-[#48B2DB] text-[#7E8082] outline-none"
+                    className="border-b-2 border-[#48B2DB] text-[#060606] outline-none text-sm"
                     value={inputValue}
                     onChange={onHandleChange}
                   />

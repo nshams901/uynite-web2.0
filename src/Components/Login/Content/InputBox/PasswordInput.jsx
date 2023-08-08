@@ -25,7 +25,7 @@ const PasswordInput = ({
 
   return (
     <div className="w-full flex flex-col items-center justify-center ">
-      <div className=" flex w-full items-center border-[1px] border-[#7E8082] rounded-[5px] text-[#AEB2B1]">
+      <div className=" flex w-full items-center border-[1px] border-[#7E8082] rounded-[5px] text-black">
         {/* heigth of input changed */}
         <input
           type={passwordType}

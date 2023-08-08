@@ -75,6 +75,7 @@ const Signup = () => {
             "Password should be minimum of 8 length characters with one numerical value",
         }),
     }),
+    
     onSubmit: async (event) => {
       dispatch(isOtpValid({}))
       dispatch(settingOtp(""));
@@ -210,7 +211,7 @@ const Signup = () => {
       {/* padding increased */}
       <div className="w-full rounded-[20px] flex flex-col justify-center items-center gap-1 px-4 h-full">
         <Heading title="Create your profile" />
-        <div className="flex w-full justify-center gap-4 mb-2">
+        <div className="flex w-full justify-center text-black gap-4 mb-2">
           <span>
             <input
               type="radio"
@@ -234,10 +235,11 @@ const Signup = () => {
         <Input
           title="Email"
           name="email"
-          inputValue={activeField ? "" : formik.values.email}
+          inputValue={activeField === "email" ? formik.values.email : ""}
           errorMessage={formik.errors.email}
           id="email"
           onHandleChange={(e) => {
+            setActiveField('email');
             if (e.target.value.length > 32) {
               formik.handleChange(
                 e.target.value.slice(0, e.target.value.length - 1)
@@ -248,7 +250,7 @@ const Signup = () => {
           }}
         />
         {/* font weight changed */}
-        <h1 className="font-semibold text-[black]">Or</h1>
+        <h1 className="font-semibold text-[#7E8082]">Or</h1>
         <div className="flex w-full justify-center items-center cursor-pointer gap-2 rounded-[5px] relative">
           {/* textcolor, border color, height, bckground-color changed*/}
           <div
@@ -286,12 +288,13 @@ const Signup = () => {
 
           <input
             placeholder="Phone number"
-            className="outline-none border-[1px] border-[#7E8082] h-full rounded-[5px] w-full text-xs text-[#AEB2B1] !p-2 font-semibold disabled:bg-gray-300"
+            className="outline-none border-[1px] border-[#7E8082] h-full rounded-[5px] w-full text-xs text-black !p-2 font-semibold disabled:bg-gray-300"
             name="phone"
             type="number"
             id="phone"
-            value={formik.values.phone}
+            value={ activeField === 'phone' ? formik.values.phone : ''}
             onChange={(event) => {
+              setActiveField('phone');
               if (event.target.value.length > 12) {
                 formik.handleChange(
                   event.target.value.slice(event.target.value.length - 1)

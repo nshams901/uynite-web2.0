@@ -33,6 +33,7 @@ import books from '../../../../Assets/Images/books.png';
 import person from '../../../../Assets/Images/personIcon.png';
 import union from '../../../../Assets/Images/unionIcon.png'
 import { getFriendsList } from "../../../../redux/actionCreators/friendsAction";
+import logo from '../../../../Assets/Images/logo.png';
 
 export let privacyList = [
   { name: "Public", key: 'Public', icon: globe },
@@ -71,7 +72,7 @@ const CreatePostModal = ({
     uploadFileList = [],
     alert,
     loading,
-    allFiles = isEdit ? activePost?.image?.split("@") : "",
+    allFiles = isEdit ? activePost?.image?.split("@") : [],
     isRelationAvailable = true,
     myUnionList = []
   } = state;
@@ -300,6 +301,10 @@ const CreatePostModal = ({
               <span className="font-bold">
                 {name ? `${profile?.fname} ${profile?.lname}` : "User"}
               </span>
+             {
+              profile.celibrity ?
+              <img className="w-5" src={logo}/>: ""
+             }
             </section>
             <section className="flex items-center relative ">
               <span className=" text-xs w-[40%] sm:text-[10px] lg:w-[30%] xl:w[22%] flex items-center">
@@ -355,7 +360,7 @@ const CreatePostModal = ({
               ></textarea>
             </div>
             {/* add location */}
-            <div className="w-full p-2 text-sm  items-center placeholder-gray-500">
+            <div className="w-full p-2 text-sm overflow-auto  items-center placeholder-gray-500">
               {/* <input
                 type="text"
                 placeholder="Add Location"
