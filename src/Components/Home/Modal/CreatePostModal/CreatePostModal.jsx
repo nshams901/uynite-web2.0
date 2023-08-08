@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import MainCarousel from "../../SliderSection/MainCarousel";
 import AccordionToggle from "../../Accordian/AccordianToggle";
 import SelectDropdown from "./SelectDropdown";
@@ -37,10 +37,10 @@ import logo from '../../../../Assets/Images/logo.png';
 
 export let privacyList = [
   { name: "Public", key: 'Public', icon: globe },
-  { name: "Friends" , key: 'Friend', icon: friends},
+  { name: "Friends", key: 'Friend', icon: friends },
   { name: "Relatives", key: 'Relative', icon: home },
   { name: "Classmates", key: 'Classmate', icon: books },
-  { name: "Officemates", key: 'Colleague', icon: person},
+  { name: "Officemates", key: 'Colleague', icon: person },
 ];
 const CreatePostModal = ({
   // setShowCreatePostModal,
@@ -83,7 +83,7 @@ const CreatePostModal = ({
   useEffect(() => {
     // dispatch(getFriendsList(profile?.id))
     dispatch(getUnions(profile?.id)).then((res) => {
-      setState({ ...state, myUnionList: res.data})
+      setState({ ...state, myUnionList: res.data })
     })
   }, []);
 
@@ -91,13 +91,19 @@ const CreatePostModal = ({
     setState({ ...state, postContent: e.target.value });
   };
 
-  const handleImageChange = async (e) => {
+  const handleImageChange = async (e, fileRef) => {
+
     if (e === "delete") {
       setImageFile("");
       setVideoFile("");
     } else {
       const fileList = e.target.files;
-
+      let validateFiles = validateFile(fileList[0])
+      if(validateFiles){
+        toast.error(validateFiles)
+        return ;
+      }
+      console.log(validateFiles, '---------------------');
       const fileArray = Array.from(fileList);
       fileArray.forEach((element) => {
         if (element?.type?.includes("image")) {
@@ -121,11 +127,11 @@ const CreatePostModal = ({
   };
 
   async function handleCreatePost() {
-    if(isRelationAvailable !== true){
-        if(isRelationAvailable === 'group'){
-          return toast.error(`You don't have any friends in this group`)
-        }else
-        return toast.error( `${isRelationAvailable} is not present`)
+    if (isRelationAvailable !== true) {
+      if (isRelationAvailable === 'group') {
+        return toast.error(`You don't have any friends in this group`)
+      } else
+        return toast.error(`${isRelationAvailable} is not present`)
     }
     if (allFiles) {
       setState({ ...state, loading: true });
@@ -146,7 +152,7 @@ const CreatePostModal = ({
   }
 
   const unions = myUnionList.map((item) => {
-    return {...item, name: item?.groupName, icon: union, key: 'group' };
+    return { ...item, name: item?.groupName, icon: union, key: 'group' };
   });
   const postPrivacyList = isPersonal
     ? [...privacyList, ...unions]
@@ -158,18 +164,18 @@ const CreatePostModal = ({
     // }
     console.log(selectedValue);
     let isRelationAvailable = true
-    if(selectedValue.name === 'Friends'){
+    if (selectedValue.name === 'Friends') {
       isRelationAvailable = friends.length > 0 ? true : 'Friend';
-    }else if(selectedValue.name === 'Relatives'){
+    } else if (selectedValue.name === 'Relatives') {
       const isRelative = friends.find((item) => item.friend.relative);
       isRelationAvailable = isRelative ? true : 'Relative'
-    }else if ( selectedValue.name === 'Classmates'){
+    } else if (selectedValue.name === 'Classmates') {
       const isClassmate = friends.find(item => item.friend.classment);
       isRelationAvailable = isClassmate ? true : 'Classmate'
-    }else if( selectedValue.name === 'Officemates'){
-      const isOfficemate = friends.find( item => item.friend.collgues);
+    } else if (selectedValue.name === 'Officemates') {
+      const isOfficemate = friends.find(item => item.friend.collgues);
       isRelationAvailable = isOfficemate ? true : 'Officemate';
-    }else if( selectedValue.key === 'group'){
+    } else if (selectedValue.key === 'group') {
       isRelationAvailable = selectedValue.count ? true : 'group'
     }
     setState({ ...state, alert: true, postPrivacy: selectedValue, isRelationAvailable: isRelationAvailable });
@@ -239,6 +245,28 @@ const CreatePostModal = ({
         });
   };
 
+  const validateFile = (file) => {
+    var video = document.createElement('video');
+    video.preload = 'metadata';
+    video.src = URL.createObjectURL(file);
+    let message;
+    console.log(file.size, "________ ");
+    video.onloadedmetadata = function () {
+      window.URL.revokeObjectURL(video.src);
+      if (video.duration > 120) {
+        message = 'Video should be less than 2 minutes';
+        toast.error( message );
+        handleRemove(file)
+      }
+      if(file.size > 100000000 ){
+        message = 'Video should be less than 100 MB';
+        toast.error( message );
+        handleRemove(file)
+      }
+    }
+    return message
+  }
+
   const handleRemove = (itemName) => {
     const filteredData = allFiles.filter((item) => {
       return item.name !== itemName.name;
@@ -273,7 +301,7 @@ const CreatePostModal = ({
         </div>
         <div className="flex">
           <button
-            disabled={ loading }
+            disabled={loading}
             onClick={handleCreatePost}
             className="bg-[#6780AF] py-1 w-[100px] text-white text-sm px-3 font-semibold  sm:font-bold sm:px-5 rounded-full "
           >

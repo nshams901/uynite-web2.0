@@ -4,6 +4,8 @@ import "react-multi-carousel/lib/styles.css";
 import ImageIcon from "@mui/icons-material/Image";
 import deleteIcon from "../../../Assets/Images/delete.png";
 import { MdEdit, MdOutlineDelete } from "react-icons/md";
+import { useRef } from "react";
+import { toast } from "react-toastify";
 
 export const responsive = {
   superLargeDesktop: {
@@ -34,7 +36,16 @@ export default function MainCarousel({
   selectFile,
   isEdit,
   handleRemove,
+  handleFileValidate,
 }) {
+  const videoRef = useRef()
+  const checkVideoFile = () => {
+  let validationFail = handleFileValidate(videoRef)
+    if( validationFail ){
+      toast.error(validationFail)
+      handleRemove(files[0])
+    }
+  }
   return (
     <>
       <div className="float-right "></div>
@@ -48,7 +59,7 @@ export default function MainCarousel({
         >
           {files?.length ? (
             files?.map((elem) => (
-              <div className="flex h-full justify-center  py-2">
+              <div key={elem} className="flex h-full justify-center  py-2">
                 <div className="relative hover:z-0 z-20 sm:h-[45vh] w-[100%] sm:w-[90%] lg:w-[90%] flex flex-col border border-gray-400 rounded-lg px-2 mb-4 justify-center items-center">
                   <div className="absolute -bottom-[40px] z-30  flex items-center justify-center">
                     {files && (
@@ -88,9 +99,11 @@ export default function MainCarousel({
                           ? URL.createObjectURL(elem)
                           : elem
                       }
+                      ref={videoRef}
                       alt="image"
                       className="h-[25vh] sm:h-[45vh] sm:w-[90%] lg:w-[90%] object-contain"
                       autoPlay
+                      controls
                       onClick={() => selectFile(elem)}
                     />
                   )}
@@ -122,7 +135,7 @@ export default function MainCarousel({
                   id="image"
                   name="file"
                   accept="image/*, video/*"
-                  onChange={handleImageChange}
+                  onChange={ handleImageChange}
                   required
                   multiple
                 />
