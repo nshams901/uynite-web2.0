@@ -33,7 +33,7 @@ import books from '../../../../Assets/Images/books.png';
 import person from '../../../../Assets/Images/personIcon.png';
 import union from '../../../../Assets/Images/unionIcon.png'
 import { getFriendsList } from "../../../../redux/actionCreators/friendsAction";
-import logo from '../../../../Assets/Images/logo.png';
+import logo from '../../../../Assets/Images/Logo.png';
 
 export let privacyList = [
   { name: "Public", key: 'Public', icon: globe },
