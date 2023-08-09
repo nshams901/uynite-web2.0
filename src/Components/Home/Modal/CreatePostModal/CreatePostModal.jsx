@@ -250,7 +250,6 @@ const CreatePostModal = ({
     video.preload = 'metadata';
     video.src = URL.createObjectURL(file);
     let message;
-    console.log(file.size, "________ ");
     video.onloadedmetadata = function () {
       window.URL.revokeObjectURL(video.src);
       if (video.duration > 120) {

@@ -9,6 +9,8 @@ import {
   getPostList,
 } from "../../../redux/actionCreators/rootsActionCreator";
 import useObserver from "../../Utility/custom/useObserver";
+import { isEmpty } from "../../Utility/utility";
+import EmptyPost from "../../Roots/EmptyPost";
 
 const PostContent = ({ data, showModalFunc, width, userData }) => {
   const ref = useRef({})
@@ -47,7 +49,9 @@ const PostContent = ({ data, showModalFunc, width, userData }) => {
   }
   return (
     <div className="w-full flex items-center justify-center flex-col cursor-pointer">
-      {postList?.map((elem, index) => (
+      { isEmpty(postList) ?
+        <EmptyPost/> :
+        postList?.map((elem, index) => (
         <div ref={(index+1) % 10 === 0 ? ref: null} className=" sm:w-[50%] lg:w-[40%] flex items-center justify-center flex-col px-2">
           <PostCard
             key={elem?.id}
