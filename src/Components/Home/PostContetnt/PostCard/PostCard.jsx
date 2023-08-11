@@ -226,7 +226,7 @@ const PostCard = ({ userData, item = {} }) => {
       setPostMenuModal({ ...postMenuModal, reportModal: true, activePost: item });
     } else if (modalName === "Block user") {
       setState({ ...state, blockModal: true, activePost: item });
-    } else if (modalName === "Delete Post") {
+    } else if (modalName === "Delete") {
       setState({ ...state, deleteModal: true, activePost: item });
     }
   };
