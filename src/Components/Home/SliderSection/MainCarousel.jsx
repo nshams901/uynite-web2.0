@@ -104,6 +104,7 @@ export default function MainCarousel({
                       className="h-[25vh] sm:h-[45vh] sm:w-[90%] lg:w-[90%] object-contain"
                       autoPlay
                       controls
+                      muted
                       onClick={() => selectFile(elem)}
                     />
                   )}

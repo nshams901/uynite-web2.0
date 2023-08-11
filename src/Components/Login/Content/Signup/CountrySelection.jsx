@@ -433,7 +433,7 @@ const CountrySelection = ({ modalType }) => {
               (countryCode.includes(selectedCountry.code) ? ( selectedDistrict && selectedLoksabha && selectedAssembly ) : true)
             )
             :
-            !(states.orgName && selectedCategory.category)
+            !(states.orgName && selectedCategory?.category)
            }
           width="90%"
           title="Create Profile"

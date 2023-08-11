@@ -81,7 +81,7 @@ export const getPrivacy = (relation) => {
     Officemate: person,
     Colleague: person
   }
-  return obj[relation] || union
+  return obj[relation] ?? globe
 }
 
 export const getTimeDiff = (startDate, endDate = new Date().getTime()) => {

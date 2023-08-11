@@ -42,8 +42,8 @@ const ImageEditor = ({ file, cancleEdit, saveEdit }) => {
   }
 
   return (
-    <div className="App bg-white h-1/2">
-      <div className="crop-container relative" style={{ height: '400px' }}>
+    <div className="App bg-white h-[70%]">
+      <div className="crop-container relative" style={{ maxHeight: '500px', height: '100%' }}>
         <Cropper
           image={image}
           video={image}
@@ -91,7 +91,7 @@ const ImageEditor = ({ file, cancleEdit, saveEdit }) => {
 
         <div className='w-1/2 text-center'>
           <button onClick={handleEdit} 
-          className='px-10 py-1 bg-[#6869c1] rounded-2xl text-white mr-3'>Save</button>
+          className='px-10 py-1 bg-[#6780af] rounded-2xl text-white mr-3'>Save</button>
           <button onClick={cancleEdit}
           className='px-10 py-1 border border-gray-500 rounded-2xl ml-3'>Cancel</button>
         </div>

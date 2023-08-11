@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { GrLocation } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
 import user from '../../../../Assets/Images/user.png'
-import { getHistory  } from "../../../../redux/actionCreators/postActionCreator";
+import { getHistory } from "../../../../redux/actionCreators/postActionCreator";
+import { getPrivacy } from "../../../Utility/utility";
 
 const OriginalPostModal = ({ handleCloseModal, activePost }) => {
   const dispatch = useDispatch()
@@ -14,15 +15,15 @@ const OriginalPostModal = ({ handleCloseModal, activePost }) => {
   })
 
   // const { activePost = {}} = reducerData;
-  const {  profile, text, location, image} = activePost;
+  const { profile, text, location, image, shareto } = activePost;
 
-  const [state, setState] = useState({ });
-  const { postHistory = []} = state
-  
+  const [state, setState] = useState({});
+  const { postHistory = [] } = state
+
   useEffect(() => {
-      dispatch(getHistory(activePost.id)).then(res => {
-        setState({ ...state, postHistory: res.data})
-      })
+    dispatch(getHistory(activePost.id)).then(res => {
+      setState({ ...state, postHistory: res.data })
+    })
   }, [])
   return (
     // Original Post Section
@@ -44,23 +45,24 @@ const OriginalPostModal = ({ handleCloseModal, activePost }) => {
             </div>
 
             <div className="flex flex-col flex-1 justify-center ml-2">
-              <div className="flex items-start">
+              <div className="items-start">
                 <span className="text-sm ml-1 font-bold">
                   {" "}
                   {`${profile?.fname} ${profile?.lname}`}
                 </span>
+                <div className="flex items-center gap-2"><img className="w-5" src={getPrivacy(shareto)} /> <span>{shareto || 'Public'}</span></div>
                 {/* <span className="text-xs ml-2 font-semibold mt-0.5">
                   @Software Developer
                 </span> */}
               </div>
 
               <div className="flex items-center gap-1">
-              
+
                 {/* <img src="./images/groups.png" alt="" className="w-[12px]" />
 
                 <span className="text-xs font-semibold">1 year ago</span>
                 <GrLocation size={10} /> */}
-                
+
                 {/* <span className="text-xs font-semibold"> {location}</span> */}
               </div>
             </div>
@@ -99,7 +101,7 @@ const OriginalPostModal = ({ handleCloseModal, activePost }) => {
 
         {Array.isArray(postHistory) &&
           postHistory?.map((elem, index) => {
-            const { image, profile, text, location } = elem?.post;
+            const { image, profile, text, location, shareto } = elem?.post;
             return (
               <div
                 className="bg-[#E4E7EC] flex flex-col rounded-xl gap-2 mt-[10px] pt-[6px]"
@@ -115,10 +117,12 @@ const OriginalPostModal = ({ handleCloseModal, activePost }) => {
                   </div>
 
                   <div className="flex flex-col flex-1 justify-center ml-2">
-                    <div className="flex items-start">
+                    <div className="items-start">
                       <span className="text-sm ml-1 font-bold">{`${profile?.fname} ${profile.lname}`}</span>
-                      <span className="text-xs ml-2 font-semibold mt-0.5">
+                      <span className="text-xs ml-2 mt-0.5">
                         {/* @Software Developer */}
+                        <div className="flex items-center gap-2"><img className="w-5" src={getPrivacy(shareto)} /> <span>{shareto || 'Public'}</span></div>
+
                       </span>
                     </div>
 
@@ -141,6 +145,7 @@ const OriginalPostModal = ({ handleCloseModal, activePost }) => {
                   <p className="text-[12px] break-words text-gray-500 w-[95%] mb-[6px] text-semibold">
                     {text}
                   </p>
+                  <img src={image} alt="" />
                 </div>
               </div>
             );

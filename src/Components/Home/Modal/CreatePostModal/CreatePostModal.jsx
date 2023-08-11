@@ -66,7 +66,7 @@ const CreatePostModal = ({
   const isPersonal = profile?.profiletype === "Personal";
 
   const {
-    postPrivacy = isEdit ? activePost?.shareto : { name: "Public", icon: globe },
+    postPrivacy = isEdit ? activePost?.shareto || { name: "Public", icon: globe } : { name: "Public", icon: globe },
     postContent = isEdit ? activePost?.text : "",
     location = isEdit ? activePost?.location : state?.location,
     uploadFileList = [],
@@ -103,7 +103,7 @@ const CreatePostModal = ({
         toast.error(validateFiles)
         return ;
       }
-      console.log(validateFiles, '---------------------');
+
       const fileArray = Array.from(fileList);
       fileArray.forEach((element) => {
         if (element?.type?.includes("image")) {
@@ -412,7 +412,7 @@ const CreatePostModal = ({
           />
         </div>
         {selectedFile && !isEdit && (
-          <div className="absolute h-[400px] mt-10 bg-white inset-0 z-[99999]">
+          <div className="absolute max-h-[500px] h-full overflow-auto mt-10 bg-white inset-0 z-[99999]">
             <ImageEditor
               file={selectedFile}
               cancleEdit={() => setState({ ...state, selectedFile: "" })}

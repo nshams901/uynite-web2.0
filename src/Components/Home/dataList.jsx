@@ -1,8 +1,10 @@
+import { MdOutlineDeleteForever } from "react-icons/md";
+
 export const userData=[]
 export const ownPostOption = [
   {
     samePostedUser: 0,
-    name: "Edit Post",
+    name: "Edit",
     icon: "./images/edit.png",
   },
   {
@@ -19,18 +21,18 @@ export const ownPostOption = [
   },
   {
     samePostedUser: 0,
-    name: "Delete Post",
-    icon: "./images/Delete.png",
+    name: "Delete",
+    reactIcon: <span className="w-6 mr-2 text-[#707070]"><MdOutlineDeleteForever size={25}/></span>
   },
   {
     samePostedUser: 0,
-    name: "Mute/Unmute Notifications",
+    name: "Mute Notifications",
     icon: "./images/mute.png",
     key: 'others'
   },  
   {
     samePostedUser: 0,
-    name: "Turn off/on Commeting",
+    name: "Turn off Commeting",
     icon: "./images/Messages.png",
   }, 
 ];

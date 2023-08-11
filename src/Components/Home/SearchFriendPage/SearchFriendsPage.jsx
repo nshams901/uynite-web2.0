@@ -229,7 +229,7 @@ const SearchFriendsPage = ({ isFriend }) => {
       item.checked ? item.key : false
     );
     const group = relationOptions?.filter((item) => item.union);
-    console.log(group, data, 'GROUPPPPPPPPPPP');
+
     const ownPayload = {
 
       // id: activeProfile?.profile.id,
@@ -284,6 +284,8 @@ const SearchFriendsPage = ({ isFriend }) => {
       }
     });
   };
+
+  console.log(usersList, '{{{{{{{{{{{{');
   return (
     <>
       <div className="w-[100%] mt-2 flex-1 bg-[#E4E7EC] flex justify-center py-2 ">

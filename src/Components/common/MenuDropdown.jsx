@@ -20,7 +20,7 @@ export default function MenuDropdown({ button, options, handleOption, arrow,item
         {options?.map((item) => {
           return <MenuItem className="px-4 hover:bg-gray-300 py-2 flex rounded-none"
           onClick={() => handleOption(item.name)} key={item?.name}>
-          {item.icon && <img src={item.icon} className="w-6 mr-2"/>} 
+          {item.icon ? <img src={item.icon} className="w-6 mr-2"/>: item.reactIcon } 
           <span className={itemClass}>{item.name}</span> </MenuItem>;
         })}
         {/* <MenuItem>Menu Item 1</MenuItem>

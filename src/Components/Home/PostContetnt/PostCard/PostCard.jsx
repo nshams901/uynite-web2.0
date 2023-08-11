@@ -216,8 +216,8 @@ const PostCard = ({ userData, item = {} }) => {
     // dispatch({
     //   type: "ACTIVE_POST",
     //   payload: item,
-    // });
-    if (modalName === "Edit Post") {
+      // });
+    if (modalName === "Edit") {
       setPostMenuModal({ ...postMenuModal, editPost: true, activePost: item });
     } else if (modalName === "History") {
       // dispatch(getPostHistory(item.id))
@@ -292,15 +292,15 @@ const PostCard = ({ userData, item = {} }) => {
             </div>
 
             <div className="flex  flex-col flex-1 justify-center ml-2">
-              <div className="flex items-center">
+              <div className="text-start">
                 {/*font weight removed*/}
                 <span className="ml-1 font-bold">
                   {`${item?.profile?.fname || "User"} ${item?.profile?.lname || ""
                     }`}
                 </span>
-                <span className="text-xs ml-2 font-semibold mt-0.5">
-                  {item?.profile?.job}
-                </span>
+                <div className="text-xs pb-2">
+                  {item?.profile?.job ? `@${item?.profile?.job}`: ""}
+                </div>
               </div>
 
               <div className="w-full flex items-center whitespace-nowrap text-ellipsis overflow-hidden gap-2">
@@ -463,7 +463,7 @@ const PostCard = ({ userData, item = {} }) => {
           >
             {/* <HiUserGroup size={16} /> */}
 
-            <span className=" cursor-pointer ">{item?.likecount} likes</span>
+            <span className=" cursor-pointer ">{item?.likecount} like{ item.likecount > 1 ? 's': ''}</span>
           </div>
 
           <div className="flex  gap-5 items-center">
@@ -471,7 +471,7 @@ const PostCard = ({ userData, item = {} }) => {
               className="text-[11px] lg:text-[11px] xl:text-[12px] font-medium text-gray-600 cursor-pointer"
               onClick={onHandleOpenCommentModal}
             >
-              {item?.commentcount ? item?.commentcount : 0} Comments
+              {item?.commentcount ? item?.commentcount : 0} Comment{item.commentcount > 1 ? 's': ''}
             </span>
             {/* <span className=" text-[11px] lg:text-[12px] xl:text-[13px] font-medium text-gray-600">
               28 Shares
