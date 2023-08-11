@@ -18,6 +18,13 @@ import Dropdown from "../../Login/Content/Modal/Dropdown";
 import { useMemo } from "react";
 import DropdownComp from "../../common/DropdownComp";
 import { getMyUnion } from "../../../redux/actionCreators/unionActionCreator";
+import globe from '../../../Assets/Images/globe.png';
+import home from '../../../Assets/Images/home.png';
+import friend from '../../../Assets/Images/friendsIcon.png';
+import union from '../../../Assets/Images/unionIcon.png';
+import books from '../../../Assets/Images/books.png';
+import person from '../../../Assets/Images/personIcon.png'
+
 
 const MyFriendsPage = () => {
 
@@ -51,13 +58,13 @@ const MyFriendsPage = () => {
   }, [friendProfileId]);
   // console.log(isEmpty(friends), "CHHHH", friends);
   const option = useMemo(() => {
-     const unions = unionList.map((item) => ({name: item.groupName, key: item.groupId}))
+     const unions = unionList.map((item) => ({name: item.groupName, key: item.groupId, icon: union}))
     const forPersonalAcc = [
-      { name: 'All', key: 'all'},
-      { name: "Friends", key: "friends" },
-      { name: "Relatives", key: "relatives" },
-      { name: "Classmates", key: "classmates" },
-      { name: "Officemates", key: "officemates" },
+      { name: 'All', key: 'all', icon: globe},
+      { name: "Friends", key: "friends", icon: friend },
+      { name: "Relatives", key: "relatives", icon: home },
+      { name: "Classmates", key: "classmates", icon: books },
+      { name: "Officemates", key: "officemates", icon: person },
       ...unions
     ];
     const forOrgAcc = [

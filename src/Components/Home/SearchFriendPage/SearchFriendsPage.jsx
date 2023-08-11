@@ -112,13 +112,14 @@ const SearchFriendsPage = ({ isFriend }) => {
       followerprofileid: activeProfile?.id,
       datetimes: moment().format("YYYY-MM-DDTHH:mm:ss"),
     };
+    setState({ ...state, requestModal: false });
+
     dispatch(startFollowing(payloads));
     const { id, fname, lname } = profile || {};
     const data = relationOptions.flatMap((item) =>
       item.checked ? item.key : false
     );
     const userCredential = JSON.parse(localStorage.getItem('userCredential'));
-    console.log(data.some((item) => item?.key === 'classmate'), data);
     const group = relationOptions?.filter((item) => item.union);
 
     let payload = {
