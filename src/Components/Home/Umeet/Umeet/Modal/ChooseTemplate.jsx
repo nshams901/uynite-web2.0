@@ -2,10 +2,11 @@ import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { MdKeyboardArrowRight } from 'react-icons/md'
 import { HiUpload } from 'react-icons/hi'
 import wishes from '../../../../../Assets/Images/Umeet/wishesTemplate.webp';
-import { getReunionTemplates, createEventTemplate, getTemplateByEventid } from "../../../../../redux/actionCreators/umeetActionCreator";
+import { getReunionTemplates, createEventTemplate, getTemplateByEventid, getWeddingTemplates, getAnniversaryTemplates, getOthersTemplates, getBirthdayTemplates } from "../../../../../redux/actionCreators/umeetActionCreator";
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import axios from 'axios'
+import axios from 'axios';
+import { config } from '../../../../../config/config';
 import selectedOne from '../../../../../Assets/Images/Umeet/Umeet-Main/Umeet-Attending.png'
 
 const ChooseTemplate = ({ onClose, saveTemplate, 
@@ -13,16 +14,17 @@ const ChooseTemplate = ({ onClose, saveTemplate,
   handleSelectedImgFile, eventId, selectedImage, templateSelected }) => {  
   const [tempImages, setTempImages] = useState([])
   const [selectedImage1, setSelectedImage1] = useState(null)
-  const [imgData, setImgData] = useState(null)
-console.log(selectedImage)
+  const [imgData, setImgData] = useState(null);
+  const [state, setState] = useState({})
+  const  { template} = state
+
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    dispatch(getReunionTemplates())
-    dispatch(getTemplateByEventid())
-  }, [dispatch])
-  const handleImageChange = () => {
-    if (event.target.files && event.target.files[0]) {
+  // useEffect(() => {
+  //   dispatch(getTemplateByEventid())
+  // }, [dispatch])
+  const handleImageChange = (event) => {
+    if (event?.target.files && event?.target.files[0]) {
       const image = event.target.files[0];
       handleSelectedImgFile(image)
       setSelectedImage1(URL.createObjectURL(image));
@@ -42,9 +44,10 @@ console.log(selectedImage)
 
    setTempImages(tempData)
   }   
-console.log(imgData)
+
   const handleTemp = async(item)=>{
-    handleUpload()    
+    handleUpload();
+    onClose()   
     if(selectedImage1){
       setTemplateSelected(selectedImage1);
     }else{          
@@ -76,40 +79,40 @@ console.log(imgData)
     dispatch(createEventTemplate(payload))
     }
 
-    onClose()  
+    onClose() 
   }
 
   useEffect(()=>{
     if(selectedSpecificEvent == 'Re-Union'){
-      (async function fetchData(){
-        const { data } = await axios.get(`${config.API_URI}event/api/eventtemp/category/Reunion`)                  
-        callTemp(data)
-      })()                        
+      dispatch(getReunionTemplates())
+      .then(res => {
+        setTempImages(res.data)
+      })               
     }else if(selectedSpecificEvent == 'Birthday'){
-      (async function fetchData(){
-        const { data } = await axios.get(`${config.API_URI}event/api/eventtemp/category/Birthday`)                  
-        callTemp(data)
-      })()                        
+      dispatch(getBirthdayTemplates())
+      .then(res => {
+        setTempImages(res.data)
+      })                                    
     }else if(selectedSpecificEvent == 'Wedding'){
-      (async function fetchData(){
-        const { data } = await axios.get(`${config.API_URI}event/api/eventtemp/category/Wedding`)                  
-        callTemp(data)
-      })()                        
+      dispatch(getWeddingTemplates())
+      .then(res => {
+        setTempImages(res.data)
+      })               
     }else if(selectedSpecificEvent == 'Anniversary'){
-      (async function fetchData(){
-        const { data } = await axios.get(`${config.API_URI}event/api/eventtemp/category/Anniversary`)                  
-        callTemp(data)
-      })()                        
+      dispatch(getAnniversaryTemplates())
+      .then(res => {
+        setTempImages(res.data)
+      })                                   
     }else if(selectedSpecificEvent == 'Others'){
-      (async function fetchData(){
-        const { data } = await axios.get(`${config.API_URI}event/api/eventtemp/category/Others`)                  
-        callTemp(data)
-      })()                        
+      dispatch(getOthersTemplates())
+      .then(res => {
+        setTempImages(res.data)
+      })                                    
     }else if(selectedSpecificEvent == 'Baby Shower'){
-      (async function fetchData(){
-        const { data } = await axios.get(`${config.API_URI}event/api/eventtemp/category/Baby%20Shower`)                  
-        callTemp(data)
-      })()                        
+      dispatch(getOthersTemplates())
+      .then(res => {
+        setTempImages(res.data)
+      })
     }
 
   }, [])
@@ -143,11 +146,11 @@ console.log(imgData)
                 className="flex flex-col justify-center py-3 px-3 items-center"
               >
                 <img
-                  src={data.imgs}
-                  onClick={()=>setImgData(data.imgs)}
+                  src={data.tempdetail.bgimage}
+                  onClick={()=>setImgData(data.id)}
                   className="h-52 cursor-pointer relative md:h-52 w-[150px] md:w-[130px] rounded object-cover"
                 />
-                {imgData === data.imgs && <img src={selectedOne} className='absolut flex justify-center left-10 h-5 w-5' />}
+                {imgData === data.id && <img src={selectedOne} className='absolut flex justify-center left-10 h-5 w-5' />}
               </div>
             ))}
            </section>

@@ -485,11 +485,95 @@ export const getReunionTemplates = (data) => async (dispatch) => {
       type: "GET_REUNION_TEMPLATES",
       payload: response.data,
     });
+    return response.data
   } catch (error) {
     throw error;
   }
 };
 
+
+export const getBabyShowerTemplates = (data) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+       `${config.API_URI}event/api/eventtemp/category/Babyshower`,
+       {headers: { Authorization: `Bearer ${token}` }}
+    );
+    dispatch({
+      type: "GET_BABYSHOWER_TEMPLATES",
+      payload: response.data,
+    });
+    return response.data
+
+  } catch (error) {
+    throw error;
+  }
+};
+export const getOthersTemplates = (data) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+       `${config.API_URI}event/api/eventtemp/category/Others`,
+       {headers: { Authorization: `Bearer ${token}` }}
+    );
+    dispatch({
+      type: "GET_OTHERS_TEMPLATES",
+      payload: response.data,
+    });
+    return response.data
+
+  } catch (error) {
+    throw error;
+  }
+};
+export const getAnniversaryTemplates = (data) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+       `${config.API_URI}event/api/eventtemp/category/Anniversary`,
+       {headers: { Authorization: `Bearer ${token}` }}
+    );
+    dispatch({
+      type: "GET_ANNIVERSARY_TEMPLATES",
+      payload: response.data,
+    });
+    return response.data
+
+  } catch (error) {
+    throw error;
+  }
+};
+export const getWeddingTemplates = (data) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+       `${config.API_URI}event/api/eventtemp/category/Wedding`,
+       {headers: { Authorization: `Bearer ${token}` }}
+    );
+    dispatch({
+      type: "GET_WEDDING_TEMPLATES",
+      payload: response.data,
+    });
+    return response.data
+
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getBirthdayTemplates = (data) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+       `${config.API_URI}event/api/eventtemp/category/Birthday`,
+       {headers: { Authorization: `Bearer ${token}` }}
+    );
+    dispatch({
+      type: "GET_BIRTHDAY_TEMPLATES",
+      payload: response.data,
+    });
+    return response.data
+
+  } catch (error) {
+    throw error;
+  }
+};
 export const handleCreateQuestionUI = (data) => async (dispatch) => {
   try {
     dispatch({

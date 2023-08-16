@@ -269,14 +269,14 @@ export const imageUploadApi = (file) => async (dispatch) => {
     const getStoredData = await getUserDataFromLocalStorage();
     const body = { file: file };
     const getUploadedResult = await axios.post(
-      `${config.UPLOAD_URI}`,
+      `http://fileservice-4e785b2e1af81f85.elb.us-east-2.amazonaws.com:8080/s3/upload`,
       body,
       {
         headers: {
-          "Accept-Language": "en",
-          "Content-Type": "multipart/form-data",
-          'Access-Control-Allow-Origin':'*',
-          'Access-Control-Allow-Methods':'POST,PATCH,OPTIONS',
+          // "Accept-Language": "en",
+          // "Content-Type": "multipart/form-data",
+          // 'Access-Control-Allow-Origin':'*',
+          // 'Access-Control-Allow-Methods':'POST,PATCH,OPTIONS',
           Authorization: `Bearer ${getStoredData?.token}`,
         },
       }
@@ -298,7 +298,7 @@ export const multipleImageUpload = (image) => async (dispatch) => {
     const getStoredData = await getUserDataFromLocalStorage();
 
     const multipleImageResult = await axios.post(
-      `${config.API_URI}fileservice/files`,
+      // `http://fileservice-4e785b2e1af81f85.elb.us-east-2.amazonaws.com:8080/s3/upload`,
       image,
       {
         headers: {

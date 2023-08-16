@@ -36,6 +36,9 @@ import { useParams } from "react-router"
 import ConfirmationModal from "../../../common/ConfirmationModal";
 import { useMemo } from "react";
 import ChangeRelationshipModal from "../../Modal/ChangeRelationshipModal/ChangeRelationshipModal";
+import followerIcon from '../../../../Assets/Images/Followers.png';
+import followingIcon from '../../../../Assets/Images/following.png';
+import friendIcon from '../../../../Assets/Images/friends.png'
 
 const ProfileImageSection = ({
   isOther,
@@ -377,7 +380,8 @@ const ProfileImageSection = ({
               className=" flex flex-col w-[40%] sm:w-[45%] items-center cursor-pointer"
               onClick={() => handleModal("Friends")}
             >
-              <BsPeopleFill
+              <img
+                src={ friendIcon}
                 alt=""
                 className="w-6 h-6 sm:w-7 sm:h-7 text-[#7991bd] py-0.5"
               />
@@ -391,7 +395,8 @@ const ProfileImageSection = ({
             className=" flex flex-col w-[40%] sm:w-[45%] items-center cursor-pointer"
             
           >
-            <FaWalking
+            <img
+              src={ followerIcon }
               alt=""
               className="w-6 h-6 sm:w-7 sm:h-7 text-[#7991bd] py-0.5"
               onClick={ () =>setState({ ...state, confirmationModal: true}) }
@@ -408,7 +413,7 @@ const ProfileImageSection = ({
             className=" flex flex-col w-[40%] sm:w-[45%] items-center cursor-pointer"
             onClick={() => handleModal("Following")}
           >
-            <IoIosPeople className="w-6 h-6 sm:w-7 sm:h-7 text-[#7991bd] py-0.5" />
+            <img src={ followingIcon } className="w-6 h-6 sm:w-7 sm:h-7 text-[#7991bd] py-0.5" />
             <Typography variant='small' >Following</Typography>
             <span className="w-[90%] sm:w-[97%] text-center font-bold text-[7px] sm:text-[9px] xl:text-[11px] my-1 py-[1px] bg-gray-300 px-3 sm:px-4 rounded-md">
               {followingCount}

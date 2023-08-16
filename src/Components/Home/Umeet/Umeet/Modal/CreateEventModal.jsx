@@ -24,7 +24,8 @@ import CountryCodeModal from '../../../../Login/Content/Signup/CountryCodeModal'
 import { createPortal } from "react-dom";
 import Modal from "../../../../Login/Content/Modal/Modal";
 import Portals from "../../../../Portals/Portals";
-import PoliticalFeedbackQuestion from './PoliticalFeedbackQuestion'
+import PoliticalFeedbackQuestion from './PoliticalFeedbackQuestion';
+import { config } from '../../../../../config/config';
 
 const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   handleCreatedEvent, whichType, politicalPartyFeedback,
@@ -389,6 +390,9 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
 
   const handleEventCreate = async()=>{
     //await dispatch(handleCreateDataUI({...postData, eventMode, foodType}))
+    if( !inputValue){
+      return toast.error(`About event shouldn't be empty`)
+    }
     handleCreateEvent()
   }
 
