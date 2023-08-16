@@ -101,7 +101,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   const closeCountryModal = () => {
     setCountryCode(false);
   };
-
+console.log(selectedImage, selectedImgFile, 'KKKKKKKKKKKmmmmmmmm');
   const handleEventMode = (e) => {
     setEventMode(e.target.value);
   }
@@ -526,12 +526,12 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
 
           <div className='mt-3 flex flex-col justify-center items-center'>
             <label>
-              {selectedImage ? (<div className='relative'>
+              {selectedImage || selectedImage ? (<div className='relative'>
                 <img 
-                 src={selectedImage} 
+                 src={selectedImage.tempdetail.bgimage || selectedImage} 
                  alt="Selected" 
                  className='w-ful h-[350px] lg:h-[500px] object-cover rounded-md' />
-                 <div class={`${selectedImage?.includes('localhost') ? 'hidden' : ''} absolute inset-0 flex justify-center items-center`}>
+                 <div className={`${ !selectedImage ? 'hidden' : ''} absolute inset-0 flex justify-center items-center`}>
                    <div className='w-1/2 flex flex-col justify-center items-center'>
                     <div className='py-0.5'>{formState?.eventName}</div>
                     <div className='py-0.5'>Hosted By: <span className='font-semibold'>{profileReducer?.profile?.fname}</span></div>
@@ -761,7 +761,9 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
        selectedImage={selectedImage}
        selectedSpecificEvent={selectedSpecificEvent}
        setTemplateSelected={(urlid)=>setSelectedImage(urlid)} 
-       handleSelectedImgFile={(file)=>setSelectedImgFile(file)}
+       handleSelectedImgFile={(file)=>{
+        console.log(file, '<<<<<<<<<')
+        setSelectedImgFile(file)}}
       />}       
      {showAddGroup && 
       <AddGuestModal 

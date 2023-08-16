@@ -147,10 +147,10 @@ const ChooseTemplate = ({ onClose, saveTemplate,
               >
                 <img
                   src={data.tempdetail.bgimage}
-                  onClick={()=>setImgData(data.id)}
+                  onClick={()=>setImgData(data)}
                   className="h-52 cursor-pointer relative md:h-52 w-[150px] md:w-[130px] rounded object-cover"
                 />
-                {imgData === data.id && <img src={selectedOne} className='absolut flex justify-center left-10 h-5 w-5' />}
+                {imgData?.id === data.id && <img src={selectedOne} className='absolut flex justify-center left-10 h-5 w-5' />}
               </div>
             ))}
            </section>
