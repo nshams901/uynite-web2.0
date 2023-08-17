@@ -294,9 +294,10 @@ const ProfileType = ({ modalType }) => {
             />
             <p className="text-[10px] font-semibold text-[#7E8082] w-full">
               I agree to all
-              <Link to="/auth/reals" className="text-[#05B7FD]">
-                &nbsp; Terms & Conditions, Cookies & Privacy.
-              </Link>
+              <span  className="text-[#05B7FD]">
+                &nbsp; <a target="_blank" href="https://uynite.com/terms-of-use"> Terms & Conditions, </a>
+                 <a target="_blank" href="https://uynite.com/privacy-policy" >Cookies & Privacy.</a> 
+              </span>
             </p>
             <br />
           </div>

@@ -3,7 +3,7 @@ import guest from '../../../../../Assets/Images/Umeet/Umeet-Main/Group 1054.png'
 import { useState, useEffect } from 'react'
 import ToggleButton from './ToggleButton';
 import { createEvent, updateEvent, handleCreateDataUI,
-getReunionTemplates, createEventTemplate } from "../../../../../redux/actionCreators/umeetActionCreator";
+getReunionTemplates, createEventTemplate, addInvitees, addInvitee } from "../../../../../redux/actionCreators/umeetActionCreator";
 import { getEducationDetail } from "../../../../../redux/actionCreators/profileAction"
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
@@ -398,6 +398,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   }
 
   const handleEventCreate = async()=>{
+    dispatch( addInvitees(invitees))
     //await dispatch(handleCreateDataUI({...postData, eventMode, foodType}))
     if( !inputValue){
       return toast.error(`About event shouldn't be empty`)
@@ -803,7 +804,9 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
        showAddByContactModal={showAddByContactModal}
        handleCheckbox={ handleCheckbox }
        selectedUser={ invitees }
-       handlePeopleModalClose={()=>setShowAddPeopleModal(false)} />}       
+       handlePeopleModalClose={()=>{
+        // dispatch(addInvitee(invitees))
+        setShowAddPeopleModal(false)}} />}       
      {showAddByContactModal && 
       <AddByContactModal 
         onClose={()=>setShowAddByContactModal(false)} 
