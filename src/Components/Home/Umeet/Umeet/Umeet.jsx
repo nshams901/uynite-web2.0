@@ -24,6 +24,7 @@ import { getEventByProfileid, getAllInvitedEvents,
 getEventDetails } from "../../../../redux/actionCreators/umeetActionCreator"
 import { useDispatch, useSelector } from 'react-redux'
 import { getEducationDetail } from "../../../../redux/actionCreators/profileAction"
+import { getOwnFriendsList } from '../../../../redux/actionCreators/friendsAction'
 // import AddPeopleModal from './Modal/AddPeopleModal'
 // import AddByContactModal from './Modal/AddByContactModal'
 
@@ -78,7 +79,7 @@ export default function Umeet(){
 
   const dispatch = useDispatch()
   const { umeetReducer, profileReducer } = useSelector(state => state)
-console.log(profileReducer)
+
   function EventStatus({ data }){
     if(noCreateEvent){
       return <BlankEvents event='Create Events' createEvent={createEvent} />
@@ -180,12 +181,13 @@ console.log(profileReducer)
   }
 
   useEffect(() => {    
+    dispatch( getOwnFriendsList(profileReducer.profile?.id))
     dispatch(getEventByProfileid(profileReducer?.profile?.id))
     dispatch(getAllInvitedEvents(profileReducer?.profile?.id))
     dispatch(getEducationDetail(profileReducer?.profile?.id))
   }, [])  
 
-  console.log('yes re-render')
+
   const handleCreateEventForm = (data)=>{
     umeetReducer.inviteEmailsUI = null
     umeetReducer.createData = null

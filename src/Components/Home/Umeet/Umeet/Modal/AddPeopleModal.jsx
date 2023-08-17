@@ -7,25 +7,37 @@ import person from '../../../../../Assets/Images/Person.jpg'
 import '../../Umeet.css'
 // import AddByContactModal from './AddByContactModal'
 import group from '../../../../../Assets/Images/Umeet/Umeet-Main/Group 1054.png'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
+import { getOwnFriendsList } from "../../../../../redux/actionCreators/friendsAction";
+import user from '../../../../../Assets/Images/user.png'
 
+const tab = [
+  { name: 'Choose all friends', key: 'friends'},
+  { name: 'Choose classmates', key: 'classmates'},
+  { name: 'Choose relatives', key: 'relatives'},
+  { name: 'Choose officemates', key: 'officemates'},
+]
 const token = localStorage.getItem("userCredential")
   ? JSON.parse(localStorage.getItem("userCredential")).token
   : "";
 
 const AddPeopleModal = ({ onClose, education, handlePeopleModalClose,
-handleAddByContactModal, showAddByContactModal, selectedQualification }) => {
-  const [selectAll, setSelectAll] = useState(false);
-  const [eduData, setEduData] = useState([])
+handleAddByContactModal, showAddByContactModal, selectedQualification, handleCheckbox, selectedUser }) => {
 
-  const { umeetReducer, profileReducer } = useSelector(state=>state)
-console.log(education)
+  const [selectAll, setSelectAll] = useState(false);
+  const [eduData, setEduData] = useState([]);
+  
+  const { umeetReducer, profileReducer, friendReducer } = useSelector(state=>state);
+  
+  const isPersonal = profileReducer.profile.profiletype === 'Personal'
+  
+    const [state, setState] = useState({})
+    const { activeTab = tab?.[0], dataList = friendReducer.myFriendsList  } = state
+  
   const handleSelectAllChange = () => {
     setSelectAll(!selectAll);
   }
-
-  let dataList = [];
 
   for (let i = 0; i < eduData.length; i++) {
     eduData?.map(inviteData=>(
@@ -75,15 +87,37 @@ console.log(education)
       //   setEduData(data?.data)
       // })()      
     }
-  }, [selectedQualification])
+  }, [selectedQualification]);
+   
+  useEffect(() => {
+    // dispatch( getOwnFriendsList( profileReducer.profile.id)  )
+  }, [])
+
+  const handleTabClick = ( tab ) => {
+    let key = {
+      classmates: 'classment',
+      relatives: 'relative',
+      officemates: 'collgues',
+      friends: 'id'
+    }[tab.key]
+    const data = friendReducer.myFriendsList.filter(( item ) => {
+      return item.friend[key]
+    })
+    setState({...state, activeTab:  tab , dataList: data})
+  }
 
   return (
     <div className='fixed top-0 left-0 z-20 w-full h-full flex justify-center items-center' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
 
      <div className={`w-[96%] md:w-[70%] lg:w-[45%] 2xl:w-[50%] h-[95%] md:h-[94%] flex flex-col justify-between bg-white rounded-xl p-3 lg:p-5 ${showAddByContactModal ? '-z-10' : ''}`}>
       <div className=''>
-       <div className='flex justify-start items-center text-[14px] lg:text-[16px] border-b pb-2 text-gray-600'>
-         <button className='px-5 py-1 rounded-md text-white border bg-[#649B8E]'>Choose Classmate</button>
+       <div className='flex flex-wrap justify-center items-center text-[14px] lg:text-[16px] border-b pb-2 text-gray-600'>
+       {
+        (isPersonal ? tab : []).map(item => {
+          return <button onClick={() => handleTabClick(item) } className={`px-5 my-2 text-[#649B8E] w-1/3 py-1 rounded-md border ${ activeTab.key === item.key ? 'bg-[#649B8E] text-white ' : ""}`}>{ item.name }</button>
+
+        })
+      }
          <button onClick={handleAddByContactModal} className='px-5 py-1 rounded-md ml-5 border boredr-[#649B8E] text-[#649B8E]'>Add by Email/Phone</button>
        </div>
        <div className=''>
@@ -101,14 +135,14 @@ console.log(education)
     	<div className='h-[190px] md:h-[205px] lg:h-[210px] xl:h-[280px] 2xl:h-[320px] hideScroll overflow-y-scroll'>
     	{ (dataList.length !== 0) ?
     	 dataList.map((data, i)=>(
-    	  <div key={i} className='flex items-center mb-2 lg:mb-3'>    	   
-    	   <div className='w-1/6'>
-    	    <img src={data.img} className='w-10 h-10 rounded-full object-cover' />
+    	  <div key={i} className='flex items-center mb-2 lg:mb-3'>  	   
+    	   <div className='w-auto mr-5'>
+    	    <img src={data.profile.pimage || user } className='w-10 h-10 rounded-full object-cover' />
     	   </div>
-    	   <span className='w-4/6 font-medium text-[15px]'>{data.name}oppo</span>
+    	   <span className='w-4/6 font-medium text-[15px]'>{data.profile.fname || "User"} { data.profile.lname || "" }</span>
     	   <div className='w-1/6 flex justify-end'>
     	    {selectAll ? <img src={selectedimg} className='h-6 w-6'/> :
-    	     <input type="checkbox" className='w-4 h-4' />
+    	     <input type="checkbox" checked={ selectedUser.includes(data.profile.id ) } className='w-4 h-4' onChange={ () => handleCheckbox( data.profile.id) } />
     	    }
     	   </div>
     	  </div>
@@ -122,7 +156,7 @@ console.log(education)
       <section className='flex w-full'>       
         <img src={group} className='h-9 w-9 mr-3 mt-2.5' />
         <div className='w-5/6'>
-         <button className='w-full py-1 rounded-xl text-white mt-2.5 border border-[#649B8E] bg-[#649B8E]'>Save</button>       
+         <button onClick={ handlePeopleModalClose } className='w-full py-1 rounded-xl text-white mt-2.5 border border-[#649B8E] bg-[#649B8E]'>Save</button>       
          <button onClick={handlePeopleModalClose} className='w-full py-1 my-1 rounded-xl border border-[#649B8E] text-[#649B8E]'>Cancel</button> 
         </div>
       </section>

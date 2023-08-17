@@ -26,6 +26,7 @@ import Modal from "../../../../Login/Content/Modal/Modal";
 import Portals from "../../../../Portals/Portals";
 import PoliticalFeedbackQuestion from './PoliticalFeedbackQuestion';
 import { config } from '../../../../../config/config';
+import { getOwnFriendsList } from '../../../../../redux/actionCreators/friendsAction';
 
 const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   handleCreatedEvent, whichType, politicalPartyFeedback,
@@ -72,13 +73,14 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   const [showShareMyEvent, setShowShareMyEvent] = useState(false)
   const [showPoliticalAddGroup, setShowPoliticalAddGroup] = useState(false)
   const [selectedQualification, setSelectedQualification] = useState(null)
-  const [invitesEmail, setInvitesEmail] = useState(null)
+  const [invitesEmail, setInvitesEmail] = useState([])
   const [invitesPlace, setInvitesPlace] = useState(null)
   const [shareEvent, setShareEvent] = useState(null)
   const [question, setQuestion] = useState(null)
   const [guestType, setGuestType] = useState(null)
   const [locatioCountry, setLocationCountry] = useState(null)
-  const [invitePlaceData, setInvitePlaceData] = useState(null)
+  const [invitePlaceData, setInvitePlaceData] = useState(null);
+  const [ invitees, setInvitees] = useState([])
 
   //country code states
   const [dataList, setDataList] = useState([])
@@ -101,7 +103,6 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   const closeCountryModal = () => {
     setCountryCode(false);
   };
-console.log(selectedImage, selectedImgFile, 'KKKKKKKKKKKmmmmmmmm');
   const handleEventMode = (e) => {
     setEventMode(e.target.value);
   }
@@ -132,6 +133,14 @@ console.log(selectedImage, selectedImgFile, 'KKKKKKKKKKKmmmmmmmm');
   const handleSelectedQualification = (data)=>{
     console.log(data, 'jd')
     setSelectedQualification(data)
+  }
+
+  const handleCheckbox = ( id ) => {
+    if(invitees.includes(id)){
+      const data = invitees.filter(( item) => item !== id);
+      setInvitees(data)
+    }else
+    setInvitees([...invitees, id])
   }
 
   let emialObjects = [];
@@ -383,7 +392,7 @@ console.log(selectedImage, selectedImgFile, 'KKKKKKKKKKKmmmmmmmm');
     handleShowGroup()
   }
 
-  const handleGroupAndCreate = async()=>{    
+  const handleGroupAndCreate = async()=>{
     //await dispatch(handleCreateDataUI({...postData, eventMode, startDate}))
     handleShowGroup()
   }
@@ -648,8 +657,14 @@ console.log(selectedImage, selectedImgFile, 'KKKKKKKKKKKmmmmmmmm');
           <div className='flex justify-between items-center my-2'>
            <div className='flex items-center'>
             <img src={guest} />
-            <label onClick={handleGroupAndCreate} className={`${(invitesEmail || invitesPlace) ? 'hidden' : ''} pl-1 font-medium cursor-pointer text-[#649B8E]`}>Add Guests</label>
-            <label onClick={handleEditAdd} className={`${(invitesEmail || invitesPlace) ? '' : 'hidden'} pl-2 cursor-pointer font-medium text-[#649B8E]`}>{invitesEmail?.length} <GuestType /></label>
+            {
+              +invitesEmail?.length + invitees.length === 0
+              ?
+            <label onClick={handleGroupAndCreate} className={` pl-1 font-medium cursor-pointer text-[#649B8E]`}>Add Guests</label>
+            :
+            <label onClick={handleEditAdd} className={`pl-2 cursor-pointer font-medium text-[#649B8E]`}>{+invitesEmail?.length + invitees.length} <GuestType /></label>
+
+            }
            </div>
            <span onClick={handleEditAdd} className={`${(invitesEmail || invitesPlace) ? '' : 'hidden'} cursor-pointer text-[#649B8E] border border-[#649B8E] px-2 py-0.5 rounded-md`}>Edit List</span>
           </div>
@@ -668,8 +683,9 @@ console.log(selectedImage, selectedImgFile, 'KKKKKKKKKKKmmmmmmmm');
  
           <div className={`${((eventMode == 'online') || politicalPartyFeedback) ? 'hidden' : ''} flex my-4 justify-between`}>
             <span className='text-gray-700'>Food Availability</span>
+            { }
             <div className="">
-              <ToggleButton 
+              <ToggleButton  btnText={true}
                handleFoodCreate={(value)=>setIsveg(value)} />
             </div>
           </div>
@@ -762,7 +778,6 @@ console.log(selectedImage, selectedImgFile, 'KKKKKKKKKKKmmmmmmmm');
        selectedSpecificEvent={selectedSpecificEvent}
        setTemplateSelected={(urlid)=>setSelectedImage(urlid)} 
        handleSelectedImgFile={(file)=>{
-        console.log(file, '<<<<<<<<<')
         setSelectedImgFile(file)}}
       />}       
      {showAddGroup && 
@@ -786,6 +801,8 @@ console.log(selectedImage, selectedImgFile, 'KKKKKKKKKKKmmmmmmmm');
        selectedQualification={selectedQualification} 
        handleAddByContactModal={handleAddByContactModal}
        showAddByContactModal={showAddByContactModal}
+       handleCheckbox={ handleCheckbox }
+       selectedUser={ invitees }
        handlePeopleModalClose={()=>setShowAddPeopleModal(false)} />}       
      {showAddByContactModal && 
       <AddByContactModal 

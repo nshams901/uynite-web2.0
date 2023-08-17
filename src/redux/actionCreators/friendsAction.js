@@ -137,7 +137,6 @@ export const getOwnFriendsList = (data) => async (dispatch) => {
     const response = await axios.get(
       `${config.API_URI}friend/api/friend/${data}/Accepted`
     );
-    console.log('my friends bro', response?.data)
     dispatch({
       type: "MY_FRIEND_LIST",
       payload: response.data,

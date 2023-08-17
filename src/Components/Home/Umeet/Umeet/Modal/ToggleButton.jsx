@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
 
-function ToggleButton({ handleFoodCreate, feedbackVal, share, setShareEnabled }) {
+function ToggleButton({ handleFoodCreate, feedbackVal, share, setShareEnabled , btnText}) {
   const [isOn, setIsOn] = useState(true);
 
   const handleClick = () => {
     setIsOn(prevState => !prevState)
     if(share){
-      console.log('aama pa', isOn)
       setShareEnabled(!isOn)      
     }
     if(!feedbackVal) handleFoodCreate(!isOn)
   };
 
   return (
+    <div className=' flex items-center'>
     <button
       type="button"
       onClick={handleClick}
@@ -29,6 +29,11 @@ function ToggleButton({ handleFoodCreate, feedbackVal, share, setShareEnabled })
       <span className={`${isOn ? 'pl-0 text-white': 'pl-4'}`}>{feedbackVal ? `${isOn ? 'Only Me' : 'Public'}` : ''}</span>
     </div>      
     </button>
+    {
+      btnText &&
+       <span className='mx-2'> { isOn ? 'On' : 'Off'}</span>
+    }
+    </div>
   );
 }
 
