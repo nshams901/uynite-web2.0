@@ -6,7 +6,7 @@ import ToggleButton from './ToggleButton';
 import { createEvent, updateEvent, sendEmailInvites,
 addInvitees } from "../../../../../redux/actionCreators/umeetActionCreator";
 import { useDispatch, useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
+import { config } from "../../../../../config/config";
 import axios from 'axios'
 
 const token = localStorage.getItem("userCredential")

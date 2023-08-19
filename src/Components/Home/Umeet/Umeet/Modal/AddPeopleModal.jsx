@@ -7,10 +7,10 @@ import person from '../../../../../Assets/Images/Person.jpg'
 import '../../Umeet.css'
 // import AddByContactModal from './AddByContactModal'
 import group from '../../../../../Assets/Images/Umeet/Umeet-Main/Group 1054.png'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import axios from 'axios'
-import { getOwnFriendsList } from "../../../../../redux/actionCreators/friendsAction";
 import user from '../../../../../Assets/Images/user.png'
+import { config } from "../../../../../config/config";
 
 const tab = [
   { name: 'Choose all friends', key: 'friends'},

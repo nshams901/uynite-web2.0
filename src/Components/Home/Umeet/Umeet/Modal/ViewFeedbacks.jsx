@@ -3,6 +3,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import wishes from '../../../../../Assets/Images/Umeet/wishesTemplate.webp'
 import axios from 'axios' 
 import { useSelector, useDispatch } from 'react-redux'
+import { config } from "../../../../../config/config";
 
 const ViewFeedbacks = ({ onClose }) => {
   const [feedbackDetail, setFeedbackDetail] = useState(null)

@@ -8,6 +8,7 @@ import '../../Umeet.css'
 import AddByContactModal from './AddByContactModal'
 import group from '../../../../../Assets/Images/Umeet/Umeet-Main/Group 1054.png'
 import axios from 'axios'
+import { config } from "../../../../../config/config";
 import { useSelector } from 'react-redux'
 
 // const unionsDataList = [
@@ -139,7 +140,7 @@ console.log(selectedCheckboxes)
     	   <div className='w-1/6 flex justify-end'>
     	     <input 
             type="checkbox"
-            checked={data.checked}
+            // checked={data.checked}
             value={data?.profile?.email}
             checked={selectedCheckboxes.includes(data?.profile?.email)}
             onChange={() => handleCheckboxChange(i)}

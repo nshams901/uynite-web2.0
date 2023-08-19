@@ -14,7 +14,8 @@ import {
   getStatesByCountry
 } from "../../../../../redux/actionCreators/umeetActionCreator";
 import axios from 'axios'
-import ToastWarning from '../../../../common/ToastWarning'
+import ToastWarning from '../../../../common/ToastWarning';
+import { config } from "../../../../../config/config";
 
 const AddDataList = ["State", "Loksabha", "Assembly"];
 const PublicDataList = ["State", "District"]

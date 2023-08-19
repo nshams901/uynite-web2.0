@@ -7,7 +7,8 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { getEventDetails, getAllEventChatMessage } from "../../../../redux/actionCreators/umeetActionCreator";
 import { useSelector, useDispatch } from "react-redux";
-import '../Umeet.css'
+import '../Umeet.css';
+import { config } from "../../../../config/config";
 import axios from 'axios'
 
 const responsive = {

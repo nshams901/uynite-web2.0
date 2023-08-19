@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addEmailToList, allEmailInvites } from "../../../../../redux/actionCreators/umeetActionCreator";
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { config } from "../../../../../config/config";
 
 export default function PoliticalAddBy({ onClose, whichBy, 
    countryId, country, setInvitesPlace }) {

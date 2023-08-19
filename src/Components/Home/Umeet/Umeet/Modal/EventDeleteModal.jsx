@@ -6,7 +6,8 @@ import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { cancelEvent} from "../../../../../redux/actionCreators/umeetActionCreator";
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify';
-import axios from 'axios'
+import axios from 'axios';
+import { config } from "../../../../../config/config";
 
 const EventDeleteModal = ({ onClose, deleteId }) => {
   const [eventmessage, setEventmessage] = useState('')
