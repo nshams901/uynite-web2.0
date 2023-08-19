@@ -156,7 +156,7 @@ handleAddByContactModal, showAddByContactModal, selectedQualification, handleChe
       <section className='flex w-full'>       
         <img src={group} className='h-9 w-9 mr-3 mt-2.5' />
         <div className='w-5/6'>
-         <button onClick={ handlePeopleModalClose } className='w-full py-1 rounded-xl text-white mt-2.5 border border-[#649B8E] bg-[#649B8E]'>Save</button>       
+         <button onClick={ handlePeopleModalClose } className='w-full py-1 rounded-xl text-white mt-2.5 border border-[#649B8E] bg-[#649B8E]'>Add Guests</button>       
          <button onClick={handlePeopleModalClose} className='w-full py-1 my-1 rounded-xl border border-[#649B8E] text-[#649B8E]'>Cancel</button> 
         </div>
       </section>
