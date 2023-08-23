@@ -18,7 +18,7 @@ function ToggleButton({ handleFoodCreate, feedbackVal, share, setShareEnabled , 
       onClick={handleClick}
       className={`${
         isOn ? 'bg-[#649B8E]' : 'bg-gray-300'
-      } relative inline-flex items-center rounded-full ${feedbackVal ? 'w-[120px] h-8' : 'w-12'} h-7 focus:outline-none`}
+      } relative inline-flex items-center rounded-full ${feedbackVal ? 'w-[120px] h-8' : ' min-w-[3rem]'} h-7 focus:outline-none`}
     >
     <div className='flex'>
       <span

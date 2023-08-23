@@ -3,7 +3,7 @@ import guest from '../../../../../Assets/Images/Umeet/Umeet-Main/Group 1054.png'
 import { useState, useEffect } from 'react'
 import ToggleButton from './ToggleButton';
 import { createEvent, updateEvent, handleCreateDataUI,
-getReunionTemplates, createEventTemplate, addInvitees, addInvitee } from "../../../../../redux/actionCreators/umeetActionCreator";
+getReunionTemplates, createEventTemplate, addInvitees, addInvitee, addEventInvitees } from "../../../../../redux/actionCreators/umeetActionCreator";
 import { getEducationDetail } from "../../../../../redux/actionCreators/profileAction"
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
@@ -27,6 +27,7 @@ import Portals from "../../../../Portals/Portals";
 import PoliticalFeedbackQuestion from './PoliticalFeedbackQuestion';
 import { config } from '../../../../../config/config';
 import { getOwnFriendsList } from '../../../../../redux/actionCreators/friendsAction';
+import { isEmpty } from '../../../../Utility/utility';
 
 const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   handleCreatedEvent, whichType, politicalPartyFeedback,
@@ -372,7 +373,6 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
       }
     }
     setShowShareMyEvent(true)
-    console.log(shareEvent)
     // if(showShareMyEvent == false && shareEvent!= null){
     //  await dispatch(createEvent(postData)).then((res) => {
     //     if(res?.status){
@@ -398,7 +398,16 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   }
 
   const handleEventCreate = async()=>{
-    dispatch( addInvitees(invitees))
+    const payload = { 
+    // "eventid":"6024fb88bfedfa74c3d5b775",
+     "profileid": invitees,
+     "cohostname": profileReducer.profile.fname + " " + profileReducer.profile.lname, 
+     "cohostmobile": formState.eventHostPhnNumber 
+    }
+    if(!isEmpty(emialObjects)){
+      dispatch( addEventInvitees(emialObjects))
+    }
+    dispatch( addEventInvitees(payload))
     //await dispatch(handleCreateDataUI({...postData, eventMode, foodType}))
     if( !inputValue){
       return toast.error(`About event shouldn't be empty`)

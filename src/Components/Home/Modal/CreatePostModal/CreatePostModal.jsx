@@ -34,6 +34,7 @@ import person from '../../../../Assets/Images/personIcon.png';
 import union from '../../../../Assets/Images/unionIcon.png'
 import { getFriendsList } from "../../../../redux/actionCreators/friendsAction";
 import logo from '../../../../Assets/Images/Logo.png';
+import { isEmpty } from "../../../Utility/utility";
 
 export let privacyList = [
   { name: "Public", key: 'Public', icon: globe },
@@ -133,7 +134,7 @@ const CreatePostModal = ({
       } else
         return toast.error(`${isRelationAvailable} is not present`)
     }
-    if (allFiles) {
+    if ( !isEmpty(allFiles)) {
       setState({ ...state, loading: true });
       await Promise.all(
         allFiles?.map((item) => {
@@ -143,13 +144,14 @@ const CreatePostModal = ({
         const paths = res.map((item) => item.path);
         console.log(paths, "UPLODAD");
         createPosts(paths);
-        setState({ ...state, uploadFileList: [...uploadFileList, paths] });
+        setState({ ...state, loading: true, uploadFileList: [...uploadFileList, paths] });
       });
     } else {
       setState({ ...state, loading: true });
       createPosts();
     }
   }
+  console.log(loading, 'LLLLLLLLLLLLLLLOOOOOOOOOOOO');
 
   const unions = myUnionList.map((item) => {
     return { ...item, name: item?.groupName, icon: union, key: 'group' };
@@ -226,6 +228,7 @@ const CreatePostModal = ({
       postdatetime: new Date().getTime(),
       updatpostdatetime: new Date().getTime(),
     };
+    setState({...state, loading: true})
 
     isEdit
       ? dispatch(updatePost(updatePayload)).then((res) => {
@@ -242,6 +245,7 @@ const CreatePostModal = ({
           } else {
             toast.error(res.message);
           }
+          setState({...state, loading: false})
         });
   };
 

@@ -63,6 +63,8 @@ const umeetReducer = (state = initialState, action) => {
         return { ...state, cancelEvent: action.payload}
       case "CANCEL_EVENT_RESET":
         return { ...state, cancelEvent: action.payload}
+      case "GET_MY_EVENTS":
+        return { ...state, allMyEvents: action.payload.data}
       default:
         return state;
     }

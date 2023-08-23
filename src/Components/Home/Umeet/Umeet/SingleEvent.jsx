@@ -64,6 +64,11 @@ const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
   const dispatch = useDispatch()
 
   useEffect(() => { 
+    if( isInvitedAll === 'All Events'){
+      console.log(isInvitedAll, 'LLLLLLLLLLLLLLLLLLLLLLLL');
+      // dispatch( getAllEvents(profile.id))
+      dispatch( getEventByProfileid(profile.id))
+    }
     if(isInvitedAll == 'Completed Events'){
       const completed = allInvitedEvents?.filter(item =>{ 
       const hasCompleted = item?.eventdetail?.eventstatus == 'Completed'
@@ -167,7 +172,8 @@ const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
 
   return (
     <>
-      {myEvent ? (
+      {myEvent 
+      ? (
         <>
           {(allMyEvents && allMyEvents?.length !== 0) ? 
           <>
@@ -320,7 +326,8 @@ const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
           </> : <EventLoadingAnimation />
           } 
         </>
-        ) : (
+        ) 
+        : (
           <> 
             {(invitedEvents && allInvitedEvents.length !== 0) ?
               (isInvitedAll == 'Completed Events') ? completedEvents?.map((data, i) => (

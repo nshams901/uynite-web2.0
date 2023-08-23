@@ -70,21 +70,21 @@ const Footer = () => {
         <div className="font-semibold text-xs text-[#6F6F6F] mr-4">
           <span>&copy;</span> 2022 Uynite.com
         </div>
-        <span className="font-semibold text-[#6F6F6F] text-xs">About us</span>
+        <a target="_blank" href="https://uynite.com/about" className="font-semibold text-[#6F6F6F] text-xs">About us</a>
         <div className="bg-[#6F6F6F]  w-[2px] h-[14px] hidden md:flex items-center justify-center"></div>
-        <span className="font-semibold text-[#6F6F6F] text-xs">
+        <a target='_blank' href="https://uynite.com/privacy-policy" className="font-semibold text-[#6F6F6F] text-xs">
           Privacy & Cookies
-        </span>
+        </a>
         <div className="bg-[#6F6F6F] w-[2px] h-[14px] hidden md:flex items-center justify-center"></div>
-        <span className="font-semibold text-[#6F6F6F] text-xs">
+        <a target="_blank" href="https://uynite.com/terms-of-use" className="font-semibold text-[#6F6F6F] text-xs">
           Terms & Conditions
-        </span>
+        </a>
         <div className="bg-[#6F6F6F]  w-[2px] h-[14px] hidden md:flex items-center justify-center"></div>
-        <span className="font-semibold text-[#6F6F6F] text-xs">Services</span>
+        {/* <span className="font-semibold text-[#6F6F6F] text-xs">Services</span>
         <div className="bg-[#6F6F6F]  w-[2px] h-[14px] hidden md:flex items-center justify-center"></div>
         <span className="font-semibold text-[#6F6F6F] text-xs">Careers</span>
         <div className="bg-[#6F6F6F]  w-[2px] h-[14px] hidden md:flex items-center justify-center"></div>
-        <span className="font-semibold text-[#6F6F6F] text-xs">Help</span>
+        <span className="font-semibold text-[#6F6F6F] text-xs">Help</span> */}
       </div>
     </div>
   );

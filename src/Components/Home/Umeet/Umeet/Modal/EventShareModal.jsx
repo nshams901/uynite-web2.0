@@ -4,10 +4,12 @@ import Attend from '../../../../../Assets/Images/Umeet/Umeet-Main/Umeet-Attendin
 import maybe from '../../../../../Assets/Images/Umeet/Umeet-Main/Umeet-maybe.png'
 import ToggleButton from './ToggleButton';
 import { createEvent, updateEvent, sendEmailInvites,
-addInvitees } from "../../../../../redux/actionCreators/umeetActionCreator";
+addInvitees, 
+addEventInvitees} from "../../../../../redux/actionCreators/umeetActionCreator";
 import { useDispatch, useSelector } from 'react-redux'
 import { config } from "../../../../../config/config";
 import axios from 'axios'
+import { isEmpty } from "../../../../Utility/utility";
 
 const token = localStorage.getItem("userCredential")
   ? JSON.parse(localStorage.getItem("userCredential")).token
@@ -37,31 +39,27 @@ const EventShareModal = ({ onClose, handleShareEvent, invitesEmail,
   }
 
   useEffect(()=>{
-    try {
-      (async()=>{
-       const response = await axios.post(
-        `${config.API_URI}event/api/invities/addInvities`,
-        emialObjects,
-        {headers: { Authorization: `Bearer ${token}` }})
-
-       console.log(response.data, "addInvitees");
-      })()      
-    } catch (error) { 
-      throw error;
-    }
+    // try {
+    //   if( !isEmpty(emialObjects)){
+    //     dispatch( addEventInvitees(emialObjects))
+    //   }
+    //   dispatch( a)
+    // } catch (error) { 
+    //   throw error;
+    // }
     //dispatch(addInvitees(emialObjects))
   }, [])
   return (
   <section className='absolut fixed z-20 justify-center items-center top-0 left-0 h-full w-full flex' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
-   <div className='w-[86%] md:w-[42%] lg:w-[36%] xl:w-[26%] flex flex-col justify-between p-3 bg-white md:ml-[9%] mt-[4%] rounded-2xl'>
+   <div className=' flex flex-col justify-between p-3 bg-white mt-[4%] rounded-2xl'>
     <div className='text-[18px] text-gray-700 font-bold py-3 border-b flex justify-center items-center text-center'>Choose how you want to share this invitation</div>
     <div className='flex justify-between items-center py-4'>
      <span className='w-5/6 text-[15px] text-gray-600'>Do you want to post events on Root Screen</span>
-     <span className='w-1/6 pl-1'><ToggleButton /></span>
+     <span className='mx-2 pl-1'><ToggleButton btnText /></span>
     </div>
     <div className='flex justify-between items-center py-4'>
      <span className='w-5/6 text-[15px] text-gray-600'>Do you want to Enable share options</span>
-     <span className='w-1/6 pl-1'><ToggleButton share={true} setShareEnabled={setShareEnabled} /></span>
+     <span className='mx-2 pl-1'><ToggleButton share={true} btnText setShareEnabled={setShareEnabled} /></span>
     </div>
     <div className='flex justify-center py-2'>
      <button onClick={handleShare} className='px-10 py-2 my-1 rounded-lg text-white border bg-[#649B8E]'>Confrim</button>
