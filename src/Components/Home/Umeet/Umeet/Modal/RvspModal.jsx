@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import notAttend from '../../../../../Assets/Images/Umeet/Umeet-Main/Umeet-NotAttending.png'
 import Attend from '../../../../../Assets/Images/Umeet/Umeet-Main/Umeet-Attending.png'
 import maybe from '../../../../../Assets/Images/Umeet/Umeet-Main/Umeet-maybe.png'
-import { addInvitees } from "../../../../../redux/actionCreators/umeetActionCreator";
+import { addEventInvitees } from "../../../../../redux/actionCreators/umeetActionCreator";
 import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-toastify';
 
@@ -62,7 +62,7 @@ const RvspModal = ({ onClose }) => {
 
   const handleInvitees = ()=>{ 
     umeetReducer.invitiesAdded = false   
-    dispatch(addInvitees(rsvpData))  
+    dispatch(addEventInvitees(rsvpData))  
   }
 
   useEffect(()=>{

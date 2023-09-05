@@ -11,6 +11,8 @@ import { getAllEvents, getEventList, getEventByProfileid,
 getEventDetails, getAllInvitedEvents } from '../../../../redux/actionCreators/umeetActionCreator'
 import EventLoadingAnimation from './EventLoadingAnimation'
 import EventDeleteModal from './Modal/EventDeleteModal'
+import { isEmpty } from '../../../Utility/utility'
+import { useMemo } from 'react'
 
 function EventStatus({ data, handleBothDetails, invites }) {
   if(data?.eventstatus){
@@ -45,14 +47,16 @@ const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
     }
   });
 
-  const { profile, allEvents, allMyEvents, allInvitedEvents } = reducerData
+  const { profile, allMyEvents, allInvitedEvents } = reducerData
 
   const [showDetail, setShowDetail] = useState(false)
   const [invitedEvents, setInvitedEvents] = useState(allInvitedEvents)
   const [completedEvents, setCompletedEvents] = useState(null)
   const [upcomingEvents, setUpcomingEvents] = useState(null)
   const [cancelledEvents, setCancelledEvents] = useState(null)
-  const [progressedEvents, setProgressedEvents] = useState(null)
+  const [progressedEvents, setProgressedEvents] = useState(null);
+  const [ allEvents, setAllEvents] = useState([]);
+  const [myEvents, setMyEvents ] = useState([])
 
   const [completedMyEvents, setCompletedMyEvents] = useState(null)
   const [upcomingMyEvents, setUpcomingMyEvents] = useState(null)
@@ -60,11 +64,28 @@ const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
 
   const [clickedElement, setClickedElement] = useState(null);
   const [showDeleteMyEvent, setShowDeleteMyEvent] = useState(false)
+  const [ eventList, setEventList ] = useState([])
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
+  useMemo(() => {
+    if(myEvent){
+      setEventList(myEvents)
+    }else {
+      setEventList(allEvents)
+    }
+  }, [myEvent])
 
   useEffect(() => { 
-    if( isInvitedAll === 'All Events'){
+
+    dispatch( getAllInvitedEvents( profile.id )).then((res) => {
+      setAllEvents(res.data)
+    })
+    dispatch( getAllEvents(profile.id)).then((res) => {
+      setMyEvents(res.data)
+    })
+    
+    if( isInvitedAll === 'All Events'){ 
       console.log(isInvitedAll, 'LLLLLLLLLLLLLLLLLLLLLLLL');
       // dispatch( getAllEvents(profile.id))
       dispatch( getEventByProfileid(profile.id))
@@ -169,66 +190,71 @@ const SingleEvent = ({ dataList, myEventDataList, handleEventDetails,
     setDeleteId(id)
     setShowDetail(!showDetail)
   }
-
+console.log(eventList, myEvents, "MMMMMMMMMMMMMMM");
   return (
     <>
-      {myEvent 
+      { !isEmpty(allEvents) || !isEmpty(myEvents) 
       ? (
         <>
-          {(allMyEvents && allMyEvents?.length !== 0) ? 
+          {(allEvents || myEvents) ? 
           <>
           { 
-            (isInvitedAll == 'All Events') && allMyEvents.map((data, i) => (
-              <div 
-               key={i}                 
-               className='relative cursor-pointer flex p-2.5 justify-between m-1 my-1.5 border rounded-xl border-gray-300'>
-                {/* Img section */}
-                <div
-                 onClick={()=>{handleBothDetails(data.id); handleImageSelect}} 
-                 className='w-4/12 fle h-[75px] items-center justify-center'>
-                  <img src={data?.eventTemplate} className='w-11/12 h-full object-cover rounded-md' />
-                </div>
-                {/* center section */}
+            (isInvitedAll == 'All Events') && eventList.map((item, i) => {
+              const data = item.eventdetail
+              return (
+                
                 <div 
-                 onClick={()=>{handleBothDetails(data.id); handleImageSelect}}
-                 className={`${data?.eventstatus == 'Completed' || data?.eventstatus == 'Cancel' ? 'opacity-50' : ''} 8/12 flex flex-col justify-start`}>
-                  <p className='text-[#649b8e] font-medium text-[14px]'>{data?.eventName}</p>
-                  <span 
-                   className='text-gray-600 text-[12px]'>
-                   <DateFormat dateData={data?.startdate} />
-                  </span>
+                key={i}                 
+                className='relative cursor-pointer flex p-2.5 justify-between m-1 my-1.5 border rounded-xl border-gray-300'>
+                  {/* Img section */}
+                  <div
+                  onClick={()=>{handleBothDetails(data.id); handleImageSelect}} 
+                  className='w-4/12 fle h-[75px] items-center justify-center'>
+                    <img src={data?.eventTemplate} className='w-11/12 h-full object-cover rounded-md' />
+                  </div>
+                  {/* center section */}
+                  <div 
+                  onClick={()=>{handleBothDetails(data.id); handleImageSelect}}
+                  className={`${data?.eventstatus == 'Completed' || data?.eventstatus == 'Cancel' ? 'opacity-50' : ''} 8/12 flex flex-col justify-start`}>
+                    <p className='text-[#649b8e] font-medium text-[14px]'>{data?.eventName}</p>
+                    <span 
+                    className='text-gray-600 text-[12px]'>
+                    <DateFormat dateData={data?.startdate} />
+                    </span>
 
+                  </div>
+                  {/* End status section */}
+                  {data?.eventstatus ? 
+                  (
+                    <div className='w-1/4 flex items-center justify-end'>
+                      <EventStatus data={data} />
+                    </div>
+                  ) : (
+                    <div className='w-1/4 flex justify-end'>
+                      
+                      <BsThreeDots onClick={() => {setShowDetail(!showDetail);handleElementClick(data?.id)}} className='w-8 h-8 cursor-pointer mr-2 text-gray-700' />
+                        { data?.id == clickedElement && showDetail ? (
+                          <section className='absolute z-30 right-[3%] top-[40%] border bg-white rounded-xl overflow-hidden border-gray-300'>
+                            <div onClick={handleEditEvent} className='flex hover:bg-gray-300 p-2.5 z-40 cursor-pointer border-b border-gray-300'>
+                            <img src={editImg} className='w-6 h-6' />
+                            <span className='pr-4 px-2'>Edit Event</span>
+                            </div>
+                            <div onClick={()=>handleDeleteEvent(data?.id)} className='flex hover:bg-gray-300 cursor-pointer p-2.5 border-b border-gray-300'>
+                            <img src={deleteImg} className='w-6 h-6' />
+                            <span className='pr-4 px-2'>Cancel Event</span>
+                            </div>
+                            <div onClick={handleShareEvent} className='flex hover:bg-gray-300 cursor-pointer p-2.5'>
+                            <img src={shareImg} className='w-6 h-6' />
+                            <span className='pr-4 px-2'>Share Event</span>
+                            </div> 
+                          </section>
+                        ) : null }
+                    </div>
+                  )}
                 </div>
-                {/* End status section */}
-                {data?.eventstatus ? 
-                (
-                  <div className='w-1/4 flex items-center justify-end'>
-                    <EventStatus data={data} />
-                  </div>
-                 ) : (
-                  <div className='w-1/4 flex justify-end'>
-                    
-                    <BsThreeDots onClick={() => {setShowDetail(!showDetail);handleElementClick(data?.id)}} className='w-8 h-8 cursor-pointer mr-2 text-gray-700' />
-                      { data?.id == clickedElement && showDetail ? (
-                        <section className='absolute z-30 right-[3%] top-[40%] border bg-white rounded-xl overflow-hidden border-gray-300'>
-                          <div onClick={handleEditEvent} className='flex hover:bg-gray-300 p-2.5 z-40 cursor-pointer border-b border-gray-300'>
-                           <img src={editImg} className='w-6 h-6' />
-                           <span className='pr-4 px-2'>Edit Event</span>
-                          </div>
-                          <div onClick={()=>handleDeleteEvent(data?.id)} className='flex hover:bg-gray-300 cursor-pointer p-2.5 border-b border-gray-300'>
-                           <img src={deleteImg} className='w-6 h-6' />
-                           <span className='pr-4 px-2'>Cancel Event</span>
-                          </div>
-                          <div onClick={handleShareEvent} className='flex hover:bg-gray-300 cursor-pointer p-2.5'>
-                           <img src={shareImg} className='w-6 h-6' />
-                           <span className='pr-4 px-2'>Share Event</span>
-                          </div> 
-                        </section>
-                      ) : null }
-                  </div>
-                )}
-              </div>
-            )) 
+              )
+            }
+            ) 
            }
 
            {

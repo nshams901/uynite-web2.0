@@ -3,7 +3,7 @@ import guest from '../../../../../Assets/Images/Umeet/Umeet-Main/Group 1054.png'
 import { useState, useEffect } from 'react'
 import ToggleButton from './ToggleButton';
 import { createEvent, updateEvent, handleCreateDataUI,
-getReunionTemplates, createEventTemplate, addInvitees, addInvitee, addEventInvitees } from "../../../../../redux/actionCreators/umeetActionCreator";
+getReunionTemplates, createEventTemplate, addInvitee, addEventInvitees } from "../../../../../redux/actionCreators/umeetActionCreator";
 import { getEducationDetail } from "../../../../../redux/actionCreators/profileAction"
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
@@ -28,13 +28,15 @@ import PoliticalFeedbackQuestion from './PoliticalFeedbackQuestion';
 import { config } from '../../../../../config/config';
 import { getOwnFriendsList } from '../../../../../redux/actionCreators/friendsAction';
 import { isEmpty } from '../../../../Utility/utility';
+import { useNavigate } from 'react-router-dom';
 
 const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   handleCreatedEvent, whichType, politicalPartyFeedback,
   politicalPartyMeeting, publicShopOpening, setNoMyEvent, setNoCreateEvent, setCreateEvent,
   handleMyEvent }) => {
 
-  const { profileReducer, umeetReducer } = useSelector(state => state)
+  const { profileReducer, umeetReducer } = useSelector(state => state);
+  const navigate = useNavigate()
 
   const detail = umeetReducer.eventDetail
 
@@ -63,7 +65,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
 
   const [showTemplate, setShowTemplate] = useState(false)  
   const [templateSelected, setTemplateSelected] = useState('')
-  const [selectedImage, setSelectedImage] = useState(null)
+  const [selectedImage, setSelectedImage] = useState({})
   const [selectedImgFile, setSelectedImgFile] = useState(null)
   const [showAddPeopleModal, setShowAddPeopleModal] = useState(false)
   const [showAddGroup, setShowAddGroup] = useState(false)
@@ -300,7 +302,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
     "id": eventId,
     "aboutevent": inputValue,
     "eventmode": eventMode,
-    "eventTemplate": selectedImage,
+    "eventTemplate": selectedImage?.tempdetail?.bgimage,
     "startdate": startingDate?.getTime(),
     "enddate": endingDate?.getTime(),
     "eventQuestion": question ? umeetReducer?.question?.question : null,
@@ -398,21 +400,28 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
   }
 
   const handleEventCreate = async()=>{
-    const payload = { 
-    // "eventid":"6024fb88bfedfa74c3d5b775",
-     "profileid": invitees,
-     "cohostname": profileReducer.profile.fname + " " + profileReducer.profile.lname, 
-     "cohostmobile": formState.eventHostPhnNumber 
-    }
+    const resp = await dispatch( createEvent({ ...postData, eventMode, foodType}))
+
+    const inviteePaylload = invitees.map((item) => {
+      return {
+        attend: 'Send',
+        eventid: resp.data.id,
+        eventtype: whichType == 'personal' ? 'Personal' : whichType == 'public' ? 'Public' : selectedSpecificEvent,
+        nonveg: ! foodType === 'veg',
+        profileid: item
+      }
+    })
     if(!isEmpty(emialObjects)){
       dispatch( addEventInvitees(emialObjects))
     }
-    dispatch( addEventInvitees(payload))
+    dispatch( addEventInvitees(inviteePaylload)).then((res) => {
+      navigate('/umeet')
+    })
     //await dispatch(handleCreateDataUI({...postData, eventMode, foodType}))
     if( !inputValue){
       return toast.error(`About event shouldn't be empty`)
     }
-    handleCreateEvent()
+    // handleCreateEvent()
   }
 
   const handleInputChange = (event) => {
@@ -490,30 +499,30 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
       setFeedbackVal(true)
     }
 
-    if(showShareMyEvent == false && shareEvent!= null){
-     dispatch(createEvent(postData)).then((res) => {
-        if(res?.status){
-          toast.success(res?.message)
-          dispatch(handleCreateDataUI({...postData, eventMode, foodType}))
-          handleCreatedEvent()
-        }else{
-         toast.error(res?.message)
-        }
-     })
-    }    
+    // if(showShareMyEvent == false && shareEvent!= null){
+    //  dispatch(createEvent(postData)).then((res) => {
+    //     if(res?.status){
+    //       toast.success(res?.message)
+    //       dispatch(handleCreateDataUI({...postData, eventMode, foodType}))
+    //       handleCreatedEvent()
+    //     }else{
+    //      toast.error(res?.message)
+    //     }
+    //  })
+    // }    
 
-    if(editMyEvent){
-      if(detail?.eventAddress) setEventMode('location')      
-      setFoodType(detail?.food)
-      setInputValue(detail?.aboutevent)
-      setFormState((prev) => ({
-       ...prev,
-       eventName: detail?.eventName,
-       eventAddress: detail?.eventAddress,
-       eventHostPhnNumber: detail?.eventHostPhnNumber,
-       hostmailid: detail?.hostmailid,
-      }))       
-    }    
+    // if(editMyEvent){
+    //   if(detail?.eventAddress) setEventMode('location')      
+    //   setFoodType(detail?.food)
+    //   setInputValue(detail?.aboutevent)
+    //   setFormState((prev) => ({
+    //    ...prev,
+    //    eventName: detail?.eventName,
+    //    eventAddress: detail?.eventAddress,
+    //    eventHostPhnNumber: detail?.eventHostPhnNumber,
+    //    hostmailid: detail?.hostmailid,
+    //   }))       
+    // }    
 
   }, [selectedImgFile, selectedQualification, countryData, shareEvent])
 
@@ -547,7 +556,7 @@ const CreateEventModal = ({ selectedSpecificEvent, editMyEvent,
             <label>
               {selectedImage || selectedImage ? (<div className='relative'>
                 <img 
-                 src={selectedImage.tempdetail.bgimage || selectedImage} 
+                 src={selectedImage.tempdetail?.bgimage || selectedImage} 
                  alt="Selected" 
                  className='w-ful h-[350px] lg:h-[500px] object-cover rounded-md' />
                  <div className={`${ !selectedImage ? 'hidden' : ''} absolute inset-0 flex justify-center items-center`}>

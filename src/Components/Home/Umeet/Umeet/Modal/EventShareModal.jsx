@@ -3,8 +3,7 @@ import notAttend from '../../../../../Assets/Images/Umeet/Umeet-Main/Umeet-NotAt
 import Attend from '../../../../../Assets/Images/Umeet/Umeet-Main/Umeet-Attending.png'
 import maybe from '../../../../../Assets/Images/Umeet/Umeet-Main/Umeet-maybe.png'
 import ToggleButton from './ToggleButton';
-import { createEvent, updateEvent, sendEmailInvites,
-addInvitees, 
+import { createEvent, updateEvent, sendEmailInvites, 
 addEventInvitees} from "../../../../../redux/actionCreators/umeetActionCreator";
 import { useDispatch, useSelector } from 'react-redux'
 import { config } from "../../../../../config/config";

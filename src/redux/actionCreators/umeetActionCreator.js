@@ -129,9 +129,10 @@ export const getAllInvitedEvents = (data) => async (dispatch) => {
       {headers: { Authorization: `Bearer ${token}` }}
     );
     dispatch({
-      type: "GET_ALL_INVITED_EVENTS",
+      type: "",
       payload: response.data,
     });
+    return response.data
   } catch (error) {
     throw error;
   }
@@ -218,21 +219,21 @@ export const getInviteesList = (data) => async (dispatch) => {
   }
 };
 
-export const addInvitees = (data) => async (dispatch) => {
-  try {
-    const response = await axios.post(
-      `${config.API_URI}event/api/invities/addInvities`,
-      data,
-      {headers: { Authorization: `Bearer ${token}` }}
-    );
-    dispatch({
-      type: "ADD_INVITIES",
-      payload: response.data,
-    });
-  } catch (error) { 
-    throw error;
-  }
-};
+// export const addInvitees = (data) => async (dispatch) => {
+//   try {
+//     const response = await axios.post(
+//       `${config.API_URI}event/api/invities/addInvities`,
+//       data,
+//       {headers: { Authorization: `Bearer ${token}` }}
+//     );
+//     dispatch({
+//       type: "ADD_INVITIES",
+//       payload: response.data,
+//     });
+//   } catch (error) { 
+//     throw error;
+//   }
+// };
 
 
 export const addEventInvitees = (data) => async (dispatch) => {
@@ -288,13 +289,14 @@ export const getTemplateByEventid = (data) => async (dispatch) => {
 export const getAllEvents = (data) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `${config.API_URI}event/api/invities/getmyevent/${data}`,
+      `${config.API_URI}event/api/invities/getmyevent/${data}/1693806206962`,
       {headers: { Authorization: `Bearer ${token}` }}
     );
     dispatch({
       type: "",
       payload: response.data,
     });
+    return response.data
   } catch (error) {
     throw error;
   }
